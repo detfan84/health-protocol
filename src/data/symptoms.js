@@ -1,0 +1,17 @@
+export const SYMPTOMS = [
+  { id: 'energy', name: 'Energy Level', low: 'Exhausted', high: 'Energized' },
+  { id: 'bloating', name: 'Bloating', low: 'None', high: 'Severe' },
+  { id: 'headache', name: 'Headache', low: 'None', high: 'Severe' },
+  { id: 'brain_fog', name: 'Brain Fog', low: 'Clear', high: 'Very foggy' },
+  { id: 'skin', name: 'Skin Issues', low: 'Clear', high: 'Flare-up' },
+  { id: 'joint_pain', name: 'Joint Pain', low: 'None', high: 'Severe' },
+  { id: 'sleep_quality', name: 'Sleep Quality', low: 'Poor', high: 'Excellent' },
+  { id: 'mood', name: 'Mood', low: 'Low', high: 'Great' },
+  { id: 'digestion', name: 'Digestion', low: 'Poor', high: 'Smooth' },
+  { id: 'anxiety', name: 'Anxiety', low: 'None', high: 'Severe' },
+  { id: 'nausea', name: 'Nausea', low: 'None', high: 'Severe' },
+  { id: 'muscle_aches', name: 'Muscle Aches', low: 'None', high: 'Severe' },
+  { id: 'bowel', name: 'Bowel Regularity', low: 'Irregular', high: 'Regular' },
+  { id: 'appetite', name: 'Appetite', low: 'No appetite', high: 'Strong' },
+  { id: 'focus', name: 'Focus / Clarity', low: 'Scattered', high: 'Sharp' },
+];
