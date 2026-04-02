@@ -26,9 +26,9 @@ function getActiveItemIds(startDate, dateStr, hidden, supply) {
   }).map(it => it.id);
 }
 
-// Format date as YYYY-MM-DD
+// Format date as YYYY-MM-DD in local time (not UTC)
 function formatDate(d) {
-  return d.toISOString().slice(0, 10);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
 // Get date N days before today
