@@ -18,29 +18,41 @@ export default function SupplementItem({ item, checked, hidden, editing, onToggl
           <button
             onClick={e => { e.stopPropagation(); onToggleHide(); }}
             style={{
-              width: 22, height: 22, borderRadius: 6,
+              width: 44, height: 44, borderRadius: 6,
+              border: 'none', background: 'transparent',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0, margin: '-10px -10px -10px 0', padding: 0,
+            }}
+          >
+            <span style={{
+              width: 26, height: 26, borderRadius: 6,
               border: `2px solid ${hidden ? '#e53935' : '#4caf50'}`,
               background: hidden ? '#fce4e4' : '#e8f5e9',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 11, flexShrink: 0, marginTop: 1,
-              color: hidden ? '#e53935' : '#4caf50', fontWeight: 700,
-            }}
-          >
-            {hidden ? '\u2715' : '\u2713'}
+              fontSize: 13, color: hidden ? '#e53935' : '#4caf50', fontWeight: 700,
+            }}>
+              {hidden ? '\u2715' : '\u2713'}
+            </span>
           </button>
         ) : (
           <button
             onClick={e => { e.stopPropagation(); onToggle(); }}
             style={{
-              width: 22, height: 22, borderRadius: 6,
+              width: 44, height: 44, borderRadius: 6,
+              border: 'none', background: 'transparent',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0, margin: '-10px -10px -10px 0', padding: 0,
+            }}
+          >
+            <span style={{
+              width: 26, height: 26, borderRadius: 6,
               border: `2px solid ${checked ? '#4caf50' : color}`,
               background: checked ? '#4caf50' : 'transparent',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 11, flexShrink: 0, marginTop: 1,
-              color: 'white', fontWeight: 700,
-            }}
-          >
-            {checked && '\u2713'}
+              fontSize: 13, color: 'white', fontWeight: 700,
+            }}>
+              {checked && '\u2713'}
+            </span>
           </button>
         )}
         <div style={{ flex: 1, cursor: item.details ? 'pointer' : 'default' }} onClick={() => item.details && setShowDetail(true)}>
