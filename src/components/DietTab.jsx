@@ -11,6 +11,9 @@ export default function DietTab({ currentPhaseId, theme }) {
   const [expAvoid, setExpAvoid] = useState(false);
   const [expMeals, setExpMeals] = useState(false);
   const [shoppingChecked, setShoppingCheckedState] = useState({});
+  const [customItems, setCustomItemsState] = useState([]);
+  const [adding, setAdding] = useState(false);
+  const [newItemText, setNewItemText] = useState('');
   const [copiedId, setCopiedId] = useState(null);
 
   const p = DIET_PHASES[phaseIdx];
@@ -26,10 +29,37 @@ export default function DietTab({ currentPhaseId, theme }) {
     setExpMeals(false);
   };
 
-  // Load persisted shopping checks once
+  // Load persisted shopping checks and custom items once
   useEffect(() => {
     getSetting('shoppingChecked').then((v) => setShoppingCheckedState(v || {}));
+    getSetting('customShoppingItems').then((v) => setCustomItemsState(v || []));
   }, []);
+
+  const persistCustomItems = (items) => {
+    setCustomItemsState(items);
+    setSetting('customShoppingItems', items);
+  };
+
+  const addCustomItem = () => {
+    const t = newItemText.trim();
+    if (!t) return;
+    if (!customItems.includes(t)) {
+      persistCustomItems([...customItems, t]);
+    }
+    setNewItemText('');
+  };
+
+  const removeCustomItem = (name) => {
+    persistCustomItems(customItems.filter((x) => x !== name));
+    // Also clear its check state
+    const key = `custom:${name}`;
+    if (shoppingChecked[key]) {
+      const next = { ...shoppingChecked };
+      delete next[key];
+      setShoppingCheckedState(next);
+      setSetting('shoppingChecked', next);
+    }
+  };
 
   const toggleCheck = (key) => {
     const next = { ...shoppingChecked, [key]: !shoppingChecked[key] };
@@ -330,7 +360,12 @@ export default function DietTab({ currentPhaseId, theme }) {
               Phase {p.id} Shopping List
             </div>
             <button
-              onClick={() => copy(shoppingListToText(p.shopping, `Phase ${p.id} Shopping List (${pm.name})`), 'ALL')}
+              onClick={() => {
+                const shopping = customItems.length > 0
+                  ? [...p.shopping, { cat: 'My Items', items: customItems }]
+                  : p.shopping;
+                copy(shoppingListToText(shopping, `Phase ${p.id} Shopping List (${pm.name})`), 'ALL');
+              }}
               style={{
                 fontSize: 11, fontWeight: 700, padding: '6px 12px', borderRadius: 8,
                 background: pc, color: '#fff',
@@ -436,6 +471,157 @@ export default function DietTab({ currentPhaseId, theme }) {
               </div>
             );
           })}
+
+          {/* My Items (custom, phase-independent) */}
+          <div style={{ marginBottom: 16 }}>
+            <div style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              marginBottom: 8, paddingBottom: 6, borderBottom: `2px solid ${cardBd}`,
+            }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: pc }}>
+                My Items
+                {customItems.length > 0 && (
+                  <span style={{ fontSize: 11, fontWeight: 500, color: sub, marginLeft: 6 }}>
+                    ({customItems.length})
+                  </span>
+                )}
+              </div>
+              {customItems.length > 0 && (
+                <button
+                  onClick={() => copy(
+                    groupToText({ cat: 'My Items', items: customItems }),
+                    'G-custom'
+                  )}
+                  style={{ fontSize: 10, fontWeight: 600, color: pc, padding: '2px 8px' }}
+                >
+                  {copiedId === 'G-custom' ? '\u2713 Copied!' : 'Copy group'}
+                </button>
+              )}
+            </div>
+
+            {customItems.length === 0 && !adding && (
+              <div style={{ fontSize: 11, color: sub, fontStyle: 'italic', marginBottom: 8 }}>
+                Add non-diet items here {'\u2014'} coffee, paper towels, toilet paper, toothpaste, whatever else you need this trip. Shared across all phases.
+              </div>
+            )}
+
+            {customItems.map((name, i) => {
+              const key = `custom:${name}`;
+              const checked = !!shoppingChecked[key];
+              const copyId = `custom-${i}`;
+              return (
+                <div
+                  key={i}
+                  style={{
+                    padding: '8px 10px', marginBottom: 4, borderRadius: 8,
+                    background: checked ? faint : cardBg,
+                    border: `1px solid ${cardBd}`,
+                    fontSize: 12, fontWeight: 500, color: checked ? sub : fg,
+                    display: 'flex', alignItems: 'center', gap: 8,
+                  }}
+                >
+                  <div
+                    onClick={() => toggleCheck(key)}
+                    style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', minWidth: 0 }}
+                  >
+                    <span style={{
+                      width: 18, height: 18, borderRadius: 5, flexShrink: 0,
+                      border: `2px solid ${checked ? pc : cardBd}`,
+                      background: checked ? pc : 'transparent',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: 10, color: '#fff', fontWeight: 700,
+                    }}>
+                      {checked && '\u2713'}
+                    </span>
+                    <span style={{
+                      textDecoration: checked ? 'line-through' : 'none',
+                      overflow: 'hidden', textOverflow: 'ellipsis',
+                    }}>{name}</span>
+                  </div>
+                  <button
+                    onClick={() => copy(name, copyId)}
+                    aria-label="Copy item"
+                    style={{
+                      fontSize: 10, fontWeight: 600, color: sub, padding: '4px 8px',
+                      borderRadius: 6, border: `1px solid ${cardBd}`, flexShrink: 0,
+                    }}
+                  >
+                    {copiedId === copyId ? '\u2713' : 'Copy'}
+                  </button>
+                  <button
+                    onClick={() => removeCustomItem(name)}
+                    aria-label="Remove item"
+                    title="Remove"
+                    style={{
+                      fontSize: 14, fontWeight: 700, color: sub, padding: '2px 8px',
+                      borderRadius: 6, flexShrink: 0, lineHeight: 1,
+                    }}
+                  >
+                    {'\u00d7'}
+                  </button>
+                </div>
+              );
+            })}
+
+            {adding ? (
+              <div style={{
+                display: 'flex', gap: 6, alignItems: 'center',
+                padding: '8px 10px', borderRadius: 8,
+                border: `1.5px solid ${pa}`,
+                background: cardBg, marginTop: 4,
+              }}>
+                <input
+                  type="text"
+                  autoFocus
+                  value={newItemText}
+                  onChange={(e) => setNewItemText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') { addCustomItem(); }
+                    else if (e.key === 'Escape') { setAdding(false); setNewItemText(''); }
+                  }}
+                  placeholder="e.g. Coffee beans"
+                  style={{
+                    flex: 1, padding: '4px 6px', fontSize: 12,
+                    background: 'transparent', color: fg,
+                    border: 'none', outline: 'none',
+                  }}
+                />
+                <button
+                  onClick={addCustomItem}
+                  disabled={!newItemText.trim()}
+                  style={{
+                    fontSize: 11, fontWeight: 700, padding: '4px 10px',
+                    borderRadius: 6, background: pc, color: '#fff',
+                    opacity: newItemText.trim() ? 1 : 0.4,
+                  }}
+                >
+                  Add
+                </button>
+                <button
+                  onClick={() => { setAdding(false); setNewItemText(''); }}
+                  style={{
+                    fontSize: 11, fontWeight: 600, color: sub,
+                    padding: '4px 8px', borderRadius: 6,
+                  }}
+                >
+                  Done
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setAdding(true)}
+                style={{
+                  width: '100%', marginTop: 4,
+                  padding: '8px 10px', borderRadius: 8,
+                  border: `1.5px dashed ${cardBd}`,
+                  background: 'transparent', color: pc,
+                  fontSize: 12, fontWeight: 600,
+                }}
+              >
+                + Add item
+              </button>
+            )}
+          </div>
 
           {Object.keys(shoppingChecked).some((k) => k.startsWith(`${p.id}:`)) && (
             <button
