@@ -24,6 +24,7 @@ import SymptomTracker from './components/log/SymptomTracker';
 import SupplyTracker from './components/supply/SupplyTracker';
 
 import SpacingRules from './components/reference/SpacingRules';
+import LiverFlush from './components/reference/LiverFlush';
 import SymptomsGuide from './components/reference/SymptomsGuide';
 import AnnualLabs from './components/reference/AnnualLabs';
 
@@ -397,6 +398,7 @@ function AppInner() {
       {tab === 'ref' && (
         <div style={{ paddingBottom: 24 }}>
           <SpacingRules theme={theme} />
+          <LiverFlush theme={theme} />
           <SymptomsGuide theme={theme} />
           <AnnualLabs theme={theme} startDate={startDate} onResetStart={handleResetStartDate} />
         </div>

@@ -1,8 +1,8 @@
 export const SUBPHASES = [
-  { name: 'Liver + Biofilm Prep', days: 14, pid: 1, label: 'Wks 1–2' },
-  { name: 'Kidney + Biofilm Prep', days: 14, pid: 1, label: 'Wks 3–4' },
-  { name: 'Parasite Kill', days: 30, pid: 1, label: 'Wks 5–8+' },
-  { name: 'Heavy Metal Detox', days: 30, pid: 1, label: 'Wks 9–13' },
+  { name: 'Liver + Biofilm Prep', days: 21, pid: 1, label: 'Wks 1–3' },
+  { name: 'Kidney + Biofilm Prep', days: 21, pid: 1, label: 'Wks 4–6' },
+  { name: 'Parasite Kill', days: 30, pid: 1, label: 'Wks 7–10+' },
+  { name: 'Heavy Metal Detox', days: 30, pid: 1, label: 'Wks 11–15' },
   { name: 'Cleanup Ramp-Up', days: 14, pid: 2, label: 'Wks 1–2' },
   { name: 'Full Cleanup + Probiotics', days: 42, pid: 2, label: 'Wks 3–8' },
   { name: 'Probiotic Diversification', days: 28, pid: 2, label: 'Wks 9–12' },

@@ -75,7 +75,9 @@ export default function SupplyTracker({ supply, onUpdate, phaseId, theme }) {
               )}
             </div>
             <div style={{ fontSize: 10, color: sub, marginTop: 1 }}>
-              Phases: {item.phases.join(', ')}
+              {item.phases.length > 0
+                ? `Phases: ${item.phases.join(', ')}`
+                : (item.parasiteOnly ? 'Parasite phase only' : 'Unscheduled · all phases')}
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>

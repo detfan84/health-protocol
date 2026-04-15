@@ -25,6 +25,15 @@ const SHARED_SUPPLY = {
   sfcl2: 'sfcl',      // Silver Fern Cleanse 2nd dose = same bottle
 };
 
+// Items tracked in the supply list but not (yet) scheduled in daily blocks.
+// They appear in the supply tracker with no phase filtering so you can manage
+// reorders for things you use situationally (flushes, cleanses, baths, etc).
+export const UNSCHEDULED_SUPPLY = [
+  { id: 'malic',   name: 'Malic Acid 600mg' },
+  { id: 'palo',    name: 'Palo Azul Tea Bark' },
+  { id: 'epsom',   name: 'Epsom Salt (pharmaceutical grade)' },
+];
+
 // Build the canonical supply item list from blocks + parasite adds
 // Each entry: { id (supply key), name, itemIds (block item IDs it covers), phases }
 function buildSupplyItems() {
@@ -54,6 +63,19 @@ function buildSupplyItems() {
   }
   for (const item of PARASITE_ADDS) {
     processItem(item);
+  }
+
+  // Unscheduled items: not in any block, but tracked for reorder/supply purposes.
+  // phases: [] means they show in all phases (no phase filter).
+  for (const extra of UNSCHEDULED_SUPPLY) {
+    if (!seen.has(extra.id)) {
+      seen.set(extra.id, {
+        name: extra.name,
+        itemIds: new Set([extra.id]),
+        phases: new Set(),
+        parasiteOnly: false,
+      });
+    }
   }
 
   return Array.from(seen.entries()).map(([id, data]) => ({
