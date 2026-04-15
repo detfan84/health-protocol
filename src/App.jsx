@@ -29,11 +29,14 @@ import AnnualLabs from './components/reference/AnnualLabs';
 
 import ExerciseTab from './ExerciseTab';
 import ProfileTab from './components/ProfileTab';
+import DietTab from './components/DietTab';
 
 function AppInner() {
   const settings = useSettings();
   const [tab, setTab] = useState('today');
   const [startDate, setStartDate] = useState(null);
+  const [phaseOffset, setPhaseOffsetState] = useState(0);
+  const [subphaseDurations, setSubphaseDurationsState] = useState({});
   const [checks, setChecks] = useState({});
   const [journal, setJournal] = useState('');
   const [food, setFood] = useState({ m1: '', m2: '', sn: '' });
@@ -54,6 +57,8 @@ function AppInner() {
   useEffect(() => {
     loadInitialData(d).then(data => {
       setStartDate(data.startDate);
+      setPhaseOffsetState(data.phaseOffset || 0);
+      setSubphaseDurationsState(data.subphaseDurations || {});
       setChecks(data.daily.checks || {});
       setJournal(data.daily.journal || '');
       setFood(data.daily.food || { m1: '', m2: '', sn: '' });
@@ -158,6 +163,18 @@ function AppInner() {
   const handleResetStartDate = () => {
     setStartDate(null);
     setSetting('startDate', null);
+    setPhaseOffsetState(0);
+    setSetting('phaseOffset', 0);
+  };
+
+  const handleSetPhaseOffset = (val) => {
+    setPhaseOffsetState(val);
+    setSetting('phaseOffset', val);
+  };
+
+  const handleSetSubphaseDurations = (val) => {
+    setSubphaseDurationsState(val);
+    setSetting('subphaseDurations', val);
   };
 
   const saveUserRoutines = (routines) => {
@@ -165,7 +182,7 @@ function AppInner() {
     setRoutines(routines);
   };
 
-  const info = getPhaseInfo(startDate);
+  const info = getPhaseInfo(startDate, null, phaseOffset, subphaseDurations);
   const pm = PHASE_META.find(p => p.id === info.pid) || PHASE_META[0];
   const isPara = info.si === 2;
 
@@ -232,6 +249,10 @@ function AppInner() {
         phaseInfo={{ ...info, pct }}
         startDate={startDate}
         onSetStartDate={handleSetStartDate}
+        phaseOffset={phaseOffset}
+        onSetPhaseOffset={handleSetPhaseOffset}
+        subphaseDurations={subphaseDurations}
+        onSetSubphaseDurations={handleSetSubphaseDurations}
         theme={theme}
       />
       <TabBar tab={tab} setTab={setTab} theme={theme} />
@@ -343,6 +364,11 @@ function AppInner() {
           <Journal journal={journal} onUpdate={updateJournal} theme={theme} />
           <SymptomTracker symptoms={symptoms} onUpdate={updateSymptoms} theme={theme} />
         </div>
+      )}
+
+      {/* DIET TAB */}
+      {tab === 'diet' && (
+        <DietTab currentPhaseId={info.pid} theme={theme} />
       )}
 
       {/* EXERCISE TAB */}

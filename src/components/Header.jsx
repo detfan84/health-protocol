@@ -1,15 +1,18 @@
 import { useState } from 'react';
-import { PHASE_META, SUBPHASES, TOTAL_DAYS } from '../data/phases';
+import { PHASE_META } from '../data/phases';
+import { getEffectiveSubphases } from '../lib/phaseUtils';
 import { useSettings } from '../context/SettingsContext';
 import { getTheme } from '../styles/theme';
 import SettingsPanel from './SettingsPanel';
 
-export default function Header({ phaseInfo, startDate, onSetStartDate, theme }) {
+export default function Header({ phaseInfo, startDate, onSetStartDate, phaseOffset, onSetPhaseOffset, subphaseDurations, onSetSubphaseDurations, theme }) {
   const { dark, setDark } = useSettings();
   const [showSettings, setShowSettings] = useState(false);
 
+  const effectiveSubs = getEffectiveSubphases(subphaseDurations);
+  const totalDays = effectiveSubs.reduce((s, x) => s + x.days, 0);
   const pm = PHASE_META.find(p => p.id === phaseInfo.pid) || PHASE_META[0];
-  const sp = SUBPHASES[phaseInfo.si];
+  const sp = effectiveSubs[phaseInfo.si];
   const { pc, pa, fg, sub, faint, cardBd, inputBg } = theme;
 
   return (
@@ -56,12 +59,12 @@ export default function Header({ phaseInfo, startDate, onSetStartDate, theme }) 
             </div>
             <div style={{ marginTop: 10, display: 'flex', gap: 2, height: 6, borderRadius: 3, overflow: 'hidden' }}>
               {PHASE_META.map(p => {
-                const days = SUBPHASES.filter(s => s.pid === p.id).reduce((s, x) => s + x.days, 0);
+                const days = effectiveSubs.filter(s => s.pid === p.id).reduce((s, x) => s + x.days, 0);
                 return (
                   <div
                     key={p.id}
                     style={{
-                      width: `${(days / TOTAL_DAYS) * 100}%`,
+                      width: `${(days / totalDays) * 100}%`,
                       background: phaseInfo.pid >= p.id ? (dark ? p.dk : p.color) : faint,
                       opacity: phaseInfo.pid > p.id ? 0.4 : 1,
                       borderRadius: 3,
@@ -75,7 +78,16 @@ export default function Header({ phaseInfo, startDate, onSetStartDate, theme }) 
       </div>
 
       {showSettings && (
-        <SettingsPanel theme={theme} onClose={() => setShowSettings(false)} />
+        <SettingsPanel
+          theme={theme}
+          onClose={() => setShowSettings(false)}
+          startDate={startDate}
+          phaseInfo={phaseInfo}
+          phaseOffset={phaseOffset}
+          onSetPhaseOffset={onSetPhaseOffset}
+          subphaseDurations={subphaseDurations}
+          onSetSubphaseDurations={onSetSubphaseDurations}
+        />
       )}
     </>
   );

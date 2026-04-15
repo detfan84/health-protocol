@@ -153,11 +153,13 @@ export async function getAllDailyRecords() {
 
 export async function loadInitialData(dateStr) {
   const [
-    startDate, dark, unitSystem, hydrationTarget, bodyWeight,
+    startDate, phaseOffset, subphaseDurations, dark, unitSystem, hydrationTarget, bodyWeight,
     hidden, userSupplements, equipment, notificationPrefs, profile, earnedBadges, workoutSchedule, activeMovements,
     dailyData, supplyStatuses, userRoutines,
   ] = await Promise.all([
     getSetting('startDate'),
+    getSetting('phaseOffset'),
+    getSetting('subphaseDurations'),
     getSetting('dark'),
     getSetting('unitSystem'),
     getSetting('hydrationTarget'),
@@ -177,6 +179,8 @@ export async function loadInitialData(dateStr) {
 
   return {
     startDate: startDate || null,
+    phaseOffset: phaseOffset || 0,
+    subphaseDurations: subphaseDurations || {},
     dark: dark || false,
     unitSystem: unitSystem || 'imperial',
     hydrationTarget: hydrationTarget || 100,
