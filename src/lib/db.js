@@ -149,9 +149,41 @@ export async function getAllDailyRecords() {
   return entries;
 }
 
+// --- One-time migrations ---
+// These run once at app init. Each migration sets a flag in the `migrations`
+// setting so it never runs again. Safe to ship and forget.
+
+async function runMigrations() {
+  const migrations = (await getSetting('migrations')) || {};
+
+  // 2026-04-15: user ordered the following items; any entries currently in
+  // "Out"/"Ordered"/"Low"/"Half" status should flip back to "Full" so the
+  // supply tracker reflects in-stock state. Preserves purchase source/URL/
+  // subscription toggles on the entry.
+  if (!migrations.markInStock_2026_04_15) {
+    const IDS = [
+      'wormwood', 'pumpkin', 'de',
+      'malic', 'palo', 'epsom',
+      'sboul', 'cap', 'oreg',
+      'chlorella',
+    ];
+    const supply = (await getSupplyStatuses()) || {};
+    let changed = false;
+    for (const id of IDS) {
+      if (supply[id] && supply[id].status !== 'Full') {
+        supply[id] = { ...supply[id], status: 'Full' };
+        changed = true;
+      }
+    }
+    if (changed) await setSupplyStatuses(supply);
+    await setSetting('migrations', { ...migrations, markInStock_2026_04_15: true });
+  }
+}
+
 // --- Bulk load for app init ---
 
 export async function loadInitialData(dateStr) {
+  await runMigrations();
   const [
     startDate, phaseOffset, subphaseDurations, dark, unitSystem, hydrationTarget, bodyWeight,
     hidden, userSupplements, equipment, notificationPrefs, profile, earnedBadges, workoutSchedule, activeMovements,

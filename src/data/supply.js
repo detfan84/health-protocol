@@ -29,9 +29,10 @@ const SHARED_SUPPLY = {
 // They appear in the supply tracker with no phase filtering so you can manage
 // reorders for things you use situationally (flushes, cleanses, baths, etc).
 export const UNSCHEDULED_SUPPLY = [
-  { id: 'malic',   name: 'Malic Acid 600mg' },
-  { id: 'palo',    name: 'Palo Azul Tea Bark' },
-  { id: 'epsom',   name: 'Epsom Salt (pharmaceutical grade)' },
+  { id: 'malic',     name: 'Malic Acid 600mg' },
+  { id: 'palo',      name: 'Palo Azul Tea Bark' },
+  { id: 'epsom',     name: 'Epsom Salt (pharmaceutical grade)' },
+  { id: 'chlorella', name: 'Chlorella (standalone \u2014 part of binder rotation)' },
 ];
 
 // Build the canonical supply item list from blocks + parasite adds
