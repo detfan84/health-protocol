@@ -29,6 +29,7 @@ import SymptomsGuide from './components/reference/SymptomsGuide';
 import AnnualLabs from './components/reference/AnnualLabs';
 
 import ExerciseTab from './ExerciseTab';
+import EpisodeTab from './EpisodeTab';
 import ProfileTab from './components/ProfileTab';
 import DietTab from './components/DietTab';
 
@@ -365,6 +366,11 @@ function AppInner() {
           <Journal journal={journal} onUpdate={updateJournal} theme={theme} />
           <SymptomTracker symptoms={symptoms} onUpdate={updateSymptoms} theme={theme} />
         </div>
+      )}
+
+      {/* EPISODES TAB */}
+      {tab === 'episodes' && (
+        <EpisodeTab theme={theme} />
       )}
 
       {/* DIET TAB */}

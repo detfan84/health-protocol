@@ -3,6 +3,7 @@ import { useSettings } from '../context/SettingsContext';
 const TABS = [
   ['today', 'Today'],
   ['log', 'Log'],
+  ['episodes', 'Episodes'],
   ['diet', 'Diet'],
   ['exercise', 'Exercise'],
   ['supply', 'Supply'],

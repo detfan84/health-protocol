@@ -1,7 +1,7 @@
 import { openDB } from 'idb';
 
 const DB_NAME = 'protocol-db';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 
 let dbPromise;
 
@@ -26,6 +26,9 @@ function getDB() {
         }
         if (!db.objectStoreNames.contains('bodylog')) {
           db.createObjectStore('bodylog');
+        }
+        if (!db.objectStoreNames.contains('episodes')) {
+          db.createObjectStore('episodes', { keyPath: 'id' });
         }
       },
     });
@@ -135,6 +138,23 @@ export async function getAllBodyLogs() {
   }
   entries.sort((a, b) => a.date.localeCompare(b.date));
   return entries;
+}
+
+// --- Episodes store (acute event log, keyed by episode id) ---
+
+export async function getAllEpisodes() {
+  const db = await getDB();
+  return db.getAll('episodes');
+}
+
+export async function addEpisode(episode) {
+  const db = await getDB();
+  return db.put('episodes', episode);
+}
+
+export async function deleteEpisode(id) {
+  const db = await getDB();
+  return db.delete('episodes', id);
 }
 
 // --- Daily store: get all records (for streak computation) ---
