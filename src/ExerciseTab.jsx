@@ -7,9 +7,10 @@ import RoutineView from './components/exercise/RoutineView';
 import WorkoutLogger from './components/exercise/WorkoutLogger';
 import ExerciseBrowser from './components/exercise/ExerciseBrowser';
 import ProgressChart from './components/exercise/ProgressChart';
+import BodyWork from './components/exercise/BodyWork';
 
 export default function ExerciseTab({ userRoutines, onSaveRoutines, date, theme }) {
-  const [view, setView] = useState('list'); // list | edit | log | browse | progress
+  const [view, setView] = useState('list'); // list | edit | log | browse | progress | body
   const [activeRoutine, setActiveRoutine] = useState(null);
   const [workout, setWorkoutState] = useState(null);
   const { fg, sub, pa, cardBd } = theme;
@@ -69,6 +70,7 @@ export default function ExerciseTab({ userRoutines, onSaveRoutines, date, theme 
     { id: 'list', label: 'Routines' },
     { id: 'browse', label: 'Browse' },
     { id: 'progress', label: 'Progress' },
+    { id: 'body', label: 'Body work' },
   ];
 
   if (view === 'edit' && activeRoutine) {
@@ -131,6 +133,10 @@ export default function ExerciseTab({ userRoutines, onSaveRoutines, date, theme 
 
       {view === 'progress' && (
         <ProgressChart theme={theme} />
+      )}
+
+      {view === 'body' && (
+        <BodyWork theme={theme} />
       )}
     </div>
   );

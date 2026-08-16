@@ -1,0 +1,63 @@
+/* Body work — the few rules inline styles cannot express.
+   Everything else in this view stays in the app's inline-style idiom. */
+
+/* Two frames per photo, crossfaded on a 2.6s loop. That loop IS the
+   animation: it shows the movement, which a still cannot. */
+@keyframes bw-crossfade {
+  0%,  42%  { opacity: 0; }
+  50%, 92%  { opacity: 1; }
+  100%      { opacity: 0; }
+}
+
+.bw-frames {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #00000010;
+}
+
+.bw-frames img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.bw-frames img.bw-b {
+  animation: bw-crossfade 2.6s ease-in-out infinite;
+}
+
+.bw-frames.bw-paused img.bw-b {
+  animation-play-state: paused;
+  opacity: 0;
+}
+
+/* The pause control always works, whatever the motion preference. */
+.bw-pp {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  padding: 3px 10px;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.62);
+  cursor: pointer;
+}
+
+.bw-spark path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.bw-spark circle {
+  fill: currentColor;
+}

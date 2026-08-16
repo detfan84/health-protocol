@@ -8,6 +8,12 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['icon-192.png', 'icon-512.png'],
+      workbox: {
+        // jpg is not in workbox's default precache patterns. The body work
+        // photos live in public/bodywork-images/ and the whole point is that
+        // they work with no network, so they have to be precached explicitly.
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,webmanifest}'],
+      },
       manifest: {
         name: 'Protocol Tracker',
         short_name: 'Protocol',

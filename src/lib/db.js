@@ -1,7 +1,7 @@
 import { openDB } from 'idb';
 
 const DB_NAME = 'protocol-db';
-const DB_VERSION = 3;
+const DB_VERSION = 4;
 
 let dbPromise;
 
@@ -29,6 +29,9 @@ function getDB() {
         }
         if (!db.objectStoreNames.contains('episodes')) {
           db.createObjectStore('episodes', { keyPath: 'id' });
+        }
+        if (!db.objectStoreNames.contains('bodywork')) {
+          db.createObjectStore('bodywork');
         }
       },
     });
@@ -157,6 +160,21 @@ export async function deleteEpisode(id) {
   return db.delete('episodes', id);
 }
 
+// --- Body work store ---
+// One object under one key, mirroring the export/import JSON shape exactly.
+// That file is the migration path in and out of this view, so the stored
+// object and the exported object must never drift apart.
+
+export async function getBodyWorkLog() {
+  const db = await getDB();
+  return db.get('bodywork', 'log');
+}
+
+export async function setBodyWorkLog(log) {
+  const db = await getDB();
+  return db.put('bodywork', log, 'log');
+}
+
 // --- Daily store: get all records (for streak computation) ---
 
 export async function getAllDailyRecords() {
@@ -207,6 +225,7 @@ export async function loadInitialData(dateStr) {
   const [
     startDate, phaseOffset, subphaseDurations, dark, unitSystem, hydrationTarget, bodyWeight,
     hidden, userSupplements, equipment, notificationPrefs, profile, earnedBadges, workoutSchedule, activeMovements,
+    bodyworkReminders,
     dailyData, supplyStatuses, userRoutines,
   ] = await Promise.all([
     getSetting('startDate'),
@@ -224,6 +243,7 @@ export async function loadInitialData(dateStr) {
     getSetting('earnedBadges'),
     getSetting('workoutSchedule'),
     getSetting('activeMovements'),
+    getSetting('bodyworkReminders'),
     getDaily(dateStr),
     getSupplyStatuses(),
     getRoutines(),
@@ -245,6 +265,7 @@ export async function loadInitialData(dateStr) {
     earnedBadges: earnedBadges || {},
     workoutSchedule: workoutSchedule || { days: [], time: '09:00', reminders: false },
     activeMovements: activeMovements || null,
+    bodyworkReminders: bodyworkReminders || null,
     daily: dailyData || {},
     supplyStatuses,
     userRoutines,
