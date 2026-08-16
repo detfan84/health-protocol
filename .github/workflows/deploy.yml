@@ -32,7 +32,10 @@ jobs:
       # Tests gate the deploy — a broken build should not reach the phone.
       - run: npm test
 
+      # Only Pages needs the subpath base; Vercel serves from the root.
       - run: npm run build
+        env:
+          DEPLOY_TARGET: github-pages
 
       - uses: actions/upload-pages-artifact@v3
         with:

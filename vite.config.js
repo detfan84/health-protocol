@@ -2,9 +2,19 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
-// Served from https://<user>.github.io/health-protocol/, so every asset URL
-// needs that prefix. import.meta.env.BASE_URL picks this up automatically.
-const BASE = '/health-protocol/';
+// This app is served from TWO places, at different paths:
+//
+//   Vercel (primary, the installed phone app):
+//     https://health-protocol-theta.vercel.app/   -> base '/'
+//   GitHub Pages (secondary):
+//     https://detfan84.github.io/health-protocol/ -> base '/health-protocol/'
+//
+// Vercel auto-deploys from this repo, so a hardcoded subpath base breaks the
+// primary deployment: index.html asks for /health-protocol/assets/... which
+// does not exist at the domain root, every asset 404s, and the app is a blank
+// screen. Only the Pages workflow sets DEPLOY_TARGET, so the default stays
+// correct for Vercel and for local dev.
+const BASE = process.env.DEPLOY_TARGET === 'github-pages' ? '/health-protocol/' : '/';
 
 export default defineConfig({
   base: BASE,
