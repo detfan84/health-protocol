@@ -18,8 +18,8 @@ export function fireNotification(title, body, tag = 'protocol-reminder') {
   try {
     new Notification(title, {
       body,
-      icon: '/icon-192.png',
-      badge: '/icon-192.png',
+      icon: `${import.meta.env.BASE_URL}icon-192.png`,
+      badge: `${import.meta.env.BASE_URL}icon-192.png`,
       // Distinct tags so a body work reminder does not replace a protocol
       // one in the tray, and vice versa.
       tag,

@@ -33,6 +33,7 @@ import ExerciseTab from './ExerciseTab';
 import EpisodeTab from './EpisodeTab';
 import ProfileTab from './components/ProfileTab';
 import DietTab from './components/DietTab';
+import Disclaimer, { SHORT as DISCLAIMER_SHORT, FULL as DISCLAIMER_FULL } from './components/Disclaimer';
 
 function AppInner() {
   const settings = useSettings();
@@ -413,8 +414,37 @@ function AppInner() {
           <LiverFlush theme={theme} />
           <SymptomsGuide theme={theme} />
           <AnnualLabs theme={theme} startDate={startDate} onResetStart={handleResetStartDate} />
+
+          {/* Full text lives here permanently, not only in the one-time notice. */}
+          <div style={{ padding: '0 16px 8px' }}>
+            <h3 style={{ fontSize: 14, fontWeight: 700, color: theme.fg, margin: '8px 0 8px' }}>
+              Disclaimer
+            </h3>
+            {DISCLAIMER_FULL.map((s, i) => (
+              <div key={i} style={{
+                background: theme.cardBg, border: `1px solid ${theme.cardBd}`,
+                borderRadius: 10, padding: '11px 13px', marginBottom: 8,
+              }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: theme.fg, marginBottom: 4 }}>
+                  {s.h}
+                </div>
+                <div style={{ fontSize: 12, lineHeight: 1.6, color: theme.sub }}>{s.p}</div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
+
+      {/* Always visible, every tab. */}
+      <footer style={{
+        padding: '14px 16px 22px', marginTop: 8,
+        borderTop: `1px solid ${theme.cardBd}`,
+        fontSize: 10.5, lineHeight: 1.55, color: theme.sub, textAlign: 'center',
+      }}>
+        {DISCLAIMER_SHORT}
+      </footer>
+
+      <Disclaimer theme={theme} />
     </div>
   );
 }
