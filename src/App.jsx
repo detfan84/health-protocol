@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { SettingsProvider, useSettings } from './context/SettingsContext';
-import { loadInitialData, setSetting, setDailyField, setSupplyStatuses, setRoutines, setWorkout, getWorkout, getAllDailyRecords, getAllWorkouts } from './lib/db';
+import { loadInitialData, setSetting, setDailyField, setSupplyStatuses, setRoutines, setWorkout, getWorkout, getAllDailyRecords, getAllWorkouts, getBodyWorkLog } from './lib/db';
 import { getPhaseInfo, today, getHour } from './lib/phaseUtils';
 import { BLOCKS, PARASITE_ADDS } from './data/blocks';
 import { PHASE_META, SUBPHASES } from './data/phases';
 import { getTheme } from './styles/theme';
 import { scheduleBlockReminders, scheduleWorkoutReminder } from './lib/notifications';
+import { scheduleBodyWorkReminders } from './lib/bodyworkReminders';
 import { getEncouragement, getHydrationEncouragement, getMovementEncouragement, evaluateBadges } from './lib/badgeUtils';
 import { computeStreaks } from './lib/streakUtils';
 
@@ -78,6 +79,11 @@ function AppInner() {
       // Schedule workout reminder if enabled
       if (data.workoutSchedule?.reminders) {
         scheduleWorkoutReminder(data.workoutSchedule);
+      }
+      // Body work reminders keep their own timers, so they survive the
+      // cancelAllReminders() that scheduleBlockReminders does above.
+      if (data.bodyworkReminders?.enabled) {
+        scheduleBodyWorkReminders(() => getBodyWorkLog(), data.bodyworkReminders);
       }
       // Compute streaks from history
       Promise.all([getAllDailyRecords(), getAllWorkouts()]).then(([dailyRecords, workouts]) => {

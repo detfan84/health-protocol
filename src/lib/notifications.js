@@ -13,14 +13,16 @@ export function getPermissionStatus() {
   return Notification.permission;
 }
 
-function fireNotification(title, body) {
+export function fireNotification(title, body, tag = 'protocol-reminder') {
   if (Notification.permission !== 'granted') return;
   try {
     new Notification(title, {
       body,
       icon: '/icon-192.png',
       badge: '/icon-192.png',
-      tag: 'protocol-reminder',
+      // Distinct tags so a body work reminder does not replace a protocol
+      // one in the tray, and vice versa.
+      tag,
       requireInteraction: true,
     });
   } catch (e) {
