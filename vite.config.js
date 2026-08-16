@@ -18,6 +18,12 @@ export default defineConfig({
         // photos live in public/bodywork-images/ and the whole point is that
         // they work with no network, so they have to be precached explicitly.
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,webmanifest}'],
+        // Delete precaches from previous builds instead of leaving them to
+        // accumulate. A stale precache serving an old index.html against new
+        // asset hashes is exactly how you get a permanently blank screen.
+        cleanupOutdatedCaches: true,
+        skipWaiting: true,
+        clientsClaim: true,
       },
       manifest: {
         name: 'Protocol Tracker',

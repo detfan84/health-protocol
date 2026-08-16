@@ -39,6 +39,20 @@
           problems.push(what);
           render();
         }
+
+        // Ask the browser to re-check the service worker on every load, from
+        // here rather than from the app bundle. If the bundle is broken or
+        // stale it may never run, and then nothing would ever trigger the
+        // update that fixes it — which is how a bad cache becomes permanent.
+        try {
+          if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
+            navigator.serviceWorker.getRegistrations().then(function (rs) {
+              for (var i = 0; i < rs.length; i++) {
+                try { rs[i].update(); } catch (e) {}
+              }
+            });
+          }
+        } catch (e) {}
         window.addEventListener('error', function (e) {
           note(
             e.message +
@@ -55,6 +69,41 @@
           var root = document.getElementById('root');
           if (!root || rendered) return;
           if (root.children.length > 0) return; // app mounted fine, stay out of the way
+
+          // A stale service worker is the likeliest cause of a blank screen,
+          // and it is fixable without bothering anyone. Try clearing it once
+          // and reloading before showing a panel. The sessionStorage flag
+          // makes it strictly one attempt, so a genuine code fault cannot
+          // turn into a reload loop.
+          var TRIED = 'bw-selfheal-tried';
+          var canTry = false;
+          try { canTry = !sessionStorage.getItem(TRIED); } catch (e) {}
+          if (canTry && navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
+            try { sessionStorage.setItem(TRIED, '1'); } catch (e) {}
+            navigator.serviceWorker.getRegistrations().then(function (rs) {
+              if (!rs.length) { showPanel(); return; }
+              var left = rs.length;
+              rs.forEach(function (r) {
+                r.unregister().then(function () {
+                  if (--left === 0) {
+                    if (window.caches && caches.keys) {
+                      caches.keys().then(function (ks) {
+                        Promise.all(ks.map(function (k) { return caches.delete(k); }))
+                          .then(function () { location.reload(); }, function () { location.reload(); });
+                      }, function () { location.reload(); });
+                    } else { location.reload(); }
+                  }
+                }, function () { showPanel(); });
+              });
+            }, function () { showPanel(); });
+            return;
+          }
+          showPanel();
+        }
+
+        function showPanel() {
+          var root = document.getElementById('root');
+          if (!root || rendered || root.children.length > 0) return;
           rendered = true;
           var html =
             '<div style="font:14px/1.6 system-ui,sans-serif;color:#1a1a1a;background:#faf9f7;' +
