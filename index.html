@@ -21,6 +21,111 @@
   </head>
   <body>
     <div id="root"></div>
+
+    <!--
+      Blank-screen diagnostic. Deliberately a CLASSIC script, not a module,
+      and deliberately ES5: if the app bundle fails to PARSE on an older
+      browser, nothing inside it runs — including any error boundary written
+      in React. This has to survive that, so it cannot use modern syntax and
+      cannot depend on the bundle loading at all.
+
+      If the app has not mounted a few seconds after load, this replaces the
+      white screen with the actual error and enough browser detail to act on.
+    -->
+    <script>
+      (function () {
+        var problems = [];
+        function note(what) {
+          problems.push(what);
+          render();
+        }
+        window.addEventListener('error', function (e) {
+          note(
+            e.message +
+              (e.filename ? ' — ' + String(e.filename).split('/').pop() : '') +
+              (e.lineno ? ':' + e.lineno : '')
+          );
+        });
+        window.addEventListener('unhandledrejection', function (e) {
+          note('Unhandled promise rejection: ' + (e.reason && e.reason.message ? e.reason.message : String(e.reason)));
+        });
+
+        var rendered = false;
+        function render() {
+          var root = document.getElementById('root');
+          if (!root || rendered) return;
+          if (root.children.length > 0) return; // app mounted fine, stay out of the way
+          rendered = true;
+          var html =
+            '<div style="font:14px/1.6 system-ui,sans-serif;color:#1a1a1a;background:#faf9f7;' +
+            'padding:20px;max-width:480px;margin:0 auto;min-height:100vh">' +
+            '<h1 style="font-size:17px;margin:0 0 6px">This screen would have been blank</h1>' +
+            '<p style="color:#666;font-size:13px;margin:0 0 14px">' +
+            'The app failed to start. Send this text and it can be fixed.</p>';
+          if (problems.length) {
+            html +=
+              '<div style="background:#fff;border:1px solid #e6ded6;border-radius:8px;padding:11px;margin-bottom:10px">' +
+              '<b style="font-size:12px">Error</b><pre style="white-space:pre-wrap;word-break:break-word;' +
+              'font-size:12px;margin:5px 0 0">' +
+              problems.join('\n\n').replace(/[<>&]/g, function (c) {
+                return { '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c];
+              }) +
+              '</pre></div>';
+          } else {
+            html +=
+              '<div style="background:#fff;border:1px solid #e6ded6;border-radius:8px;padding:11px;margin-bottom:10px">' +
+              '<b style="font-size:12px">Error</b><p style="font-size:12px;margin:5px 0 0">' +
+              'No error was reported, so the script probably never ran at all — most often a ' +
+              'cached service worker serving a stale page, or the script being blocked.</p></div>';
+          }
+          html +=
+            '<div style="background:#fff;border:1px solid #e6ded6;border-radius:8px;padding:11px;margin-bottom:10px">' +
+            '<b style="font-size:12px">Browser</b><pre style="white-space:pre-wrap;word-break:break-word;' +
+            'font-size:11px;color:#666;margin:5px 0 0">' +
+            navigator.userAgent +
+            '\nmodules: ' + ('noModule' in HTMLScriptElement.prototype ? 'yes' : 'NO') +
+            '\nservice worker: ' + ('serviceWorker' in navigator ? 'yes' : 'no') +
+            '\nURL: ' + location.href +
+            '</pre></div>' +
+            '<button id="bw-reset" style="width:100%;padding:12px;font-size:14px;font-weight:600;' +
+            'border:none;border-radius:8px;background:#2D5016;color:#fff">' +
+            'Clear cached app and reload</button>' +
+            '<p style="color:#888;font-size:11px;margin:10px 0 0">' +
+            'This clears the offline cache only. Your logged data is stored separately and is not touched.</p>' +
+            '</div>';
+          root.innerHTML = html;
+
+          document.getElementById('bw-reset').onclick = function () {
+            var done = function () { location.reload(); };
+            try {
+              if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
+                navigator.serviceWorker.getRegistrations().then(function (rs) {
+                  var n = rs.length;
+                  if (!n) return caches && caches.keys ? clearCaches() : done();
+                  rs.forEach(function (r) {
+                    r.unregister().then(function () { if (--n === 0) clearCaches(); });
+                  });
+                });
+              } else { done(); }
+            } catch (err) { done(); }
+            function clearCaches() {
+              if (!window.caches || !caches.keys) return done();
+              caches.keys().then(function (ks) {
+                if (!ks.length) return done();
+                var n = ks.length;
+                ks.forEach(function (k) {
+                  caches.delete(k).then(function () { if (--n === 0) done(); });
+                });
+              }, done);
+            }
+          };
+        }
+
+        // Give the bundle a fair chance on a slow connection before shouting.
+        window.setTimeout(render, 6000);
+      })();
+    </script>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
