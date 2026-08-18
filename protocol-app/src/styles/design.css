@@ -1,0 +1,314 @@
+/* design.css — design system v1.
+ *
+ * The app's voice is quiet, so its surface is too: warm paper neutrals, one
+ * muted sage accent, generous space, minimal motion. Nothing flashes, counts
+ * up, or celebrates — the calm IS the design.
+ *
+ * Ships with: light + dark (auto via prefers-color-scheme, or pinned with
+ * [data-theme]), prefers-reduced-motion support, visible focus for keyboard
+ * users, and ≥44px touch targets throughout.
+ */
+
+/* ------------------------------ tokens ------------------------------ */
+
+:root {
+  /* palette — light (warm paper) */
+  --bg: #f5f3ee;
+  --surface: #fdfcf9;
+  --surface-2: #f0ede6;
+  --ink: #2b2a26;
+  --ink-muted: #6c675d;
+  --line: #e3dfd5;
+  --accent: #58796a;        /* muted sage */
+  --accent-ink: #ffffff;
+  --accent-soft: #e9efeb;   /* wash behind the "now" block */
+  --danger: #9c5a51;        /* muted clay, not alarm red */
+  --danger-ink: #ffffff;
+
+  /* type */
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --fs-sm: 0.8125rem;   /* 13 */
+  --fs-base: 0.9375rem; /* 15 */
+  --fs-md: 1.0625rem;   /* 17 */
+  --fs-lg: 1.25rem;     /* 20 */
+  --fs-xl: 1.5rem;      /* 24 */
+
+  /* rhythm */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px; --sp-6: 32px;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --tap: 44px;          /* minimum touch target */
+  --ease: 150ms ease;
+  --shadow: 0 1px 2px rgba(43, 42, 38, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #1a1c1a;
+    --surface: #232622;
+    --surface-2: #2b2e2a;
+    --ink: #e7e5de;
+    --ink-muted: #a29d92;
+    --line: #363a35;
+    --accent: #7fa38f;
+    --accent-ink: #1a1c1a;
+    --accent-soft: #26302a;
+    --danger: #c08b82;
+    --danger-ink: #1a1c1a;
+    --shadow: none;
+  }
+}
+:root[data-theme='dark'] {
+  --bg: #1a1c1a;
+  --surface: #232622;
+  --surface-2: #2b2e2a;
+  --ink: #e7e5de;
+  --ink-muted: #a29d92;
+  --line: #363a35;
+  --accent: #7fa38f;
+  --accent-ink: #1a1c1a;
+  --accent-soft: #26302a;
+  --danger: #c08b82;
+  --danger-ink: #1a1c1a;
+  --shadow: none;
+}
+
+/* --------------------------- calm motion ---------------------------- */
+
+* { transition: background-color var(--ease), border-color var(--ease), color var(--ease); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ------------------------------- base ------------------------------- */
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: var(--fs-base);
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--bg);
+  padding-bottom: calc(var(--tap) + var(--sp-6) + env(safe-area-inset-bottom, 0px));
+}
+
+main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--sp-4);
+}
+
+h1 { font-size: var(--fs-xl); font-weight: 650; margin: var(--sp-3) 0 var(--sp-2); }
+h2 { font-size: var(--fs-md); font-weight: 650; margin: 0; }
+p  { margin: var(--sp-2) 0; }
+
+.muted { color: var(--ink-muted); font-size: var(--fs-sm); }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ------------------------------ cards ------------------------------- */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--sp-4);
+  margin-bottom: var(--sp-4);
+}
+.card.now { background: var(--accent-soft); border-color: var(--accent); }
+
+.card-head {
+  display: flex; align-items: baseline; gap: var(--sp-2);
+  flex-wrap: wrap; margin-bottom: var(--sp-2);
+}
+.chip {
+  font-size: var(--fs-sm); color: var(--ink-muted);
+  background: var(--surface-2); border-radius: 999px; padding: 1px var(--sp-2);
+}
+.chip.now-tag { color: var(--accent-ink); background: var(--accent); }
+
+/* ------------------------------- rows ------------------------------- */
+
+.row {
+  display: flex; align-items: flex-start; gap: var(--sp-3);
+  padding: var(--sp-2) 0;
+  border-top: 1px solid var(--line);
+}
+.row:first-of-type { border-top: none; }
+.row .grow { flex: 1; min-width: 0; }
+.row .name { font-size: var(--fs-base); }
+.row .dose { color: var(--ink-muted); }
+.row .why { display: block; color: var(--ink-muted); font-size: var(--fs-sm); }
+
+/* ----------------------------- controls ----------------------------- */
+
+button, input, select, textarea { font: inherit; color: inherit; }
+
+.btn {
+  min-height: var(--tap);
+  padding: 0 var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+}
+.btn:hover { background: var(--surface-2); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.danger  { background: transparent; border-color: var(--danger); color: var(--danger); }
+.btn.quiet   { border: none; background: none; color: var(--ink-muted); min-height: var(--tap); }
+.btn.small   { min-height: 36px; min-width: 36px; padding: 0 var(--sp-2); font-size: var(--fs-sm); }
+
+/* the one tap */
+.check {
+  flex: none;
+  width: var(--tap); height: var(--tap);
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  cursor: pointer;
+  display: grid; place-items: center;
+  color: transparent;
+  font-size: var(--fs-md);
+}
+.check[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.check[aria-pressed='true'] + .grow .name { color: var(--ink-muted); }
+
+input[type='text'], input[type='number'], input[type='time'], textarea, select {
+  width: 100%;
+  min-height: var(--tap);
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+textarea { resize: vertical; min-height: 88px; }
+label { display: block; font-size: var(--fs-sm); color: var(--ink-muted); margin-bottom: var(--sp-1); }
+.field { margin-bottom: var(--sp-3); }
+.field-row { display: flex; gap: var(--sp-2); }
+.field-row > * { flex: 1; min-width: 0; }
+
+/* stepper (water) */
+.stepper { display: flex; align-items: center; gap: var(--sp-3); }
+.stepper .count { font-size: var(--fs-lg); min-width: 2ch; text-align: center; }
+
+/* ---------------------------- navigation ---------------------------- */
+
+nav.tabs {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  display: flex;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+nav.tabs button {
+  flex: 1;
+  min-height: calc(var(--tap) + var(--sp-2));
+  border: none; background: none; cursor: pointer;
+  color: var(--ink-muted);
+  font-size: var(--fs-sm);
+}
+nav.tabs button[aria-current='page'] { color: var(--accent); font-weight: 650; }
+
+/* ------------------------------ editor ------------------------------ */
+
+.editor-block { border: 1px solid var(--line); border-radius: var(--radius); padding: var(--sp-3); margin-bottom: var(--sp-3); background: var(--surface); }
+.editor-item { border-top: 1px dashed var(--line); padding-top: var(--sp-3); margin-top: var(--sp-3); }
+.reorder { display: flex; gap: var(--sp-1); }
+.phase-chip {
+  min-height: 36px;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: var(--surface); padding: 0 var(--sp-3);
+  cursor: pointer; font-size: var(--fs-sm);
+}
+.phase-chip[aria-pressed='true'] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.chip-row { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+
+.savebar {
+  position: sticky; bottom: calc(var(--tap) + var(--sp-3) + env(safe-area-inset-bottom, 0px));
+  display: flex; gap: var(--sp-2);
+  background: var(--bg);
+  padding: var(--sp-2) 0;
+}
+.savebar .btn { flex: 1; }
+
+.results { white-space: pre-wrap; font-size: var(--fs-sm); }
+
+/* --------------------------- announcer (v0.2) --------------------------- *
+ * Failures speak here (ruling B). Cards appear without animation — nothing
+ * to suppress for reduced motion — and stay until addressed. The past-
+ * failure card ([role='status']) is quieter: its moment already had its
+ * alert; this is the note that survived to the next launch.
+ */
+
+.announcer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  max-width: 680px;
+  margin: 0 auto;
+  pointer-events: none;
+}
+
+.announce-card {
+  pointer-events: auto;
+  background: var(--surface);
+  border: 1px solid var(--danger);
+  border-left: 4px solid var(--danger);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-3) var(--sp-4);
+  box-shadow: var(--shadow);
+}
+
+.announce-card[role='status'] {
+  border-color: var(--line);
+  border-left-color: var(--ink-muted);
+}
+
+.announce-card p { margin: var(--sp-1) 0 0; font-size: var(--fs-base); }
+.announce-card strong { font-size: var(--fs-base); }
+
+.announce-card .tech {
+  font-size: var(--fs-sm);
+  color: var(--ink-muted);
+  overflow-wrap: anywhere;
+}
+.announce-card .tech:empty { display: none; }
+
+.announce-actions {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.announce-card textarea {
+  width: 100%;
+  margin-top: var(--sp-2);
+  min-height: 60px;
+}
