@@ -1,0 +1,14 @@
+{
+  // Tells Cloudflare how to serve this app. There is no build step and no
+  // server code: the app is plain HTML, CSS and ES modules, and every user's
+  // data lives in their own browser. So Cloudflare's only job is to hand out
+  // the files in this folder as-is.
+  //
+  // No "main" entry on purpose — that is what makes this a static-only
+  // deployment rather than a Worker script.
+  "name": "shoes-of-peace",
+  "compatibility_date": "2026-08-18",
+  "assets": {
+    "directory": "./"
+  }
+}
