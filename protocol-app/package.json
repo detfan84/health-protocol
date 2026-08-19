@@ -4,10 +4,13 @@
   "version": "0.2.0",
   "type": "module",
   "scripts": {
-    "test": "node --test tests/data-layer.test.js tests/editor.test.js tests/trackers.test.js tests/ui-imports.test.js tests/fail-loudly-imports.test.js tests/fail-loudly.test.js"
+    "test": "node --test tests/data-layer.test.js tests/editor.test.js tests/trackers.test.js tests/ui-imports.test.js tests/fail-loudly-imports.test.js tests/fail-loudly.test.js",
+    "stage": "node scripts/stage-dist.mjs",
+    "deploy": "node scripts/stage-dist.mjs && wrangler deploy"
   },
   "devDependencies": {
     "fake-indexeddb": "^6.2.5",
-    "jsdom": "^30.0.1"
+    "jsdom": "^30.0.1",
+    "wrangler": "^4.124.0"
   }
 }

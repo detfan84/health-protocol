@@ -2,13 +2,18 @@
   // Tells Cloudflare how to serve this app. There is no build step and no
   // server code: the app is plain HTML, CSS and ES modules, and every user's
   // data lives in their own browser. So Cloudflare's only job is to hand out
-  // the files in this folder as-is.
+  // the files in dist/ as-is.
   //
-  // No "main" entry on purpose — that is what makes this a static-only
+  // dist/ is a plain copy of index.html and src/, made by
+  // scripts/stage-dist.mjs. Nothing is compiled or transformed. It exists so
+  // that tests, package.json and node_modules cannot reach the web: the
+  // script lists what ships rather than trying to exclude what must not.
+  //
+  // No "main" entry on purpose - that is what makes this a static-only
   // deployment rather than a Worker script.
   "name": "shoes-of-peace",
   "compatibility_date": "2026-08-18",
   "assets": {
-    "directory": "./"
+    "directory": "./dist"
   }
 }
