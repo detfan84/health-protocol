@@ -14,6 +14,7 @@ import { buildToday, MOVEMENT_PROMPTS, MOVEMENT_SAFETY_LINE, makePhaseSetting } 
 import { toggleCheck, setJournal, addFood, removeFood, bumpWater } from '../trackerOps.js';
 import { guarded } from './announcer.js';
 import * as store from '../store.js';
+import { hasBundled, loadBundledProtocol } from '../bundledProtocol.js';
 import { localDateKey, nowIso } from '../../lib/core.js';
 
 function timeLabel(b) {
@@ -63,7 +64,7 @@ function checkRow(item, day, why) {
   );
 }
 
-export async function viewToday() {
+export async function viewToday({ reload } = {}) {
   const date = localDateKey();
   const [protocols, day] = await Promise.all([store.loadProtocols(), store.loadDay(date)]);
   const phaseSettings = await store.loadPhaseSettings(protocols);
@@ -139,9 +140,25 @@ export async function viewToday() {
 
   function renderBlocks(t) {
     if (t.blocks.length === 0) {
-      blocksHost.append(
-        h('div.card', {}, h('p.muted', {}, 'Nothing active yet. Build a protocol — or switch one on — in Protocols.')),
+      // The empty state is where a first launch lands, so the way out of it
+      // belongs here — not one tab away, where nobody thinks to look.
+      const card = h('div.card', {},
+        h('p.muted', {}, 'Nothing active yet. Build a protocol — or switch one on — in Protocols.'),
       );
+      if (!hasBundled(protocols)) {
+        card.append(
+          h('p.muted', {}, 'Your supplement protocol from the previous app is ready to bring in — 65 items across 9 time blocks, with doses and phase timing.'),
+          h('button.btn', {
+            style: 'width:100%',
+            onclick: () =>
+              guarded(loadBundledProtocol, {
+                what: 'Loading your supplement protocol',
+                onOk: () => reload?.(),
+              }),
+          }, 'Load my supplement protocol'),
+        );
+      }
+      blocksHost.append(card);
       return;
     }
     for (const b of t.blocks) {

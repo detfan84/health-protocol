@@ -88,7 +88,7 @@ async function render() {
     } else if (state.tab === 'data') {
       view = await viewData({ applyTheme });
     } else {
-      view = await viewToday();
+      view = await viewToday({ reload: () => render() });
     }
     main.append(view);
     renderTabs();
