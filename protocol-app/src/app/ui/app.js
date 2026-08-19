@@ -81,6 +81,7 @@ async function render() {
     } else if (state.tab === 'protocols') {
       view = await viewProtocols({
         openEditor: (id) => { state.editingId = id; render(); },
+        reload: () => render(),
       });
     } else if (state.tab === 'supply') {
       view = await viewSupply();

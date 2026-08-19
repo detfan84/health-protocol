@@ -6,7 +6,25 @@ import * as store from '../store.js';
 import { newProtocol, setProtocolFields } from '../editorOps.js';
 import { guarded } from './announcer.js';
 
-export async function viewProtocols({ openEditor }) {
+/**
+ * Fetches the supplement protocol that ships with the app and imports it.
+ *
+ * Fetched rather than baked into the code on purpose: content here is data
+ * you own, and this file is the same shape as any backup you export. Import
+ * merges and never deletes, and the referee is `updatedAt` — so if you have
+ * already edited an item, loading this again keeps YOUR version.
+ */
+async function loadBundledProtocol() {
+  const res = await fetch('./supplement-protocol.json', { cache: 'no-store' });
+  if (!res.ok) throw new Error(`The protocol file didn't load (HTTP ${res.status}).`);
+  const result = await store.importBackup(await res.text());
+  if (!result.ok) {
+    throw new Error(result.errors.map((e) => `${e.path}: ${e.message}`).join(' '));
+  }
+  return result;
+}
+
+export async function viewProtocols({ openEditor, reload }) {
   const protocols = await store.loadProtocols();
   const root = h('div');
   root.append(h('h1', {}, 'Protocols'));
@@ -58,6 +76,25 @@ export async function viewProtocols({ openEditor }) {
           ),
           h('button.btn', { onclick: () => openEditor(p.id), 'aria-label': `Edit ${p.name || 'untitled protocol'}` }, 'Edit'),
         ),
+      ),
+    );
+  }
+
+  // Offered until it is here. Once loaded, this card gets out of the way.
+  if (!protocols.some((p) => p.id === 'supplement-protocol')) {
+    root.append(
+      h('div.card', {},
+        h('div.card-head', {}, h('h2', {}, 'Your supplement protocol')),
+        h('p.muted', {},
+          '65 supplements across 9 time blocks — doses, reasoning and phase timing, carried over from your previous app. Loading it adds a protocol and removes nothing. Edit anything that has changed.'),
+        h('button.btn', {
+          style: 'width:100%',
+          onclick: () =>
+            guarded(loadBundledProtocol, {
+              what: 'Loading your supplement protocol',
+              onOk: () => reload?.(),
+            }),
+        }, 'Load it'),
       ),
     );
   }

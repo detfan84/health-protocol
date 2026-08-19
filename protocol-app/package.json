@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "node --test tests/data-layer.test.js tests/editor.test.js tests/trackers.test.js tests/ui-imports.test.js tests/fail-loudly-imports.test.js tests/fail-loudly.test.js",
+    "convert": "node scripts/convert-legacy.mjs",
     "stage": "node scripts/stage-dist.mjs",
     "deploy": "node scripts/stage-dist.mjs && wrangler deploy"
   },
