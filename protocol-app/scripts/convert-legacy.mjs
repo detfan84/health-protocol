@@ -20,6 +20,7 @@ import { writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { validateFile } from '../src/lib/protocolFile.js';
+import { movementProtocols } from './convert-movement.mjs';
 import { FILE_FORMAT, SCHEMA_VERSION } from '../src/lib/schema.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -109,7 +110,7 @@ const file = {
   kind: 'backup',
   schemaVersion: SCHEMA_VERSION,
   exportedAt: now,
-  data: { protocols: [protocol], days: [], labs: [], settings: [] },
+  data: { protocols: [protocol, ...movementProtocols], days: [], labs: [], settings: [] },
 };
 
 // Check it against the app's own importer before writing. If this app would
@@ -121,11 +122,15 @@ if (!result.ok) {
   process.exit(1);
 }
 
-const out = resolve(here, '..', 'supplement-protocol.json');
+const out = resolve(here, '..', 'starter-protocols.json');
 await writeFile(out, JSON.stringify(file, null, 2) + '\n', 'utf8');
 
-const items = protocol.blocks.reduce((n, b) => n + b.items.length, 0);
-console.log(`ok: ${protocol.blocks.length} blocks, ${items} items, ${phases.length} phases`);
+for (const p of [protocol, ...movementProtocols]) {
+  const n = p.blocks.reduce((t, b) => t + b.items.length, 0);
+  console.log(
+    `${String(n).padStart(3)} items | ${p.blocks.length} blocks | ${p.active ? 'on ' : 'off'} | ${p.name}`,
+  );
+}
 if (result.warnings.length) {
   console.log(`${result.warnings.length} warning(s) from the validator:`);
   for (const w of result.warnings.slice(0, 10)) console.log('  -', w.path ?? '', w.message ?? w);

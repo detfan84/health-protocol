@@ -1,0 +1,2349 @@
+{
+  "format": "protocol-app/v1",
+  "kind": "backup",
+  "schemaVersion": 1,
+  "exportedAt": "2026-08-19T19:48:38.983Z",
+  "data": {
+    "protocols": [
+      {
+        "id": "supplement-protocol",
+        "name": "Supplement Protocol",
+        "notes": "Carried over from the previous app. Doses, reasoning and phase timing are as they were there — edit anything that has changed.",
+        "active": true,
+        "phases": [
+          {
+            "id": "ph-1-liver-biofilm-prep",
+            "name": "Liver + Biofilm Prep — Detox + Biofilm Assault",
+            "days": 21,
+            "order": 0
+          },
+          {
+            "id": "ph-1-kidney-biofilm-prep",
+            "name": "Kidney + Biofilm Prep — Detox + Biofilm Assault",
+            "days": 21,
+            "order": 1
+          },
+          {
+            "id": "ph-1-parasite-kill",
+            "name": "Parasite Kill — Detox + Biofilm Assault",
+            "days": 30,
+            "order": 2
+          },
+          {
+            "id": "ph-1-heavy-metal-detox",
+            "name": "Heavy Metal Detox — Detox + Biofilm Assault",
+            "days": 30,
+            "order": 3
+          },
+          {
+            "id": "ph-2-cleanup-ramp-up",
+            "name": "Cleanup Ramp-Up — Gut Deep Clean + Rebuild",
+            "days": 14,
+            "order": 4
+          },
+          {
+            "id": "ph-2-full-cleanup-probiotics",
+            "name": "Full Cleanup + Probiotics — Gut Deep Clean + Rebuild",
+            "days": 42,
+            "order": 5
+          },
+          {
+            "id": "ph-2-probiotic-diversification",
+            "name": "Probiotic Diversification — Gut Deep Clean + Rebuild",
+            "days": 28,
+            "order": 6
+          },
+          {
+            "id": "ph-3-gradual-rho-intro",
+            "name": "Gradual Rho Intro — Cellular Optimization",
+            "days": 21,
+            "order": 7
+          },
+          {
+            "id": "ph-3-full-stack-dim",
+            "name": "Full Stack + DIM+ — Cellular Optimization",
+            "days": 90,
+            "order": 8
+          },
+          {
+            "id": "ph-4-daily-maintenance",
+            "name": "Daily Maintenance — Lifelong Maintenance",
+            "days": 365,
+            "order": 9
+          }
+        ],
+        "blocks": [
+          {
+            "id": "wake",
+            "name": "Upon Waking — Empty Stomach",
+            "start": "05:00",
+            "end": "07:00",
+            "order": 0,
+            "items": [
+              {
+                "id": "amino",
+                "name": "Perfect Amino Powder",
+                "dose": "1 scoop in water",
+                "why": "Amino acid foundation — fasted absorption optimal",
+                "notes": "Essential amino acids in pre-digested form. Take first thing on empty stomach for maximum absorption. Mix in 8-12oz water.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "bgluc",
+                "name": "Beta-Glucan (1,3/1,6)",
+                "dose": "500mg with Perfect Amino water",
+                "why": "Immune modulator — primes NK cells, macrophages, and neutrophils",
+                "notes": "Immune modulator — primes NK cells, macrophages, and neutrophils. Supports Th1 immunity against parasites. Empty stomach required.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "glut",
+                "name": "Naked Glutamine",
+                "dose": "5g stirred into hot morning tea. Dissolves best in hot liquid — eliminates clumping.",
+                "why": "Gut lining fuel — feeds intestinal cell repair",
+                "notes": "L-Glutamine is the primary fuel source for intestinal epithelial cells. Critical during detox when gut lining is under stress.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim"
+                ]
+              },
+              {
+                "id": "lymph1",
+                "name": "Lymphoria Drops",
+                "dose": "1–2 mL under tongue",
+                "why": "Opens lymphatic drainage pathways",
+                "notes": "Homeopathic lymphatic drainage support. Hold under tongue 30 seconds before swallowing. Supports toxin removal through lymph system.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification"
+                ]
+              },
+              {
+                "id": "trace",
+                "name": "Trace Mineral Drops",
+                "dose": "Per label in water. Can add to same hot tea as glutamine.",
+                "why": "Mineral replenishment — critical during fasting + detox",
+                "notes": "Full-spectrum ionic trace minerals. Detox and fasting deplete minerals rapidly. Add to your morning water. Can add to same hot tea as glutamine.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim"
+                ]
+              },
+              {
+                "id": "colost",
+                "name": "Colostrum",
+                "dose": "Powder in morning water OR capsules with food (Breaking Fast)",
+                "why": "Immunoglobulins + lactoferrin + growth factors for mucosal immunity and gut barrier repair",
+                "notes": "Immunoglobulins (IgA, IgG) + lactoferrin + growth factors for mucosal immunity and gut barrier repair. Complements Silver Fern Cleanse but adds growth factors Cleanse doesn't have. Powder form: morning water on empty stomach. Capsule form: take with food at Breaking Fast. Do NOT add to hot liquids — heat destroys bioactive compounds.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "coffee",
+            "name": "~30 Min Later — Coffee/Tea (still fasted)",
+            "start": "06:00",
+            "end": "08:00",
+            "order": 1,
+            "items": [
+              {
+                "id": "bb",
+                "name": "Boost Blenz Detox Blend",
+                "dose": "Per label in coffee/tea",
+                "why": "Current detox phase — the backbone",
+                "notes": "Phase-specific detox blend. Mix into coffee or tea. This is the primary detox driver for Phase 1.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox"
+                ]
+              },
+              {
+                "id": "natto",
+                "name": "Nattokinase",
+                "dose": "Per label",
+                "why": "BIOFILM: Dissolves fibrin scaffolding in biofilm matrix",
+                "notes": "Enzyme derived from natto (fermented soy). Breaks down fibrin, which is the structural scaffolding that biofilms use. Take on empty stomach for systemic effect.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "gluta",
+                "name": "Rho Glutathione",
+                "dose": "1 tsp",
+                "why": "Master antioxidant — restores liver Phase II detox capacity",
+                "notes": "Liposomal glutathione. The body's master antioxidant and primary liver detoxification molecule. Hold under tongue briefly before swallowing.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "antro",
+                "name": "Standard Process Antronex",
+                "dose": "Per label",
+                "why": "Liver decongestion — especially during liver cleanse",
+                "notes": "Yakriton extract supporting liver detoxification. Especially important during the liver cleanse subphase.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox"
+                ]
+              },
+              {
+                "id": "msm",
+                "name": "MSM (from Glucosamine combo)",
+                "dose": "1 tablet",
+                "why": "Sulfur donor for glutathione production",
+                "notes": "Methylsulfonylmethane provides bioavailable sulfur needed to produce glutathione. Also supports joint health and reduces inflammation.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification"
+                ]
+              },
+              {
+                "id": "mb",
+                "name": "Methylene Blue (Meraki)",
+                "dose": "Per label",
+                "why": "Mitochondrial support + mild antimicrobial. 2+ hrs from Nano Scrub.",
+                "notes": "Pharmaceutical-grade methylene blue. Acts as an electron carrier in the mitochondrial electron transport chain. IMPORTANT: Space 2+ hours from Nano Scrub.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim"
+                ]
+              },
+              {
+                "id": "nad",
+                "name": "Rho NAD+",
+                "dose": "1 tsp",
+                "why": "Cellular energy + sirtuin activation. Supports mitochondrial function during active detox.",
+                "notes": "Liposomal NAD+ precursor. Supports cellular energy production, DNA repair, and activates sirtuins (longevity genes).",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "curc",
+                "name": "Rho Curcumin + Resveratrol",
+                "dose": "1 tsp",
+                "why": "Anti-inflammatory + longevity. Replaces Qunol Turmeric.",
+                "notes": "Liposomal curcumin and resveratrol. Powerful anti-inflammatory and antioxidant combo supporting cellular longevity.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "coq10",
+                "name": "Rho CoQ10",
+                "dose": "Per label",
+                "why": "Mitochondrial energy — synergistic with NAD+. Helps cells process detox burden.",
+                "notes": "Coenzyme Q10 in liposomal form. Essential for mitochondrial energy production. Works synergistically with NAD+.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "vitc",
+                "name": "Rho Vitamin C",
+                "dose": "Per label",
+                "why": "Immune + collagen. Antioxidant rapidly depleted during detox.",
+                "notes": "Liposomal vitamin C for enhanced absorption. Supports immune function and collagen production.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "d3k2r",
+                "name": "Rho D3K2",
+                "dose": "Per label",
+                "why": "Immune + bone health.",
+                "notes": "Liposomal vitamin D3 with K2 for proper calcium metabolism. Supports immune function and bone density.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "carn",
+                "name": "L-Carnitine",
+                "dose": "Per label",
+                "why": "Fatty acid transport into mitochondria",
+                "notes": "Transports long-chain fatty acids into mitochondria for energy production. Especially beneficial during fasted state.",
+                "phaseIds": [
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "ahcc",
+                "name": "AHCC (Kinoko Platinum)",
+                "dose": "750mg–1500mg on empty stomach",
+                "why": "Alpha-glucan immune modulator — different pathway than beta-glucan (TLR-2/TLR-4)",
+                "notes": "Alpha-glucan immune modulator — works through different pathway than beta-glucan (TLR-2/TLR-4). Resets host immunity to clear persistent infections. Add after heavy killing is done. Can also take in Upon Waking block.",
+                "phaseIds": [
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "binder",
+            "name": "Mid-Morning ~9–10am — ⚠️ BINDER WINDOW (fasted)",
+            "start": "09:00",
+            "end": "11:00",
+            "order": 2,
+            "items": [
+              {
+                "id": "bind",
+                "name": "Binder Rotation",
+                "dose": "Charcoal / Zeolite / Chlorella — rotate daily",
+                "why": "2+ hrs after supps, 2+ hrs before food. Fasting window = effortless.",
+                "notes": "Rotate between activated charcoal, zeolite, and chlorella daily. These bind toxins released during detox. CRITICAL: Must be 2+ hours away from all other supplements and food or they will bind those instead.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification"
+                ]
+              },
+              {
+                "id": "de",
+                "name": "Diatomaceous Earth (food grade)",
+                "dose": "1 tsp in water (treat as binder — 2 hrs from everything)",
+                "why": "Mechanical parasite killer — silica edges damage parasite membranes",
+                "notes": "Food-grade diatomaceous earth. The microscopic silica shells mechanically damage parasite membranes in the gut. Treat as a binder: 2+ hours from all other supplements and food. Stir 1 tsp into water and drink.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "prebmeal",
+            "name": "~15–20 Min Before First Meal — Pre-Meal (Bile Priming)",
+            "start": "11:00",
+            "end": "12:00",
+            "order": 3,
+            "items": [
+              {
+                "id": "bitters",
+                "name": "Digestive Bitters",
+                "dose": "1 dropper on tongue or in small water",
+                "why": "Stimulates vagus nerve → signals liver/gallbladder to produce bile before food arrives",
+                "notes": "Herbal bitters (gentian, dandelion, artichoke, etc.). Taste receptors on the tongue trigger the vagus nerve, which signals the liver and gallbladder to release bile in anticipation of food. Take 15–20 minutes before your first meal for best effect. Can be taken on the tongue or mixed into a small amount of water.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "meal1",
+            "name": "Breaking Fast ~Noon+ — WITH FOOD",
+            "start": "11:00",
+            "end": "14:00",
+            "order": 4,
+            "items": [
+              {
+                "id": "tudca",
+                "name": "TUDCA",
+                "dose": "500mg liver phase → 250mg ongoing",
+                "why": "Bile flow + liver detox. Absorbs better with food.",
+                "notes": "Better with food; tolerable with a small snack.\n\nTauroursodeoxycholic acid. Supports bile flow, liver detoxification, and protects liver cells. Higher dose during liver cleanse phase, lower dose ongoing.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "oxbile",
+                "name": "Ox Bile",
+                "dose": "125–500mg with fatty meals (start low)",
+                "why": "Directly supplements insufficient bile — improves fat digestion and fat-soluble vitamin absorption",
+                "notes": "NEVER take this without food — it can cause harm on an empty stomach.\n\nBovine bile extract. Directly supplements insufficient bile output, improving fat digestion and absorption of fat-soluble vitamins (A, D, E, K). ALWAYS take with fatty meals. Start low (125mg) and titrate up to tolerance — too much can cause loose stools.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim"
+                ]
+              },
+              {
+                "id": "lecithin",
+                "name": "Sunflower Lecithin",
+                "dose": "1 tbsp granules with food",
+                "why": "Keeps bile fluid, prevents sludge/stone formation — bile thinner",
+                "notes": "Better with food; tolerable with a small snack.\n\nPhospholipid-rich granules that keep bile fluid and prevent biliary sludge/stone formation. Stir into food or a smoothie. Soy-free option preferred (sunflower). Tastes slightly nutty, dissolves easily.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "artichoke",
+                "name": "Artichoke Extract",
+                "dose": "Per label with food",
+                "why": "Increases bile production volume — clinical evidence. Pairs with TUDCA (quality + quantity).",
+                "notes": "Better with food; tolerable with a small snack.\n\nCynara scolymus leaf extract (cynarin). Clinical evidence for increasing bile production volume. Complementary to TUDCA: artichoke boosts quantity of bile, TUDCA improves its quality/flow. Better absorbed with food.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim"
+                ]
+              },
+              {
+                "id": "berb",
+                "name": "Berberine",
+                "dose": "Per label — NEVER empty stomach",
+                "why": "BIOFILM: Jams quorum sensing + antimicrobial. Must have food.",
+                "notes": "NEVER take this without food — it can cause harm on an empty stomach.\n\nBerberine disrupts bacterial quorum sensing (how biofilm organisms communicate). Also has antimicrobial and blood sugar benefits. ALWAYS take with food — can cause severe nausea on empty stomach.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "garlic",
+                "name": "Raw Garlic",
+                "dose": "2 cloves crushed, sit 10 min, eat with first food",
+                "why": "Allicin disrupts parasite cell membranes — mild but persistent pressure",
+                "notes": "Better with food; tolerable with a small snack.\n\nAllicin disrupts parasite cell membranes — mild but persistent pressure. Crush 2 cloves, let sit for 10 minutes to allow allicin to form, then eat with your first food of the day.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox"
+                ]
+              },
+              {
+                "id": "wormwood",
+                "name": "Wormwood/Cloves/Black Walnut (Clark Triad)",
+                "dose": "Per label — start half dose week 1",
+                "why": "Herbal antiparasitic: wormwood targets adults, cloves target eggs, black walnut targets larvae",
+                "notes": "Better with food; tolerable with a small snack.\n\nThe Clark parasite triad. Wormwood targets adult parasites, cloves target eggs, black walnut targets larvae — together they cover all life stages. Start at half dose week 1 to gauge tolerance, then ramp to full dose per label.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification"
+                ]
+              },
+              {
+                "id": "papaya",
+                "name": "Papaya Seeds",
+                "dose": "1 tbsp chewed raw",
+                "why": "Antiparasitic — carpaine disrupts parasite membranes",
+                "notes": "Better with food; tolerable with a small snack.\n\nCarpaine in papaya seeds disrupts parasite membranes. Chew 1 tbsp raw seeds (peppery taste) with a meal. Can also blend into smoothies. Fresh seeds from a ripe papaya are most potent.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification"
+                ]
+              },
+              {
+                "id": "pumpkin",
+                "name": "Pumpkin Seeds",
+                "dose": "1/4 cup raw, chewed, 2-3x/week",
+                "why": "Cucurbitin paralyzes worms — aids expulsion",
+                "notes": "Better with food; tolerable with a small snack.\n\nCucurbitin in pumpkin seeds paralyzes intestinal worms, aiding their expulsion. Must be raw (roasted loses potency). Chew thoroughly — 1/4 cup 2-3x per week with meals.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification"
+                ]
+              },
+              {
+                "id": "turm",
+                "name": "Qunol Turmeric",
+                "dose": "Per label",
+                "why": "⚠️ FALLBACK: Use until Rho Curcumin arrives, then swap.",
+                "notes": "Better with food; tolerable with a small snack.\n\nTurmeric extract with enhanced absorption. Anti-inflammatory support during detox phases. Fat-soluble — absorbs better with food. TEMPORARY — swap to Rho Curcumin + Resveratrol when it arrives.\n\nCurrently using what is on hand — a stopgap, not the intended product.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox"
+                ]
+              },
+              {
+                "id": "clo",
+                "name": "Cod Liver Oil",
+                "dose": "Per label",
+                "why": "Omega-3 + vitamin A (mucosal membranes) + vitamin D",
+                "notes": "Better with food; tolerable with a small snack.\n\nWhole-food source of omega-3s, vitamin A, and vitamin D. Fat-soluble vitamins absorb better with food. Can cause fishy burps on empty stomach.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "zinc",
+                "name": "Zinc + Copper",
+                "dose": "50mg→25mg zinc. Copper on zinc days.",
+                "why": "Immune, stomach acid, gut repair.",
+                "notes": "NEVER take this without food — it can cause harm on an empty stomach.\n\nZinc supports immune function, stomach acid production, and gut repair. ALWAYS take with food — causes nausea on empty stomach. Take copper alongside zinc to prevent depletion.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "liver",
+                "name": "Desiccated Liver",
+                "dose": "Per label (use remaining)",
+                "why": "Whole-food B vitamins, iron, vitamin A.",
+                "notes": "Better with food; tolerable with a small snack.\n\nGrass-fed desiccated liver capsules. Nature's multivitamin — iron content can cause nausea without food.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox"
+                ]
+              },
+              {
+                "id": "adren",
+                "name": "Jigsaw Adrenal Cocktail",
+                "dose": "Per label",
+                "why": "⚠️ FALLBACK: Use until Rho Vitamin C arrives, then swap.",
+                "notes": "Better with food; tolerable with a small snack.\n\nWhole-food vitamin C with sodium and potassium for adrenal support. Better absorbed with food. TEMPORARY — swap to Rho Vitamin C when it arrives.\n\nCurrently using what is on hand — a stopgap, not the intended product.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox"
+                ]
+              },
+              {
+                "id": "d3k2",
+                "name": "D3/K2 (current supply)",
+                "dose": "Per label",
+                "why": "⚠️ FALLBACK: Use until Rho D3K2 arrives, then swap.",
+                "notes": "Better with food; tolerable with a small snack.\n\nVitamin D3 with K2. Fat-soluble — absorbs better with food. TEMPORARY — swap to Rho D3K2 when it arrives.\n\nCurrently using what is on hand — a stopgap, not the intended product.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox"
+                ]
+              },
+              {
+                "id": "rv",
+                "name": "RepairVite K-60",
+                "dose": "Per label (use before July)",
+                "why": "Gut barrier repair — complements Reflux Pro",
+                "notes": "Better with food; tolerable with a small snack.\n\nApex Energetics gut repair formula. Contains nutrients that support tight junction integrity. Better tolerated with food.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox"
+                ]
+              },
+              {
+                "id": "collr",
+                "name": "Rho Collagen Peptides",
+                "dose": "Per label",
+                "why": "Hair, skin, joints, gut lining.",
+                "notes": "Better with food; tolerable with a small snack.\n\nHydrolyzed collagen peptides for connective tissue support. Can be taken fasted or with food.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "sliver",
+                "name": "Super Liver (Super Bonsai)",
+                "dose": "2 full droppers with food",
+                "why": "7-herb liver support formula (milk thistle, dandelion, turmeric, ginger, yellow dock, chicory root). Supports liver detox capacity during heavy protocol phases.",
+                "notes": "Better with food; tolerable with a small snack.\n\n7-herb liver support tincture: milk thistle, dandelion, turmeric, ginger, yellow dock, chicory root. Take 2 full droppers with food. Supports liver detox capacity during the heaviest protocol phases.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim"
+                ]
+              },
+              {
+                "id": "mthistle",
+                "name": "Milk Thistle",
+                "dose": "Per label",
+                "why": "Liver protectant — silymarin shields liver cells during detox",
+                "notes": "Better with food; tolerable with a small snack.\n\nStandardized silymarin extract. Protects liver cells (hepatocytes) from toxin damage, supports glutathione production, and promotes liver cell regeneration. Especially important during active detox phases. Fat-soluble — absorbs better with food.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "bseed",
+                "name": "Black Seed Oil",
+                "dose": "Per label (1 tsp or capsules)",
+                "why": "Anti-inflammatory, antimicrobial, immune modulator",
+                "notes": "Better with food; tolerable with a small snack.\n\nNigella sativa oil (thymoquinone). Broad-spectrum benefits: anti-inflammatory, antioxidant, antimicrobial, and immune-modulating. Supports liver function, gut health, and respiratory health. Studies show activity against biofilms and Candida. Better tolerated with food — can cause mild GI upset on empty stomach.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "pectin",
+                "name": "Apple Pectin",
+                "dose": "1 tsp mixed into food or water",
+                "why": "Prebiotic — feeds F. prausnitzii (butyrate producer flagged low on GI-MAP)",
+                "notes": "Better with food; tolerable with a small snack.\n\nPrebiotic that specifically feeds F. prausnitzii (butyrate producer flagged low on GI-MAP). Start Phase 2 Week 3+ alongside probiotics. Start with 1 tsp — ramp up over 2+ weeks. If significant bloating/gas, cut dose in half and rebuild. Do NOT start until spore probiotics have been active for at least 2 weeks.",
+                "phaseIds": [
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "rstarch",
+                "name": "Resistant Starch (Potato Starch)",
+                "dose": "1 tsp in water or food (ramp to 1 tbsp)",
+                "why": "Third prebiotic lever for butyrate-producer recolonization",
+                "notes": "Better with food; tolerable with a small snack.\n\nThird prebiotic lever for butyrate-producer recolonization. Must be uncooked — heat destroys resistant starch. Start Phase 2 Week 3+. Start with 1 tsp — ramp up over 2+ weeks. If significant bloating/gas, cut dose in half and rebuild. Do NOT start until spore probiotics have been active for at least 2 weeks.",
+                "phaseIds": [
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "post1",
+            "name": "After First Meal — After Eating",
+            "start": "12:00",
+            "end": "15:00",
+            "order": 5,
+            "items": [
+              {
+                "id": "reflux",
+                "name": "Silver Fern Reflux Pro",
+                "dose": "Powder into mouth, dissolve",
+                "why": "Coats/repairs stomach mucosal lining",
+                "notes": "Pour powder directly into mouth and let dissolve. Creates a protective coating on the stomach lining and supports mucosal repair.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification"
+                ]
+              },
+              {
+                "id": "mf",
+                "name": "Rho Methylfolate + B12",
+                "dose": "Per label",
+                "why": "Methylation engine — powers toxin processing",
+                "notes": "Active forms of folate and B12. These power the methylation cycle which is essential for processing and eliminating toxins.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "bcomp",
+                "name": "Rho Methylated B-Complex",
+                "dose": "Per label",
+                "why": "Full B vitamin support for energy + nervous system",
+                "notes": "Full-spectrum B vitamins in methylated (active) forms. Supports energy production, nervous system function, and methylation.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "tmg",
+                "name": "Rho Liposomal TMG",
+                "dose": "Per label",
+                "why": "Methyl donor — feeds methylation cycle",
+                "notes": "Trimethylglycine (betaine). Provides methyl groups that fuel the methylation cycle. Supports liver function and homocysteine metabolism.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "sboul",
+                "name": "Saccharomyces boulardii",
+                "dose": "Per label",
+                "why": "Probiotic yeast — territory defense against Candida",
+                "notes": "Beneficial yeast that competes with Candida for intestinal real estate. Survives antibiotics and supports gut immune function.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification"
+                ]
+              },
+              {
+                "id": "dgl",
+                "name": "DGL (Deglycyrrhizinated Licorice)",
+                "dose": "1–2 chewable tablets after eating",
+                "why": "Stimulates mucin production — rebuilds lining from underneath while Reflux Pro coats from above",
+                "notes": "Stimulates mucin production in stomach/intestinal lining. Complements Reflux Pro — DGL rebuilds from underneath while Reflux Pro coats from above.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification"
+                ]
+              },
+              {
+                "id": "sfcl",
+                "name": "Silver Fern Cleanse",
+                "dose": "2–4 caps (ramp per protocol)",
+                "why": "Immunoglobulins bind pathogen debris",
+                "notes": "Better with food; tolerable with a small snack.\n\nImmunoglobulin-based formula that binds to pathogen debris and toxins. Better tolerated after eating.",
+                "phaseIds": [
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "afternoon",
+            "name": "Afternoon — Between Meals",
+            "start": "14:00",
+            "end": "17:00",
+            "order": 6,
+            "items": [
+              {
+                "id": "elec",
+                "name": "Perfect Amino Electrolytes",
+                "dose": "1 scoop — sip through afternoon",
+                "why": "Hydration + minerals during fasting + detox",
+                "notes": "Electrolyte powder with amino acids. Sip throughout the afternoon for sustained hydration and mineral replenishment.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "lymph2",
+                "name": "Lymphoria Drops (2nd dose)",
+                "dose": "1–2 mL in water",
+                "why": "Second dose keeps lymph draining",
+                "notes": "Second daily dose of lymphatic drainage support. Maintains lymph flow throughout the day for continuous toxin removal.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox"
+                ]
+              },
+              {
+                "id": "acacia",
+                "name": "Acacia Fiber",
+                "dose": "1 tsp in water (start small, ramp to 1 tbsp)",
+                "why": "Gentle slow-fermenting prebiotic — feeds beneficial bacteria without gas/bloating",
+                "notes": "Gentle slow-fermenting prebiotic — feeds beneficial bacteria without the gas/bloating of other prebiotics. Start when introducing probiotics in Phase 2. Start with 1 tsp — ramp up over 2+ weeks. If significant bloating/gas, cut dose in half and rebuild. Do NOT start until spore probiotics have been active for at least 2 weeks.",
+                "phaseIds": [
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "dinner",
+            "name": "Dinner — With Food",
+            "start": "17:00",
+            "end": "20:00",
+            "order": 7,
+            "items": [
+              {
+                "id": "motil",
+                "name": "Silver Fern Motility",
+                "dose": "2 capsules",
+                "why": "Peristalsis via bile + serotonin. NOT a laxative.",
+                "notes": "Better with food; tolerable with a small snack.\n\nSupports natural gut motility through bile stimulation and serotonin receptor activation. Designed to take with meals.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification"
+                ]
+              },
+              {
+                "id": "coll",
+                "name": "Orgain Collagen",
+                "dose": "Per label",
+                "why": "⚠️ FALLBACK: Use until Rho Collagen arrives, then swap.",
+                "notes": "Better with food; tolerable with a small snack.\n\nCollagen protein providing glycine and proline. Better absorbed with food. TEMPORARY — swap to Rho Collagen Peptides when it arrives.\n\nCurrently using what is on hand — a stopgap, not the intended product.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox"
+                ]
+              },
+              {
+                "id": "sfcl2",
+                "name": "Silver Fern Cleanse (2nd dose)",
+                "dose": "4 caps if moderate–severe",
+                "why": "Evening immunoglobulin dose",
+                "notes": "Better with food; tolerable with a small snack.\n\nSecond daily dose of immunoglobulin cleanse. Better tolerated with food.",
+                "phaseIds": [
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification"
+                ]
+              },
+              {
+                "id": "dim",
+                "name": "Rho DIM+",
+                "dose": "Per label",
+                "why": "Estrogen metabolism + hormonal balance. Hold until body is stable — hormonal modulation during active detox makes it impossible to distinguish die-off from DIM+ effects.",
+                "notes": "Better with food; tolerable with a small snack.\n\nDiindolylmethane supports healthy estrogen metabolism. Fat-soluble — absorbs better with food. PHASES 3-4 ONLY: Hormonal modulation during active detox makes it impossible to distinguish die-off from DIM+ effects.",
+                "phaseIds": [
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "prob",
+                "name": "Probiotic (multi-strain)",
+                "dose": "Per label",
+                "why": "Microbiome maintenance",
+                "notes": "Better with food; tolerable with a small snack.\n\nMulti-strain probiotic for ongoing microbiome diversity. Survives stomach acid better when taken with food.",
+                "phaseIds": [
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "inulin",
+                "name": "Inulin/FOS",
+                "dose": "1 tsp in water (start small)",
+                "why": "Prebiotic — feeds Bifidobacterium and butyrate producers",
+                "notes": "Prebiotic — feeds Bifidobacterium and butyrate producers. Supports cross-feeding relationship with existing B. longum. Start Phase 2 Week 3+. Start with 1 tsp — ramp up over 2+ weeks. If significant bloating/gas, cut dose in half and rebuild. Do NOT start until spore probiotics have been active for at least 2 weeks.",
+                "phaseIds": [
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "bed",
+            "name": "Bedtime — Before Sleep",
+            "start": "20:00",
+            "end": "23:59",
+            "order": 8,
+            "items": [
+              {
+                "id": "elim",
+                "name": "Body Health Eliminate",
+                "dose": "2–4 caps (back off if loose)",
+                "why": "Overnight drainage. Taper as Motility works.",
+                "notes": "Herbal bowel support for overnight drainage and elimination. Start at 2 caps, increase to 4 if needed. Reduce dose if stools become too loose.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification"
+                ]
+              },
+              {
+                "id": "taurine",
+                "name": "Taurine",
+                "dose": "500–1000mg",
+                "why": "Required for bile acid conjugation — liver can't finish making functional bile acids without it. Also calming.",
+                "notes": "Amino acid required for bile acid conjugation. The liver combines bile acids with taurine (or glycine) to form functional conjugated bile acids. Without adequate taurine, bile composition is impaired. Bonus: taurine has calming/sleep-supporting effects via GABA pathways, making bedtime an ideal timing.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "mag",
+                "name": "Magnesium Glycinate (Pure Encapsulations)",
+                "dose": "Per label",
+                "why": "Sleep, relaxation, gentle bowel support. Alternative to Rho Magnesium — use either one.",
+                "notes": "Glycinate form for best absorption and calming effect. Supports sleep, muscle relaxation, and gentle bowel regularity. Most people are deficient in magnesium. Can use this OR Rho Magnesium — your choice.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "rhomag",
+                "name": "Rho Magnesium",
+                "dose": "Per label",
+                "why": "Supports relaxation, sleep quality, gentle bowel support.",
+                "notes": "Liposomal magnesium. Supports relaxation, sleep quality, and gentle bowel regularity. Alternative to Pure Encapsulations Magnesium Glycinate — use either one.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              },
+              {
+                "id": "sleep",
+                "name": "Rho Sleep Formula",
+                "dose": "Per label",
+                "why": "Rest + recovery. Cellular repair happens during sleep. Supports sleep quality during detox.",
+                "notes": "Liposomal sleep support formula. Recovery happens during sleep — this supports deep, restorative rest.",
+                "phaseIds": [
+                  "ph-1-liver-biofilm-prep",
+                  "ph-1-kidney-biofilm-prep",
+                  "ph-1-parasite-kill",
+                  "ph-1-heavy-metal-detox",
+                  "ph-2-cleanup-ramp-up",
+                  "ph-2-full-cleanup-probiotics",
+                  "ph-2-probiotic-diversification",
+                  "ph-3-gradual-rho-intro",
+                  "ph-3-full-stack-dim",
+                  "ph-4-daily-maintenance"
+                ]
+              }
+            ]
+          }
+        ],
+        "createdAt": "2026-08-19T19:48:38.983Z",
+        "updatedAt": "2026-08-19T19:48:38.983Z"
+      },
+      {
+        "id": "body-work",
+        "name": "Body work & breathing",
+        "notes": "Release, breathing, airway, nerve glides, balance and vagal work, carried over from the previous app. Switched off until you want it — turn it on in Protocols, or thin it down first.",
+        "active": false,
+        "phases": [],
+        "blocks": [
+          {
+            "id": "bw-release",
+            "name": "Release & load",
+            "order": 0,
+            "items": [
+              {
+                "id": "bw-hip",
+                "name": "Front of hip",
+                "why": "right primary",
+                "notes": "Tool: Firm lacrosse ball\n\nRelease: Lie face down, ball at the front-outside of the hip just inside the hip bone. Sink onto it slowly. Wait for the guard to let go, then a little more. 60–90 sec. Right side first — it's the locked one. Left lighter.\n\nLoad: Glute bridge ×10 slow, squeeze at the top. Then standing hip extension ×10 each side. The flexor let go; the glute has to take the job.\n\nNotice: Knee-to-chest goes further with less pinch. Clicking quiets. Relaxation runs down the leg.\n\nCareful: The right hip clicks and subluxes. Release is the opener, stability is the fix — don't chase depth.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-glute",
+                "name": "Glute & back of hip",
+                "why": "Manual release paired with the loading that keeps it.",
+                "notes": "Tool: Firm lacrosse ball\n\nRelease: Sit on the floor, ball under one glute, that ankle crossed over the opposite knee. Roll slowly to find the tender spot, then stop and let the pressure build. 60–90 sec each side.\n\nLoad: Side-lying clamshells ×12 each side, or standing banded abduction. Light band — this is about finding the muscle, not loading it.\n\nNotice: Hips sit more level. Less low-back ache when standing.\n\nCareful: Deep glute work can catch the sciatic nerve. Numbness or shooting down the leg means move the ball, not push harder.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-feet",
+                "name": "Feet",
+                "why": "the foundation",
+                "notes": "Tool: Firm lacrosse ball, or a golf ball for finer work\n\nRelease: Ball under the arch — seated first, standing when you want more. Roll the whole sole slowly: heel, arch, ball of foot. Then park on the tender spots. 60–90 sec per foot.\n\nLoad: Short foot — gently dome the arch without curling the toes, hold 5 sec ×10. Then barefoot balance, eyes open, 30 sec per side.\n\nNotice: The ground feels more detailed. Balance steadier. Calves loosen without being touched.\n\nCareful: Tender because they're deconditioned, not damaged. Daily and light beats hard and occasional.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-calf",
+                "name": "Calves",
+                "why": "right releases, left strengthens",
+                "notes": "Tool: RolFlex, or a firm ball\n\nRelease: On the mid-belly of the calf — not the Achilles, not the shin bone. While compressed, slowly point and flex the foot 8–10×. Right side primary.\n\nLoad: Bilateral heel raises ×15 slow, then lower on the left alone ×8. Add seated bent-knee raises for the soleus.\n\nNotice: Knee-to-wall distance improves on the right. The ankle feels like it has more to give.\n\nCareful: Surgically altered tissue both sides. The left is the weak one — release it lightly or skip it. It needs strength, not length.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-ham",
+                "name": "Hamstrings",
+                "why": "Manual release paired with the loading that keeps it.",
+                "notes": "Tool: Foam roller or firm ball\n\nRelease: Under the hamstring, seated on the floor with the leg out. Slow. Once you're on a spot, straighten and bend the knee a few times under the pressure.\n\nLoad: Glute bridge with the feet further out ×10. Then a bodyweight hip hinge with soft knees ×10 — slow, back flat.\n\nNotice: The forward fold goes further with the knees soft.\n\nCareful: Chase the fold with knees in soft neutral, never locked back. Range here is a fair target; knee hyperextension is not.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-pec",
+                "name": "Chest & front of shoulder",
+                "why": "breathing",
+                "notes": "Tool: Soft ball against a wall\n\nRelease: Ball between your chest and a wall, just below and inside the front of the shoulder — the meaty part near the armpit, not on bone. Lean in, then slowly raise and lower that arm.\n\nLoad: Wall angels ×8 with the low back flat. Then banded external rotation ×12, elbow tucked at your side.\n\nNotice: Shoulders sit back without effort. The chest stops caving in on the lungs. Breath gets deeper on its own.\n\nCareful: Don't force shoulders-back-chest-out. That retraction is the exact move that reproduces the thoracic outlet symptoms — let the position come from underneath.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-lat",
+                "name": "Lat & back of armpit",
+                "why": "the spot you found",
+                "notes": "Tool: Firm ball, side-lying\n\nRelease: Lie on your side, arm overhead, ball in the back wall of the armpit. Small movements, not long rolls.\n\nLoad: Lat squeeze isometric — arms at your sides, squeeze the armpits down toward the hips, 5 sec ×10. Then assisted hang, feet partly down, 20–40 sec, pulling the shoulder blades DOWN.\n\nNotice: Ribs stop flaring. Belly breath comes easier. Traps quieten.\n\nCareful: Right shoulder subluxes. Feet stay partly on the ground during hangs until the scapular base is solid.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-thor",
+                "name": "Mid & upper back",
+                "why": "the cow direction",
+                "notes": "Tool: Foam roller\n\nRelease: Roller across the mid-back, arms crossed over the chest. A few passes, then park on a stiff segment and drape backwards over it. Breathe into it. Don't crank.\n\nLoad: Cat-cow ×8 with real attention to the cow — that's the direction you've lost. Then prone Y-raises ×10, light.\n\nNotice: Standing tall stops being effort. Head sits back over the shoulders.\n\nCareful: Extend from the mid-back, not the low back. If it hinges down low, move the roller up.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-neck",
+                "name": "Base of skull",
+                "why": "instead of cracking",
+                "notes": "Tool: Two balls in a sock, or the foam peanut\n\nRelease: Lie on your back and place them either side of the spine right at the base of the skull. Let the head rest into them, 3–5 min. Run slow extended-exhale breathing the whole time.\n\nLoad: Chin nods — lying on your back, gently nod the chin toward the throat without lifting the head. Hold 5 sec ×10. These are the deep neck flexors, the stabilizers whose absence makes the neck feel like it needs cracking.\n\nNotice: The urge to crack drops. Forward-head posture is easier to correct and holds longer.\n\nCareful: This replaces neck cracking. Self-manipulating the cervical spine with lax connective tissue is the one item here with a serious downside — the vertebral arteries run through the joints you would be torquing.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-quad",
+                "name": "Front of thigh",
+                "why": "Manual release paired with the loading that keeps it.",
+                "notes": "Tool: Foam roller\n\nRelease: Roller down the front of the thigh, weight regulated through your arms. Slow.\n\nLoad: Bodyweight squat to a box or chair ×10, strict form. Then step-downs ×8 each side, slow and controlled.\n\nNotice: Less pull on the kneecap. The deep squat comes easier.\n\nCareful: The kneeling lean-back stretch is intense on a knee in deep flexion. Keep it propped and short — or swap it for a half-kneeling hip flexor stretch with the pelvis tucked under. Same chain, far more control.",
+                "phaseIds": []
+              }
+            ]
+          },
+          {
+            "id": "bw-breath",
+            "name": "Breathing",
+            "order": 1,
+            "items": [
+              {
+                "id": "bw-br-9090",
+                "name": "90/90 hip lift",
+                "dose": "5 breaths. Once or twice a day.",
+                "why": "start here",
+                "notes": "Tool: A wall, plus a rolled hand towel or a small inflatable ball — the 5–6 inch kind, like a child's playground ball — to hold between the knees\n\n1. Lie on your back with your feet flat on a wall, hips about a foot out from it. Knees bent 90° and hips bent 90°, so your shins are parallel to the floor.\n2. Put the towel or ball between your knees. Squeeze it lightly and keep squeezing the whole time.\n3. Exhale through pursed lips, slowly, and keep going about 3 seconds past the point where you would normally stop. This is the part that matters — the last of the air is what drops the ribs out of flare.\n4. As you exhale, push your heels into the wall until your tailbone lifts about an inch off the floor. An inch. Your low back should flatten against the floor.\n5. Hold empty for 3 seconds.\n6. Let air fall back in through your nose without releasing the position or the knee squeeze.\n\nFeels like: Hamstrings and low abdominals working. If you feel your quads, low back, or hip flexors, you have lifted too high — come down.\n\nNotice: Low back rests flat on the floor without you holding it there. Ribs feel dropped rather than flared. This is the drill that most directly targets the anterior tilt and rib flare you identified yourself.\n\nCareful: This is not a glute bridge. An inch of lift, no more. If you get lightheaded, stop and breathe normally for a minute — that is the CO2 shift, and it settles as tolerance builds.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-br-belly",
+                "name": "All-fours belly lift",
+                "dose": "5 breaths. Once a day.",
+                "why": "back expansion",
+                "notes": "Tool: None\n\n1. Hands under shoulders, knees under hips.\n2. Round your low back slightly and tuck your tailbone under — the opposite of the arch you default into.\n3. Exhale fully through pursed lips.\n4. At the bottom, without inhaling, draw your belly up toward your spine and hold 3 seconds.\n5. Inhale through your nose and aim the air into the BACK of your rib cage — imagine widening the space between your shoulder blades. Keep the tuck the whole time.\n\nFeels like: Strange at first. Most people have never breathed into the back of the ribs and it takes a few sessions to find.\n\nNotice: You can feel your back widen on the inhale rather than your chest rising.\n\nCareful: This one makes people lightheaded faster than the 90/90. Sit back on your heels if it does.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-br-co2",
+                "name": "CO2 tolerance",
+                "dose": "Once a week, same time of day. Write it down.",
+                "why": "your number",
+                "notes": "Tool: Phone timer\n\n1. Sit quietly for 5 minutes first. Morning, before getting up, gives the most consistent reading.\n2. Breathe normally in through the nose, and normally out. Not a big breath, not a forced exhale.\n3. Pinch your nose.\n4. Time until the FIRST definite urge to breathe. Not how long you can hold on — the first real signal: a swallow, a contraction in the throat, a jerk in the belly.\n5. Release and breathe normally. If you are gasping afterwards you held too long and the number is invalid.\n\nFeels like: Uncomfortable, not distressing. You should be able to breathe normally straight after.\n\nNotice: Under 10 seconds is a very reactive set-point. 10–20 is reactive and common with a breathing pattern disorder. 20–30 is moderate. 40+ is well regulated. The number rising over weeks IS the thing you are trying to fix, and it is the only hard metric in this document.\n\nCareful: Do it sitting or lying, never standing, given the orthostatic picture.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-br-exhale",
+                "name": "Extended exhale",
+                "dose": "Run it during every single release hold. Plus 5 minutes before sleep.",
+                "why": "layer into everything",
+                "notes": "Tool: None\n\n1. In through the nose for a count of 4.\n2. Out through the nose or pursed lips for a count of 6 to 8.\n3. No force, no strain, no holding at the top.\n\nFeels like: Slowing. This is the mechanism behind the melt-into-the-floor response you already get.\n\nNotice: Tissue lets go faster under release when you are doing this than when you are not. Test it on a spot you know well.\n\nCareful: If the count feels like a struggle, shorten both numbers and keep the ratio. 3 in, 5 out is fine.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-br-nasal",
+                "name": "Nose only, all day",
+                "dose": "All day, imperfectly. It is a default you are rebuilding, not a rule you are passing or failing.",
+                "why": "The lever you haven't touched. Everything so far has been downstream effect.",
+                "notes": "Tool: Awareness\n\n1. Mouth closed at rest. Lips sealed, teeth slightly apart, tongue on the roof of the mouth.\n2. Nose breathing on walks. If you have to open your mouth, slow down until you do not.\n3. Notice when you break the seal. Stress, concentration, and reaching for something are the usual triggers.\n\nNotice: Reaching for the mouth constantly is data, not failure — it points at nasal obstruction, which is already on your list.\n\nCareful: Do not tape your mouth at night. That advice is everywhere in this space and it is specifically wrong for you: you can reproduce your own airway collapse, and taping removes the escape route.",
+                "phaseIds": []
+              }
+            ]
+          },
+          {
+            "id": "bw-range",
+            "name": "Range you own",
+            "order": 2,
+            "items": [
+              {
+                "id": "bw-rg-cr",
+                "name": "Contract–relax",
+                "dose": "2–3 times a week per muscle, not daily. This is a training stimulus, not a warm-up.",
+                "why": "the method",
+                "notes": "Tool: A belt, strap, towel, wall, or doorframe. Something immovable to push against\n\n1. Move into the stretch until you feel the FIRST real tension. Not the end of your range, not pain. That is your starting point.\n2. Push the stretched muscle against something immovable at about 25–50% effort. Not maximum. Keep breathing.\n3. Hold that push for 6–10 seconds.\n4. Let go completely. Long exhale. Ease into the new range that opens up — and there will be one.\n5. Repeat 3 times total, then stop and move on.\n\nFeels like: The gain right after the contraction is often immediate and surprising. That is the nervous system granting permission, which is exactly the mechanism you described.\n\nNotice: Range gained this way tends to still be there tomorrow. Range gained from passive holding usually is not. This is the tool for the question you actually asked.\n\nCareful: 25–50% effort, not maximum. Only on restricted muscle — never used to push a joint that subluxes further into range.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-rg-ham",
+                "name": "Contract–relax: hamstring",
+                "dose": "3 rounds per side, 3× a week.",
+                "why": "Loaded lengthening — the real answer to a nervous system guarding a range.",
+                "notes": "Tool: Belt, strap, or towel\n\n1. Lie on your back. Loop the strap around the arch of one foot and raise that leg toward the ceiling, knee softly bent — never locked straight.\n2. Raise until you feel the first real tension.\n3. Press your heel DOWN into the strap at 25–50% effort for 8 seconds. Resist with your arms so nothing actually moves.\n4. Relax, exhale long, and draw the leg closer to you.\n5. 3 rounds, then swap sides.\n\nNotice: Forward fold goes deeper — with soft knees, which is the version that counts.\n\nCareful: Knee softly bent throughout. This drill is the safe route to the range you want; locking the knee out to gain a few degrees is the unsafe one.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-rg-calf",
+                "name": "Contract–relax: calf",
+                "dose": "3 rounds per side, 3× a week. Right side is the tight one.",
+                "why": "Loaded lengthening — the real answer to a nervous system guarding a range.",
+                "notes": "Tool: A wall\n\n1. Put the ball of one foot up against a wall with the toes pointing up the wall and the heel on the floor.\n2. Lean your shin toward the wall until you feel the first real tension in the calf.\n3. Press the ball of your foot INTO the wall at 25–50% effort for 8 seconds.\n4. Relax and lean the shin closer to the wall.\n5. 3 rounds each side.\n\nNotice: Knee-to-wall distance increases. The deep squat gets easier, because the ankle stops being the limiter.\n\nCareful: Surgically altered tissue both sides. Go lighter on the left.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-rg-ecc",
+                "name": "Eccentric heel drops",
+                "dose": "Start at 5 reps per side, twice a week. Build toward 8.",
+                "why": "calves",
+                "notes": "Tool: A step or stair with a rail\n\n1. Stand with the balls of both feet on the edge of a step, heels hanging off. Hold the rail.\n2. Rise up onto both toes.\n3. Shift all your weight onto ONE leg.\n4. Lower that heel slowly, counting 5 seconds, until it is well below the level of the step.\n5. Put the other foot back down and use BOTH legs to come back up. Never come up on one leg.\n6. That is one rep.\n\nFeels like: You will be sore 24–48 hours later. That is the drill working, and it is also why the starting dose is deliberately low.\n\nNotice: Calves get stronger and longer at the same time. This is how you get range that holds instead of range you have to keep re-earning.\n\nCareful: Eccentrics cause real delayed soreness, and delayed is the operative word given the post-exertional picture. Start at half the volume you think you need and watch the following two days before adding any.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-rg-squat",
+                "name": "Deep squat hang",
+                "dose": "30–60 seconds, daily. This is one you can do every day.",
+                "why": "Loaded lengthening — the real answer to a nervous system guarding a range.",
+                "notes": "Tool: A doorframe, post, or the edge of a heavy table\n\n1. Hold the doorframe with both hands at about waist height.\n2. Sink into the deepest squat you can while keeping your heels down. Let your arms carry as much of your weight as they need to.\n3. Relax into it. Rock gently side to side. Let your knees drift out over your feet.\n4. Breathe into your belly and the back of your ribs the whole time.\n\nNotice: Over weeks you need less and less arm support. That is the progression — not more depth, but how much of your own weight you can hold down there.\n\nCareful: Heels stay down. If they lift, the ankle is the limiter — do the calf work and take more weight through your arms in the meantime.",
+                "phaseIds": []
+              }
+            ]
+          },
+          {
+            "id": "bw-ribs",
+            "name": "Ribs & diaphragm",
+            "order": 3,
+            "items": [
+              {
+                "id": "bw-rb-inter",
+                "name": "Between the ribs",
+                "dose": "2–3 spots per side, 5 breaths each. Two or three times a week.",
+                "why": "intercostals",
+                "notes": "Tool: A TENNIS BALL, or your FOAM lacrosse ball. Soft. Not the firm rubber one, and not a big inflatable exercise ball\n\n1. Stand side-on to a wall. Put the ball between the side of your rib cage and the wall, starting just below the armpit.\n2. Raise that arm overhead and rest it on the wall. This opens the spaces between the ribs and is what makes the drill work.\n3. Lean in gently. Feel for a tender spot BETWEEN two ribs — in the soft strip, not on the hard bone.\n4. Stay on that spot and breathe. Big slow inhale, feel the rib push out against the ball. Long exhale.\n5. 5 breaths, then move down a few inches and find the next spot.\n\nFeels like: Odd and very specific. You will feel the breath reaching somewhere it has not been.\n\nNotice: Side ribs expand more on the inhale. The breath feels wider rather than just deeper.\n\nCareful: Light pressure only. This is bone with thin muscle strips between — a firm ball lands on the rib instead of in the gap, and you bruise easily. If it feels like pressing on bone, move the ball.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-rb-diaph",
+                "name": "Under the rib margin",
+                "dose": "3 breaths per spot, 4–5 spots per side. Every other day.",
+                "why": "diaphragm",
+                "notes": "Tool: Your fingers. There is no tool for this\n\n1. Lie on your back, knees bent, feet flat. Let your belly go completely soft.\n2. Find the bottom edge of your rib cage at the front, starting near the centre just below the breastbone.\n3. Hook your fingertips gently just UNDER the rib margin, pointing up and in, toward your head.\n4. Exhale slowly. As you exhale, let your fingers sink slightly further under the edge.\n5. Hold there as you inhale. Do not dig and do not push against the breath. 3 breaths.\n6. Move about an inch outward along the rib arch and repeat. Work from the centre out to the side, then do the other side.\n\nFeels like: Deep and uncomfortable, occasionally oddly emotional. It should never be sharp.\n\nNotice: Belly breath comes without effort afterwards. This is the most direct access you have to the muscle itself, and the psoas attaches into the same lumbar fascia — your best release and your main symptom are literally continuous tissue.\n\nCareful: Not on a full stomach. Gentle — you are reaching under the ribs near organs, and patience works far better than pressure. Sharp pain means stop.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-rb-side",
+                "name": "Side-lying rib opener",
+                "dose": "8 breaths per side. Daily if you like it.",
+                "why": "You are working what pulls on the cage. Not the cage itself.",
+                "notes": "Tool: Foam roller or a rolled towel\n\n1. Lie on your side with the roller under your bottom ribs, running across your body.\n2. Stretch the top arm overhead and bring the top leg forward for balance.\n3. Breathe INTO the upside ribs — the ones facing the ceiling. Feel them open.\n4. 8 breaths, then swap sides.\n\nNotice: Rotation and side-bending get easier. Pairs naturally with the lat work.\n\nCareful: Roller under the ribs, not the waist. If it presses into soft belly, move it up.",
+                "phaseIds": []
+              }
+            ]
+          },
+          {
+            "id": "bw-airway",
+            "name": "Airway & tongue",
+            "order": 4,
+            "items": [
+              {
+                "id": "bw-aw-posture",
+                "name": "Tongue posture",
+                "dose": "All day, as a default you keep returning to.",
+                "why": "all day",
+                "notes": "Tool: None\n\n1. The whole tongue — not just the tip — suctioned flat against the roof of the mouth.\n2. Tip rests on the ridge just BEHIND your top front teeth, not on the teeth themselves.\n3. Lips sealed, teeth slightly apart, breathing through the nose.\n4. That is the resting position. Everything else in this section is training you toward holding it without thinking about it.\n\nNotice: You already use this deliberately as an airway compensation. The goal is making it automatic, including while asleep, which is where it would actually help the collapse.\n\nCareful: Jaw tension means you are pressing with the jaw instead of the tongue. Teeth stay apart.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-aw-press",
+                "name": "Tongue press & suction",
+                "dose": "5–10 minutes daily, split however suits you. Give it 2–3 months before judging whether it works.",
+                "why": "Myofunctional therapy. Real evidence for mild apnea and UARS, and nobody has mentioned it to you.",
+                "notes": "Tool: None\n\n1. PRESS — whole tongue flat against the roof of the mouth, push up hard. Hold 10 seconds. ×10.\n2. SUCTION HOLD — suction the whole tongue flat to the palate so it makes a vacuum. Keeping that seal, slowly open your jaw as wide as you can WITHOUT the tongue peeling off. Hold 5 seconds, then close. ×10.\n3. SLIDE — tip of the tongue on the ridge behind the top front teeth, then slide it backwards along the roof of the mouth as far as it will go. ×10.\n4. STRONG SWALLOW — anchor the tongue tip on that ridge and swallow, pressing the tongue up hard through the whole swallow. ×10.\n\nFeels like: Your tongue gets tired, which tells you it was weak.\n\nNotice: Waking less dry-mouthed. Tongue posture starting to hold without attention. Effects on sleep take months, not days — this is the slowest-acting thing in this document and also one of the highest-value.\n\nCareful: Jaw fatigue is expected; jaw pain is not. Given the TMJ picture, go easy on the wide-open suction hold and cut the range right back if the joint complains.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-aw-palate",
+                "name": "Soft palate & throat",
+                "dose": "Daily. Fold it into brushing your teeth so you do not have to remember it separately.",
+                "why": "Myofunctional therapy. Real evidence for mild apnea and UARS, and nobody has mentioned it to you.",
+                "notes": "Tool: A glass of water\n\n1. Say an exaggerated 'ahh' and hold it, feeling the back of the throat lift. ×10.\n2. Gargle water properly and loudly for 30 seconds. ×3. Aggressive enough that your eyes water slightly.\n3. Hum on a low pitch with a long exhale until you feel the buzz in your throat and chest.\n\nNotice: Doubles as direct vagal work — the vagus nerve supplies the larynx. It is also relevant to the voice thread.\n\nCareful: Nothing to speak of. This is the safest thing in the whole document.",
+                "phaseIds": []
+              }
+            ]
+          },
+          {
+            "id": "bw-nerve",
+            "name": "Nerve glides",
+            "order": 5,
+            "items": [
+              {
+                "id": "bw-nv-sciatic",
+                "name": "Sciatic glide",
+                "dose": "10 reps × 2 sets per side. Daily is fine.",
+                "why": "hamstrings that will not let go",
+                "notes": "Tool: A chair\n\n1. Sit on the edge of a chair with your hands on your thighs.\n2. Slouch. Let your low back round. This is deliberate, not sloppy.\n3. Now, at the same time: straighten one knee out in front of you AND tip your head BACK.\n4. Then reverse, at the same time: bend the knee back down AND drop your chin to your chest.\n5. That is one rep. About 2 seconds each direction, smooth and continuous.\n\nFeels like: A pull down the back of the leg that MOVES as you go. That movement is the nerve sliding, which is the whole point.\n\nNotice: If your hamstring range improves from this when stretching has not moved it, the restriction was never muscular.\n\nCareful: This is flossing, not stretching — never hold the end position. If it reproduces pain, tingling, or numbness, reduce the range until it does not. More is not better here; this is one of the few drills where overdoing it clearly makes things worse.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-nv-median",
+                "name": "Median nerve glide",
+                "dose": "10 reps × 2 sets per side.",
+                "why": "arm & thoracic outlet",
+                "notes": "Tool: None\n\n1. Arm out to the side at shoulder height, elbow bent, palm facing up near your shoulder.\n2. Straighten the elbow out to the side while bending the wrist back so the fingers point down and behind you — and at the same time tilt your head AWAY from that arm.\n3. Reverse: bend the elbow back in, relax the wrist, and tilt your head TOWARD the arm.\n4. Slow and smooth, about 2 seconds each way.\n\nNotice: Arm symptoms that come and go with position are usually neural rather than muscular. This tests that directly.\n\nCareful: Given the thoracic outlet picture, start with a much smaller range than feels necessary. If it reproduces numbness or tingling, halve the range. Never push into symptoms.",
+                "phaseIds": []
+              }
+            ]
+          },
+          {
+            "id": "bw-balance",
+            "name": "Balance & feet",
+            "order": 6,
+            "items": [
+              {
+                "id": "bw-bl-prog",
+                "name": "Single-leg progression",
+                "dose": "5 minutes, most days. Barefoot always.",
+                "why": "Proprioception training. The direct route to the mind-body connection you keep describing.",
+                "notes": "Tool: Bare feet, and a wall or counter within reach\n\n1. LEVEL 1 — Single leg, eyes open, 30 seconds. 3 rounds per side.\n2. LEVEL 2 — Single leg, eyes closed, 15–30 seconds. This is a big jump; vision was doing most of the work.\n3. LEVEL 3 — Single leg, eyes open, with slow head turns left and right ×10, then up and down ×10.\n4. LEVEL 4 — Single leg standing on a folded towel or pillow, eyes open.\n5. LEVEL 5 — Single leg on the pillow, eyes closed.\n6. Only move up a level when the current one is boring.\n\nNotice: Your foot will be visibly working — toes gripping, arch adjusting constantly. That is the foot-to-brain conversation you are trying to restart.\n\nCareful: Stay within reach of a counter. The Level 3 head turns can trigger dizziness given the dysautonomia — if the room moves, sit down and come back to it another day at a slower speed.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-bl-toes",
+                "name": "Toe control",
+                "dose": "Daily. It takes two minutes and you can do it sitting down.",
+                "why": "harder than it sounds",
+                "notes": "Tool: Bare feet, a towel\n\n1. TOE SPREAD — spread all your toes apart without curling them. Hold 5 seconds. ×10.\n2. BIG TOE LIFT — press the other four toes down and lift only the big toe. Then reverse: big toe down, lift the other four.\n3. TOWEL SCRUNCH — towel flat on the floor, use your toes to drag it toward you. ×10 each foot.\n4. The lifts will be close to impossible at first. That is the point — it is a connection you do not have yet.\n\nNotice: Individual toe control is a direct readout of the nerve pathway you are trying to rebuild. Watching it go from impossible to easy is the clearest progress marker in this entire document.\n\nCareful: Cramping is common at first. Stop, stretch the foot out, come back tomorrow.",
+                "phaseIds": []
+              }
+            ]
+          },
+          {
+            "id": "bw-vagal",
+            "name": "Vagal & nervous system",
+            "order": 7,
+            "items": [
+              {
+                "id": "bw-vg-mat",
+                "name": "Acupressure mat",
+                "dose": "15–20 minutes, 3–4× a week. Evening works best.",
+                "why": "you own it, use it",
+                "notes": "Tool: The mat you already have\n\n1. Lie on it, bare back if you can tolerate it, for 15–20 minutes.\n2. Run extended-exhale breathing the entire time. This is what turns it from a sensation into a nervous system drill.\n3. The first 2–3 minutes are unpleasant, then it flips to warmth. Wait for the flip.\n\nNotice: You said yourself that it helps and that you underuse it. Attach it to a fixed cue — after dinner, or while reading — rather than relying on remembering.\n\nCareful: Your skin bruises and marks easily. A thin t-shirt for the first few sessions is a sensible place to start.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-vg-hum",
+                "name": "Humming & gargling",
+                "dose": "Daily. It combines with the soft palate work — same drills, two purposes.",
+                "why": "Direct downregulation. Cheap, and you already own most of the gear.",
+                "notes": "Tool: Your voice, and a glass of water\n\n1. Hum on the lowest comfortable pitch, drawing the exhale out as long as it will go. Feel the vibration in your throat and chest.\n2. 5 minutes, or about 20 long hums.\n3. Gargle water loudly for 30 seconds, ×3.\n\nNotice: The vagus nerve supplies the larynx, so this is about as direct as non-invasive vagal stimulation gets without a device.\n\nCareful: None.",
+                "phaseIds": []
+              },
+              {
+                "id": "bw-vg-face",
+                "name": "Cold on the face",
+                "dose": "When you need a reset. Not a daily requirement.",
+                "why": "Direct downregulation. Cheap, and you already own most of the gear.",
+                "notes": "Tool: A bowl of cold water, or a cold pack\n\n1. Bowl of cold water — face in, hold 20–30 seconds. Or hold a cold pack over your forehead and eyes.\n2. Face and forehead only. Not a cold shower and not full immersion.\n3. The trigger is the nerve endings around the eyes and forehead. That is what fires the dive reflex and slows the heart.\n\nNotice: One of the very few things that shifts autonomic state within seconds rather than minutes.\n\nCareful: Cold is a mast cell trigger for some people — test small and stop if you get flushing, itching, or hives. Not while alone if you are prone to feeling faint.",
+                "phaseIds": []
+              }
+            ]
+          }
+        ],
+        "createdAt": "2026-08-19T19:48:38.979Z",
+        "updatedAt": "2026-08-19T19:48:38.979Z"
+      },
+      {
+        "id": "stretching",
+        "name": "Stretching",
+        "notes": "Morning Flow and Evening Wind-Down. The longest version of each is here — delete what you do not want rather than hunting for a shorter list.",
+        "active": false,
+        "phases": [],
+        "blocks": [
+          {
+            "id": "st-morning",
+            "name": "Morning Flow",
+            "start": "06:00",
+            "end": "09:00",
+            "order": 0,
+            "items": [
+              {
+                "id": "st-morning-cat_cow",
+                "name": "Cat-Cow",
+                "dose": "60 sec — Full segmental with breath",
+                "why": "spine, core",
+                "notes": "Start on hands and knees, wrists under shoulders, knees under hips. INHALE: Drop belly toward floor, lift chest and tailbone (Cow). EXHALE: Round spine toward ceiling, tuck chin and pelvis (Cat). Move slowly with breath, feeling each vertebra articulate.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-thread_needle",
+                "name": "Thread the Needle",
+                "dose": "60 sec — 30 sec each side",
+                "why": "thoracic spine, shoulders",
+                "notes": "From hands and knees, reach right arm under your left arm, sliding it along the floor. Let your right shoulder and temple rest on the ground. Hold, breathing into the stretch. Return and repeat on the other side.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-downward_dog",
+                "name": "Downward Dog",
+                "dose": "60 sec — Pedal, hold, single-leg, calf press",
+                "why": "hamstrings, calves, shoulders, spine",
+                "notes": "From hands and knees, tuck toes, lift hips high and back. Press chest toward thighs, heels toward floor (they don't need to touch). Spread fingers wide, externally rotate upper arms. Pedal feet to warm up calves and hamstrings.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-cobra",
+                "name": "Cobra / Upward Dog",
+                "dose": "50 sec — Flow between cobra and upward dog",
+                "why": "hip flexors, abs, spine extensors",
+                "notes": "Lie face down, hands under shoulders. COBRA: Press up gently, keeping hips on floor, elbows slightly bent. UPWARD DOG: Press up fully, lift thighs off floor, roll shoulders back. Only go as high as comfortable — no pain in lower back.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-worlds_greatest",
+                "name": "World's Greatest Stretch",
+                "dose": "100 sec — 5 per side, full sequence with hamstring reach",
+                "why": "hip flexors, hamstrings, thoracic spine, groin",
+                "notes": "Step right foot outside right hand in a deep lunge. Drop left knee (optional). Rotate right arm to the sky, opening chest. Hold, then bring elbow toward the floor inside the right foot. Straighten front leg for hamstring stretch. Repeat other side.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-standing_hamstring",
+                "name": "Standing Hamstring Stretch",
+                "dose": "60 sec — 30 sec each leg, flex and point",
+                "why": "hamstrings, calves",
+                "notes": "Place one foot on a low step or bench (or just extend in front of you). Keep the elevated leg straight. Hinge at the hips and lean forward with a flat back until you feel the stretch behind the thigh. Keep hips square. Hold and switch.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-seated_forward_fold",
+                "name": "Seated Forward Fold",
+                "dose": "60 sec — Hinge from hips, walk hands forward",
+                "why": "hamstrings, lower back, calves",
+                "notes": "Sit with legs extended straight in front of you. Sit tall first, then hinge at the hips and reach toward your toes. Keep your back as flat as possible — don't round excessively. Use a strap around feet if needed. Breathe and relax deeper on each exhale.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-forward_fold",
+                "name": "Standing Forward Fold",
+                "dose": "45 sec — Deep ragdoll",
+                "why": "hamstrings, lower back, calves",
+                "notes": "Stand with feet hip-width apart. Hinge at hips and fold forward, letting arms hang heavy. Bend knees as much as needed. Let head hang, releasing neck tension. Grab opposite elbows and sway gently (ragdoll).",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-standing_quad",
+                "name": "Standing Quad Stretch",
+                "dose": "50 sec — 25 sec each side",
+                "why": "quads, hip flexors",
+                "notes": "Stand on one leg (hold wall if needed). Bend the other knee and grab your foot behind you, pulling heel toward glute. Keep knees close together and push hips slightly forward. You should feel the stretch in the front of your thigh.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-hip_cars",
+                "name": "Hip CARs",
+                "dose": "70 sec — 5+ large circles each leg",
+                "why": "hips, hip flexors, glutes",
+                "notes": "Controlled Articular Rotations. Stand on one leg (hold wall if needed). Lift knee to chest, rotate it out to the side, extend behind you, then reverse. Move SLOWLY through the biggest circle you can control. This maps your hip's full range of motion.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-ankle_cars",
+                "name": "Ankle CARs",
+                "dose": "40 sec — 5 circles each direction",
+                "why": "ankles, calves, tibialis",
+                "notes": "Controlled Articular Rotations for ankles. Lift one foot off the ground. Slowly draw the largest circle you can with your toes, moving only at the ankle joint. Go clockwise, then counterclockwise. Keep the rest of your leg still.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-ninety_ninety",
+                "name": "90/90 Hip Switch",
+                "dose": "80 sec — 5 switches with 15 sec holds",
+                "why": "hips, hip internal rotation, hip external rotation",
+                "notes": "Sit on floor with both knees bent 90°. Front shin parallel to your chest, back shin perpendicular. Sit tall. To switch: lift both knees, rotate to the other side so the back leg becomes the front. The goal is smooth, controlled transitions.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-pigeon",
+                "name": "Pigeon Stretch",
+                "dose": "90 sec — 45 sec each side, sleeping pigeon",
+                "why": "glutes, hip flexors, piriformis",
+                "notes": "From downward dog, bring right knee forward behind right wrist. Extend left leg straight behind you. Square your hips. Upright pigeon: stay on hands. Sleeping pigeon: fold forward over front leg. Hold and breathe. Switch sides.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-deep_squat",
+                "name": "Deep Squat Hold",
+                "dose": "60 sec — Full exploration — rotate, shift, reach",
+                "why": "hips, ankles, quads, adductors",
+                "notes": "Stand with feet slightly wider than shoulders, toes slightly out. Sink hips down as low as possible while keeping heels on the floor. Use elbows to push knees outward. Keep chest up. If heels lift, widen stance or hold something for balance.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-lateral_lunge",
+                "name": "Lateral Lunge Hold",
+                "dose": "60 sec — 30 sec each side",
+                "why": "adductors, groin, hamstrings, quads",
+                "notes": "Step wide to the right, bending right knee and pushing hips back while keeping left leg straight. Keep both feet flat. Sit into the bent knee side. Feel the stretch in the straight leg's inner thigh. Hold, then switch sides.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-calf_wall",
+                "name": "Wall Calf Stretch",
+                "dose": "50 sec — Both variations each side",
+                "why": "calves, achilles",
+                "notes": "Stand facing a wall. Step one foot back, keeping it straight with heel pressed into floor. Lean into the wall, bending the front knee. Feel the stretch in the back calf. For soleus (deeper calf), slightly bend the back knee while keeping heel down.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-shoulder_cars",
+                "name": "Shoulder CARs",
+                "dose": "50 sec — 5 circles each arm",
+                "why": "shoulders, rotator cuff",
+                "notes": "Stand tall, arm at your side. Slowly raise arm forward, overhead, behind you, and back down in the biggest circle you can control. Keep your torso completely still — only the shoulder moves. Reverse direction.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-thoracic_rotation",
+                "name": "Thoracic Spine Rotation",
+                "dose": "60 sec — 5 each side with deep breaths",
+                "why": "thoracic spine, obliques",
+                "notes": "Lie on your side with knees stacked and bent 90°. Extend both arms in front of you, palms together. Keeping bottom arm and knees still, rotate top arm open like a book, following it with your eyes. Let gravity pull the arm toward the floor. Return slowly.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-couch_stretch",
+                "name": "Couch Stretch",
+                "dose": "70 sec — 35 sec each side",
+                "why": "hip flexors, quads, psoas",
+                "notes": "Kneel facing away from a wall. Place one foot against the wall behind you (top of foot on wall, knee on floor close to wall). Step the other foot forward into a lunge. Squeeze the glute on the back leg side. This is an intense hip flexor stretch — ease into it.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-bretzel",
+                "name": "Bretzel Stretch",
+                "dose": "60 sec — 30 sec each side",
+                "why": "hips, thoracic spine, quads",
+                "notes": "Lie on your side. Bend top knee to 90° and pin it to the floor in front of you with bottom hand. Bend bottom knee and grab that foot behind you with top hand (quad stretch). Rotate upper body open toward the ceiling. This stretches everything.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-wall_slide",
+                "name": "Wall Slide",
+                "dose": "50 sec — 10 slow reps",
+                "why": "upper back, shoulders, posture",
+                "notes": "Stand with back, head, and butt against a wall. Place arms in \"goal post\" position (elbows bent 90°, backs of hands against wall). Slowly slide arms up overhead, keeping everything pressed to the wall. Slowly lower back down. If you can't keep contact, that shows tightness.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-chest_doorway",
+                "name": "Doorway Chest Stretch",
+                "dose": "50 sec — All heights, deep lean",
+                "why": "chest, anterior deltoids",
+                "notes": "Stand in a doorway. Place forearms on the door frame at 90° (elbows at shoulder height). Step one foot through and lean forward until you feel the stretch across your chest. Adjust arm height to target different pec fibers — higher hits upper chest, lower hits lower.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-frog",
+                "name": "Frog Stretch",
+                "dose": "50 sec — Gentle rocking",
+                "why": "adductors, groin, hips",
+                "notes": "Start on hands and knees. Slowly widen your knees as far as comfortable, keeping feet in line with knees (shins parallel). Lower to forearms. You should feel an intense inner thigh stretch. Rock gently forward and back to explore the range.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-morning-neck_stretch",
+                "name": "Neck Stretch",
+                "dose": "40 sec — Full routine with gentle pressure",
+                "why": "neck, upper traps",
+                "notes": "Sit or stand tall. Tilt right ear toward right shoulder. Gently place right hand on top of head for light overpressure. Keep left shoulder down. Hold 15-20 seconds. For the front of the neck, look up and slightly to one side. Switch sides.",
+                "phaseIds": []
+              }
+            ]
+          },
+          {
+            "id": "st-evening",
+            "name": "Evening Wind-Down",
+            "start": "20:00",
+            "end": "23:00",
+            "order": 1,
+            "items": [
+              {
+                "id": "st-evening-childs_pose",
+                "name": "Child's Pose",
+                "dose": "70 sec — Wide knees, lat stretch both sides, breathe",
+                "why": "back, hips, lats",
+                "notes": "Kneel on the floor, big toes together, knees wide. Sit hips back toward heels and walk hands forward, lowering chest toward floor. Rest forehead on the ground. For lat stretch, walk both hands to one side and hold, then switch.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-evening-cat_cow",
+                "name": "Cat-Cow",
+                "dose": "60 sec — Full segmental, 10+ breaths",
+                "why": "spine, core",
+                "notes": "Start on hands and knees, wrists under shoulders, knees under hips. INHALE: Drop belly toward floor, lift chest and tailbone (Cow). EXHALE: Round spine toward ceiling, tuck chin and pelvis (Cat). Move slowly with breath, feeling each vertebra articulate.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-evening-thread_needle",
+                "name": "Thread the Needle",
+                "dose": "60 sec — 30 sec each side, sink into it",
+                "why": "thoracic spine, shoulders",
+                "notes": "From hands and knees, reach right arm under your left arm, sliding it along the floor. Let your right shoulder and temple rest on the ground. Hold, breathing into the stretch. Return and repeat on the other side.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-evening-downward_dog",
+                "name": "Downward Dog",
+                "dose": "45 sec — Gentle, pedal, hold",
+                "why": "hamstrings, calves, shoulders, spine",
+                "notes": "From hands and knees, tuck toes, lift hips high and back. Press chest toward thighs, heels toward floor (they don't need to touch). Spread fingers wide, externally rotate upper arms. Pedal feet to warm up calves and hamstrings.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-evening-cobra",
+                "name": "Cobra / Upward Dog",
+                "dose": "40 sec — Baby cobra, flow gently",
+                "why": "hip flexors, abs, spine extensors",
+                "notes": "Lie face down, hands under shoulders. COBRA: Press up gently, keeping hips on floor, elbows slightly bent. UPWARD DOG: Press up fully, lift thighs off floor, roll shoulders back. Only go as high as comfortable — no pain in lower back.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-evening-pigeon",
+                "name": "Pigeon Stretch",
+                "dose": "110 sec — 55 sec each side, melt into floor",
+                "why": "glutes, hip flexors, piriformis",
+                "notes": "From downward dog, bring right knee forward behind right wrist. Extend left leg straight behind you. Square your hips. Upright pigeon: stay on hands. Sleeping pigeon: fold forward over front leg. Hold and breathe. Switch sides.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-evening-bretzel",
+                "name": "Bretzel Stretch",
+                "dose": "80 sec — 40 sec each side, deep breathing",
+                "why": "hips, thoracic spine, quads",
+                "notes": "Lie on your side. Bend top knee to 90° and pin it to the floor in front of you with bottom hand. Bend bottom knee and grab that foot behind you with top hand (quad stretch). Rotate upper body open toward the ceiling. This stretches everything.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-evening-ninety_ninety",
+                "name": "90/90 Hip Switch",
+                "dose": "80 sec — 20 sec pauses each position",
+                "why": "hips, hip internal rotation, hip external rotation",
+                "notes": "Sit on floor with both knees bent 90°. Front shin parallel to your chest, back shin perpendicular. Sit tall. To switch: lift both knees, rotate to the other side so the back leg becomes the front. The goal is smooth, controlled transitions.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-evening-seated_forward_fold",
+                "name": "Seated Forward Fold",
+                "dose": "60 sec — Walk hands, breathe deeper each exhale",
+                "why": "hamstrings, lower back, calves",
+                "notes": "Sit with legs extended straight in front of you. Sit tall first, then hinge at the hips and reach toward your toes. Keep your back as flat as possible — don't round excessively. Use a strap around feet if needed. Breathe and relax deeper on each exhale.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-evening-figure_four",
+                "name": "Supine Figure-4 Stretch",
+                "dose": "60 sec — 30 sec each side, press knee away",
+                "why": "glutes, piriformis, hips",
+                "notes": "Lie on your back. Cross right ankle over left knee (making a \"4\" shape). Reach through and pull the left thigh toward your chest. You should feel a deep stretch in the right glute/hip. Keep head on the floor. Hold and switch.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-evening-hamstring_strap",
+                "name": "Supine Hamstring Stretch",
+                "dose": "80 sec — 40 sec each leg, flex/point/circle foot",
+                "why": "hamstrings",
+                "notes": "Lie on your back. Lift one leg and hold behind the thigh or calf (use a towel or strap if needed). Keep the leg as straight as possible. Keep the other leg flat on the floor. Pull gently to deepen the stretch. Hold and breathe.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-evening-standing_quad",
+                "name": "Standing Quad Stretch",
+                "dose": "50 sec — 25 sec each side",
+                "why": "quads, hip flexors",
+                "notes": "Stand on one leg (hold wall if needed). Bend the other knee and grab your foot behind you, pulling heel toward glute. Keep knees close together and push hips slightly forward. You should feel the stretch in the front of your thigh.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-evening-calf_wall",
+                "name": "Wall Calf Stretch",
+                "dose": "50 sec — Straight and bent, each side",
+                "why": "calves, achilles",
+                "notes": "Stand facing a wall. Step one foot back, keeping it straight with heel pressed into floor. Lean into the wall, bending the front knee. Feel the stretch in the back calf. For soleus (deeper calf), slightly bend the back knee while keeping heel down.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-evening-scorpion",
+                "name": "Scorpion Stretch",
+                "dose": "60 sec — 30 sec each side, control the rotation",
+                "why": "hip flexors, thoracic spine, chest",
+                "notes": "Lie face down, arms in a T. Lift your right leg and swing it over your body toward your left hand, rotating your hips. Keep your right shoulder pressed into the floor as much as possible. You'll feel a stretch in the chest and hip flexor. Return and repeat other side.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-evening-spinal_twist_supine",
+                "name": "Supine Spinal Twist",
+                "dose": "80 sec — 40 sec each side, total surrender",
+                "why": "spine, obliques, glutes, chest",
+                "notes": "Lie on your back, arms in a T. Pull one knee to chest, then guide it across your body to the opposite side. Let gravity pull the knee toward the floor. Keep both shoulders pressed down. Look in the opposite direction of the knee. Breathe and melt into it.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-evening-butterfly",
+                "name": "Butterfly Stretch",
+                "dose": "60 sec — Deep fold, slow breathing",
+                "why": "adductors, groin, hips",
+                "notes": "Sit with soles of feet together, knees falling outward. Hold feet and sit tall. Gently press knees toward floor with elbows or let gravity work. For deeper stretch, fold forward from the hips while maintaining a long spine.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-evening-frog",
+                "name": "Frog Stretch",
+                "dose": "70 sec — Gentle rocking, widen gradually",
+                "why": "adductors, groin, hips",
+                "notes": "Start on hands and knees. Slowly widen your knees as far as comfortable, keeping feet in line with knees (shins parallel). Lower to forearms. You should feel an intense inner thigh stretch. Rock gently forward and back to explore the range.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-evening-chest_doorway",
+                "name": "Doorway Chest Stretch",
+                "dose": "50 sec — Hold and breathe",
+                "why": "chest, anterior deltoids",
+                "notes": "Stand in a doorway. Place forearms on the door frame at 90° (elbows at shoulder height). Step one foot through and lean forward until you feel the stretch across your chest. Adjust arm height to target different pec fibers — higher hits upper chest, lower hits lower.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-evening-neck_stretch",
+                "name": "Neck Stretch",
+                "dose": "40 sec — Full routine, very gentle",
+                "why": "neck, upper traps",
+                "notes": "Sit or stand tall. Tilt right ear toward right shoulder. Gently place right hand on top of head for light overpressure. Keep left shoulder down. Hold 15-20 seconds. For the front of the neck, look up and slightly to one side. Switch sides.",
+                "phaseIds": []
+              },
+              {
+                "id": "st-evening-legs_up_wall",
+                "name": "Legs Up the Wall",
+                "dose": "120 sec — Full body scan, 4-7-8 breathing, let everything go",
+                "why": "hamstrings, lower back, nervous system",
+                "notes": "Sit with one hip against a wall, then swing your legs up as you lie back. Scoot your butt as close to the wall as comfortable. Arms at sides or on belly. Close your eyes. This inverts blood flow, calms the nervous system, and gently stretches hamstrings.",
+                "phaseIds": []
+              }
+            ]
+          }
+        ],
+        "createdAt": "2026-08-19T19:48:38.979Z",
+        "updatedAt": "2026-08-19T19:48:38.979Z"
+      },
+      {
+        "id": "routine-full-body",
+        "name": "Full Body",
+        "notes": "Hit every major muscle group in one session. Switch this on for the day you are doing it. Starting at the easiest level of each movement — raise it as you go.",
+        "active": false,
+        "phases": [],
+        "blocks": [
+          {
+            "id": "routine-full-body-main",
+            "name": "Full Body",
+            "order": 0,
+            "items": [
+              {
+                "id": "ex-full-body-push-up",
+                "name": "Push-Up",
+                "dose": "3 × 8 reps",
+                "why": "chest, shoulders, triceps",
+                "notes": "Form: Chest to floor, full lockout, body in straight line\n\nStarting level: Wall Push-Up — Stand arm-length from wall\n\nStart in a plank position with hands slightly wider than shoulder-width apart, body forming a straight line from head to heels. Lower your chest to the floor by bending your elbows, then press back up to full arm extension. Keep your core tight and avoid letting your hips sag or pike up. You should feel the work in your chest, shoulders, and triceps.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-full-body-inverted-row",
+                "name": "Inverted Row",
+                "dose": "3 × 8 reps",
+                "why": "back, biceps",
+                "notes": "Form: Body straight, pull chest to bar or table edge\n\nStarting level: High Bar/Table — More upright angle, easier\n\nLie under a sturdy table or low bar, grab the edge with an overhand grip, and hang with your body straight and heels on the floor. Pull your chest up to the bar or table edge by squeezing your shoulder blades together, then lower with control. Keep your body rigid like a reverse plank. The more horizontal your body, the harder the exercise.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-full-body-squat",
+                "name": "Squat",
+                "dose": "3 × 10 reps",
+                "why": "quads, glutes, hamstrings",
+                "notes": "Form: Knees track over toes, hips below parallel, chest up\n\nStarting level: Assisted Squat — Hold onto support\n\nStand with feet about shoulder-width apart, toes pointing slightly outward. Push your hips back and bend your knees to lower your body as if sitting into a chair, going at least until your thighs are parallel to the floor. Keep your chest up and knees tracking over your toes. Drive through your whole foot to stand back up.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-full-body-romanian-deadlift",
+                "name": "Romanian Deadlift",
+                "dose": "3 × 10 reps",
+                "why": "hamstrings, glutes, lower back",
+                "notes": "Form: Soft knees, hinge at hips, slide DBs along legs, flat back\n\nStarting level: BW Hip Hinge — Practice the pattern unloaded\n\nStand with feet hip-width apart holding dumbbells in front of your thighs. With a slight bend in your knees, hinge at the hips and push your butt back, sliding the dumbbells down along your legs. Lower until you feel a deep stretch in your hamstrings, keeping your back flat throughout. Squeeze your glutes to drive your hips forward and return to standing.\n\nEquipment: dumbbell",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-full-body-plank",
+                "name": "Plank",
+                "dose": "3 × 20 sec",
+                "why": "abs, obliques, shoulders",
+                "notes": "Form: Straight line from head to heels, squeeze everything tight\n\nStarting level: Knee Plank — Knees on ground\n\nGet into a forearm plank position with elbows directly under shoulders and feet together or hip-width apart. Your body should form a perfectly straight line from head to heels. Squeeze your abs, glutes, and quads to maintain the position. Avoid letting your hips sag toward the floor or pike upward. Breathe steadily throughout.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-full-body-bear-crawl",
+                "name": "Bear Crawl",
+                "dose": "2 × 20 sec",
+                "why": "shoulders, core, quads",
+                "notes": "Form: Knees hover off floor, opposite hand and foot move together\n\nStarting level: Static Hold — Just hold the position\n\nStart on all fours and lift your knees just one to two inches off the floor. Crawl forward by moving the opposite hand and foot together (right hand with left foot, then left hand with right foot). Keep your back flat and your knees hovering low. Avoid letting your hips rock side to side. This builds core stability, shoulder endurance, and coordination.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              }
+            ]
+          }
+        ],
+        "createdAt": "2026-08-19T19:48:38.979Z",
+        "updatedAt": "2026-08-19T19:48:38.979Z"
+      },
+      {
+        "id": "routine-upper-body",
+        "name": "Upper Body",
+        "notes": "Push and pull balance for upper body strength. Switch this on for the day you are doing it. Starting at the easiest level of each movement — raise it as you go.",
+        "active": false,
+        "phases": [],
+        "blocks": [
+          {
+            "id": "routine-upper-body-main",
+            "name": "Upper Body",
+            "order": 0,
+            "items": [
+              {
+                "id": "ex-upper-body-push-up",
+                "name": "Push-Up",
+                "dose": "3 × 10 reps",
+                "why": "chest, shoulders, triceps",
+                "notes": "Form: Chest to floor, full lockout, body in straight line\n\nStarting level: Incline Push-Up — Hands on bench or counter\n\nStart in a plank position with hands slightly wider than shoulder-width apart, body forming a straight line from head to heels. Lower your chest to the floor by bending your elbows, then press back up to full arm extension. Keep your core tight and avoid letting your hips sag or pike up. You should feel the work in your chest, shoulders, and triceps.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-upper-body-banded-row",
+                "name": "Banded Row",
+                "dose": "3 × 12 reps",
+                "why": "back, biceps",
+                "notes": "Form: Wrap band around feet or anchor low, pull elbows back\n\nStarting level: Light — Light band resistance\n\nSit on the floor with legs extended and loop a resistance band around your feet, or anchor it to a low point in front of you. Sit tall, grab both ends of the band, and pull your elbows straight back, squeezing your shoulder blades together. Return to the start with control. Keep your chest lifted and avoid rounding your back.\n\nEquipment: band",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-upper-body-dip",
+                "name": "Dip",
+                "dose": "3 × 8 reps",
+                "why": "chest, triceps, shoulders",
+                "notes": "Form: Lean slightly forward, elbows back, full depth\n\nStarting level: Bench Dip — Hands on bench behind you\n\nPlace your hands on parallel bars or the edge of a sturdy bench behind you and support your body weight with arms extended. Lower yourself by bending your elbows until your upper arms are roughly parallel to the floor, then press back up to lockout. Lean your torso slightly forward to emphasize your chest, or stay upright to target triceps more. Avoid shrugging your shoulders up toward your ears.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-upper-body-banded-curl",
+                "name": "Banded Curl",
+                "dose": "3 × 12 reps",
+                "why": "biceps",
+                "notes": "Form: Stand on band, curl with elbows pinned\n\nStarting level: Light — Light band\n\nStand on the middle of a resistance band with both feet and hold the ends in each hand. Curl your hands up toward your shoulders, keeping your elbows pinned at your sides throughout the movement. Lower with control. The band provides increasing resistance at the top, which matches where your biceps are strongest.\n\nEquipment: band",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-upper-body-banded-face-pull",
+                "name": "Banded Face Pull",
+                "dose": "3 × 12 reps",
+                "why": "rear delts, upper back",
+                "notes": "Form: Pull band to face, elbows high, squeeze rear delts\n\nStarting level: Light — Light band, focus on squeeze\n\nAnchor a resistance band at about face height. Hold both ends and step back to create tension. Pull the band toward your face with elbows high and wide, squeezing your rear deltoids and upper back at the end position. Return slowly. This exercise is excellent for posture and shoulder health.\n\nEquipment: band",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-upper-body-dead-bug",
+                "name": "Dead Bug",
+                "dose": "3 × 10 reps",
+                "why": "abs, deep core",
+                "notes": "Form: Low back pressed into floor, extend opposite arm and leg slowly\n\nStarting level: Basic — Arms only or legs only\n\nLie on your back with arms extended toward the ceiling and knees bent at 90 degrees above your hips. Press your lower back firmly into the floor. Slowly extend one arm overhead and the opposite leg toward the floor, then return to the starting position and switch sides. If your lower back lifts off the floor, you have gone too far.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              }
+            ]
+          }
+        ],
+        "createdAt": "2026-08-19T19:48:38.979Z",
+        "updatedAt": "2026-08-19T19:48:38.979Z"
+      },
+      {
+        "id": "routine-lower-body",
+        "name": "Lower Body",
+        "notes": "Quads, hamstrings, glutes, and calves. Switch this on for the day you are doing it. Starting at the easiest level of each movement — raise it as you go.",
+        "active": false,
+        "phases": [],
+        "blocks": [
+          {
+            "id": "routine-lower-body-main",
+            "name": "Lower Body",
+            "order": 0,
+            "items": [
+              {
+                "id": "ex-lower-body-squat",
+                "name": "Squat",
+                "dose": "3 × 12 reps",
+                "why": "quads, glutes, hamstrings",
+                "notes": "Form: Knees track over toes, hips below parallel, chest up\n\nStarting level: BW Squat — Freestanding bodyweight\n\nStand with feet about shoulder-width apart, toes pointing slightly outward. Push your hips back and bend your knees to lower your body as if sitting into a chair, going at least until your thighs are parallel to the floor. Keep your chest up and knees tracking over your toes. Drive through your whole foot to stand back up.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-lower-body-lunge",
+                "name": "Lunge",
+                "dose": "3 × 10 reps",
+                "why": "quads, glutes, hamstrings",
+                "notes": "Form: Long step, knee hovers above floor, drive through front heel\n\nStarting level: Static Lunge — Feet stay in split stance\n\nStand tall and take a long step forward. Lower your body by bending both knees until your rear knee hovers just above the floor and your front thigh is roughly parallel to the ground. Drive through your front heel to return to standing. Keep your torso upright throughout and avoid letting your front knee shoot past your toes.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-lower-body-romanian-deadlift",
+                "name": "Romanian Deadlift",
+                "dose": "3 × 12 reps",
+                "why": "hamstrings, glutes, lower back",
+                "notes": "Form: Soft knees, hinge at hips, slide DBs along legs, flat back\n\nStarting level: BW Hip Hinge — Practice the pattern unloaded\n\nStand with feet hip-width apart holding dumbbells in front of your thighs. With a slight bend in your knees, hinge at the hips and push your butt back, sliding the dumbbells down along your legs. Lower until you feel a deep stretch in your hamstrings, keeping your back flat throughout. Squeeze your glutes to drive your hips forward and return to standing.\n\nEquipment: dumbbell",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-lower-body-glute-bridge",
+                "name": "Glute Bridge",
+                "dose": "3 × 15 reps",
+                "why": "glutes, hamstrings",
+                "notes": "Form: Drive hips up, squeeze glutes hard at top, feet flat\n\nStarting level: Two-Leg — Standard bridge\n\nLie on your back with knees bent and feet flat on the floor, hip-width apart. Drive through your heels to lift your hips toward the ceiling, squeezing your glutes as hard as you can at the top. Lower your hips back down with control. Avoid pushing from your lower back; the movement should come from your glutes. You should feel a strong contraction in your glutes at the top.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-lower-body-calf-raise",
+                "name": "Calf Raise",
+                "dose": "3 × 15 reps",
+                "why": "calves",
+                "notes": "Form: Full stretch at bottom, high on toes at top, slow tempo\n\nStarting level: Two-Leg Flat — Both feet on flat ground\n\nStand with feet hip-width apart, ideally with the balls of your feet on the edge of a step so your heels can drop below for a full stretch. Rise up onto your toes as high as possible, squeezing your calves at the top, then lower slowly below the step level. Use a slow, controlled tempo and avoid bouncing.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-lower-body-banded-crab-walk",
+                "name": "Banded Crab Walk",
+                "dose": "2 × 15 reps",
+                "why": "glutes, hip abductors",
+                "notes": "Form: Band above knees, quarter squat, step laterally with tension\n\nStarting level: Light — Light band\n\nPlace a resistance band just above your knees and stand in a quarter-squat position with feet hip-width apart. Step sideways with one foot, maintaining tension in the band, then follow with the other foot. Keep your hips low and your knees pushed outward against the band. You should feel this in your outer glutes and hip abductors.\n\nEquipment: band",
+                "phaseIds": []
+              }
+            ]
+          }
+        ],
+        "createdAt": "2026-08-19T19:48:38.979Z",
+        "updatedAt": "2026-08-19T19:48:38.979Z"
+      },
+      {
+        "id": "routine-push-day",
+        "name": "Push Day",
+        "notes": "Chest, shoulders, and triceps focus. Switch this on for the day you are doing it. Starting at the easiest level of each movement — raise it as you go.",
+        "active": false,
+        "phases": [],
+        "blocks": [
+          {
+            "id": "routine-push-day-main",
+            "name": "Push Day",
+            "order": 0,
+            "items": [
+              {
+                "id": "ex-push-day-push-up",
+                "name": "Push-Up",
+                "dose": "3 × 10 reps",
+                "why": "chest, shoulders, triceps",
+                "notes": "Form: Chest to floor, full lockout, body in straight line\n\nStarting level: Incline Push-Up — Hands on bench or counter\n\nStart in a plank position with hands slightly wider than shoulder-width apart, body forming a straight line from head to heels. Lower your chest to the floor by bending your elbows, then press back up to full arm extension. Keep your core tight and avoid letting your hips sag or pike up. You should feel the work in your chest, shoulders, and triceps.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-push-day-dip",
+                "name": "Dip",
+                "dose": "3 × 8 reps",
+                "why": "chest, triceps, shoulders",
+                "notes": "Form: Lean slightly forward, elbows back, full depth\n\nStarting level: Bench Dip — Hands on bench behind you\n\nPlace your hands on parallel bars or the edge of a sturdy bench behind you and support your body weight with arms extended. Lower yourself by bending your elbows until your upper arms are roughly parallel to the floor, then press back up to lockout. Lean your torso slightly forward to emphasize your chest, or stay upright to target triceps more. Avoid shrugging your shoulders up toward your ears.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-push-day-arm-circles",
+                "name": "Arm Circles",
+                "dose": "2 × 30 sec",
+                "why": "shoulders",
+                "notes": "Form: Arms straight out, controlled circles, both directions\n\nStarting level: Small Circles — Tight circles, arms extended\n\nStand tall and extend both arms straight out to your sides at shoulder height. Make small controlled circles with your arms, gradually increasing the size. Perform circles in both forward and backward directions. You should feel a burn in your shoulders; keep your core engaged and avoid shrugging.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-push-day-banded-tricep-pushdown",
+                "name": "Banded Tricep Pushdown",
+                "dose": "3 × 12 reps",
+                "why": "triceps",
+                "notes": "Form: Anchor band high, elbows pinned to sides, full extension\n\nStarting level: Light — Light band resistance\n\nAnchor a resistance band at a high point such as the top of a door. Face the anchor, grab the band with both hands, and pin your elbows tightly to your sides. Push your hands downward by straightening your arms, squeezing your triceps at the bottom, then slowly return to the start. Do not let your elbows drift forward.\n\nEquipment: band",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-push-day-pike-push-up",
+                "name": "Pike Push-Up",
+                "dose": "2 × 6 reps",
+                "why": "shoulders, triceps",
+                "notes": "Form: Hips high, head between arms, touch nose to floor\n\nStarting level: Kneeling Pike — Knees on ground, hips up\n\nStart in a downward-dog position with your hips piked high and hands shoulder-width apart. Bend your elbows and lower the top of your head toward the floor between your hands, then press back up. Keep your hips high throughout so the movement targets your shoulders rather than your chest. You should feel this primarily in your front and side deltoids.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-push-day-plank",
+                "name": "Plank",
+                "dose": "3 × 20 sec",
+                "why": "abs, obliques, shoulders",
+                "notes": "Form: Straight line from head to heels, squeeze everything tight\n\nStarting level: Knee Plank — Knees on ground\n\nGet into a forearm plank position with elbows directly under shoulders and feet together or hip-width apart. Your body should form a perfectly straight line from head to heels. Squeeze your abs, glutes, and quads to maintain the position. Avoid letting your hips sag toward the floor or pike upward. Breathe steadily throughout.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              }
+            ]
+          }
+        ],
+        "createdAt": "2026-08-19T19:48:38.979Z",
+        "updatedAt": "2026-08-19T19:48:38.979Z"
+      },
+      {
+        "id": "routine-pull-day",
+        "name": "Pull Day",
+        "notes": "Back, biceps, and rear delts. Switch this on for the day you are doing it. Starting at the easiest level of each movement — raise it as you go.",
+        "active": false,
+        "phases": [],
+        "blocks": [
+          {
+            "id": "routine-pull-day-main",
+            "name": "Pull Day",
+            "order": 0,
+            "items": [
+              {
+                "id": "ex-pull-day-banded-row",
+                "name": "Banded Row",
+                "dose": "3 × 12 reps",
+                "why": "back, biceps",
+                "notes": "Form: Wrap band around feet or anchor low, pull elbows back\n\nStarting level: Light — Light band resistance\n\nSit on the floor with legs extended and loop a resistance band around your feet, or anchor it to a low point in front of you. Sit tall, grab both ends of the band, and pull your elbows straight back, squeezing your shoulder blades together. Return to the start with control. Keep your chest lifted and avoid rounding your back.\n\nEquipment: band",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-pull-day-banded-lat-pulldown",
+                "name": "Banded Lat Pulldown",
+                "dose": "3 × 12 reps",
+                "why": "lats, biceps",
+                "notes": "Form: Anchor band high, pull elbows to ribs, squeeze lats\n\nStarting level: Light Kneeling — Kneel, light band overhead\n\nAnchor a resistance band at a high point above you. Kneel or stand facing the anchor and grab both ends of the band with arms extended overhead. Pull your elbows down to your ribs, squeezing your lats hard at the bottom, then slowly extend your arms back up. Think about driving your elbows into your back pockets.\n\nEquipment: band",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-pull-day-banded-curl",
+                "name": "Banded Curl",
+                "dose": "3 × 12 reps",
+                "why": "biceps",
+                "notes": "Form: Stand on band, curl with elbows pinned\n\nStarting level: Light — Light band\n\nStand on the middle of a resistance band with both feet and hold the ends in each hand. Curl your hands up toward your shoulders, keeping your elbows pinned at your sides throughout the movement. Lower with control. The band provides increasing resistance at the top, which matches where your biceps are strongest.\n\nEquipment: band",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-pull-day-banded-face-pull",
+                "name": "Banded Face Pull",
+                "dose": "3 × 12 reps",
+                "why": "rear delts, upper back",
+                "notes": "Form: Pull band to face, elbows high, squeeze rear delts\n\nStarting level: Light — Light band, focus on squeeze\n\nAnchor a resistance band at about face height. Hold both ends and step back to create tension. Pull the band toward your face with elbows high and wide, squeezing your rear deltoids and upper back at the end position. Return slowly. This exercise is excellent for posture and shoulder health.\n\nEquipment: band",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-pull-day-superman",
+                "name": "Superman",
+                "dose": "3 × 20 sec",
+                "why": "lower back, glutes",
+                "notes": "Form: Lift arms and legs off floor, squeeze glutes and back\n\nStarting level: Hold — Static hold, arms and legs up\n\nLie face down with arms extended overhead and legs straight. Simultaneously lift your arms, chest, and legs off the floor by squeezing your glutes and lower back muscles. Hold briefly at the top, then lower with control. Keep your neck neutral by looking at the floor rather than cranking your head up.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-pull-day-prone-y-t-w-raise",
+                "name": "Prone Y-T-W Raise",
+                "dose": "2 × 8 reps",
+                "why": "upper back, rear delts",
+                "notes": "Form: Lie face down, lift arms in Y, T, then W shapes\n\nStarting level: Bodyweight on Floor — Just arms, no weight\n\nLie face down on the floor with arms extended. Lift your arms off the ground into a Y shape (overhead and angled out), then a T shape (straight out to the sides), then a W shape (elbows bent, pulled toward ribs). Hold each position for a beat. These target the upper back, rear delts, and rotator cuff muscles important for posture.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              }
+            ]
+          }
+        ],
+        "createdAt": "2026-08-19T19:48:38.979Z",
+        "updatedAt": "2026-08-19T19:48:38.979Z"
+      },
+      {
+        "id": "routine-mobility-flow",
+        "name": "Mobility Flow",
+        "notes": "Hip, ankle, shoulder, and spine mobility. Switch this on for the day you are doing it. Starting at the easiest level of each movement — raise it as you go.",
+        "active": false,
+        "phases": [],
+        "blocks": [
+          {
+            "id": "routine-mobility-flow-main",
+            "name": "Mobility Flow",
+            "order": 0,
+            "items": [
+              {
+                "id": "ex-mobility-flow-cat-cow",
+                "name": "Cat-Cow",
+                "dose": "2 × 10 reps",
+                "why": "spine, core",
+                "notes": "Form: Alternate arching and rounding spine, sync with breath\n\nStarting level: Basic — Standard cat-cow on all fours\n\nStart on all fours with hands under shoulders and knees under hips. On an inhale, arch your back and lift your chest and tailbone toward the ceiling (cow). On an exhale, round your spine upward and tuck your chin and pelvis (cat). Move slowly and coordinate each position with your breath. This gently mobilizes the entire spine.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-mobility-flow-deep-squat-hold",
+                "name": "Deep Squat Hold",
+                "dose": "3 × 20 sec",
+                "why": "hips, ankles, thoracic",
+                "notes": "Form: Sit deep, heels down, chest up, breathe and relax into it\n\nStarting level: Assisted Hold — Hold onto support\n\nLower yourself into the deepest squat position you can while keeping your heels on the floor. Hold the position, keeping your chest upright and breathing deeply to relax into the stretch. If your heels rise, widen your stance or hold onto a support. This opens up the hips, ankles, and thoracic spine. Aim to accumulate time rather than rushing.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-mobility-flow-hip-cars",
+                "name": "Hip CARs",
+                "dose": "2 × 5 reps",
+                "why": "hips",
+                "notes": "Form: Slow controlled circles at the hip, biggest circle possible\n\nStarting level: Hands & Knees — On all fours, circle hip\n\nStand on one leg or kneel on all fours. Lift one knee and slowly draw the biggest circle possible with your hip joint, moving through flexion, abduction, extension, and adduction. Make smooth, controlled circles in both directions. This maintains hip joint range of motion and highlights any areas of tightness.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-mobility-flow-ankle-cars",
+                "name": "Ankle CARs",
+                "dose": "2 × 5 reps",
+                "why": "ankles",
+                "notes": "Form: Slow controlled circles through full ankle range of motion\n\nStarting level: Seated Circles — Seated, circle each ankle\n\nSit or stand on one leg and slowly draw large circles with your foot by moving your ankle through its full range of motion. Move clockwise for several reps, then counterclockwise. CARs (Controlled Articular Rotations) help maintain and improve joint health. Keep the movement slow and deliberate, exploring every part of the range.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-mobility-flow-shoulder-cars",
+                "name": "Shoulder CARs",
+                "dose": "2 × 5 reps",
+                "why": "shoulders",
+                "notes": "Form: Fist tight, move arm in biggest circle possible, stay controlled\n\nStarting level: Small ROM — Smaller circles to start\n\nStand tall and make a tight fist with one hand. Slowly raise your arm in front of you, continue overhead, then behind you and back down, tracing the biggest circle possible with a straight arm. Move very slowly and with control. Repeat in the opposite direction. This helps maintain shoulder mobility and highlights any restrictions in your range of motion.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-mobility-flow-childs-pose",
+                "name": "Child's Pose",
+                "dose": "2 × 30 sec",
+                "why": "back, hips",
+                "notes": "Form: Sit hips back to heels, arms extended, forehead to floor\n\nStarting level: Standard — Knees together\n\nKneel on the floor and sit your hips back toward your heels. Extend your arms forward along the floor and lower your forehead to the ground. Breathe deeply and let your body relax into the stretch. This gently stretches the back, hips, and shoulders and is an excellent resting position between exercises or as part of a cooldown.\n\nEquipment: bodyweight",
+                "phaseIds": []
+              },
+              {
+                "id": "ex-mobility-flow-couch-stretch-hip-flexor",
+                "name": "couch-stretch-hip-flexor",
+                "dose": "2 × 30 sec",
+                "notes": "",
+                "phaseIds": []
+              }
+            ]
+          }
+        ],
+        "createdAt": "2026-08-19T19:48:38.979Z",
+        "updatedAt": "2026-08-19T19:48:38.979Z"
+      }
+    ],
+    "days": [],
+    "labs": [],
+    "settings": []
+  }
+}

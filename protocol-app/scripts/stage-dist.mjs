@@ -16,7 +16,7 @@ const appDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = resolve(appDir, 'dist');
 
 // Everything the browser loads, starting from index.html.
-const SHIPPED = ['index.html', 'src', 'supplement-protocol.json'];
+const SHIPPED = ['index.html', 'src', 'starter-protocols.json'];
 
 await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });

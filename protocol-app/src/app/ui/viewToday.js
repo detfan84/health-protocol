@@ -147,7 +147,7 @@ export async function viewToday({ reload } = {}) {
       );
       if (!hasBundled(protocols)) {
         card.append(
-          h('p.muted', {}, 'Your supplement protocol from the previous app is ready to bring in — 65 items across 9 time blocks, with doses and phase timing.'),
+          h('p.muted', {}, 'Everything from your previous app is ready to bring in — supplements, body work, breathing, stretching and your workout routines. Only the supplements switch on; the rest wait in Protocols until you want them.'),
           h('button.btn', {
             style: 'width:100%',
             onclick: () =>
@@ -155,7 +155,7 @@ export async function viewToday({ reload } = {}) {
                 what: 'Loading your supplement protocol',
                 onOk: () => reload?.(),
               }),
-          }, 'Load my supplement protocol'),
+          }, 'Bring in my protocols'),
         );
       }
       blocksHost.append(card);

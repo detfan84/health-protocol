@@ -5,7 +5,7 @@ import { h } from './dom.js';
 import * as store from '../store.js';
 import { newProtocol, setProtocolFields } from '../editorOps.js';
 import { guarded } from './announcer.js';
-import { BUNDLED_ID, loadBundledProtocol } from '../bundledProtocol.js';
+import { hasBundled, loadBundledProtocol } from '../bundledProtocol.js';
 
 export async function viewProtocols({ openEditor, reload }) {
   const protocols = await store.loadProtocols();
@@ -64,12 +64,12 @@ export async function viewProtocols({ openEditor, reload }) {
   }
 
   // Offered until it is here. Once loaded, this card gets out of the way.
-  if (!protocols.some((p) => p.id === BUNDLED_ID)) {
+  if (!hasBundled(protocols)) {
     root.append(
       h('div.card', {},
-        h('div.card-head', {}, h('h2', {}, 'Your supplement protocol')),
+        h('div.card-head', {}, h('h2', {}, 'Your content from the old app')),
         h('p.muted', {},
-          '65 supplements across 9 time blocks — doses, reasoning and phase timing, carried over from your previous app. Loading it adds a protocol and removes nothing. Edit anything that has changed.'),
+          'Nine protocols: 65 supplements with doses, reasoning and phase timing; body work, breathing and airway drills; morning and evening stretching; and six workout routines. Everything except the supplements arrives switched off. Loading adds and removes nothing.'),
         h('button.btn', {
           style: 'width:100%',
           onclick: () =>
@@ -77,7 +77,7 @@ export async function viewProtocols({ openEditor, reload }) {
               what: 'Loading your supplement protocol',
               onOk: () => reload?.(),
             }),
-        }, 'Load it'),
+        }, 'Bring it in'),
       ),
     );
   }
