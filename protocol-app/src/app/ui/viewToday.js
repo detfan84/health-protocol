@@ -14,13 +14,40 @@ import { buildToday, MOVEMENT_PROMPTS, MOVEMENT_SAFETY_LINE, makePhaseSetting } 
 import { toggleCheck, setJournal, addFood, removeFood, bumpWater } from '../trackerOps.js';
 import { guarded } from './announcer.js';
 import * as store from '../store.js';
-import { hasBundled, loadBundledProtocol } from '../bundledProtocol.js';
 import { localDateKey, nowIso } from '../../lib/core.js';
 
 function timeLabel(b) {
   if (b.start && b.end) return `${b.start}–${b.end}`;
   if (b.start) return `from ${b.start}`;
   return null;
+}
+
+/**
+ * The instructions, folded away until asked for.
+ *
+ * Notes carry the whole point of an item — how to do it, how long, what to
+ * watch for, what to be careful of. They were stored and never drawn, which
+ * left a screen of names you could tick without knowing why. Printing them
+ * inline would make an already-long list unreadable, so each item keeps a
+ * disclosure: closed by default, one tap to the real thing.
+ *
+ * Paragraphs that begin with a short label ("Release: ...", "Careful: ...")
+ * keep that label in bold, because that is how they read on paper.
+ */
+function notesBlock(notes) {
+  const paragraphs = String(notes).split(/\n{2,}/).filter((t) => t.trim() !== '');
+  if (paragraphs.length === 0) return null;
+  return h(
+    'details.notes',
+    {},
+    h('summary', {}, 'How'),
+    paragraphs.map((text) => {
+      const m = /^([A-Z][A-Za-z ]{1,14}):\s([\s\S]+)$/.exec(text);
+      return m
+        ? h('p', {}, h('strong', {}, `${m[1]} `), m[2])
+        : h('p', {}, text);
+    }),
+  );
 }
 
 function checkRow(item, day, why) {
@@ -60,6 +87,7 @@ function checkRow(item, day, why) {
       {},
       h('span.name', {}, item.name, item.dose ? h('span.dose', {}, ` · ${item.dose}`) : null),
       why ? h('span.why', {}, why) : null,
+      item.notes ? notesBlock(item.notes) : null,
     ),
   );
 }
@@ -140,24 +168,9 @@ export async function viewToday({ reload } = {}) {
 
   function renderBlocks(t) {
     if (t.blocks.length === 0) {
-      // The empty state is where a first launch lands, so the way out of it
-      // belongs here — not one tab away, where nobody thinks to look.
       const card = h('div.card', {},
-        h('p.muted', {}, 'Nothing active yet. Build a protocol — or switch one on — in Protocols.'),
+        h('p.muted', {}, 'Nothing active yet. Build a protocol — or bring one in — in Protocols.'),
       );
-      if (!hasBundled(protocols)) {
-        card.append(
-          h('p.muted', {}, 'Everything from your previous app is ready to bring in — supplements, body work, breathing, stretching and your workout routines. Only the supplements switch on; the rest wait in Protocols until you want them.'),
-          h('button.btn', {
-            style: 'width:100%',
-            onclick: () =>
-              guarded(loadBundledProtocol, {
-                what: 'Loading your supplement protocol',
-                onOk: () => reload?.(),
-              }),
-          }, 'Bring in my protocols'),
-        );
-      }
       blocksHost.append(card);
       return;
     }

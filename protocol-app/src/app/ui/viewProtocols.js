@@ -1,11 +1,10 @@
 // viewProtocols.js — the plans. Multiple protocols may be active at once;
 // Today interleaves whatever is switched on here.
 
-import { h } from './dom.js';
+import { h, clear } from './dom.js';
 import * as store from '../store.js';
 import { newProtocol, setProtocolFields } from '../editorOps.js';
 import { guarded } from './announcer.js';
-import { hasBundled, loadBundledProtocol } from '../bundledProtocol.js';
 
 export async function viewProtocols({ openEditor, reload }) {
   const protocols = await store.loadProtocols();
@@ -63,24 +62,51 @@ export async function viewProtocols({ openEditor, reload }) {
     );
   }
 
-  // Offered until it is here. Once loaded, this card gets out of the way.
-  if (!hasBundled(protocols)) {
-    root.append(
-      h('div.card', {},
-        h('div.card-head', {}, h('h2', {}, 'Your content from the old app')),
-        h('p.muted', {},
-          'Nine protocols: 65 supplements with doses, reasoning and phase timing; body work, breathing and airway drills; morning and evening stretching; and six workout routines. Everything except the supplements arrives switched off. Loading adds and removes nothing.'),
-        h('button.btn', {
-          style: 'width:100%',
-          onclick: () =>
-            guarded(loadBundledProtocol, {
-              what: 'Loading your supplement protocol',
-              onOk: () => reload?.(),
-            }),
-        }, 'Bring it in'),
-      ),
-    );
-  }
+  /* --------------------------- import a file -------------------------- */
+  const importResults = h('pre.tech', { 'aria-live': 'polite' });
+  const fileInput = h('input', {
+    type: 'file',
+    id: 'protocol-file',
+    accept: 'application/json,.json',
+    onchange: (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      clear(importResults);
+      guarded(
+        async () => store.importFile(await file.text()),
+        {
+          what: 'The import',
+          detail:
+            'The import stopped before finishing. It writes in one storage transaction, so nothing was partly applied — this device is exactly as it was.',
+          onOk: (res) => {
+            if (res.ok) {
+              importResults.textContent = 'Imported. Nothing was deleted — an import only ever adds or updates.';
+              reload?.();
+            } else {
+              importResults.textContent = ["That file couldn't be imported. Nothing on this device changed."]
+                .concat(res.errors.map((x) => `• ${x.path}: ${x.message}${x.hint ? ` — ${x.hint}` : ''}`))
+                .join('\n');
+            }
+            e.target.value = '';
+          },
+          onFail: () => {
+            importResults.textContent = 'The import stopped before finishing. Nothing on this device changed.';
+            e.target.value = '';
+          },
+        },
+      );
+    },
+  });
+  root.append(
+    h('div.card', {},
+      h('div.card-head', {}, h('h2', {}, 'Bring in a protocol')),
+      h('p.muted', {},
+        'Open a protocol or backup file you have been given, or one you exported from another device. Importing merges: where both sides have a record the newer one wins, and nothing is ever deleted.'),
+      h('label', { for: 'protocol-file', class: 'visually-hidden' }, 'Choose a protocol or backup file'),
+      fileInput,
+      importResults,
+    ),
+  );
 
   root.append(
     h('button.btn.primary', {

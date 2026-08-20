@@ -1,0 +1,6 @@
+# Converted personal content. The converter regenerates it from the old app
+# on demand (npm run convert), and it is imported by hand on each device.
+#
+# It is NOT committed and NOT shipped: this app is meant to be shareable, and
+# one person's supplement regimen is not starter content for everyone else.
+starter-protocols.json

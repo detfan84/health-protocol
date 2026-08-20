@@ -312,3 +312,32 @@ nav.tabs button[aria-current='page'] { color: var(--accent); font-weight: 650; }
   margin-top: var(--sp-2);
   min-height: 60px;
 }
+
+
+/* ---------------------------- item instructions ---------------------- */
+/* Closed by default: the list stays scannable, the detail stays reachable. */
+.notes {
+  margin-top: 6px;
+}
+.notes > summary {
+  cursor: pointer;
+  display: inline-block;
+  font-size: var(--fs-sm, 0.8125rem);
+  color: var(--muted);
+  padding: 4px 0;
+  min-height: 32px;
+  line-height: 24px;
+}
+.notes > summary:hover {
+  color: var(--ink);
+}
+.notes > p {
+  margin: 6px 0 0;
+  font-size: var(--fs-sm, 0.8125rem);
+  color: var(--muted);
+  line-height: 1.5;
+  white-space: pre-line;
+}
+.notes > p > strong {
+  color: var(--ink);
+}

@@ -4,7 +4,8 @@
 // meaningful event (protocols). Day and settings records arrive already
 // stamped by the ops that changed them.
 
-import { STORES } from '../lib/schema.js';
+import { STORES, FILE_FORMAT } from '../lib/schema.js';
+import { validateFile } from '../lib/protocolFile.js';
 import { nowIso, localDateKey } from '../lib/core.js';
 import {
   openDb,
@@ -132,6 +133,47 @@ export async function exportBackup() {
 export async function importBackup(fileInput) {
   const db = await ready();
   return importMerge(db, fileInput);
+}
+
+/**
+ * Import whatever kind of file a person picked.
+ *
+ * The app used to accept backups only, while telling anyone holding a
+ * protocol file to "import it from the Protocols screen" — a screen with no
+ * import on it. This is that door, and it takes either kind.
+ *
+ * A protocol file is wrapped as a one-protocol backup rather than saved
+ * directly, so it goes through the same merge referee as everything else:
+ * newer `updatedAt` wins, nothing is ever deleted, and re-importing a file
+ * after you have edited an item keeps YOUR version.
+ */
+export async function importFile(fileInput) {
+  const v = validateFile(fileInput);
+  if (!v.ok) return { ok: false, errors: v.errors, warnings: v.warnings };
+
+  if (v.kind === 'fragment') {
+    return {
+      ok: false,
+      errors: [{
+        path: 'kind',
+        message: 'This is a fragment — a piece of a protocol, not a whole one.',
+        hint: 'Fragments merge into an existing protocol from its edit screen.',
+      }],
+      warnings: v.warnings,
+    };
+  }
+
+  if (v.kind === 'protocol') {
+    return importBackup({
+      format: FILE_FORMAT,
+      kind: 'backup',
+      schemaVersion: v.value.schemaVersion,
+      exportedAt: v.value.exportedAt,
+      data: { protocols: [v.value.protocol], days: [], labs: [], settings: [] },
+    });
+  }
+
+  return importBackup(fileInput);
 }
 
 /** User-initiated only. Imports never call this — nothing about an import
