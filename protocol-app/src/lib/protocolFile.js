@@ -102,6 +102,24 @@ function fixItem(raw, path, ctx) {
       .filter(Boolean);
     if (photos.length) item.photos = photos;
   }
+  // How this item is tracked: a tick, sets of reps, or a duration (PLAN §4.2).
+  // Anything else is a tick, because an unknown tracking type must not make an
+  // item unloggable — it just makes it ordinary.
+  const tracking = asTrimmed(String(raw.tracking ?? ''));
+  if (tracking === 'sets' || tracking === 'duration') item.tracking = tracking;
+  else if (tracking && tracking !== 'check') {
+    ctx.warn(path + '.tracking', `"${raw.tracking}" is not a way of tracking — treated as a simple tick. Known: check, sets, duration.`);
+  }
+  // What the plan asks for. Optional, and never a floor or a judgement — the
+  // log records what happened, this only says what was written down.
+  if (isObj(raw.target)) {
+    const target = {};
+    for (const k of ['sets', 'reps', 'seconds']) {
+      const n = asNumber(raw.target[k]);
+      if (n !== undefined && Number.isFinite(n) && n > 0) target[k] = Math.round(n);
+    }
+    if (Object.keys(target).length) item.target = target;
+  }
   // Cadence travels with the plan: "3× a week" is part of what the protocol
   // says to do, so a protocol shared with somebody else carries it. What does
   // NOT travel is anything personal about doing it — a pause lives in the

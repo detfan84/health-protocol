@@ -279,3 +279,75 @@ test('no screen ever prints the word "null" at a person', async () => {
       `a raw value reached the screen for date=${date ?? 'today'}: ${text.slice(0, 200)}`);
   }
 });
+
+test('sets and reps are recorded, shown back, and survive an un-tick', async () => {
+  store._resetForTests();
+  await store.ready({ name: 'screens-7' });
+  const { localDateKey } = await import('../src/lib/core.js');
+  const { addDays } = await import('../src/lib/cadence.js');
+  const today = localDateKey();
+  const lastWeek = addDays(today, -7);
+
+  await store.saveProtocol({
+    id: 'p-train', name: 'Strength', active: true, phases: [],
+    blocks: [{
+      id: 'b', name: 'Full Body', order: 0,
+      items: [
+        { id: 'ex-squat', name: 'Squat', tracking: 'sets', target: { sets: 3, reps: 10 } },
+        { id: 'ex-plank', name: 'Plank', tracking: 'duration', target: { seconds: 30 } },
+        { id: 'plain', name: 'Just a tick' },
+      ],
+    }],
+    createdAt: 'x', updatedAt: 'x',
+  });
+
+  // Last week: 3 × 8 at 20 kg — the numbers today should be shown against.
+  await store.saveDay({
+    date: lastWeek, checks: { 'ex-squat': { at: 'x' } }, food: [],
+    log: { 'ex-squat': { sets: [{ reps: 8, kg: 20 }, { reps: 8, kg: 20 }, { reps: 8, kg: 20 }] } },
+    updatedAt: 'x',
+  });
+
+  draw(await viewToday({}));
+  await settled();
+
+  const row = [...document.querySelectorAll('.row')].find((r) => /Squat/.test(r.textContent));
+  assert.match(row.textContent, /Last time/, 'training against last time is the point of writing it down');
+  assert.match(row.textContent, /8 @ 44 lb/, 'shown in the person’s own units, from kilograms underneath');
+  assert.match(row.textContent, /Asked for: 3 × 10/);
+
+  const plain = [...document.querySelectorAll('.row')].find((r) => /Just a tick/.test(r.textContent));
+  assert.equal(plain.querySelector('.training'), null, 'an ordinary item gets no logger — one tap is still the ask');
+
+  // Log a set: it records, and it ticks the item, because doing it is doing it.
+  const logBtn = [...row.querySelectorAll('button')].find((b) => /Log a set/.test(b.textContent));
+  assert.ok(logBtn);
+  logBtn.dispatchEvent(new Event('click'));
+  await settled(12);
+
+  let day = await store.loadDay(today);
+  assert.equal(day.log['ex-squat'].sets.length, 1);
+  assert.equal(day.log['ex-squat'].sets[0].reps, 10, 'the new set starts from what the plan asked for');
+  assert.ok(day.checks['ex-squat'], 'logging work marks the work done');
+
+  // Type real numbers into it.
+  const inputs = [...document.querySelectorAll('.set-row input')];
+  inputs[0].value = '12';
+  inputs[0].dispatchEvent(new Event('change'));
+  await settled(10);
+  inputs[1].value = '95';
+  inputs[1].dispatchEvent(new Event('change'));
+  await settled(10);
+
+  day = await store.loadDay(today);
+  assert.equal(day.log['ex-squat'].sets[0].reps, 12);
+  assert.ok(Math.abs(day.log['ex-squat'].sets[0].kg - 95 * 0.45359237) < 0.01, 'stored in kilograms');
+
+  // Un-ticking must never destroy typed numbers (ruling B).
+  const check = row.querySelector('button.check');
+  check.dispatchEvent(new Event('click'));
+  await settled(12);
+  day = await store.loadDay(today);
+  assert.equal(day.checks['ex-squat'], undefined, 'the tick came off');
+  assert.equal(day.log['ex-squat'].sets[0].reps, 12, 'and the work you wrote down is still there');
+});

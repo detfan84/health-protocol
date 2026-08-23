@@ -31,6 +31,8 @@ const OUT_PHOTOS = resolve(OUT_DIR, 'photos');
 
 const load = (f) => import(pathToFileURL(resolve(OLD, f)).href);
 
+import { dayArcProtocol } from './day-arc.mjs';
+
 /* ------------------------------------------------------------------ *
  * Personal detail → general instruction.
  *
@@ -159,6 +161,10 @@ function flowBlock(routine, { id, name, start, minutes }) {
         dose: Number.isFinite(step.duration) ? `${step.duration} sec` : undefined,
       };
       if (step.note) item.why = step.note;
+      if (Number.isFinite(step.duration)) {
+        item.tracking = 'duration';
+        item.target = { seconds: step.duration };
+      }
       if (step.details && !lib.details) item.fields = { release: step.details };
       if (lib.details) item.fields = { release: lib.details };
       if (lib.muscles?.length) {
@@ -241,7 +247,17 @@ function exerciseItem(entry, i) {
     id: `ex-${entry.exerciseId}`,
     name: step?.name && step.name !== ex.name ? `${ex.name} — ${step.name}` : ex.name,
     cadence: { kind: 'timesPerWeek', n: 3 },
+    // What the app should let you WRITE DOWN. The library already says whether
+    // an exercise is counted in reps or held for time; carry that across, or
+    // the training log has nothing to attach itself to.
+    tracking: ex.trackingType === 'duration' || entry.targetDuration ? 'duration' : 'sets',
+    target: Object.fromEntries(Object.entries({
+      sets: entry.sets,
+      reps: entry.targetReps,
+      seconds: entry.targetDuration,
+    }).filter(([, v]) => Number.isFinite(v))),
   };
+  if (!Object.keys(item.target).length) delete item.target;
   const dose = entry.targetReps
     ? `${entry.sets} × ${entry.targetReps}`
     : entry.targetDuration
@@ -284,6 +300,8 @@ const starter = {
   exportedAt: now,
   data: {
     protocols: [
+      // The anchors first: this is the day the app is actually about.
+      dayArcProtocol(now),
       {
         id: 'seed-daily-flow',
         name: 'Morning and evening flow',
@@ -343,6 +361,7 @@ await writeFile(resolve(OUT_DIR, 'starter.json'), `${JSON.stringify(starter, nul
 const cards = bodyBlocks.reduce((n, b) => n + b.items.length, 0);
 console.log(`body work: ${bodyBlocks.length} sections, ${cards} cards`);
 console.log(`flows: morning ${morning.items.length} steps, evening ${evening.items.length} steps`);
+console.log('day arc: 4 anchor blocks, each with a 60-second floor');
 console.log(`support: ${supportBlocks.reduce((n, b) => n + b.items.length, 0)} practices`);
 console.log(`routines: ${routineProtocols.length} (${routineProtocols.filter((p) => p.active).map((p) => p.name).join(', ') || 'none'} switched on)`);
 console.log(`photos: ${copied} files for ${wanted.size} sets`);

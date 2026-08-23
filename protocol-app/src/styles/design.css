@@ -207,6 +207,18 @@ label { display: block; font-size: var(--fs-sm); color: var(--ink-muted); margin
 .field-row { display: flex; gap: var(--sp-2); }
 .field-row > * { flex: 1; min-width: 0; }
 
+/* training log */
+.training {
+  margin-top: var(--sp-2);
+  padding: var(--sp-3);
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+}
+.training-head { display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: baseline; }
+.sets { display: grid; gap: var(--sp-2); margin-top: var(--sp-2); }
+.set-row { align-items: end; }
+.set-row input { max-width: 7rem; }
+
 /* body-work card: five fields and a two-frame loop */
 .fields { margin-top: var(--sp-2); display: grid; gap: var(--sp-2); }
 .field-line { font-size: var(--fs-sm); line-height: 1.5; }

@@ -186,3 +186,32 @@ test('cadence survives export and import; a broken one warns instead of vanishin
     'and the one it dropped was said out loud (decision 24)',
   );
 });
+
+/* ------------------------------ the day arc --------------------------- */
+
+test('the day arc ships as anchors, and every anchor has a sixty-second floor', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const text = await readFile(new URL('../src/content/starter.json', import.meta.url), 'utf8');
+  const v = validateFile(text);
+  assert.equal(v.ok, true);
+
+  const arc = v.value.data.protocols.find((p) => p.id === 'seed-day-arc');
+  assert.ok(arc, 'the day arc must ship — it is the thing the app is about');
+  assert.equal(arc.active, true);
+
+  const names = arc.blocks.map((b) => b.name);
+  assert.equal(names.length, 4, 'wake, rise, evening release, in-bed wind-down');
+  assert.match(names[0], /feet touch the floor/i, 'the first anchor happens before you get up');
+
+  for (const b of arc.blocks) {
+    const first = b.items[0];
+    assert.equal(first.tracking, 'duration', `${b.name}: the floor is a timed thing`);
+    assert.equal(first.target.seconds, 60, `${b.name}: the floor is sixty seconds (law 6)`);
+    assert.ok(/floor version/i.test(first.why ?? ''), `${b.name}: the floor says it is the floor`);
+  }
+
+  // Anchors are stable and daily by design (law 4) — no cadence thinning here.
+  const arcItems = arc.blocks.flatMap((b) => b.items);
+  assert.equal(arcItems.some((i) => i.cadence), false, 'anchors are the same every day on purpose');
+  assert.ok(arcItems.every((i) => i.fields?.release), 'every anchor item says how to do it');
+});

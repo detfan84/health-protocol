@@ -17,8 +17,11 @@
 
 import { h, clear } from './dom.js';
 import { buildToday, makePhaseSetting } from '../todayModel.js';
-import { toggleCheck, setJournal, addFood, removeFood, bumpWaterMl, setWaterMl, unavailableReason } from '../trackerOps.js';
-import { unitsOf, stepMl, volumeUnitLabel, displayVolume, parseVolume } from '../../lib/units.js';
+import {
+  toggleCheck, setJournal, addFood, removeFood, bumpWaterMl, setWaterMl,
+  unavailableReason, addSet, updateSet, removeSet, setDuration, trainingLog, lastLoggedBefore,
+} from '../trackerOps.js';
+import { unitsOf, stepMl, volumeUnitLabel, displayVolume, parseVolume, weightUnitLabel, displayWeight, parseWeight } from '../../lib/units.js';
 import { cadenceOf, cadenceLabel, addDays } from '../../lib/cadence.js';
 import { guarded } from './announcer.js';
 import * as store from '../store.js';
@@ -62,7 +65,7 @@ function timeLabel(b) {
  */
 function notesBlock(notes, itemId, openNotes, extra, card = {}) {
   const paragraphs = String(notes ?? '').split(/\n{2,}/).filter((t) => t.trim() !== '');
-  const hasCard = Boolean(card.fields || card.photos?.length);
+  const hasCard = Boolean(card.fields || card.photos?.length || card.training);
   if (paragraphs.length === 0 && !extra && !hasCard) return null;
   // Opened instructions stay open. The screen re-sorts itself as the day gets
   // ticked off, and re-closing what somebody opened to read mid-exercise would
@@ -72,6 +75,7 @@ function notesBlock(notes, itemId, openNotes, extra, card = {}) {
     'details.notes',
     { open: openNotes?.has(itemId) ? '' : null },
     h('summary', {}, hasCard || paragraphs.length ? 'How' : 'Options'),
+    card.training ?? null,
     fieldsBlock(card.fields),
     photos,
     paragraphs.map((text) => {
@@ -180,7 +184,129 @@ function fieldsBlock(fields) {
   );
 }
 
-function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, cadence, writeKey = localDateKey } = {}) {
+/**
+ * The training log: what you actually did, typed where you did it.
+ *
+ * A tick tells you a workout happened. It does not tell you that last week was
+ * 3×8 at 20 lb and today was 3×10 — which is the entire reason to write
+ * training down. So an item tracked as sets or a duration carries a small
+ * logger inside its own disclosure, and above it, last time's numbers.
+ *
+ * Everything here is optional. The tap is still the whole daily ask: an item
+ * ticked with nothing typed is complete, and always was.
+ */
+function trainingBlock(item, day, { units, writeKey, onLogged, lastTime }) {
+  if (item.tracking !== 'sets' && item.tracking !== 'duration') return null;
+
+  const host = h('div.training', {});
+  const wLabel = weightUnitLabel(units);
+
+  const target = item.target
+    ? item.tracking === 'duration'
+      ? `${item.target.seconds ?? ''} sec`
+      : `${item.target.sets ?? ''} × ${item.target.reps ?? ''}`.trim()
+    : null;
+
+  host.append(
+    h('div.training-head', {},
+      h('span.field-label', {}, 'Log'),
+      target ? h('span.why', {}, `Asked for: ${target}`) : null,
+      lastTime ? h('span.why', {}, `Last time (${lastTime.when}): ${lastTime.text}`) : null,
+    ),
+  );
+
+  const write = (fn, what) => guarded(() => store.mutateDay(writeKey(), fn), {
+    what,
+    onOk: (next) => onLogged?.(next),
+  });
+
+  const rows = h('div.sets', {});
+  function renderSets() {
+    clear(rows);
+    const log = trainingLog(day, item.id);
+
+    if (item.tracking === 'duration') {
+      const secs = log?.seconds;
+      rows.append(
+        h('div.field-row', {},
+          h('div', {},
+            h('label', {}, 'Seconds'),
+            h('input', {
+              type: 'number', min: '1', inputmode: 'numeric',
+              value: Number.isFinite(secs) ? String(secs) : '',
+              placeholder: item.target?.seconds ? String(item.target.seconds) : '—',
+              'aria-label': `Seconds for ${item.name}`,
+              onchange: (e) => {
+                const n = Number(e.target.value);
+                write(
+                  (fresh) => setDuration(fresh, item.id, Number.isFinite(n) && n > 0 ? n : undefined),
+                  `The time for ${item.name}`,
+                );
+              },
+            })),
+        ),
+      );
+      return;
+    }
+
+    (log?.sets ?? []).forEach((set, i) => {
+      rows.append(
+        h('div.field-row.set-row', {},
+          h('div', {},
+            h('label', {}, `Set ${i + 1} · reps`),
+            h('input', {
+              type: 'number', min: '0', inputmode: 'numeric',
+              value: Number.isFinite(set.reps) ? String(set.reps) : '',
+              placeholder: item.target?.reps ? String(item.target.reps) : '—',
+              'aria-label': `Reps in set ${i + 1} of ${item.name}`,
+              onchange: (e) => {
+                const n = Number(e.target.value);
+                write((fresh) => updateSet(fresh, item.id, i, { reps: Number.isFinite(n) ? n : undefined }),
+                  `Set ${i + 1} of ${item.name}`);
+              },
+            })),
+          h('div', {},
+            h('label', {}, `Weight (${wLabel})`),
+            h('input', {
+              type: 'number', min: '0', step: '0.5', inputmode: 'decimal',
+              value: Number.isFinite(set.kg) ? String(displayWeight(set.kg, units)) : '',
+              placeholder: 'bodyweight',
+              'aria-label': `Weight in set ${i + 1} of ${item.name}, in ${wLabel}`,
+              onchange: (e) => {
+                write((fresh) => updateSet(fresh, item.id, i, { kg: parseWeight(e.target.value, units) }),
+                  `Set ${i + 1} of ${item.name}`);
+              },
+            })),
+          h('button.btn.small.quiet', {
+            'aria-label': `Remove set ${i + 1} of ${item.name}`,
+            onclick: () => write((fresh) => removeSet(fresh, item.id, i), `Removing set ${i + 1}`),
+          }, 'Remove'),
+        ),
+      );
+    });
+
+    rows.append(
+      h('button.btn.small', {
+        onclick: () => {
+          // A new set starts from the last one you did today, or from what the
+          // plan asked for — nobody wants to retype 10 and 20 five times.
+          const sets = trainingLog(day, item.id)?.sets ?? [];
+          const previous = sets[sets.length - 1];
+          const seed = previous
+            ? { ...previous }
+            : { reps: item.target?.reps, kg: lastTime?.kg };
+          write((fresh) => addSet(fresh, item.id, seed), `A set of ${item.name}`);
+        },
+      }, (trainingLog(day, item.id)?.sets ?? []).length ? 'Add another set' : 'Log a set'),
+    );
+  }
+  renderSets();
+  host.append(rows);
+  host._renderSets = renderSets;
+  return host;
+}
+
+function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, cadence, writeKey = localDateKey, units = 'imperial', lastTime } = {}) {
   const pressed = Boolean(day.checks[item.id]);
   const btn = h(
     'button.check',
@@ -231,6 +357,29 @@ function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, 
       )
     : null;
 
+  // Logging a set is doing the thing, so it ticks the item too — but only
+  // upward: it never un-ticks something you already marked done.
+  const training = trainingBlock(item, day, {
+    units,
+    writeKey,
+    lastTime,
+    onLogged: (next) => {
+      Object.assign(day, next);
+      training?._renderSets?.();
+      const hasWork = Boolean(next.log?.[item.id]);
+      if (hasWork && !next.checks[item.id]) {
+        guarded(() => store.mutateDay(writeKey(), (fresh) => toggleCheck(fresh, item.id)), {
+          what: `The check-off for ${item.name}`,
+          onOk: (after) => {
+            Object.assign(day, after);
+            btn.setAttribute('aria-pressed', 'true');
+            onChanged?.(after);
+          },
+        });
+      }
+    },
+  });
+
   return h(
     'div.row' + (unavailable ? '.unavailable' : ''),
     {},
@@ -249,6 +398,7 @@ function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, 
       notesBlock(item.notes, item.id, openNotes, options, {
         fields: item.fields,
         photos: item.photos,
+        training,
       }),
     ),
   );
@@ -271,6 +421,9 @@ export async function viewToday({ reload, stamp, date: viewing } = {}) {
     store.loadSupplies(),
   ]);
   const phaseSettings = await store.loadPhaseSettings(protocols);
+  // Read once, up here: the day's rows need it for weights, the water card
+  // needs it for volumes, and a second read would be a second answer.
+  const units = unitsOf(await store.getSetting('ui.units'));
   const state = { day, history, pauses, supplies };
   // A past day is looked at from its own end: every block's window has closed,
   // so nothing is "now" and what is left is simply what was not recorded.
@@ -423,12 +576,40 @@ export async function viewToday({ reload, stamp, date: viewing } = {}) {
       b.items.map((it) => checkRow(it, day, it.why, {
         openNotes,
         writeKey,
+        units,
+        lastTime: lastTimeFor(it),
         onChanged: rerenderBlocks,
         onPause: pauseOrResume,
         unavailable: unavailableReason(it.id, { pause: state.pauses[it.id], supply: state.supplies[it.id] }),
         cadence: cadenceChip(it),
       })),
     );
+  }
+
+  /**
+   * Last time's numbers, as a line a person can train against.
+   * Reads the same recent history the cadence maths already loaded.
+   */
+  function lastTimeFor(item) {
+    if (item.tracking !== 'sets' && item.tracking !== 'duration') return null;
+    const found = lastLoggedBefore(state.history, item.id, date);
+    if (!found) return null;
+    const wLabel = weightUnitLabel(units);
+    const when = dateFromKey(found.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    if (Number.isFinite(found.log.seconds)) {
+      return { when, text: `${found.log.seconds} sec` };
+    }
+    const sets = found.log.sets ?? [];
+    if (!sets.length) return null;
+    const text = sets
+      .map((set) => {
+        const reps = Number.isFinite(set.reps) ? `${set.reps}` : '—';
+        const load = Number.isFinite(set.kg) ? ` @ ${displayWeight(set.kg, units)} ${wLabel}` : '';
+        return `${reps}${load}`;
+      })
+      .join(', ');
+    const heaviest = sets.reduce((m, x) => (Number.isFinite(x.kg) && x.kg > (m ?? 0) ? x.kg : m), undefined);
+    return { when, text, kg: heaviest };
   }
 
   /** Only worth saying when it is not every day — the default says nothing. */
@@ -503,7 +684,17 @@ export async function viewToday({ reload, stamp, date: viewing } = {}) {
           : 'Nothing was recorded for these. Tick anything you did and forgot to mark.',
         foldOver: 8,
       }),
-      groupSection(t, { key: 'anytime', title: 'Anytime today' }),
+      groupSection(t, {
+        key: 'anytime',
+        title: 'Anytime today',
+        note: 'Work with no clock on it — the library, and the practices you fit in where they fit.',
+        // The anchors are the day; this is everything else, and on a fresh
+        // device everything else is due at once because nothing has been done
+        // yet. Folded, it is one line you open when you want it. (The composer
+        // in FRAMEWORK is what will eventually deal a handful from here; until
+        // that exists, folding is the honest version of the same idea.)
+        foldOver: 6,
+      }),
       groupSection(t, { key: 'later', title: 'Later today', closed: true }),
       groupSection(t, {
         key: 'asNeeded',
@@ -663,7 +854,6 @@ export async function viewToday({ reload, stamp, date: viewing } = {}) {
   // Ruling A on screen: before the first log the box is empty and the label
   // says "not logged yet". Empty is not zero, and the screen must not blur
   // the two. Clearing the box puts the day back to never-logged.
-  const units = unitsOf(await store.getSetting('ui.units'));
   const unitLabel = volumeUnitLabel(units);
   const tap = stepMl(units);
   const shown = (d) => {

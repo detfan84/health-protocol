@@ -60,3 +60,32 @@ export function legacyGlassesToMl(glasses) {
   if (!Number.isFinite(glasses)) return undefined;
   return Math.round(glasses * IMPERIAL_STEP_ML);
 }
+
+/* ------------------------------- weight ------------------------------ */
+//
+// Same rule as volume: stored canonical (kilograms), read in whatever the
+// person set. A training log that changes meaning when somebody flips a
+// setting is a log you cannot trust, and a log you cannot trust is worse
+// than no log.
+
+export const KG_PER_LB = 0.45359237;
+
+export function weightUnitLabel(units) {
+  return units === 'metric' ? 'kg' : 'lb';
+}
+
+/** Stored kg → what the screen shows. Half units, because plates are real. */
+export function displayWeight(kg, units) {
+  if (!Number.isFinite(kg)) return undefined;
+  const n = units === 'metric' ? kg : kg / KG_PER_LB;
+  return Math.round(n * 2) / 2;
+}
+
+/** What the person typed → kg. Blank or nonsense is undefined, never 0. */
+export function parseWeight(text, units) {
+  const t = String(text ?? '').trim();
+  if (t === '') return undefined;
+  const n = Number(t);
+  if (!Number.isFinite(n) || n < 0) return undefined;
+  return units === 'metric' ? n : n * KG_PER_LB;
+}

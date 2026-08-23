@@ -53,6 +53,10 @@ export function normalizeDay(day, date) {
     delete d.waterMl;
     delete d.waterFromGlasses;
   }
+  // The training log is an object of item id → what was done. Absent means
+  // nothing was recorded, which is not the same as nothing was done.
+  if (d.log && (typeof d.log !== 'object' || Array.isArray(d.log))) delete d.log;
+  if (d.log && Object.keys(d.log).length === 0) delete d.log;
   return d;
 }
 
@@ -119,6 +123,107 @@ export function setWaterMl(day, ml) {
   delete d.waterFromGlasses; // a typed number is logged, not derived
   d.updatedAt = nowIso();
   return d;
+}
+
+/* ---------------------------- training log ---------------------------- */
+//
+// What you actually did, not just that you did it (PLAN §4.2, decision 22 as
+// extended). Sets with reps and load, or a duration — recorded at the moment
+// of the tap, in the day record, so it outlives every later edit to the plan.
+//
+// Two rules this shape exists to keep:
+//
+//   The tap is still the whole ask. Logging is optional and always was; an
+//   item you tick without typing anything is complete.
+//
+//   Typed numbers are never destroyed by a tap. The log lives beside the
+//   checks, not inside them, so un-checking something by accident cannot
+//   erase the work you wrote down (ruling B: typed content is never
+//   stranded). Load is stored in kilograms, whatever the screen shows.
+
+function logOf(day, itemId) {
+  return day.log?.[itemId];
+}
+
+function withLog(day, itemId, change) {
+  const d = clone(day);
+  d.log = d.log ?? {};
+  const current = d.log[itemId] ?? {};
+  const next = change(clone(current));
+  if (!next || (!next.sets?.length && !Number.isFinite(next.seconds))) {
+    delete d.log[itemId];                       // nothing recorded is nothing
+    if (Object.keys(d.log).length === 0) delete d.log;
+  } else {
+    next.updatedAt = nowIso();
+    d.log[itemId] = next;
+  }
+  d.updatedAt = nowIso();
+  return d;
+}
+
+/** A blank set, ready to be typed into. Nothing is a zero until it is typed. */
+export function addSet(day, itemId, initial = {}) {
+  return withLog(day, itemId, (log) => {
+    const sets = Array.isArray(log.sets) ? log.sets : [];
+    sets.push(cleanSet(initial));
+    return { ...log, sets };
+  });
+}
+
+/** Patch one set. `reps` and `kg` may each be undefined — that is "not said". */
+export function updateSet(day, itemId, index, patch) {
+  return withLog(day, itemId, (log) => {
+    const sets = Array.isArray(log.sets) ? [...log.sets] : [];
+    if (!sets[index]) return log;
+    sets[index] = cleanSet({ ...sets[index], ...patch });
+    return { ...log, sets };
+  });
+}
+
+export function removeSet(day, itemId, index) {
+  return withLog(day, itemId, (log) => {
+    const sets = Array.isArray(log.sets) ? log.sets.filter((_, i) => i !== index) : [];
+    return { ...log, sets };
+  });
+}
+
+/** For holds and walks: one number, in seconds. undefined clears it. */
+export function setDuration(day, itemId, seconds) {
+  return withLog(day, itemId, (log) => {
+    const next = { ...log };
+    if (Number.isFinite(seconds) && seconds > 0) next.seconds = Math.round(seconds);
+    else delete next.seconds;
+    return next;
+  });
+}
+
+function cleanSet(raw) {
+  const out = {};
+  if (Number.isFinite(raw.reps) && raw.reps > 0) out.reps = Math.round(raw.reps);
+  if (Number.isFinite(raw.kg) && raw.kg > 0) out.kg = Math.round(raw.kg * 1000) / 1000;
+  if (Number.isFinite(raw.seconds) && raw.seconds > 0) out.seconds = Math.round(raw.seconds);
+  return out;
+}
+
+/** The log for one item on one day, or undefined. */
+export function trainingLog(day, itemId) {
+  return logOf(day, itemId);
+}
+
+/**
+ * The last day before `before` that has a log for this item, with its log.
+ * This is what makes a training screen worth opening: you train against last
+ * time's numbers, and an app that cannot show them is a checklist.
+ */
+export function lastLoggedBefore(history, itemId, before) {
+  let best = null;
+  for (const [date, rec] of Object.entries(history ?? {})) {
+    if (date >= before) continue;
+    const log = rec?.log?.[itemId];
+    if (!log) continue;
+    if (!best || date > best.date) best = { date, log };
+  }
+  return best;
 }
 
 /* ------------------------------- supply ------------------------------ */
