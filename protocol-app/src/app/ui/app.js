@@ -17,24 +17,31 @@ import { viewSupply } from './viewSupply.js';
 import { viewData } from './viewData.js';
 import { viewSession } from './viewSession.js';
 import { viewLibrary } from './viewLibrary.js';
+import { viewHome } from './viewHome.js';
+import { viewArea } from './viewArea.js';
+import { viewReference } from './viewReference.js';
 import { viewDisclaimer, accepted } from './viewDisclaimer.js';
 import { surfacePastFailures, installGlobalNet, plainReason } from './announcer.js';
 import { recordFailure } from '../failLog.js';
 import { hhmm } from '../todayModel.js';
 import { localDateKey, nowIso } from '../../lib/core.js';
 
+// Five destinations, and the first one is a menu rather than a list. The
+// structure the app now has is: menu → area → session. A tab bar with a
+// screenful of items behind every tab is what it had before, and it read as
+// one mile-long page no matter which tab you were on.
 const TABS = [
-  { id: 'today', label: 'Today' },
+  { id: 'home', label: 'Home' },
   { id: 'library', label: 'Library' },
-  { id: 'protocols', label: 'Plans' },
-  { id: 'supply', label: 'Supply' },
-  { id: 'data', label: 'Data' },
+  { id: 'reference', label: 'Learn' },
+  { id: 'track', label: 'Track' },
+  { id: 'data', label: 'You' },
 ];
 
 // todayStamp: what the Today screen was drawn for — the date, and the next
 // moment its grouping changes. Set by viewToday, read by watchForStaleScreen.
 const state = {
-  tab: 'today',
+  tab: 'home',
   editingId: null,
   todayStamp: null,
   currentView: null,
@@ -45,12 +52,22 @@ const state = {
   // A block being run rather than listed: { protocolId, blockId }. The session
   // owns the whole screen while it lasts — no tabs, no scrolling past it.
   session: null,
+  // Which area page is open, if any — an area is a protocol, and its page
+  // lists that protocol's parts rather than everything in the app.
+  areaId: null,
 };
 
 export function applyTheme(value) {
   const el = document.documentElement;
   if (value === 'light' || value === 'dark') el.dataset.theme = value;
   else delete el.dataset.theme;
+}
+
+/** The colour scheme — a different choice from light/dark, and it survives it. */
+export function applyScheme(value) {
+  const el = document.documentElement;
+  if (value && value !== 'paper') el.dataset.scheme = value;
+  else delete el.dataset.scheme;
 }
 
 function techLine(error) {
@@ -111,31 +128,56 @@ async function render() {
       window.scrollTo(0, 0);
       return;
     }
-    if (state.tab === 'protocols' && state.editingId) {
+    const startSession = (protocolId, blockId) => {
+      state.session = { protocolId, blockId };
+      render();
+    };
+    const goHome = () => { state.areaId = null; state.tab = 'home'; render(); };
+
+    if (state.editingId) {
       view = await viewEditor({
         protocolId: state.editingId,
         done: () => { state.editingId = null; render(); },
       });
-    } else if (state.tab === 'protocols') {
+    } else if (state.areaId) {
+      view = await viewArea({
+        areaId: state.areaId,
+        back: goHome,
+        startSession,
+        openEditor: (id) => { state.editingId = id; render(); },
+      });
+    } else if (state.tab === 'library') {
+      view = await viewLibrary({ reload: () => render() });
+    } else if (state.tab === 'reference') {
+      view = await viewReference();
+    } else if (state.tab === 'plans') {
       view = await viewProtocols({
         openEditor: (id) => { state.editingId = id; render(); },
         reload: () => render(),
       });
-    } else if (state.tab === 'library') {
-      view = await viewLibrary({ reload: () => render() });
     } else if (state.tab === 'supply') {
       view = await viewSupply();
-    } else if (state.tab === 'data') {
-      view = await viewData({ applyTheme });
-    } else {
+    } else if (state.tab === 'track' || state.tab === 'day') {
       view = await viewToday({
         date: state.viewingDate ?? undefined,
+        mode: state.tab === 'track' ? 'track' : 'day',
         reload: (opts) => {
           if (opts && 'date' in opts) state.viewingDate = opts.date ?? null;
           render();
         },
         stamp: (s) => { state.todayStamp = s; },
-        startSession: (protocolId, blockId) => { state.session = { protocolId, blockId }; render(); },
+        startSession,
+      });
+    } else if (state.tab === 'data') {
+      view = await viewData({ applyTheme, applyScheme, go: (tab) => { state.tab = tab; render(); } });
+    } else {
+      view = await viewHome({
+        startSession,
+        open: ({ area, tab }) => {
+          if (area) state.areaId = area;
+          if (tab) state.tab = tab;
+          render();
+        },
       });
     }
     main.append(view);
@@ -159,7 +201,13 @@ function renderTabs() {
     nav.append(
       h('button', {
         'aria-current': state.tab === t.id ? 'page' : null,
-        onclick: () => { state.tab = t.id; state.editingId = null; state.viewingDate = null; render(); },
+        onclick: () => {
+          state.tab = t.id;
+          state.editingId = null;
+          state.viewingDate = null;
+          state.areaId = null;
+          render();
+        },
       }, t.label),
     );
   }
@@ -182,6 +230,8 @@ export async function init() {
     return null;
   });
   applyTheme(theme?.value ?? 'auto');
+  const scheme = await store.getSetting('ui.scheme').catch(() => null);
+  applyScheme(scheme?.value ?? 'paper');
 
   // Nothing before this: not the tabs, not a check-off, not a glimpse of
   // somebody's routine. PLAN §2 calls the disclaimer mandatory for a
@@ -322,7 +372,7 @@ function watchForStaleScreen() {
   if (typeof document.addEventListener !== 'function') return;
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState !== 'visible') return;
-    if (state.tab !== 'today') return;
+    if (state.tab !== 'home') return;
     const s = state.todayStamp;
     if (!s) return;
     const stale = s.date !== localDateKey() || (s.nextBoundaryHM && hhmm() >= s.nextBoundaryHM);

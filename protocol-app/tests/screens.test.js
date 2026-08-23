@@ -395,3 +395,65 @@ test('the library is comprehensive, merged, and every item can be picked up', as
     assert.equal(blob.includes(word), false, `the library must not carry "${word}"`);
   }
 });
+
+test('the front door is a menu, not a list', async () => {
+  const { viewHome } = await import('../src/app/ui/viewHome.js');
+  store._resetForTests();
+  await store.ready({ name: 'screens-8' });
+  await store.saveProtocol(dayLongProtocol());
+  await store.saveProtocol({
+    id: 'seed-body-work', name: 'Body work', active: true, phases: [],
+    blocks: [{ id: 'bw-release', name: 'Release & load', order: 0, items: [
+      { id: 'bw-hip', name: 'Front of hip' }, { id: 'bw-feet', name: 'Feet' }] }],
+    createdAt: 'x', updatedAt: 'x',
+  });
+
+  const opened = [];
+  draw(await viewHome({ open: (o) => opened.push(o), startSession: (p, b) => opened.push({ p, b }) }));
+  await settled();
+
+  const main = document.querySelector('main');
+  // The thing that made it unusable: every item in the app on one page.
+  assert.equal(main.querySelectorAll('.row').length, 0, 'no item rows on the front door');
+  assert.ok(main.querySelectorAll('.tile').length >= 4, 'areas are destinations, not lists');
+  assert.match(main.textContent, /Right now/, 'the first question is what to do now');
+
+  // Tiles go somewhere rather than expanding in place.
+  const bodyTile = [...main.querySelectorAll('.tile')].find((t) => /Body work/.test(t.textContent));
+  assert.ok(bodyTile, 'each active protocol is an area');
+  assert.match(bodyTile.textContent, /1 part/, 'a tile says how big the area is');
+  bodyTile.dispatchEvent(new Event('click'));
+  await settled();
+  assert.deepEqual(opened.at(-1), { area: 'seed-body-work' });
+});
+
+test('an area page holds one area, with its parts as sessions', async () => {
+  const { viewArea } = await import('../src/app/ui/viewArea.js');
+  store._resetForTests();
+  await store.ready({ name: 'screens-9' });
+  await store.saveProtocol({
+    id: 'seed-day-arc', name: 'The day arc', active: true, phases: [],
+    blocks: [
+      { id: 'arc-wake', name: 'Before your feet touch the floor', start: '06:30', order: 0,
+        items: [{ id: 'a1', name: 'Rocking child’s pose', target: { seconds: 60 }, tracking: 'duration' }] },
+      { id: 'arc-bed', name: 'In bed, winding down', start: '22:00', order: 1,
+        items: [{ id: 'a2', name: 'Supine knee rocks' }] },
+    ],
+    createdAt: 'x', updatedAt: 'x',
+  });
+
+  const started = [];
+  draw(await viewArea({ areaId: 'seed-day-arc', back: () => {}, startSession: (p, b) => started.push(b), openEditor: () => {} }));
+  await settled();
+
+  const main = document.querySelector('main');
+  assert.match(main.querySelector('h1').textContent, /The day arc/);
+  const parts = [...main.querySelectorAll('section.card .card-head h2')].map((e) => e.textContent);
+  assert.deepEqual(parts, ['Before your feet touch the floor', 'In bed, winding down']);
+
+  // Every part is startable — that is what an area page is for.
+  const starts = [...main.querySelectorAll('button.primary')].filter((b) => /Start/.test(b.textContent));
+  assert.equal(starts.length, 2);
+  starts[0].dispatchEvent(new Event('click'));
+  assert.deepEqual(started, ['arc-wake']);
+});

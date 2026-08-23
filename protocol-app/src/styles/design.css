@@ -143,6 +143,115 @@ p  { margin: var(--sp-2) 0; }
 }
 .chip.now-tag { color: var(--accent-ink); background: var(--accent); }
 
+
+/* ------------------------- colour schemes --------------------------- *
+ *
+ * Five, and the person picks (Kevin, 23 Aug). Each redefines the same tokens,
+ * so nothing downstream knows or cares which is on — and each carries its own
+ * dark behaviour, because a scheme that only works in daylight is half a
+ * scheme.
+ *
+ * The accents are the other half of the system: an area tile, its icon and its
+ * page all take colour from one accent, so the menu is scannable by hue rather
+ * than by reading every label.
+ */
+
+:root {
+  --dawn: #b0724f;
+  --sage: #58796a;
+  --clay: #9c5a51;
+  --sky: #4a7391;
+  --plum: #7a5b78;
+  --ochre: #977b3f;
+  --muted-accent: #6c675d;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --dawn: #d69a76; --sage: #7fa38f; --clay: #c08b82;
+    --sky: #7ea6c4; --plum: #ab8ba8; --ochre: #c4a765; --muted-accent: #a29d92;
+  }
+}
+:root[data-theme='dark'] {
+  --dawn: #d69a76; --sage: #7fa38f; --clay: #c08b82;
+  --sky: #7ea6c4; --plum: #ab8ba8; --ochre: #c4a765; --muted-accent: #a29d92;
+}
+
+/* Slate — cooler, greyer, less warmth in the paper. */
+:root[data-scheme='slate'] {
+  --bg: #eef1f4; --surface: #fbfcfd; --surface-2: #e4e9ee;
+  --ink: #23282d; --ink-muted: #5f6a75; --line: #d5dce3;
+  --accent: #46687f; --accent-soft: #e2eaf1;
+}
+/* Forest — deeper green, more contrast. */
+:root[data-scheme='forest'] {
+  --bg: #f2f4ef; --surface: #fbfcf9; --surface-2: #e6ebe0;
+  --ink: #21281f; --ink-muted: #5c6957; --line: #d7ded0;
+  --accent: #3f6b45; --accent-soft: #e3efe4;
+}
+/* Dusk — warm dark, always dark, for anybody who never wants the light one. */
+:root[data-scheme='dusk'] {
+  --bg: #1b1a18; --surface: #242320; --surface-2: #2d2b28;
+  --ink: #ece8e0; --ink-muted: #a8a196; --line: #3a3733;
+  --accent: #c08f5e; --accent-ink: #1b1a18; --accent-soft: #33291f;
+  --danger: #d08b80; --shadow: none;
+}
+/* Plain — maximum contrast, minimum decoration. */
+:root[data-scheme='contrast'] {
+  --bg: #ffffff; --surface: #ffffff; --surface-2: #f0f0f0;
+  --ink: #000000; --ink-muted: #3a3a3a; --line: #767676;
+  --accent: #00407a; --accent-ink: #ffffff; --accent-soft: #e8eff7;
+  --shadow: none;
+}
+
+/* --------------------------- home & tiles ---------------------------- */
+
+.home-head { margin-bottom: var(--sp-5); }
+.home-head h1 { margin-bottom: 2px; }
+.section-title {
+  font-size: var(--fs-sm); text-transform: uppercase; letter-spacing: 0.07em;
+  color: var(--ink-muted); margin: var(--sp-5) 0 var(--sp-2);
+}
+section:first-of-type .section-title { margin-top: var(--sp-2); }
+
+.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-3); }
+@media (min-width: 560px) { .tiles { grid-template-columns: repeat(3, 1fr); } }
+
+.tile {
+  display: flex; flex-direction: column; gap: var(--sp-2);
+  min-height: 104px; padding: var(--sp-3);
+  text-align: left; border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); color: var(--ink);
+  box-shadow: var(--shadow); cursor: pointer;
+  border-left: 3px solid var(--tile-accent, var(--accent));
+}
+.tile:active { transform: translateY(1px); }
+.tile[data-accent='dawn']  { --tile-accent: var(--dawn); }
+.tile[data-accent='sage']  { --tile-accent: var(--sage); }
+.tile[data-accent='clay']  { --tile-accent: var(--clay); }
+.tile[data-accent='sky']   { --tile-accent: var(--sky); }
+.tile[data-accent='plum']  { --tile-accent: var(--plum); }
+.tile[data-accent='ochre'] { --tile-accent: var(--ochre); }
+.tile[data-accent='muted'] { --tile-accent: var(--muted-accent); opacity: 0.78; }
+.tile-icon { color: var(--tile-accent, var(--accent)); display: block; }
+.tile-body { display: block; }
+.tile-title { display: block; font-size: var(--fs-md); line-height: 1.25; }
+.tile-sub { display: block; font-size: var(--fs-sm); color: var(--ink-muted); margin-top: 2px; }
+.icon { display: block; }
+
+.now-card { border-left: 3px solid var(--accent); }
+.now-card h3 { font-size: var(--fs-lg); margin-bottom: 2px; }
+
+/* area page */
+.area-head { margin-bottom: var(--sp-4); }
+.area-title { display: flex; align-items: center; gap: var(--sp-3); margin: var(--sp-3) 0 var(--sp-1); }
+.area-head[data-accent='dawn']  .tile-icon { color: var(--dawn); }
+.area-head[data-accent='sage']  .tile-icon { color: var(--sage); }
+.area-head[data-accent='clay']  .tile-icon { color: var(--clay); }
+.area-head[data-accent='sky']   .tile-icon { color: var(--sky); }
+.area-head[data-accent='plum']  .tile-icon { color: var(--plum); }
+.area-head[data-accent='ochre'] .tile-icon { color: var(--ochre); }
+.row.compact { padding: var(--sp-2) 0; }
+
 /* ------------------------------- rows ------------------------------- */
 
 .row {

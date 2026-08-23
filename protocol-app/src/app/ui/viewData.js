@@ -18,7 +18,7 @@ const STORE_LABELS = {
   [STORES.SETTINGS]: 'Settings',
 };
 
-export async function viewData({ applyTheme }) {
+export async function viewData({ applyTheme, applyScheme, go }) {
   const root = h('div');
   root.append(
     h('h1', {}, 'Your data'),
@@ -234,9 +234,37 @@ export async function viewData({ applyTheme }) {
   /* ---------------------------- appearance ---------------------------- */
   const themeSetting = await store.getSetting('ui.theme');
   let persistedTheme = themeSetting?.value ?? 'auto';
+  const schemeSetting = await store.getSetting('ui.scheme').catch(() => null);
+  let persistedScheme = schemeSetting?.value ?? 'paper';
   root.append(
     h('div.card', {},
       h('div.card-head', {}, h('h2', {}, 'Appearance')),
+      h('div.field', {},
+        h('label', { for: 'scheme' }, 'Colour scheme'),
+        h('select', {
+          id: 'scheme',
+          onchange: (e) => {
+            const chosen = e.target.value;
+            guarded(
+              () => store.putSetting({ key: 'ui.scheme', value: chosen, updatedAt: nowIso() }),
+              {
+                what: 'The colour scheme',
+                onOk: () => { applyScheme?.(chosen); persistedScheme = chosen; },
+                onFail: () => { e.target.value = persistedScheme; },
+              },
+            );
+          },
+        },
+          [
+            ['paper', 'Paper - warm neutrals'],
+            ['slate', 'Slate - cool grey'],
+            ['forest', 'Forest - deep green'],
+            ['dusk', 'Dusk - warm dark, always'],
+            ['contrast', 'Plain - maximum contrast'],
+          ].map(([value, label]) =>
+            h('option', { value, selected: persistedScheme === value }, label)),
+        ),
+      ),
       h('div.field', {},
         h('label', { for: 'theme' }, 'Theme'),
         h('select', {

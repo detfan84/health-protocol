@@ -404,7 +404,7 @@ function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, 
   );
 }
 
-export async function viewToday({ reload, stamp, date: viewing, startSession } = {}) {
+export async function viewToday({ reload, stamp, date: viewing, startSession, mode = 'day' } = {}) {
   const date = viewing ?? localDateKey();
   const isToday = date === localDateKey();
 
@@ -526,8 +526,11 @@ export async function viewToday({ reload, stamp, date: viewing, startSession } =
   }
 
   /* ------------------------------ blocks ---------------------------- */
+  // 'track' is the journal / food / water page: the day's records, without
+  // the whole plan above them. 'day' is the full grouped list for anybody who
+  // wants to see everything at once. Neither is the front door any more.
   const blocksHost = h('div');
-  root.append(blocksHost);
+  if (mode !== 'track') root.append(blocksHost);
 
   function rerenderBlocks() {
     return guarded(
