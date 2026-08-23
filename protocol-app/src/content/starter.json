@@ -2,7 +2,7 @@
   "format": "protocol-app/v1",
   "kind": "backup",
   "schemaVersion": 2,
-  "exportedAt": "2026-08-23T01:35:19.887Z",
+  "exportedAt": "2026-08-23T01:40:08.830Z",
   "data": {
     "protocols": [
       {
@@ -249,8 +249,156 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T01:35:19.887Z",
-        "updatedAt": "2026-08-23T01:35:19.887Z"
+        "createdAt": "2026-08-23T01:40:08.830Z",
+        "updatedAt": "2026-08-23T01:40:08.830Z"
+      },
+      {
+        "id": "seed-support",
+        "name": "Daily support",
+        "notes": "Movement, drainage and downregulation — the practices that are not a routine and not a supplement. The occasional ones are marked \"when needed\": present, never late.",
+        "active": true,
+        "phases": [],
+        "blocks": [
+          {
+            "id": "sup-movement",
+            "name": "Movement",
+            "order": 0,
+            "items": [
+              {
+                "id": "sup-walk",
+                "name": "Movement 20–30 min",
+                "why": "Lymph needs muscle movement — walk, bike, play, anything counts"
+              },
+              {
+                "id": "sup-stretch",
+                "name": "Stretch/yoga 10+ min",
+                "why": "Circulation + stress reduction"
+              },
+              {
+                "id": "sup-workout",
+                "name": "Strength training",
+                "why": "Build muscle, support metabolism, improve bone density",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                }
+              }
+            ]
+          },
+          {
+            "id": "sup-detox",
+            "name": "Drainage & recovery",
+            "order": 1,
+            "items": [
+              {
+                "id": "sup-castor",
+                "name": "Castor oil pack",
+                "why": "Liver area, 30–60 min with heat — supports detox and inflammation",
+                "cadence": {
+                  "kind": "asNeeded"
+                }
+              },
+              {
+                "id": "sup-sweat",
+                "name": "Sweat session",
+                "why": "Skin = detox organ — sauna, hot bath, or intense exercise",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                }
+              },
+              {
+                "id": "sup-cold",
+                "name": "Cold exposure",
+                "why": "Cold shower or plunge — reduces inflammation, boosts dopamine, builds resilience",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                }
+              },
+              {
+                "id": "sup-drybrush",
+                "name": "Dry brushing",
+                "why": "Stimulates lymphatic drainage, exfoliates skin, improves circulation",
+                "cadence": {
+                  "kind": "everyNDays",
+                  "n": 2
+                }
+              },
+              {
+                "id": "sup-enema",
+                "name": "Coffee enema",
+                "why": "Liver/gallbladder support — follow practitioner guidance",
+                "cadence": {
+                  "kind": "asNeeded"
+                }
+              },
+              {
+                "id": "sup-oilpull",
+                "name": "Oil pulling",
+                "why": "Swish coconut oil 10–20 min — oral microbiome support",
+                "cadence": {
+                  "kind": "asNeeded"
+                }
+              },
+              {
+                "id": "sup-cupping",
+                "name": "Cupping",
+                "why": "Increases blood flow, releases fascial tension, supports detox pathways",
+                "cadence": {
+                  "kind": "asNeeded"
+                }
+              },
+              {
+                "id": "sup-acupressure",
+                "name": "Acupressure / acupuncture",
+                "why": "Stimulates meridian points — relieves pain, supports organ function, reduces stress",
+                "cadence": {
+                  "kind": "asNeeded"
+                }
+              }
+            ]
+          },
+          {
+            "id": "sup-mind",
+            "name": "Mind & nervous system",
+            "order": 2,
+            "items": [
+              {
+                "id": "sup-breath",
+                "name": "Deep breathing 5 min",
+                "why": "Parasympathetic activation — calms fight-or-flight"
+              },
+              {
+                "id": "sup-meditate",
+                "name": "Meditation",
+                "why": "Even 5 minutes reduces cortisol and improves focus"
+              },
+              {
+                "id": "sup-journal",
+                "name": "Gratitude / journaling",
+                "why": "Mental clarity, emotional processing, stress reduction"
+              },
+              {
+                "id": "sup-sunlight",
+                "name": "Morning sunlight 10 min",
+                "why": "Sets circadian rhythm, boosts vitamin D, improves sleep"
+              },
+              {
+                "id": "sup-grounding",
+                "name": "Grounding / earthing",
+                "why": "Bare feet on earth — reduces inflammation, improves sleep"
+              },
+              {
+                "id": "sup-screen",
+                "name": "Screen-free wind-down",
+                "why": "No screens 30–60 min before bed — protects melatonin production"
+              }
+            ]
+          }
+        ],
+        "createdAt": "2026-08-23T01:40:08.830Z",
+        "updatedAt": "2026-08-23T01:40:08.830Z"
       },
       {
         "id": "seed-body-work",
@@ -901,8 +1049,671 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T01:35:19.887Z",
-        "updatedAt": "2026-08-23T01:35:19.887Z"
+        "createdAt": "2026-08-23T01:40:08.830Z",
+        "updatedAt": "2026-08-23T01:40:08.830Z"
+      },
+      {
+        "id": "seed-routine-full-body",
+        "name": "Full Body",
+        "notes": "Hit every major muscle group in one session Switch this on for the days you are doing it.",
+        "active": true,
+        "phases": [],
+        "blocks": [
+          {
+            "id": "rt-full-body",
+            "name": "Full Body",
+            "order": 0,
+            "items": [
+              {
+                "id": "ex-push-up",
+                "name": "Push-Up — Standard Push-Up",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 10",
+                "why": "Chest to floor, full lockout, body in straight line",
+                "fields": {
+                  "release": "Start in a plank position with hands slightly wider than shoulder-width apart, body forming a straight line from head to heels. Lower your chest to the floor by bending your elbows, then press back up to full arm extension. Keep your core tight and avoid letting your hips sag or pike up. You should feel the work in your chest, shoulders, and triceps.",
+                  "tool": "Full plank position",
+                  "notice": "Where the work should land: chest, shoulders, triceps."
+                }
+              },
+              {
+                "id": "ex-db-row",
+                "name": "DB Row — Heavy Single-Arm",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 10",
+                "why": "Flat back, pull elbow past torso, squeeze shoulder blade",
+                "fields": {
+                  "release": "Place one hand and knee on a bench for support, keeping your back flat and parallel to the floor. Hold a dumbbell in the other hand with arm hanging straight down. Pull the dumbbell up by driving your elbow past your torso and squeezing your shoulder blade toward your spine, then lower with control. Avoid rotating your torso as you pull.",
+                  "tool": "Increase weight",
+                  "notice": "Where the work should land: back, biceps."
+                }
+              },
+              {
+                "id": "ex-squat",
+                "name": "Squat — Pause Squat",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 12",
+                "why": "Knees track over toes, hips below parallel, chest up",
+                "fields": {
+                  "release": "Stand with feet about shoulder-width apart, toes pointing slightly outward. Push your hips back and bend your knees to lower your body as if sitting into a chair, going at least until your thighs are parallel to the floor. Keep your chest up and knees tracking over your toes. Drive through your whole foot to stand back up.",
+                  "tool": "Hold 2 seconds at bottom",
+                  "notice": "Where the work should land: quads, glutes, hamstrings."
+                }
+              },
+              {
+                "id": "ex-romanian-deadlift",
+                "name": "Romanian Deadlift — Light DB",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 10",
+                "why": "Soft knees, hinge at hips, slide DBs along legs, flat back",
+                "fields": {
+                  "release": "Stand with feet hip-width apart holding dumbbells in front of your thighs. With a slight bend in your knees, hinge at the hips and push your butt back, sliding the dumbbells down along your legs. Lower until you feel a deep stretch in your hamstrings, keeping your back flat throughout. Squeeze your glutes to drive your hips forward and return to standing.",
+                  "tool": "Light dumbbells",
+                  "notice": "Where the work should land: hamstrings, glutes, lower back."
+                }
+              },
+              {
+                "id": "ex-plank",
+                "name": "Plank — Standard",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 30 sec",
+                "why": "Straight line from head to heels, squeeze everything tight",
+                "fields": {
+                  "release": "Get into a forearm plank position with elbows directly under shoulders and feet together or hip-width apart. Your body should form a perfectly straight line from head to heels. Squeeze your abs, glutes, and quads to maintain the position. Avoid letting your hips sag toward the floor or pike upward. Breathe steadily throughout.",
+                  "tool": "Full plank on forearms",
+                  "notice": "Where the work should land: abs, obliques, shoulders."
+                }
+              },
+              {
+                "id": "ex-bear-crawl",
+                "name": "Bear Crawl — Forward/Back",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "2 × 30 sec",
+                "why": "Knees hover off floor, opposite hand and foot move together",
+                "fields": {
+                  "release": "Start on all fours and lift your knees just one to two inches off the floor. Crawl forward by moving the opposite hand and foot together (right hand with left foot, then left hand with right foot). Keep your back flat and your knees hovering low. Avoid letting your hips rock side to side. This builds core stability, shoulder endurance, and coordination.",
+                  "tool": "Crawl forward and backward",
+                  "notice": "Where the work should land: shoulders, core, quads."
+                }
+              }
+            ]
+          }
+        ],
+        "createdAt": "2026-08-23T01:40:08.830Z",
+        "updatedAt": "2026-08-23T01:40:08.830Z"
+      },
+      {
+        "id": "seed-routine-upper-body",
+        "name": "Upper Body",
+        "notes": "Push and pull balance for upper body strength Switch this on for the days you are doing it.",
+        "active": false,
+        "phases": [],
+        "blocks": [
+          {
+            "id": "rt-upper-body",
+            "name": "Upper Body",
+            "order": 0,
+            "items": [
+              {
+                "id": "ex-push-up",
+                "name": "Push-Up — Standard Push-Up",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 12",
+                "why": "Chest to floor, full lockout, body in straight line",
+                "fields": {
+                  "release": "Start in a plank position with hands slightly wider than shoulder-width apart, body forming a straight line from head to heels. Lower your chest to the floor by bending your elbows, then press back up to full arm extension. Keep your core tight and avoid letting your hips sag or pike up. You should feel the work in your chest, shoulders, and triceps.",
+                  "tool": "Full plank position",
+                  "notice": "Where the work should land: chest, shoulders, triceps."
+                }
+              },
+              {
+                "id": "ex-db-row",
+                "name": "DB Row — Heavy Single-Arm",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 10",
+                "why": "Flat back, pull elbow past torso, squeeze shoulder blade",
+                "fields": {
+                  "release": "Place one hand and knee on a bench for support, keeping your back flat and parallel to the floor. Hold a dumbbell in the other hand with arm hanging straight down. Pull the dumbbell up by driving your elbow past your torso and squeezing your shoulder blade toward your spine, then lower with control. Avoid rotating your torso as you pull.",
+                  "tool": "Increase weight",
+                  "notice": "Where the work should land: back, biceps."
+                }
+              },
+              {
+                "id": "ex-dip",
+                "name": "Dip — Legs Extended Dip",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 10",
+                "why": "Lean slightly forward, elbows back, full depth",
+                "fields": {
+                  "release": "Place your hands on parallel bars or the edge of a sturdy bench behind you and support your body weight with arms extended. Lower yourself by bending your elbows until your upper arms are roughly parallel to the floor, then press back up to lockout. Lean your torso slightly forward to emphasize your chest, or stay upright to target triceps more. Avoid shrugging your shoulders up toward your ears.",
+                  "tool": "Straighten legs to increase load",
+                  "notice": "Where the work should land: chest, triceps, shoulders."
+                }
+              },
+              {
+                "id": "ex-lateral-raise",
+                "name": "Lateral Raise — Light DB",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 10",
+                "why": "Slight bend in elbows, raise to shoulder height, control down",
+                "fields": {
+                  "release": "Stand with a dumbbell in each hand at your sides. With a slight bend in your elbows, raise both arms out to the sides until they reach shoulder height, then lower slowly. Avoid swinging or using momentum, and do not raise above shoulder level. You should feel this in the sides of your shoulders.",
+                  "tool": "Light dumbbells, strict form",
+                  "notice": "Where the work should land: shoulders."
+                }
+              },
+              {
+                "id": "ex-db-curl",
+                "name": "DB Curl — Moderate",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 10",
+                "why": "Elbows pinned, supinate at top, no swinging",
+                "fields": {
+                  "release": "Stand with a dumbbell in each hand, arms fully extended at your sides with palms facing forward. Curl the weights up toward your shoulders by bending at the elbows, squeezing your biceps at the top, then lower slowly. Keep your elbows pinned to your sides and avoid swinging your body to generate momentum.",
+                  "tool": "Increase weight",
+                  "notice": "Where the work should land: biceps."
+                }
+              },
+              {
+                "id": "ex-mountain-climber",
+                "name": "Mountain Climber — Standard",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 20",
+                "why": "Plank position, drive knees to chest, hips low and stable",
+                "fields": {
+                  "release": "Start in a high plank position with hands under shoulders. Rapidly drive one knee toward your chest, then switch legs in a running motion while keeping your hips low and stable. Avoid letting your hips bounce up and down. The faster you go, the more cardiovascular demand. Keep your core braced to maintain a flat back throughout.",
+                  "tool": "Moderate pace",
+                  "notice": "Where the work should land: abs, hip flexors."
+                }
+              }
+            ]
+          }
+        ],
+        "createdAt": "2026-08-23T01:40:08.830Z",
+        "updatedAt": "2026-08-23T01:40:08.830Z"
+      },
+      {
+        "id": "seed-routine-lower-body",
+        "name": "Lower Body",
+        "notes": "Quads, hamstrings, glutes, and calves Switch this on for the days you are doing it.",
+        "active": false,
+        "phases": [],
+        "blocks": [
+          {
+            "id": "rt-lower-body",
+            "name": "Lower Body",
+            "order": 0,
+            "items": [
+              {
+                "id": "ex-squat",
+                "name": "Squat — Pause Squat",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 10",
+                "why": "Knees track over toes, hips below parallel, chest up",
+                "fields": {
+                  "release": "Stand with feet about shoulder-width apart, toes pointing slightly outward. Push your hips back and bend your knees to lower your body as if sitting into a chair, going at least until your thighs are parallel to the floor. Keep your chest up and knees tracking over your toes. Drive through your whole foot to stand back up.",
+                  "tool": "Hold 2 seconds at bottom",
+                  "notice": "Where the work should land: quads, glutes, hamstrings."
+                }
+              },
+              {
+                "id": "ex-lunge",
+                "name": "Lunge — Reverse Lunge",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 12",
+                "why": "Long step, knee hovers above floor, drive through front heel",
+                "fields": {
+                  "release": "Stand tall and take a long step forward. Lower your body by bending both knees until your rear knee hovers just above the floor and your front thigh is roughly parallel to the ground. Drive through your front heel to return to standing. Keep your torso upright throughout and avoid letting your front knee shoot past your toes.",
+                  "tool": "Step backward",
+                  "notice": "Where the work should land: quads, glutes, hamstrings."
+                }
+              },
+              {
+                "id": "ex-romanian-deadlift",
+                "name": "Romanian Deadlift — Light DB",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 10",
+                "why": "Soft knees, hinge at hips, slide DBs along legs, flat back",
+                "fields": {
+                  "release": "Stand with feet hip-width apart holding dumbbells in front of your thighs. With a slight bend in your knees, hinge at the hips and push your butt back, sliding the dumbbells down along your legs. Lower until you feel a deep stretch in your hamstrings, keeping your back flat throughout. Squeeze your glutes to drive your hips forward and return to standing.",
+                  "tool": "Light dumbbells",
+                  "notice": "Where the work should land: hamstrings, glutes, lower back."
+                }
+              },
+              {
+                "id": "ex-glute-bridge",
+                "name": "Glute Bridge — Single-Leg",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 12",
+                "why": "Drive hips up, squeeze glutes hard at top, feet flat",
+                "fields": {
+                  "release": "Lie on your back with knees bent and feet flat on the floor, hip-width apart. Drive through your heels to lift your hips toward the ceiling, squeezing your glutes as hard as you can at the top. Lower your hips back down with control. Avoid pushing from your lower back; the movement should come from your glutes. You should feel a strong contraction in your glutes at the top.",
+                  "tool": "One foot only",
+                  "notice": "Where the work should land: glutes, hamstrings."
+                }
+              },
+              {
+                "id": "ex-calf-raise",
+                "name": "Calf Raise — Single-Leg",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 12",
+                "why": "Full stretch at bottom, high on toes at top, slow tempo",
+                "fields": {
+                  "release": "Stand with feet hip-width apart, ideally with the balls of your feet on the edge of a step so your heels can drop below for a full stretch. Rise up onto your toes as high as possible, squeezing your calves at the top, then lower slowly below the step level. Use a slow, controlled tempo and avoid bouncing.",
+                  "tool": "One foot at a time",
+                  "notice": "Where the work should land: calves."
+                }
+              },
+              {
+                "id": "ex-banded-crab-walk",
+                "name": "Banded Crab Walk — Medium",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "2 × 15",
+                "why": "Band above knees, quarter squat, step laterally with tension",
+                "fields": {
+                  "release": "Place a resistance band just above your knees and stand in a quarter-squat position with feet hip-width apart. Step sideways with one foot, maintaining tension in the band, then follow with the other foot. Keep your hips low and your knees pushed outward against the band. You should feel this in your outer glutes and hip abductors.",
+                  "tool": "Medium band",
+                  "notice": "Where the work should land: glutes, hip abductors."
+                }
+              }
+            ]
+          }
+        ],
+        "createdAt": "2026-08-23T01:40:08.830Z",
+        "updatedAt": "2026-08-23T01:40:08.830Z"
+      },
+      {
+        "id": "seed-routine-push-day",
+        "name": "Push Day",
+        "notes": "Chest, shoulders, and triceps focus Switch this on for the days you are doing it.",
+        "active": false,
+        "phases": [],
+        "blocks": [
+          {
+            "id": "rt-push-day",
+            "name": "Push Day",
+            "order": 0,
+            "items": [
+              {
+                "id": "ex-push-up",
+                "name": "Push-Up — Standard Push-Up",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "4 × 12",
+                "why": "Chest to floor, full lockout, body in straight line",
+                "fields": {
+                  "release": "Start in a plank position with hands slightly wider than shoulder-width apart, body forming a straight line from head to heels. Lower your chest to the floor by bending your elbows, then press back up to full arm extension. Keep your core tight and avoid letting your hips sag or pike up. You should feel the work in your chest, shoulders, and triceps.",
+                  "tool": "Full plank position",
+                  "notice": "Where the work should land: chest, shoulders, triceps."
+                }
+              },
+              {
+                "id": "ex-dip",
+                "name": "Dip — Legs Extended Dip",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 10",
+                "why": "Lean slightly forward, elbows back, full depth",
+                "fields": {
+                  "release": "Place your hands on parallel bars or the edge of a sturdy bench behind you and support your body weight with arms extended. Lower yourself by bending your elbows until your upper arms are roughly parallel to the floor, then press back up to lockout. Lean your torso slightly forward to emphasize your chest, or stay upright to target triceps more. Avoid shrugging your shoulders up toward your ears.",
+                  "tool": "Straighten legs to increase load",
+                  "notice": "Where the work should land: chest, triceps, shoulders."
+                }
+              },
+              {
+                "id": "ex-db-overhead-press",
+                "name": "DB Overhead Press — Seated Moderate",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 10",
+                "why": "Brace core, press straight overhead, full lockout",
+                "fields": {
+                  "release": "Hold a dumbbell in each hand at shoulder height with palms facing forward. Brace your core and press both dumbbells straight overhead until your arms are fully extended. Lower them back to shoulder height with control. Avoid arching your lower back excessively; if you find yourself leaning back, reduce the weight.",
+                  "tool": "Increase weight, seated",
+                  "notice": "Where the work should land: shoulders, triceps."
+                }
+              },
+              {
+                "id": "ex-lateral-raise",
+                "name": "Lateral Raise — Light DB",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 12",
+                "why": "Slight bend in elbows, raise to shoulder height, control down",
+                "fields": {
+                  "release": "Stand with a dumbbell in each hand at your sides. With a slight bend in your elbows, raise both arms out to the sides until they reach shoulder height, then lower slowly. Avoid swinging or using momentum, and do not raise above shoulder level. You should feel this in the sides of your shoulders.",
+                  "tool": "Light dumbbells, strict form",
+                  "notice": "Where the work should land: shoulders."
+                }
+              },
+              {
+                "id": "ex-db-tricep-extension",
+                "name": "DB Tricep Extension — Single-Arm Overhead",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 10",
+                "why": "Keep elbows close to head, full stretch and lockout",
+                "fields": {
+                  "release": "Stand or sit and hold a dumbbell overhead with both hands or one hand. Keeping your upper arm vertical and elbow pointed at the ceiling, lower the weight behind your head until you feel a deep stretch in the triceps. Extend your arm back to full lockout. Avoid flaring your elbows outward or arching your back.",
+                  "tool": "One arm at a time",
+                  "notice": "Where the work should land: triceps."
+                }
+              },
+              {
+                "id": "ex-shoulder-tap",
+                "name": "Shoulder Tap — Standard Plank Tap",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 20",
+                "why": "Minimize hip rotation, keep hips square to floor",
+                "fields": {
+                  "release": "Start in a high plank position with hands directly under shoulders and feet slightly wider than hip-width apart. Lift one hand and tap the opposite shoulder, then return it to the floor and repeat on the other side. The key challenge is keeping your hips perfectly still and square to the floor; widen your stance to make this easier.",
+                  "tool": "Full plank, alternate taps",
+                  "notice": "Where the work should land: shoulders, core."
+                }
+              }
+            ]
+          }
+        ],
+        "createdAt": "2026-08-23T01:40:08.830Z",
+        "updatedAt": "2026-08-23T01:40:08.830Z"
+      },
+      {
+        "id": "seed-routine-pull-day",
+        "name": "Pull Day",
+        "notes": "Back, biceps, and rear delts Switch this on for the days you are doing it.",
+        "active": false,
+        "phases": [],
+        "blocks": [
+          {
+            "id": "rt-pull-day",
+            "name": "Pull Day",
+            "order": 0,
+            "items": [
+              {
+                "id": "ex-db-row",
+                "name": "DB Row — Heavy Single-Arm",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 10",
+                "why": "Flat back, pull elbow past torso, squeeze shoulder blade",
+                "fields": {
+                  "release": "Place one hand and knee on a bench for support, keeping your back flat and parallel to the floor. Hold a dumbbell in the other hand with arm hanging straight down. Pull the dumbbell up by driving your elbow past your torso and squeezing your shoulder blade toward your spine, then lower with control. Avoid rotating your torso as you pull.",
+                  "tool": "Increase weight",
+                  "notice": "Where the work should land: back, biceps."
+                }
+              },
+              {
+                "id": "ex-banded-lat-pulldown",
+                "name": "Banded Lat Pulldown — Medium",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 10",
+                "why": "Anchor band high, pull elbows to ribs, squeeze lats",
+                "fields": {
+                  "release": "Anchor a resistance band at a high point above you. Kneel or stand facing the anchor and grab both ends of the band with arms extended overhead. Pull your elbows down to your ribs, squeezing your lats hard at the bottom, then slowly extend your arms back up. Think about driving your elbows into your back pockets.",
+                  "tool": "Medium band",
+                  "notice": "Where the work should land: lats, biceps."
+                }
+              },
+              {
+                "id": "ex-db-curl",
+                "name": "DB Curl — Moderate",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 10",
+                "why": "Elbows pinned, supinate at top, no swinging",
+                "fields": {
+                  "release": "Stand with a dumbbell in each hand, arms fully extended at your sides with palms facing forward. Curl the weights up toward your shoulders by bending at the elbows, squeezing your biceps at the top, then lower slowly. Keep your elbows pinned to your sides and avoid swinging your body to generate momentum.",
+                  "tool": "Increase weight",
+                  "notice": "Where the work should land: biceps."
+                }
+              },
+              {
+                "id": "ex-banded-face-pull",
+                "name": "Banded Face Pull — Heavy",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 12",
+                "why": "Pull band to face, elbows high, squeeze rear delts",
+                "fields": {
+                  "release": "Anchor a resistance band at about face height. Hold both ends and step back to create tension. Pull the band toward your face with elbows high and wide, squeezing your rear deltoids and upper back at the end position. Return slowly. This exercise is excellent for posture and shoulder health.",
+                  "tool": "Heavy band",
+                  "notice": "Where the work should land: rear delts, upper back."
+                }
+              },
+              {
+                "id": "ex-superman",
+                "name": "Superman — Pulse",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 30 sec",
+                "why": "Lift arms and legs off floor, squeeze glutes and back",
+                "fields": {
+                  "release": "Lie face down with arms extended overhead and legs straight. Simultaneously lift your arms, chest, and legs off the floor by squeezing your glutes and lower back muscles. Hold briefly at the top, then lower with control. Keep your neck neutral by looking at the floor rather than cranking your head up.",
+                  "tool": "Small up and down pulses",
+                  "notice": "Where the work should land: lower back, glutes."
+                }
+              },
+              {
+                "id": "ex-farmers-carry",
+                "name": "Farmer's Carry — Moderate",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 30 sec",
+                "why": "Shoulders packed, chest tall, walk with purpose",
+                "fields": {
+                  "release": "Pick up a heavy dumbbell in each hand and stand tall with your shoulders pulled down and back (packed). Walk forward in a controlled manner, keeping your chest up and core braced. Avoid leaning to either side. This builds grip strength, trap endurance, and core stability. Walk until your grip gives out or you reach your target distance.",
+                  "tool": "Increase weight or distance",
+                  "notice": "Where the work should land: forearms, traps, core."
+                }
+              }
+            ]
+          }
+        ],
+        "createdAt": "2026-08-23T01:40:08.830Z",
+        "updatedAt": "2026-08-23T01:40:08.830Z"
+      },
+      {
+        "id": "seed-routine-mobility-flow",
+        "name": "Mobility Flow",
+        "notes": "Hip, ankle, shoulder, and spine mobility Switch this on for the days you are doing it.",
+        "active": false,
+        "phases": [],
+        "blocks": [
+          {
+            "id": "rt-mobility-flow",
+            "name": "Mobility Flow",
+            "order": 0,
+            "items": [
+              {
+                "id": "ex-worlds-greatest-stretch",
+                "name": "World's Greatest Stretch — With Rotation",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "2 × 5",
+                "why": "Lunge, plant hand, rotate and reach to sky, feel every part open",
+                "fields": {
+                  "release": "Step into a deep lunge position and plant the hand on the same side as your front foot on the floor inside the foot. Rotate your torso and reach the other arm toward the sky, opening your chest. Hold briefly, then return your hand to the floor. This stretch hits the hips, hamstrings, thoracic spine, and groin all in one movement.",
+                  "tool": "Add thoracic rotation",
+                  "notice": "Where the work should land: hips, thoracic, hamstrings."
+                }
+              },
+              {
+                "id": "ex-deep-squat-hold",
+                "name": "Deep Squat Hold — Unassisted 30s",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "3 × 30 sec",
+                "why": "Sit deep, heels down, chest up, breathe and relax into it",
+                "fields": {
+                  "release": "Lower yourself into the deepest squat position you can while keeping your heels on the floor. Hold the position, keeping your chest upright and breathing deeply to relax into the stretch. If your heels rise, widen your stance or hold onto a support. This opens up the hips, ankles, and thoracic spine. Aim to accumulate time rather than rushing.",
+                  "tool": "Freestanding 30-second hold",
+                  "notice": "Where the work should land: hips, ankles, thoracic."
+                }
+              },
+              {
+                "id": "ex-90-90-hip-switch",
+                "name": "90/90 Hip Switch — Elevated Hands",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "2 × 8",
+                "why": "Both knees at 90 degrees, switch sides by rotating hips",
+                "fields": {
+                  "release": "Sit on the floor with both knees bent at 90 degrees, one leg in front and one behind, creating a \"90/90\" position. Rotate your hips to switch both legs to the other side so the front leg becomes the back leg and vice versa. Keep your chest tall throughout. This exercise mobilizes the hips through internal and external rotation.",
+                  "tool": "Hands off floor",
+                  "notice": "Where the work should land: hip internal/external rotation."
+                }
+              },
+              {
+                "id": "ex-hip-cars",
+                "name": "Hip CARs — Freestanding",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "2 × 5",
+                "why": "Slow controlled circles at the hip, biggest circle possible",
+                "fields": {
+                  "release": "Stand on one leg or kneel on all fours. Lift one knee and slowly draw the biggest circle possible with your hip joint, moving through flexion, abduction, extension, and adduction. Make smooth, controlled circles in both directions. This maintains hip joint range of motion and highlights any areas of tightness.",
+                  "tool": "No support",
+                  "notice": "Where the work should land: hips."
+                }
+              },
+              {
+                "id": "ex-thoracic-spine-rotation",
+                "name": "Thoracic Spine Rotation — Windmill",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "2 × 8",
+                "why": "Lock hips, rotate through upper back only, reach and open",
+                "fields": {
+                  "release": "Lie on your side with knees bent and stacked. Keeping your hips locked in place, rotate your upper back to open your top arm toward the floor on the other side. Return to the starting position. The key is isolating the rotation to your thoracic spine while your hips stay still. This is especially beneficial if you sit for long periods.",
+                  "tool": "Standing windmill rotation",
+                  "notice": "Where the work should land: thoracic spine."
+                }
+              },
+              {
+                "id": "ex-pigeon-stretch",
+                "name": "Pigeon Stretch — Forward Fold",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "2 × 45 sec",
+                "why": "Front shin across body, square hips, ease into stretch",
+                "fields": {
+                  "release": "From a kneeling position, bring one shin across your body in front of you with the knee angled outward. Extend your other leg straight behind you. Square your hips toward the front and ease your torso down toward the floor. You should feel a deep stretch in the front hip and glute. Use your hands for support and breathe into the stretch.",
+                  "tool": "Fold torso over front leg",
+                  "notice": "Where the work should land: glutes, hip flexors."
+                }
+              },
+              {
+                "id": "ex-banded-ankle-dorsiflexion",
+                "name": "Banded Ankle Dorsiflexion — Medium",
+                "cadence": {
+                  "kind": "timesPerWeek",
+                  "n": 3
+                },
+                "dose": "2 × 10",
+                "why": "Band pulls ankle back, drive knee forward over toes",
+                "fields": {
+                  "release": "Anchor a resistance band low and loop it around the front of your ankle. Face away from the anchor point in a half-kneeling position. The band pulls your ankle backward, creating a distraction force. Drive your knee forward over your toes against the band resistance. This improves ankle dorsiflexion, which is crucial for squatting depth and athletic performance.",
+                  "tool": "Medium band",
+                  "notice": "Where the work should land: tibialis anterior, ankles."
+                }
+              }
+            ]
+          }
+        ],
+        "createdAt": "2026-08-23T01:40:08.830Z",
+        "updatedAt": "2026-08-23T01:40:08.830Z"
       }
     ],
     "days": [],

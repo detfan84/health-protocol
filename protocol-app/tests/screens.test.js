@@ -224,7 +224,25 @@ test('the shipped starter content is real, valid, and free of one person’s reg
 
   const protocols = v.value.data.protocols;
   assert.ok(protocols.length >= 2);
-  assert.ok(protocols.every((p) => p.active === true), 'content that ships switched off is content nobody sees');
+
+  // What ships switched ON is the point: an app whose content arrives
+  // disabled is the exact failure this content exists to fix. The only
+  // exceptions are alternate strength routines — you do one of those on a
+  // given day, not all five — and each must say so in its own notes.
+  const onByDefault = ['seed-daily-flow', 'seed-support', 'seed-body-work'];
+  for (const id of onByDefault) {
+    const p = protocols.find((x) => x.id === id);
+    assert.ok(p, `${id} must ship`);
+    assert.equal(p.active, true, `${id} must arrive switched on`);
+  }
+  for (const p of protocols.filter((x) => x.active !== true)) {
+    assert.match(p.id, /^seed-routine-/, `${p.name} ships switched off without being an alternate routine`);
+    assert.match(p.notes ?? '', /switch this on/i, `${p.name} must say how to turn it on`);
+  }
+  assert.ok(
+    protocols.some((p) => p.id.startsWith('seed-routine-') && p.active === true),
+    'at least one strength routine is on, or strength is invisible again',
+  );
 
   const items = protocols.flatMap((p) => p.blocks.flatMap((b) => b.items));
   assert.ok(items.length >= 50, `expected a real library, got ${items.length} items`);

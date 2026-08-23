@@ -91,6 +91,9 @@ function generalise(cardId, card) {
 
 const { SECTIONS, PHOTOS, EVERY } = await load('bodywork.js');
 const { STRETCHING_ROUTINES, STRETCH_LIBRARY } = await load('stretching.js');
+const { DEFAULT_MOVEMENTS } = await load('movements.js');
+const { ROUTINE_TEMPLATES } = await load('routines.js');
+const { EXERCISES } = await load('exercises.js');
 
 function photosFor(cardId) {
   const sets = PHOTOS?.[cardId] ?? [];
@@ -177,6 +180,103 @@ evening.order = 1;
 /* ----------------------------- the file ----------------------------- */
 
 const now = new Date().toISOString();
+
+/* ------------------------ daily support & detox ---------------------- */
+// Walking, lymphatic work, sweat, cold, breathing, sunlight, grounding — the
+// practices that are not a routine and not a supplement, and that the rebuild
+// carried across not at all. Dry brushing is in here: it is the lymphatic
+// drainage work, and its absence was the first thing anybody noticed.
+//
+// The cadence is the honest part. A walk is daily. A coffee enema is not
+// something an app should ask for every morning, so the occasional practices
+// are "when needed" — present, never due, never late.
+
+const SUPPORT_CADENCE = {
+  walk: undefined, stretch: undefined, breath: undefined, meditate: undefined,
+  journal: undefined, sunlight: undefined, grounding: undefined,
+  drybrush: { kind: 'everyNDays', n: 2 },
+  sweat: { kind: 'timesPerWeek', n: 3 },
+  workout: { kind: 'timesPerWeek', n: 3 },
+  cold: { kind: 'timesPerWeek', n: 3 },
+};
+const AS_NEEDED = new Set(['castor', 'enema', 'oilpull', 'cupping', 'acupressure']);
+
+const SUPPORT_BLOCKS = [
+  { key: 'movement', name: 'Movement' },
+  { key: 'detox', name: 'Drainage & recovery' },
+  { key: 'mind', name: 'Mind & nervous system' },
+];
+
+const supportBlocks = SUPPORT_BLOCKS.map((group, order) => ({
+  id: `sup-${group.key}`,
+  name: group.name,
+  order,
+  items: (DEFAULT_MOVEMENTS ?? [])
+    .filter((m) => m.category === group.key)
+    .map((m) => {
+      const item = { id: `sup-${m.id}`, name: m.n };
+      if (m.w) item.why = m.w;
+      const cadence = AS_NEEDED.has(m.id) ? { kind: 'asNeeded' } : SUPPORT_CADENCE[m.id];
+      if (cadence) item.cadence = cadence;
+      return item;
+    }),
+})).filter((b) => b.items.length);
+
+/* ----------------------------- strength ------------------------------ */
+// Eight routines exist; two of them (Morning Stretch, Evening Wind-Down)
+// duplicate the flows above and are skipped. Full Body ships switched ON at
+// three sessions a week — a strength routine nobody can see is the whole
+// mistake this file exists to fix — and the others ship as protocols you can
+// switch on for the day you are doing them, which is how training actually
+// works.
+
+const SKIP_ROUTINES = new Set(['morning-stretch', 'evening-stretch']);
+const LEVEL = 'medium'; // the middle variant; easy and hard are one edit away
+
+function exerciseItem(entry, i) {
+  const ex = (EXERCISES ?? []).find((e) => e.id === entry.exerciseId);
+  if (!ex) return null;
+  const step = ex.progression?.find((s) => s.level === entry.currentLevel);
+  const item = {
+    id: `ex-${entry.exerciseId}`,
+    name: step?.name && step.name !== ex.name ? `${ex.name} — ${step.name}` : ex.name,
+    cadence: { kind: 'timesPerWeek', n: 3 },
+  };
+  const dose = entry.targetReps
+    ? `${entry.sets} × ${entry.targetReps}`
+    : entry.targetDuration
+      ? `${entry.sets} × ${entry.targetDuration} sec`
+      : undefined;
+  if (dose) item.dose = dose;
+  if (ex.formCue) item.why = ex.formCue;
+  const fields = {};
+  if (ex.details) fields.release = ex.details;
+  if (step?.note) fields.tool = step.note;
+  if (ex.muscles?.length) fields.notice = `Where the work should land: ${ex.muscles.join(', ')}.`;
+  if (Object.keys(fields).length) item.fields = fields;
+  return item;
+}
+
+const routineProtocols = (ROUTINE_TEMPLATES ?? [])
+  .filter((r) => !SKIP_ROUTINES.has(r.id))
+  .map((r, i) => ({
+    id: `seed-routine-${r.id}`,
+    name: r.name,
+    notes: `${r.description ?? ''} Switch this on for the days you are doing it.`.trim(),
+    active: r.id === 'full-body',
+    phases: [],
+    blocks: [{
+      id: `rt-${r.id}`,
+      name: r.name,
+      order: 0,
+      items: (r.variants?.[LEVEL] ?? []).map(exerciseItem).filter(Boolean),
+    }],
+    createdAt: now,
+    updatedAt: now,
+  }))
+  .filter((p) => p.blocks[0].items.length);
+
+
 const starter = {
   format: 'protocol-app/v1',
   kind: 'backup',
@@ -195,6 +295,16 @@ const starter = {
         updatedAt: now,
       },
       {
+        id: 'seed-support',
+        name: 'Daily support',
+        notes: 'Movement, drainage and downregulation — the practices that are not a routine and not a supplement. The occasional ones are marked "when needed": present, never late.',
+        active: true,
+        phases: [],
+        blocks: supportBlocks,
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
         id: 'seed-body-work',
         name: 'Body work',
         notes: 'Release paired with the loading that keeps it, plus breathing, airway, nerve glides, balance and downregulation. Each card says how often it comes round; nothing here is daily unless it says so.',
@@ -204,6 +314,7 @@ const starter = {
         createdAt: now,
         updatedAt: now,
       },
+      ...routineProtocols,
     ],
     days: [],
     labs: [],
@@ -232,5 +343,7 @@ await writeFile(resolve(OUT_DIR, 'starter.json'), `${JSON.stringify(starter, nul
 const cards = bodyBlocks.reduce((n, b) => n + b.items.length, 0);
 console.log(`body work: ${bodyBlocks.length} sections, ${cards} cards`);
 console.log(`flows: morning ${morning.items.length} steps, evening ${evening.items.length} steps`);
+console.log(`support: ${supportBlocks.reduce((n, b) => n + b.items.length, 0)} practices`);
+console.log(`routines: ${routineProtocols.length} (${routineProtocols.filter((p) => p.active).map((p) => p.name).join(', ') || 'none'} switched on)`);
 console.log(`photos: ${copied} files for ${wanted.size} sets`);
 console.log(`wrote src/content/starter.json (${(JSON.stringify(starter).length / 1024).toFixed(0)} KB)`);
