@@ -17,6 +17,14 @@
 // (Automatic advancing by phase length is the next foundation item on the
 // roadmap, not this session; the stored startedAt is what it will need.)
 
+import { dueToday } from '../lib/cadence.js';
+import { unavailableReason } from './trackerOps.js';
+
+/** The local date key for a Date — the same shape core.localDateKey uses. */
+function localDateKeyOf(d) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
 /* ------------------------------ phases ------------------------------ */
 
 export function phaseKey(protocolId) {
@@ -93,7 +101,15 @@ function itemVisible(item, phase) {
  * tappable). Nothing here counts, scores or scolds — a missed item is one
  * you can still do, listed where you can find it.
  */
-export function buildToday({ protocols, phaseSettings = {}, now = new Date(), day = null }) {
+export function buildToday({
+  protocols,
+  phaseSettings = {},
+  now = new Date(),
+  day = null,
+  history = {},
+  pauses = {},
+  supplies = {},
+} = {}) {
   const active = (protocols ?? []).filter((p) => p.active === true);
   const nowHM = hhmmOfDate(now);
 
@@ -152,20 +168,49 @@ export function buildToday({ protocols, phaseSettings = {}, now = new Date(), da
   }
 
   const ordered = [...timed, ...untimed];
+  const todayKey = day?.date ?? localDateKeyOf(now);
   const checked = (it) => Boolean(day?.checks?.[it.id]);
   const part = (block, items) => ({ ...block, items });
-  const groups = { now: [], missed: [], anytime: [], later: [], done: [] };
+  const groups = { now: [], missed: [], anytime: [], later: [], done: [], unavailable: [], asNeeded: [] };
+
+  // Where each item goes. The order of these questions is the point:
+  //
+  //   1. Did you do it? Then it is done, whatever the plan says now. The
+  //      record outranks the plan (decision 21).
+  //   2. Can you do it? Paused, or run out — the app stops asking rather
+  //      than listing something you cannot act on (R16).
+  //   3. Is it due? A 3×-a-week item that has had its three is not on
+  //      today's screen at all. "Not due" is hidden, not greyed out.
+  //   4. Otherwise it belongs to its block's time of day.
+  function place(item) {
+    if (checked(item)) return { key: 'done' };
+    const why = unavailableReason(item.id, { pause: pauses[item.id], supply: supplies[item.id] });
+    if (why) return { key: 'unavailable', why };
+    const due = dueToday(item, todayKey, history);
+    if (due.reason === 'as-needed') return { key: 'asNeeded', due };
+    if (!due.due) return { key: null, due }; // genuinely off the screen
+    return { key: null, due, timed: true };
+  }
 
   for (const b of ordered) {
-    const open = b.items.filter((it) => !checked(it));
-    const done = b.items.filter(checked);
-    if (open.length) {
-      // 'past' with items left is the missed group — same items, found where
-      // a person would look for them rather than hidden as a punishment.
-      const key = b.when === 'past' ? 'missed' : b.when;
-      groups[key].push(part(b, open));
+    const buckets = { done: [], unavailable: [], asNeeded: [], open: [] };
+    const notes = new Map();
+    for (const it of b.items) {
+      const p = place(it);
+      if (p.why) notes.set(it.id, p.why);
+      if (p.due) notes.set(it.id, notes.get(it.id) ?? p.due);
+      if (p.key) buckets[p.key].push(it);
+      else if (p.timed) buckets.open.push(it);
     }
-    if (done.length) groups.done.push(part(b, done));
+    // 'past' with items left is the missed group — same items, found where a
+    // person would look for them rather than hidden as a punishment.
+    const openKey = b.when === 'past' ? 'missed' : b.when;
+    if (buckets.open.length) groups[openKey].push(part(b, buckets.open));
+    if (buckets.done.length) groups.done.push(part(b, buckets.done));
+    if (buckets.unavailable.length) {
+      groups.unavailable.push({ ...part(b, buckets.unavailable), why: notes });
+    }
+    if (buckets.asNeeded.length) groups.asNeeded.push(part(b, buckets.asNeeded));
   }
 
   // When does this screen stop being true? The earliest moment a block opens

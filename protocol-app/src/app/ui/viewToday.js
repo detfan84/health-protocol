@@ -17,8 +17,9 @@
 
 import { h, clear } from './dom.js';
 import { buildToday, makePhaseSetting } from '../todayModel.js';
-import { toggleCheck, setJournal, addFood, removeFood, bumpWaterMl, setWaterMl } from '../trackerOps.js';
+import { toggleCheck, setJournal, addFood, removeFood, bumpWaterMl, setWaterMl, unavailableReason } from '../trackerOps.js';
 import { unitsOf, stepMl, volumeUnitLabel, displayVolume, parseVolume } from '../../lib/units.js';
+import { cadenceOf, cadenceLabel } from '../../lib/cadence.js';
 import { guarded } from './announcer.js';
 import * as store from '../store.js';
 import { localDateKey, nowIso } from '../../lib/core.js';
@@ -46,22 +47,23 @@ function timeLabel(b) {
  * Paragraphs that begin with a short label ("Release: ...", "Careful: ...")
  * keep that label in bold, because that is how they read on paper.
  */
-function notesBlock(notes, itemId, openNotes) {
-  const paragraphs = String(notes).split(/\n{2,}/).filter((t) => t.trim() !== '');
-  if (paragraphs.length === 0) return null;
+function notesBlock(notes, itemId, openNotes, extra) {
+  const paragraphs = String(notes ?? '').split(/\n{2,}/).filter((t) => t.trim() !== '');
+  if (paragraphs.length === 0 && !extra) return null;
   // Opened instructions stay open. The screen re-sorts itself as the day gets
   // ticked off, and re-closing what somebody opened to read mid-exercise would
   // make the app fight them.
   const el = h(
     'details.notes',
     { open: openNotes?.has(itemId) ? '' : null },
-    h('summary', {}, 'How'),
+    h('summary', {}, paragraphs.length ? 'How' : 'Options'),
     paragraphs.map((text) => {
       const m = /^([A-Z][A-Za-z ]{1,14}):\s([\s\S]+)$/.exec(text);
       return m
         ? h('p', {}, h('strong', {}, `${m[1]} `), m[2])
         : h('p', {}, text);
     }),
+    extra ?? null,
   );
   if (openNotes) {
     el.addEventListener('toggle', () => {
@@ -72,7 +74,7 @@ function notesBlock(notes, itemId, openNotes) {
   return el;
 }
 
-function checkRow(item, day, why, { openNotes, onChanged } = {}) {
+function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, cadence } = {}) {
   const pressed = Boolean(day.checks[item.id]);
   const btn = h(
     'button.check',
@@ -99,25 +101,60 @@ function checkRow(item, day, why, { openNotes, onChanged } = {}) {
     },
     '✓',
   );
+  // The pause control lives inside the item's own disclosure rather than on
+  // the row: fifty rows with a second button each is the clutter that made
+  // this screen unusable, and pausing is something you do occasionally and on
+  // purpose. (R16 — a person must be able to stop the app asking, and start it
+  // again whenever they want.)
+  const options = onPause
+    ? h('div.item-options', {},
+        unavailable?.kind === 'out-of-stock'
+          ? h('span.why', {}, 'Not being asked for: the supply count is zero. Restock it on the Supply screen and it comes back on its own.')
+          : unavailable
+            ? h('button.btn.small', {
+                onclick: () => onPause(item, false),
+                'aria-label': `Start asking for ${item.name} again`,
+              }, 'Start again')
+            : h('button.btn.small.quiet', {
+                onclick: () => onPause(item, true),
+                'aria-label': `Pause ${item.name}`,
+              }, 'Pause this'),
+        unavailable
+          ? null
+          : h('span.why', {}, 'Stops the app asking for this. Nothing already recorded changes, and you can start it again whenever you want.'),
+      )
+    : null;
+
   return h(
-    'div.row',
+    'div.row' + (unavailable ? '.unavailable' : ''),
     {},
     btn,
     h(
       'div.grow',
       {},
-      h('span.name', {}, item.name, item.dose ? h('span.dose', {}, ` · ${item.dose}`) : null),
+      h('span.name', {},
+        item.name,
+        item.dose ? h('span.dose', {}, ` · ${item.dose}`) : null,
+        cadence ? h('span.chip.cadence', {}, cadence) : null,
+      ),
       why ? h('span.why', {}, why) : null,
-      item.notes ? notesBlock(item.notes, item.id, openNotes) : null,
+      notesBlock(item.notes, item.id, openNotes, options),
     ),
   );
 }
 
 export async function viewToday({ reload, stamp } = {}) {
   const date = localDateKey();
-  const [protocols, day] = await Promise.all([store.loadProtocols(), store.loadDay(date)]);
+  const [protocols, day, history, pauses, supplies] = await Promise.all([
+    store.loadProtocols(),
+    store.loadDay(date),
+    store.loadRecentDays(date),   // cadence needs to know about the week so far
+    store.loadPauses(),
+    store.loadSupplies(),
+  ]);
   const phaseSettings = await store.loadPhaseSettings(protocols);
-  const today = buildToday({ protocols, phaseSettings, now: new Date(), day });
+  const state = { day, history, pauses, supplies };
+  const today = buildToday({ protocols, phaseSettings, now: new Date(), day, history, pauses, supplies });
 
   // Instructions the person has opened, by item id — kept across the
   // re-sorts a tap causes, so reading stays read.
@@ -180,10 +217,20 @@ export async function viewToday({ reload, stamp } = {}) {
   function rerenderBlocks() {
     return guarded(
       async () => {
-        const ps = await store.loadProtocols();
+        const today2 = localDateKey();
+        const [ps, fresh, hist, paused, supply] = await Promise.all([
+          store.loadProtocols(),
+          store.loadDay(today2),
+          store.loadRecentDays(today2),
+          store.loadPauses(),
+          store.loadSupplies(),
+        ]);
         const settings = await store.loadPhaseSettings(ps);
-        const fresh = await store.loadDay(localDateKey());
-        return buildToday({ protocols: ps, phaseSettings: settings, now: new Date(), day: fresh });
+        Object.assign(state, { day: fresh, history: hist, pauses: paused, supplies: supply });
+        return buildToday({
+          protocols: ps, phaseSettings: settings, now: new Date(),
+          day: fresh, history: hist, pauses: paused, supplies: supply,
+        });
       },
       {
         what: "Refreshing today's blocks",
@@ -211,7 +258,32 @@ export async function viewToday({ reload, stamp } = {}) {
     );
     return h('section.card' + flavour, { 'aria-label': `${b.name} block` },
       head,
-      b.items.map((it) => checkRow(it, day, it.why, { openNotes, onChanged: rerenderBlocks })),
+      b.items.map((it) => checkRow(it, day, it.why, {
+        openNotes,
+        onChanged: rerenderBlocks,
+        onPause: pauseOrResume,
+        unavailable: unavailableReason(it.id, { pause: state.pauses[it.id], supply: state.supplies[it.id] }),
+        cadence: cadenceChip(it),
+      })),
+    );
+  }
+
+  /** Only worth saying when it is not every day — the default says nothing. */
+  function cadenceChip(item) {
+    const c = cadenceOf(item);
+    return c.kind === 'daily' ? null : cadenceLabel(c);
+  }
+
+  /** R16: stop asking, or start again. Both are one write and a re-sort. */
+  function pauseOrResume(item, pause) {
+    return guarded(
+      () => (pause
+        ? store.pauseItem(item.id, { name: item.name })
+        : store.resumeItem(item.id)),
+      {
+        what: pause ? `Pausing ${item.name}` : `Starting ${item.name} again`,
+        onOk: () => rerenderBlocks(),
+      },
     );
   }
 
@@ -268,6 +340,18 @@ export async function viewToday({ reload, stamp } = {}) {
       }),
       groupSection(t, { key: 'anytime', title: 'Anytime today' }),
       groupSection(t, { key: 'later', title: 'Later today', closed: true }),
+      groupSection(t, {
+        key: 'asNeeded',
+        title: 'When you need it',
+        note: 'These are never due and never late. They are here when you want them.',
+        closed: true,
+      }),
+      groupSection(t, {
+        key: 'unavailable',
+        title: "Not asking right now",
+        note: 'Paused, or run out. Open one to start it again.',
+        closed: true,
+      }),
       groupSection(t, { key: 'done', title: 'Done', closed: true }),
     ].filter(Boolean);
 

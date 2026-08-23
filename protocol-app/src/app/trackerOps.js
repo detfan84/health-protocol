@@ -151,3 +151,53 @@ export function makeSupply(itemId, { name, count, note } = {}, existing) {
   rec.updatedAt = nowIso();
   return rec;
 }
+
+/* ------------------------------- pause -------------------------------- */
+//
+// Pausing is Kevin's answer to K4 (R16, Aug 22): if you cannot do something
+// right now, the app should stop asking — and you should be able to start it
+// again whenever you want, without editing your plan or losing your history.
+//
+// Two ways an item becomes unavailable:
+//   - you paused it, deliberately;
+//   - you ran out of it, which the app can see from the supply count it is
+//     already keeping. Decision 22 says run-out gaps are data, never nags;
+//     this is that rule with teeth — the data changes what the app ASKS of
+//     you, and still says nothing about you.
+//
+// Pause lives in the SETTINGS store, not on the plan (decision 19): it is
+// personal state, so it survives an import untouched, and sharing a protocol
+// never tells anyone else what you have stopped taking.
+
+export function pauseKey(itemId) {
+  return `pause:${itemId}`;
+}
+
+/**
+ * @param reason 'manual' — you paused it. (Running out is derived live from
+ *               the supply count; it is not written down as a pause, so the
+ *               moment you restock, the item is simply back.)
+ */
+export function makePause(itemId, { name, note, reason = 'manual' } = {}) {
+  const rec = { key: pauseKey(itemId), itemId, reason, pausedAt: nowIso(), updatedAt: nowIso() };
+  if (name !== undefined) rec.name = String(name); // label snapshot, as elsewhere
+  if (note !== undefined) {
+    const n = String(note).trim();
+    if (n) rec.note = n;
+  }
+  return rec;
+}
+
+/**
+ * Why this item is not being asked for — or null if it is.
+ * Pure: the caller brings the pause record and the supply record.
+ */
+export function unavailableReason(itemId, { pause, supply } = {}) {
+  if (pause) return { kind: 'paused', since: pause.pausedAt, note: pause.note };
+  // Three-state: no count means "not tracking supply for this", which is not
+  // the same as none left. Only a real, stored zero means out.
+  if (supply && Number.isFinite(supply.count) && supply.count <= 0) {
+    return { kind: 'out-of-stock', since: supply.updatedAt };
+  }
+  return null;
+}

@@ -9,6 +9,7 @@
 import { h, clear } from './dom.js';
 import * as store from '../store.js';
 import { guarded } from './announcer.js';
+import { cadenceOf, cadenceLabel } from '../../lib/cadence.js';
 import {
   setProtocolFields,
   addPhase, updatePhase, removePhase, movePhase,
@@ -135,6 +136,42 @@ export async function viewEditor({ protocolId, done }) {
               type: 'text', value: it.why ?? '', placeholder: 'What this piece is pushing on',
               oninput: (e) => apply(updateItem(working, b.id, it.id, { why: e.target.value })),
             })),
+            // How often, as something the app can act on rather than prose
+            // inside a dose string. Daily is the default and says nothing.
+            field('How often', h('div.field-row', {},
+              h('select', {
+                'aria-label': `How often for ${it.name}`,
+                onchange: (e) => {
+                  const kind = e.target.value;
+                  const n = kind === 'timesPerWeek' ? 3 : kind === 'everyNDays' ? 2 : undefined;
+                  apply(updateItem(working, b.id, it.id, { cadence: { kind, n: cadenceOf(it).n ?? n } }));
+                  render();
+                },
+              },
+                [
+                  ['daily', 'Every day'],
+                  ['timesPerWeek', 'Some days a week'],
+                  ['everyNDays', 'Every so many days'],
+                  ['asNeeded', 'When needed'],
+                ].map(([value, label]) =>
+                  h('option', { value, selected: cadenceOf(it).kind === value }, label),
+                ),
+              ),
+              ['timesPerWeek', 'everyNDays'].includes(cadenceOf(it).kind)
+                ? h('input', {
+                    type: 'number', min: '1', max: cadenceOf(it).kind === 'timesPerWeek' ? '7' : '365',
+                    value: String(cadenceOf(it).n ?? ''),
+                    style: 'max-width:6rem',
+                    'aria-label': cadenceOf(it).kind === 'timesPerWeek'
+                      ? `Days a week for ${it.name}`
+                      : `Days between for ${it.name}`,
+                    oninput: (e) => apply(updateItem(working, b.id, it.id, {
+                      cadence: { kind: cadenceOf(it).kind, n: Number(e.target.value) },
+                    })),
+                  })
+                : null,
+              h('span.why', { style: 'align-self:center' }, cadenceLabel(cadenceOf(it))),
+            )),
             // A textarea, not an input: notes are the how-to — several
             // paragraphs, including the "never take this without food" lines.
             // A text input silently strips every newline the moment the field

@@ -15,6 +15,7 @@
 
 import { FILE_FORMAT, SCHEMA_VERSION } from './schema.js';
 import { newId, nowIso } from './core.js';
+import { CADENCE_KINDS } from './cadence.js';
 
 const KINDS = ['backup', 'protocol', 'fragment'];
 
@@ -69,7 +70,36 @@ function fixItem(raw, path, ctx) {
     if (Array.isArray(raw.phaseIds)) item.phaseIds = raw.phaseIds.map(String);
     else ctx.warn(path + '.phaseIds', 'Expected a list — ignored.');
   }
+  // Cadence travels with the plan: "3× a week" is part of what the protocol
+  // says to do, so a protocol shared with somebody else carries it. What does
+  // NOT travel is anything personal about doing it — a pause lives in the
+  // settings store (decision 19), so importing somebody's protocol never
+  // imports the fact that they stopped taking something.
+  if (raw.cadence != null) {
+    const c = fixCadence(raw.cadence, path + '.cadence', ctx);
+    if (c) item.cadence = c;
+  }
   return item;
+}
+
+/** A cadence, or nothing — a broken one is a warning and daily, never a crash. */
+function fixCadence(raw, path, ctx) {
+  if (!isObj(raw)) {
+    ctx.warn(path, 'Expected something like { "kind": "timesPerWeek", "n": 3 } — ignored, so this is every day.');
+    return null;
+  }
+  const kind = asTrimmed(raw.kind);
+  if (!CADENCE_KINDS.includes(kind)) {
+    ctx.warn(path + '.kind', `"${raw.kind}" is not a cadence — ignored, so this is every day. Known: ${CADENCE_KINDS.join(', ')}.`);
+    return null;
+  }
+  if (kind === 'daily' || kind === 'asNeeded') return { kind };
+  const n = asNumber(raw.n);
+  if (n === undefined || !Number.isInteger(n) || n < 1) {
+    ctx.warn(path + '.n', `"${raw.n}" is not a whole number of days — ignored, so this is every day.`);
+    return null;
+  }
+  return { kind, n: Math.min(n, kind === 'timesPerWeek' ? 7 : 365) };
 }
 
 function fixBlock(raw, path, ctx, order) {

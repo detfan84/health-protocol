@@ -168,6 +168,14 @@ export function updateItem(p, blockId, itemId, patch) {
     if (v) it[k] = v;
     else delete it[k];
   }
+  // Cadence is part of the plan, so it is edited here and travels with a
+  // shared protocol. Daily is the default and is stored as absence — the
+  // shape stays as small as the truth it carries.
+  if (patch.cadence !== undefined) {
+    const c = normalizeCadence(patch.cadence);
+    if (c) it.cadence = c;
+    else delete it.cadence;
+  }
   return out;
 }
 
@@ -208,4 +216,20 @@ export function toggleItemPhase(p, blockId, itemId, phaseId) {
   if (ids.size) it.phaseIds = [...ids];
   else delete it.phaseIds;
   return out;
+}
+
+/**
+ * A cadence the plan can hold, or null for "every day" (which is stored as
+ * nothing at all). Anything unrecognisable is null too: the editor should not
+ * be able to write a schedule the reader will not understand.
+ */
+export function normalizeCadence(input) {
+  if (!input) return null;
+  const kind = String(input.kind ?? '');
+  if (kind === 'daily' || kind === '') return null;
+  if (kind === 'asNeeded') return { kind };
+  if (kind !== 'timesPerWeek' && kind !== 'everyNDays') return null;
+  const n = Number(input.n);
+  if (!Number.isInteger(n) || n < 1) return null;
+  return { kind, n: Math.min(n, kind === 'timesPerWeek' ? 7 : 365) };
 }

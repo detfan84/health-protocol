@@ -7,6 +7,7 @@
 import { STORES, FILE_FORMAT } from '../lib/schema.js';
 import { validateFile } from '../lib/protocolFile.js';
 import { nowIso, localDateKey } from '../lib/core.js';
+import { addDays } from '../lib/cadence.js';
 import {
   openDb,
   put,
@@ -19,7 +20,7 @@ import {
   importMerge,
 } from '../lib/db.js';
 import { normalizeDay } from './trackerOps.js';
-import { supplyKey } from './trackerOps.js';
+import { supplyKey, pauseKey, makePause } from './trackerOps.js';
 import { phaseKey } from './todayModel.js';
 
 let _db = null;
@@ -156,6 +157,48 @@ export async function loadSupplies() {
 
 export async function loadSupply(itemId) {
   return getSetting(supplyKey(itemId));
+}
+
+/** { [itemId]: pauseRecord } — what the app has been asked to stop asking for. */
+export async function loadPauses() {
+  const all = await allSettings();
+  const out = {};
+  for (const rec of all) {
+    if (typeof rec.key === 'string' && rec.key.startsWith('pause:') && rec.itemId) {
+      out[rec.itemId] = rec;
+    }
+  }
+  return out;
+}
+
+export async function pauseItem(itemId, opts) {
+  return putSetting(makePause(itemId, opts));
+}
+
+/** Resuming removes the record — there is no "unpaused" state to store. */
+export async function resumeItem(itemId) {
+  const db = await ready();
+  await removeOne(db, STORES.SETTINGS, pauseKey(itemId));
+}
+
+/**
+ * Day records from the last `days` days, as { [dateKey]: record }, for the
+ * cadence maths ("have I done this three times this week?").
+ *
+ * Reads the whole store and filters: a year of days is a few hundred small
+ * records, and a range cursor here would be complexity bought with nothing.
+ */
+export async function loadRecentDays(through = localDateKey(), days = 21) {
+  const db = await ready();
+  const all = await getAll(db, STORES.DAYS);
+  const from = addDays(through, -Math.abs(days));
+  const out = {};
+  for (const rec of all) {
+    if (typeof rec?.date === 'string' && rec.date >= from && rec.date <= through) {
+      out[rec.date] = normalizeDay(rec, rec.date);
+    }
+  }
+  return out;
 }
 
 /* --------------------------- backup / wipe ---------------------------- */
