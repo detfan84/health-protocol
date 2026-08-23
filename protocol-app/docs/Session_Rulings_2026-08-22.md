@@ -47,3 +47,63 @@ correction-log entry below.
   to be an artifact that entered the Aug-21 R1 homework list and was never written. Either it
   lives somewhere only Kevin can see (a claude.ai Project), or the homework line should be struck.
 - **Roadmap layer 1 says "39 tests green"; the suite is 50 green** as of this session.
+
+---
+
+# Session rulings — 23 Aug 2026
+
+## R19 — Push: calendar for now, server parked as a maybe (Kevin).
+
+The fork was priced (memo, Aug 22): no web app anywhere can schedule a
+notification on the device — Notification Triggers is abandoned and Web Push
+has no deliver-at — so a closed-app notification needs either a server or a
+native wrapper. The wrapper is disqualified on three counts (broken Android
+delivery, App Review 5.1.1(ix) against an individual developer for a health
+app, and a membership whose lapse deletes the product). Kevin's line:
+**calendar export is v1; the server stays a maybe, not a no.** Decision 4 is
+therefore untouched for now — "we cannot see your data" remains literally
+true — and the sentence that would replace it is written and waiting in the
+memo if the server is ever built.
+
+*Standing note recorded with this ruling:* no closed-app reminder on any
+delivery path — calendar, native, or push — can know what you have already
+done today. Reminders are fixed time-of-day cues by nature. D22's "stop
+nagging about an empty bottle" and R16's missed-item prompt live inside the
+app, not in the notification.
+
+## R20 — Reminder cadence varies by kind (Kevin).
+
+"The cadence should be variable depending on the type of notification it is."
+A part-of-the-day reminder fires once at a time that means something; a
+movement snack or posture check repeats through a window and does not care
+about the exact minute. Implemented as kinds carrying a starting shape
+(interval + window), with the shape then owned by the person — a kind is a
+label, never behaviour of its own. Quiet hours suppress repeating nudges only;
+a time typed by hand is left alone.
+
+## R21 — The hard-coded movement prompts are removed (Kevin, Aug 22, confirmed).
+
+"Kill the hardcoded movement prompts, those will give way for the more
+intentional movement programs." Removed; ids retired, never reused; existing
+check-offs stay in the day records they were written into. **Open:** nothing
+fills the gap until real movement content ships — Kevin to say whether Today
+should carry anything in the meantime.
+
+## R22 — The app is called **Shoes of Peace** (Kevin).
+
+"For now" — recorded as current, not final. The Cloudflare worker already
+carried the name; it now appears in the app, the manifest, the home-screen
+icon and every calendar alert. Closes the "name the app" item in roadmap
+Phase 0, provisionally.
+
+## Correction-log entries
+
+- 2026-08-23 — the app had been deployed for four days and Kevin did not know
+  its URL, had never opened it on his phone, and had only ever seen it on the
+  computer. Nothing in the repo or the docs recorded where it lives in a place
+  he reads — `docs/` now does, and it is
+  **https://shoes-of-peace.kevin-c-bowie.workers.dev**.
+- 2026-08-23 — every platform assumption in the Aug-22 push memo was written
+  for an iPhone; Kevin is on **Android**, where push works in an ordinary tab
+  with no install. The memo's recommendation survives, but its hardest
+  constraints do not apply to his own phone.
