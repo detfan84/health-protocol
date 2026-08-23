@@ -75,7 +75,12 @@ export const MIGRATIONS = [
  *   phases: [ { id, name, days?, order } ]            // optional, may be []
  *   blocks: [ {                                        // time blocks
  *     id, name, start? 'HH:MM', end? 'HH:MM', order,
- *     items: [ { id, name, dose?, why?, notes?, phaseIds?: [] } ]
+ *     items: [ {
+ *       id, name, dose?, why?, notes?, phaseIds?: [],
+ *       cadence?: { kind, n? },                    // how often (PLAN 4.1)
+ *       fields?: { tool?, release?, load?, notice?, careful? },  // K3
+ *       photos?: [ { set, caption?, approx? } ],   // two frames per set
+ *     } ]
  *   } ]
  *   createdAt, updatedAt
  * }

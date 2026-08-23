@@ -17,6 +17,7 @@ import { viewSupply } from './viewSupply.js';
 import { viewData } from './viewData.js';
 import { viewDisclaimer, accepted } from './viewDisclaimer.js';
 import { surfacePastFailures, installGlobalNet, plainReason } from './announcer.js';
+import { recordFailure } from '../failLog.js';
 import { hhmm } from '../todayModel.js';
 import { localDateKey, nowIso } from '../../lib/core.js';
 
@@ -176,11 +177,48 @@ export async function init() {
     return;
   }
 
+  await seedContentOnce();
   await render();
   watchForStaleScreen();
   surfacePastFailures();
   askToKeepTheData();
   registerWorker();
+}
+
+/**
+ * The content the app ships with, put in on the first run.
+ *
+ * Without this the app opens empty — a screen that says "nothing active yet"
+ * over a journal and a water tracker, which is what it did for four days
+ * while a full body-work library sat in the repo. Ship the content or the app
+ * is a filing cabinet.
+ *
+ * Applied ONCE and remembered: someone who deletes a seeded protocol has
+ * decided something, and an app that puts it back every launch is arguing.
+ * It goes through the ordinary import path, so the validator sees it like any
+ * other file and a broken seed cannot write half of itself.
+ */
+async function seedContentOnce() {
+  try {
+    const done = await store.getSetting('seed.applied');
+    if (done?.value) return;
+    const existing = await store.loadProtocols();
+    if (existing.length > 0) {
+      // Somebody already has their own content; do not add to it uninvited.
+      await store.putSetting({ key: 'seed.applied', value: 'skipped-existing', at: nowIso() });
+      return;
+    }
+    const res = await fetch(new URL('../../content/starter.json', import.meta.url));
+    if (!res.ok) throw new Error(`starter content: HTTP ${res.status}`);
+    const out = await store.importFile(await res.text());
+    if (!out.ok) throw new Error(out.errors?.map((e) => `${e.path}: ${e.message}`).join('; ') || 'invalid');
+    await store.putSetting({ key: 'seed.applied', value: 'v1', at: nowIso() });
+  } catch (error) {
+    // Loud, not fatal: the app still works, and the person can import
+    // anything themselves — but they should know why it is empty.
+    console.error('[protocol-app] the starter content did not load:', error);
+    recordFailure({ what: 'The starter content', error });
+  }
 }
 
 /**

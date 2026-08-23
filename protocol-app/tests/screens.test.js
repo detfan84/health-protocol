@@ -168,3 +168,96 @@ test('a past day can be looked at and corrected, and writes land on that day', a
   [...main.querySelectorAll('button')].find((b) => b.textContent === '‹').dispatchEvent(new Event('click'));
   assert.deepEqual(asked, { date: addDays(yesterday, -1) });
 });
+
+test('a body-work card renders as a card: five fields, a warning, and photos', async () => {
+  store._resetForTests();
+  await store.ready({ name: 'screens-5' });
+  await store.saveProtocol({
+    id: 'p-card', name: 'Body work', active: true, phases: [],
+    blocks: [{
+      id: 'b', name: 'Release & load', order: 0,
+      items: [{
+        id: 'bw-hip',
+        name: 'Front of hip',
+        fields: {
+          tool: 'Firm lacrosse ball',
+          release: 'Lie face down, ball at the front-outside of the hip.',
+          load: 'Glute bridge ×10 slow.',
+          notice: 'Knee-to-chest goes further with less pinch.',
+          careful: 'If a hip clicks or catches, do not chase depth.',
+        },
+        photos: [{ set: 'Kneeling_Hip_Flexor', caption: 'Half-kneeling hip flexor.' },
+                 { set: 'Butt_Lift_Bridge', caption: 'The load.', approx: true }],
+      }],
+    }],
+    createdAt: 'x', updatedAt: 'x',
+  });
+
+  draw(await viewToday({}));
+  await settled();
+
+  const row = [...document.querySelectorAll('.row')].find((r) => /Front of hip/.test(r.textContent));
+  assert.ok(row, 'the card is on the screen');
+
+  const labels = [...row.querySelectorAll('.field-label')].map((e) => e.textContent);
+  assert.deepEqual(labels, ['Tool', 'Release', 'Load', 'Notice', 'Careful'],
+    'five fields, as five fields — not one blob of notes');
+
+  const careful = row.querySelector('.field-line.careful');
+  assert.ok(careful, 'careful is drawn as a warning, not as another paragraph');
+  assert.match(careful.textContent, /do not chase depth/);
+
+  const imgs = [...row.querySelectorAll('img.photo')];
+  assert.equal(imgs.length, 2, 'both photo sets are there');
+  assert.match(imgs[0].getAttribute('src'), /Kneeling_Hip_Flexor_0\.jpg$/, 'starts on the first frame');
+  assert.equal(imgs[0].getAttribute('loading'), 'lazy', 'a closed card costs no data');
+  assert.match(row.textContent, /close, not exact/, 'an approximate photo says so');
+});
+
+test('the shipped starter content is real, valid, and free of one person’s regimen', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const { validateFile } = await import('../src/lib/protocolFile.js');
+  const text = await readFile(new URL('../src/content/starter.json', import.meta.url), 'utf8');
+
+  const v = validateFile(text);
+  assert.equal(v.ok, true, `starter content must import cleanly: ${JSON.stringify(v.errors)}`);
+
+  const protocols = v.value.data.protocols;
+  assert.ok(protocols.length >= 2);
+  assert.ok(protocols.every((p) => p.active === true), 'content that ships switched off is content nobody sees');
+
+  const items = protocols.flatMap((p) => p.blocks.flatMap((b) => b.items));
+  assert.ok(items.length >= 50, `expected a real library, got ${items.length} items`);
+  assert.ok(items.some((i) => i.fields?.release && i.fields?.careful), 'body-work cards survive the trip');
+  assert.ok(items.some((i) => i.photos?.length), 'so do the photographs');
+  assert.ok(items.some((i) => i.cadence?.kind === 'everyNDays'), 'and their frequencies');
+
+  // Decision 3: no brand-name supplement content, and nobody else's regimen.
+  const blob = JSON.stringify(protocols).toLowerCase();
+  for (const word of ['rho ', 'boost blenz', 'methylene blue', 'parasite', 'binder', 'nattokinase']) {
+    assert.equal(blob.includes(word), false, `shipped content must not carry "${word}"`);
+  }
+  // And no first-person laterality left over from one body.
+  for (const phrase of ['the right hip', 'right shoulder subluxes', 'surgically altered']) {
+    assert.equal(blob.includes(phrase), false, `shipped content still says "${phrase}"`);
+  }
+});
+
+test('no screen ever prints the word "null" at a person', async () => {
+  store._resetForTests();
+  await store.ready({ name: 'screens-6' });
+  await store.saveProtocol(dayLongProtocol());
+
+  const { localDateKey } = await import('../src/lib/core.js');
+  const { addDays } = await import('../src/lib/cadence.js');
+
+  // append(null) renders the string "null" — h() drops nulls among children,
+  // the raw DOM API does not, and the two are easy to mix up.
+  for (const date of [undefined, addDays(localDateKey(), -1)]) {
+    draw(await viewToday({ date, reload: () => {} }));
+    await settled();
+    const text = document.querySelector('main').textContent;
+    assert.equal(/\bnull\b|\bundefined\b|\[object Object\]/.test(text), false,
+      `a raw value reached the screen for date=${date ?? 'today'}: ${text.slice(0, 200)}`);
+  }
+});

@@ -207,6 +207,29 @@ label { display: block; font-size: var(--fs-sm); color: var(--ink-muted); margin
 .field-row { display: flex; gap: var(--sp-2); }
 .field-row > * { flex: 1; min-width: 0; }
 
+/* body-work card: five fields and a two-frame loop */
+.fields { margin-top: var(--sp-2); display: grid; gap: var(--sp-2); }
+.field-line { font-size: var(--fs-sm); line-height: 1.5; }
+.field-label {
+  display: inline-block; min-width: 4.5rem;
+  font-weight: 600; color: var(--ink-muted);
+}
+.field-line.careful {
+  border-left: 3px solid var(--danger);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+}
+.field-line.careful .field-label { color: var(--danger); }
+.photos { display: grid; gap: var(--sp-3); margin-top: var(--sp-3); }
+.photo-figure { margin: 0; }
+img.photo {
+  width: 100%; max-width: 320px; height: auto;
+  border-radius: var(--radius-sm); background: var(--surface-2);
+  display: block;
+}
+.photo-figure figcaption { margin-top: var(--sp-1); }
+
 /* cadence, pause, item options */
 .chip.cadence { margin-left: var(--sp-2); }
 .row.unavailable .name { color: var(--ink-muted); }

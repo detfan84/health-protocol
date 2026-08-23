@@ -25,6 +25,9 @@ const dist = resolve(appDir, 'dist');
 // manifest's start_url is resolved against where it is served from. Icons ride
 // along inside src/.
 const SHIPPED = ['index.html', 'manifest.webmanifest', 'sw.js', 'src'];
+// src/ carries the app AND its content: src/content/starter.json plus the
+// body-work photographs. If content ever moves out of src/, add it here or it
+// silently will not deploy — which is exactly how the app shipped empty.
 
 await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });

@@ -70,6 +70,38 @@ function fixItem(raw, path, ctx) {
     if (Array.isArray(raw.phaseIds)) item.phaseIds = raw.phaseIds.map(String);
     else ctx.warn(path + '.phaseIds', 'Expected a list — ignored.');
   }
+  // The five structured fields (K3, ruled Aug 19 and never built until now).
+  // A body-work card is not a supplement row: what tool, what to do, what to
+  // load afterwards, what to notice, and what to be careful of are five
+  // different KINDS of thing, and flattening them into one paragraph is how
+  // the app lost the content it already had. Careful is styled as a warning
+  // downstream precisely because it is not just another paragraph.
+  if (isObj(raw.fields)) {
+    const fields = {};
+    for (const k of ['tool', 'release', 'load', 'notice', 'careful']) {
+      const v = asTrimmed(raw.fields[k] == null ? '' : String(raw.fields[k]));
+      if (v) fields[k] = v;
+    }
+    if (Object.keys(fields).length) item.fields = fields;
+  }
+  // Photos: two frames of the real movement, which a still cannot show.
+  // `approx` means "close, but not exactly this drill" and the card says so —
+  // a picture that quietly misleads is worse than no picture.
+  if (Array.isArray(raw.photos)) {
+    const photos = raw.photos
+      .filter(isObj)
+      .map((ph) => {
+        const set = asTrimmed(String(ph.set ?? ''));
+        if (!set || !/^[A-Za-z0-9_.-]+$/.test(set)) return null; // no paths, no traversal
+        const out = { set };
+        const caption = asTrimmed(String(ph.caption ?? ''));
+        if (caption) out.caption = caption;
+        if (ph.approx === true) out.approx = true;
+        return out;
+      })
+      .filter(Boolean);
+    if (photos.length) item.photos = photos;
+  }
   // Cadence travels with the plan: "3× a week" is part of what the protocol
   // says to do, so a protocol shared with somebody else carries it. What does
   // NOT travel is anything personal about doing it — a pause lives in the

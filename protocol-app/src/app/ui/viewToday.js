@@ -60,16 +60,20 @@ function timeLabel(b) {
  * Paragraphs that begin with a short label ("Release: ...", "Careful: ...")
  * keep that label in bold, because that is how they read on paper.
  */
-function notesBlock(notes, itemId, openNotes, extra) {
+function notesBlock(notes, itemId, openNotes, extra, card = {}) {
   const paragraphs = String(notes ?? '').split(/\n{2,}/).filter((t) => t.trim() !== '');
-  if (paragraphs.length === 0 && !extra) return null;
+  const hasCard = Boolean(card.fields || card.photos?.length);
+  if (paragraphs.length === 0 && !extra && !hasCard) return null;
   // Opened instructions stay open. The screen re-sorts itself as the day gets
   // ticked off, and re-closing what somebody opened to read mid-exercise would
   // make the app fight them.
+  const photos = photoLoop(card.photos);
   const el = h(
     'details.notes',
     { open: openNotes?.has(itemId) ? '' : null },
-    h('summary', {}, paragraphs.length ? 'How' : 'Options'),
+    h('summary', {}, hasCard || paragraphs.length ? 'How' : 'Options'),
+    fieldsBlock(card.fields),
+    photos,
     paragraphs.map((text) => {
       const m = /^([A-Z][A-Za-z ]{1,14}):\s([\s\S]+)$/.exec(text);
       return m
@@ -78,13 +82,102 @@ function notesBlock(notes, itemId, openNotes, extra) {
     }),
     extra ?? null,
   );
-  if (openNotes) {
-    el.addEventListener('toggle', () => {
-      if (el.open) openNotes.add(itemId);
-      else openNotes.delete(itemId);
-    });
-  }
+  el.addEventListener('toggle', () => {
+    if (el.open) {
+      openNotes?.add(itemId);
+      photos?._startLoop?.();
+    } else {
+      openNotes?.delete(itemId);
+      photos?._stopLoop?.();
+    }
+  });
+  if (el.open) photos?._startLoop?.();
   return el;
+}
+
+/**
+ * The body-work card: a photo loop, and the five fields as five fields.
+ *
+ * This is the shape the old app had and the rebuild dropped — the content was
+ * carried across as one blob of notes behind a "How" fold, which is how an app
+ * full of body work came to look like an app with none. Tool, release, load,
+ * notice and careful are five different kinds of thing (K3): what you need,
+ * what to do, what to load afterwards so the range holds, what tells you it
+ * worked, and what would hurt you. Careful is drawn as a warning because it is
+ * not just another paragraph.
+ */
+function photoLoop(photos) {
+  if (!photos?.length) return null;
+  const host = h('div.photos', {});
+  const frames = [];
+
+  for (const ph of photos) {
+    // Two frames, the start and the end of the movement, alternating: a still
+    // cannot show a movement, and a video is a file nobody has offline.
+    const img = h('img.photo', {
+      src: `./src/content/photos/${ph.set}_0.jpg`,
+      alt: ph.caption ?? 'The movement, first frame',
+      loading: 'lazy',
+      decoding: 'async',
+    });
+    // A photo that fails to load says so rather than leaving a broken icon.
+    img.addEventListener('error', () => {
+      img.replaceWith(h('p.why', {}, 'That photo is missing from this copy of the app.'));
+    }, { once: true });
+    frames.push({ img, set: ph.set });
+    host.append(
+      h('figure.photo-figure', {},
+        img,
+        ph.caption
+          ? h('figcaption.why', {},
+              ph.approx ? h('span.chip', {}, 'close, not exact') : null,
+              ph.caption)
+          : null,
+      ),
+    );
+  }
+
+  // The loop runs only while somebody is looking at it. A timer per photo,
+  // left running behind a closed disclosure — or after the screen re-sorts —
+  // is a battery drain nobody asked for on a phone that stays open all day.
+  let timer = null;
+  let frame = 0;
+  host._startLoop = () => {
+    if (timer) return;
+    timer = setInterval(() => {
+      frame = frame ? 0 : 1;
+      for (const f of frames) {
+        if (f.img.isConnected) f.img.src = `./src/content/photos/${f.set}_${frame}.jpg`;
+      }
+    }, 1200);
+  };
+  host._stopLoop = () => {
+    if (timer) clearInterval(timer);
+    timer = null;
+  };
+  return host;
+}
+
+const FIELD_LABELS = {
+  tool: 'Tool',
+  release: 'Release',
+  load: 'Load',
+  notice: 'Notice',
+  careful: 'Careful',
+};
+
+function fieldsBlock(fields) {
+  if (!fields) return null;
+  return h('div.fields', {},
+    Object.keys(FIELD_LABELS)
+      .filter((k) => fields[k])
+      .map((k) =>
+        h('div.field-line' + (k === 'careful' ? '.careful' : ''), {},
+          h('span.field-label', {}, FIELD_LABELS[k]),
+          h('span', {}, fields[k]),
+        ),
+      ),
+  );
 }
 
 function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, cadence, writeKey = localDateKey } = {}) {
@@ -151,7 +244,12 @@ function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, 
         cadence ? h('span.chip.cadence', {}, cadence) : null,
       ),
       why ? h('span.why', {}, why) : null,
-      notesBlock(item.notes, item.id, openNotes, options),
+      // A card with real content opens to the card; a plain item opens to its
+      // notes. Same disclosure, so the row stays one line until asked.
+      notesBlock(item.notes, item.id, openNotes, options, {
+        fields: item.fields,
+        photos: item.photos,
+      }),
     ),
   );
 }
@@ -224,10 +322,15 @@ export async function viewToday({ reload, stamp, date: viewing } = {}) {
       isToday ? null : h('button.btn.small', { onclick: () => go(localDateKey()) }, 'Today'),
     ),
     h('div.field', { style: 'margin-top:var(--sp-2)' }, picker),
-    isToday
-      ? null
-      : h('p.muted', {}, 'You are looking at a day that has already happened. Ticking something here is not cheating — a record you correct is a record that is more true.'),
   );
+  // NOT via append(null): the DOM's append() renders a null argument as the
+  // word "null" on the screen, where h()'s own child handling would have
+  // dropped it. One of those was live for exactly as long as it took to look.
+  if (!isToday) {
+    root.append(
+      h('p.muted', {}, 'You are looking at a day that has already happened. Ticking something here is not cheating — a record you correct is a record that is more true.'),
+    );
+  }
 
   /* ------------------------- phase pointers ------------------------- */
   // Only on today: the phase pointer is where the plan is NOW, and changing

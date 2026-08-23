@@ -1,0 +1,912 @@
+{
+  "format": "protocol-app/v1",
+  "kind": "backup",
+  "schemaVersion": 2,
+  "exportedAt": "2026-08-23T01:35:19.887Z",
+  "data": {
+    "protocols": [
+      {
+        "id": "seed-daily-flow",
+        "name": "Morning and evening flow",
+        "notes": "Two short routines, ten minutes each. Edit anything — it is yours now.",
+        "active": true,
+        "phases": [],
+        "blocks": [
+          {
+            "id": "flow-morning",
+            "name": "Morning flow",
+            "start": "07:00",
+            "order": 0,
+            "items": [
+              {
+                "id": "st-flow-morning-cat_cow",
+                "name": "Cat-Cow",
+                "dose": "45 sec",
+                "why": "8 slow breaths",
+                "fields": {
+                  "release": "Start on hands and knees, wrists under shoulders, knees under hips. INHALE: Drop belly toward floor, lift chest and tailbone (Cow). EXHALE: Round spine toward ceiling, tuck chin and pelvis (Cat). Move slowly with breath, feeling each vertebra articulate.",
+                  "notice": "Where you should feel it: spine, core."
+                }
+              },
+              {
+                "id": "st-flow-morning-thread_needle",
+                "name": "Thread the Needle",
+                "dose": "40 sec",
+                "why": "20 sec each side",
+                "fields": {
+                  "release": "From hands and knees, reach right arm under your left arm, sliding it along the floor. Let your right shoulder and temple rest on the ground. Hold, breathing into the stretch. Return and repeat on the other side.",
+                  "notice": "Where you should feel it: thoracic spine, shoulders."
+                }
+              },
+              {
+                "id": "st-flow-morning-worlds_greatest",
+                "name": "World's Greatest Stretch",
+                "dose": "60 sec",
+                "why": "5 per side with rotation",
+                "fields": {
+                  "release": "Step right foot outside right hand in a deep lunge. Drop left knee (optional). Rotate right arm to the sky, opening chest. Hold, then bring elbow toward the floor inside the right foot. Straighten front leg for hamstring stretch. Repeat other side.",
+                  "notice": "Where you should feel it: hip flexors, hamstrings, thoracic spine, groin."
+                }
+              },
+              {
+                "id": "st-flow-morning-downward_dog",
+                "name": "Downward Dog",
+                "dose": "30 sec",
+                "why": "Pedal feet, press heels",
+                "fields": {
+                  "release": "From hands and knees, tuck toes, lift hips high and back. Press chest toward thighs, heels toward floor (they don't need to touch). Spread fingers wide, externally rotate upper arms. Pedal feet to warm up calves and hamstrings.",
+                  "notice": "Where you should feel it: hamstrings, calves, shoulders, spine."
+                }
+              },
+              {
+                "id": "st-flow-morning-standing_hamstring",
+                "name": "Standing Hamstring Stretch",
+                "dose": "40 sec",
+                "why": "20 sec each leg",
+                "fields": {
+                  "release": "Place one foot on a low step or bench (or just extend in front of you). Keep the elevated leg straight. Hinge at the hips and lean forward with a flat back until you feel the stretch behind the thigh. Keep hips square. Hold and switch.",
+                  "notice": "Where you should feel it: hamstrings, calves."
+                }
+              },
+              {
+                "id": "st-flow-morning-hip_cars",
+                "name": "Hip CARs",
+                "dose": "40 sec",
+                "why": "3 slow circles each leg",
+                "fields": {
+                  "release": "Controlled Articular Rotations. Stand on one leg (hold wall if needed). Lift knee to chest, rotate it out to the side, extend behind you, then reverse. Move SLOWLY through the biggest circle you can control. This maps your hip's full range of motion.",
+                  "notice": "Where you should feel it: hips, hip flexors, glutes."
+                }
+              },
+              {
+                "id": "st-flow-morning-deep_squat",
+                "name": "Deep Squat Hold",
+                "dose": "45 sec",
+                "why": "Shift weight side to side",
+                "fields": {
+                  "release": "Stand with feet slightly wider than shoulders, toes slightly out. Sink hips down as low as possible while keeping heels on the floor. Use elbows to push knees outward. Keep chest up. If heels lift, widen stance or hold something for balance.",
+                  "notice": "Where you should feel it: hips, ankles, quads, adductors."
+                }
+              },
+              {
+                "id": "st-flow-morning-ankle_cars",
+                "name": "Ankle CARs",
+                "dose": "30 sec",
+                "why": "5 circles each foot",
+                "fields": {
+                  "release": "Controlled Articular Rotations for ankles. Lift one foot off the ground. Slowly draw the largest circle you can with your toes, moving only at the ankle joint. Go clockwise, then counterclockwise. Keep the rest of your leg still.",
+                  "notice": "Where you should feel it: ankles, calves, tibialis."
+                }
+              },
+              {
+                "id": "st-flow-morning-shoulder_cars",
+                "name": "Shoulder CARs",
+                "dose": "40 sec",
+                "why": "3 slow circles each arm",
+                "fields": {
+                  "release": "Stand tall, arm at your side. Slowly raise arm forward, overhead, behind you, and back down in the biggest circle you can control. Keep your torso completely still — only the shoulder moves. Reverse direction.",
+                  "notice": "Where you should feel it: shoulders, rotator cuff."
+                }
+              },
+              {
+                "id": "st-flow-morning-lateral_lunge",
+                "name": "Lateral Lunge Hold",
+                "dose": "40 sec",
+                "why": "20 sec each side",
+                "fields": {
+                  "release": "Step wide to the right, bending right knee and pushing hips back while keeping left leg straight. Keep both feet flat. Sit into the bent knee side. Feel the stretch in the straight leg's inner thigh. Hold, then switch sides.",
+                  "notice": "Where you should feel it: adductors, groin, hamstrings, quads."
+                }
+              },
+              {
+                "id": "st-flow-morning-chest_doorway",
+                "name": "Doorway Chest Stretch",
+                "dose": "30 sec",
+                "why": "Open the chest, shoulders back",
+                "fields": {
+                  "release": "Stand in a doorway. Place forearms on the door frame at 90° (elbows at shoulder height). Step one foot through and lean forward until you feel the stretch across your chest. Adjust arm height to target different pec fibers — higher hits upper chest, lower hits lower.",
+                  "notice": "Where you should feel it: chest, anterior deltoids."
+                }
+              },
+              {
+                "id": "st-flow-morning-neck_stretch",
+                "name": "Neck Stretch",
+                "dose": "30 sec",
+                "why": "Side, diagonal, and front",
+                "fields": {
+                  "release": "Sit or stand tall. Tilt right ear toward right shoulder. Gently place right hand on top of head for light overpressure. Keep left shoulder down. Hold 15-20 seconds. For the front of the neck, look up and slightly to one side. Switch sides.",
+                  "notice": "Where you should feel it: neck, upper traps."
+                }
+              }
+            ]
+          },
+          {
+            "id": "flow-evening",
+            "name": "Evening wind-down",
+            "start": "21:00",
+            "order": 1,
+            "items": [
+              {
+                "id": "st-flow-evening-childs_pose",
+                "name": "Child's Pose",
+                "dose": "45 sec",
+                "why": "Wide knees, walk hands L/R for lat stretch",
+                "fields": {
+                  "release": "Kneel on the floor, big toes together, knees wide. Sit hips back toward heels and walk hands forward, lowering chest toward floor. Rest forehead on the ground. For lat stretch, walk both hands to one side and hold, then switch.",
+                  "notice": "Where you should feel it: back, hips, lats."
+                }
+              },
+              {
+                "id": "st-flow-evening-cat_cow",
+                "name": "Cat-Cow",
+                "dose": "40 sec",
+                "why": "Segmental, match breath",
+                "fields": {
+                  "release": "Start on hands and knees, wrists under shoulders, knees under hips. INHALE: Drop belly toward floor, lift chest and tailbone (Cow). EXHALE: Round spine toward ceiling, tuck chin and pelvis (Cat). Move slowly with breath, feeling each vertebra articulate.",
+                  "notice": "Where you should feel it: spine, core."
+                }
+              },
+              {
+                "id": "st-flow-evening-thread_needle",
+                "name": "Thread the Needle",
+                "dose": "40 sec",
+                "why": "20 sec each side, sink into it",
+                "fields": {
+                  "release": "From hands and knees, reach right arm under your left arm, sliding it along the floor. Let your right shoulder and temple rest on the ground. Hold, breathing into the stretch. Return and repeat on the other side.",
+                  "notice": "Where you should feel it: thoracic spine, shoulders."
+                }
+              },
+              {
+                "id": "st-flow-evening-pigeon",
+                "name": "Pigeon Stretch",
+                "dose": "60 sec",
+                "why": "30 sec each side, melt forward",
+                "fields": {
+                  "release": "From downward dog, bring right knee forward behind right wrist. Extend left leg straight behind you. Square your hips. Upright pigeon: stay on hands. Sleeping pigeon: fold forward over front leg. Hold and breathe. Switch sides.",
+                  "notice": "Where you should feel it: glutes, hip flexors, piriformis."
+                }
+              },
+              {
+                "id": "st-flow-evening-figure_four",
+                "name": "Supine Figure-4 Stretch",
+                "dose": "40 sec",
+                "why": "20 sec each side",
+                "fields": {
+                  "release": "Lie on your back. Cross right ankle over left knee (making a \"4\" shape). Reach through and pull the left thigh toward your chest. You should feel a deep stretch in the right glute/hip. Keep head on the floor. Hold and switch.",
+                  "notice": "Where you should feel it: glutes, piriformis, hips."
+                }
+              },
+              {
+                "id": "st-flow-evening-hamstring_strap",
+                "name": "Supine Hamstring Stretch",
+                "dose": "50 sec",
+                "why": "25 sec each leg",
+                "fields": {
+                  "release": "Lie on your back. Lift one leg and hold behind the thigh or calf (use a towel or strap if needed). Keep the leg as straight as possible. Keep the other leg flat on the floor. Pull gently to deepen the stretch. Hold and breathe.",
+                  "notice": "Where you should feel it: hamstrings."
+                }
+              },
+              {
+                "id": "st-flow-evening-spinal_twist_supine",
+                "name": "Supine Spinal Twist",
+                "dose": "50 sec",
+                "why": "25 sec each side",
+                "fields": {
+                  "release": "Lie on your back, arms in a T. Pull one knee to chest, then guide it across your body to the opposite side. Let gravity pull the knee toward the floor. Keep both shoulders pressed down. Look in the opposite direction of the knee. Breathe and melt into it.",
+                  "notice": "Where you should feel it: spine, obliques, glutes, chest."
+                }
+              },
+              {
+                "id": "st-flow-evening-butterfly",
+                "name": "Butterfly Stretch",
+                "dose": "40 sec",
+                "why": "Feet together, knees out, fold forward",
+                "fields": {
+                  "release": "Sit with soles of feet together, knees falling outward. Hold feet and sit tall. Gently press knees toward floor with elbows or let gravity work. For deeper stretch, fold forward from the hips while maintaining a long spine.",
+                  "notice": "Where you should feel it: adductors, groin, hips."
+                }
+              },
+              {
+                "id": "st-flow-evening-neck_stretch",
+                "name": "Neck Stretch",
+                "dose": "30 sec",
+                "why": "Gentle, just gravity",
+                "fields": {
+                  "release": "Sit or stand tall. Tilt right ear toward right shoulder. Gently place right hand on top of head for light overpressure. Keep left shoulder down. Hold 15-20 seconds. For the front of the neck, look up and slightly to one side. Switch sides.",
+                  "notice": "Where you should feel it: neck, upper traps."
+                }
+              },
+              {
+                "id": "st-flow-evening-legs_up_wall",
+                "name": "Legs Up the Wall",
+                "dose": "60 sec",
+                "why": "Close eyes, deep breaths",
+                "fields": {
+                  "release": "Sit with one hip against a wall, then swing your legs up as you lie back. Scoot your butt as close to the wall as comfortable. Arms at sides or on belly. Close your eyes. This inverts blood flow, calms the nervous system, and gently stretches hamstrings.",
+                  "notice": "Where you should feel it: hamstrings, lower back, nervous system."
+                }
+              }
+            ]
+          }
+        ],
+        "createdAt": "2026-08-23T01:35:19.887Z",
+        "updatedAt": "2026-08-23T01:35:19.887Z"
+      },
+      {
+        "id": "seed-body-work",
+        "name": "Body work",
+        "notes": "Release paired with the loading that keeps it, plus breathing, airway, nerve glides, balance and downregulation. Each card says how often it comes round; nothing here is daily unless it says so.",
+        "active": true,
+        "phases": [],
+        "blocks": [
+          {
+            "id": "bw-release",
+            "name": "Release & load",
+            "order": 0,
+            "items": [
+              {
+                "id": "bw-hip",
+                "name": "Front of hip",
+                "why": "Manual release paired with the loading that keeps it.",
+                "fields": {
+                  "tool": "Firm lacrosse ball",
+                  "release": "Lie face down, ball at the front-outside of the hip just inside the hip bone. Sink onto it slowly. Wait for the guard to let go, then a little more. 60–90 sec. Start with the tighter side; the other side lighter.",
+                  "load": "Glute bridge ×10 slow, squeeze at the top. Then standing hip extension ×10 each side. The flexor let go; the glute has to take the job.",
+                  "notice": "Knee-to-chest goes further with less pinch. Clicking quiets. Relaxation runs down the leg.",
+                  "careful": "If a hip clicks, catches or feels like it slides, release is the opener and stability is the fix — do not chase depth."
+                },
+                "photos": [
+                  {
+                    "set": "Kneeling_Hip_Flexor",
+                    "caption": "Half-kneeling hip flexor — the safer swap for the kneeling lean-back the card warns about. Tuck the pelvis under."
+                  },
+                  {
+                    "set": "Butt_Lift_Bridge",
+                    "caption": "The load. Slow, squeeze at the top. The flexor let go; the glute has to take the job."
+                  }
+                ],
+                "cadence": {
+                  "kind": "everyNDays",
+                  "n": 2
+                }
+              },
+              {
+                "id": "bw-glute",
+                "name": "Glute & back of hip",
+                "why": "Manual release paired with the loading that keeps it.",
+                "fields": {
+                  "tool": "Firm lacrosse ball",
+                  "release": "Sit on the floor, ball under one glute, that ankle crossed over the opposite knee. Roll slowly to find the tender spot, then stop and let the pressure build. 60–90 sec each side.",
+                  "load": "Side-lying clamshells ×12 each side, or standing banded abduction. Light band — this is about finding the muscle, not loading it.",
+                  "notice": "Hips sit more level. Less low-back ache when standing.",
+                  "careful": "Deep glute work can catch the sciatic nerve. Numbness or shooting down the leg means move the ball, not push harder."
+                },
+                "photos": [
+                  {
+                    "set": "Piriformis-SMR",
+                    "caption": "Ball or roller under one glute, that ankle crossed over the opposite knee. Roll to the tender spot, then stop and let the pressure build."
+                  },
+                  {
+                    "set": "Iliotibial_Tract-SMR",
+                    "caption": "Further round the side, if the tenderness sits on the outer hip rather than deep in the glute.",
+                    "approx": true
+                  },
+                  {
+                    "set": "Single_Leg_Glute_Bridge",
+                    "caption": "A harder bridge once the two-leg version is easy. Light band optional — this is about finding the muscle."
+                  }
+                ],
+                "cadence": {
+                  "kind": "everyNDays",
+                  "n": 2
+                }
+              },
+              {
+                "id": "bw-feet",
+                "name": "Feet",
+                "why": "Manual release paired with the loading that keeps it.",
+                "fields": {
+                  "tool": "Firm lacrosse ball, or a golf ball for finer work",
+                  "release": "Ball under the arch — seated first, standing when you want more. Roll the whole sole slowly: heel, arch, ball of foot. Then park on the tender spots. 60–90 sec per foot.",
+                  "load": "Short foot — gently dome the arch without curling the toes, hold 5 sec ×10. Then barefoot balance, eyes open, 30 sec per side.",
+                  "notice": "The ground feels more detailed. Balance steadier. Calves loosen without being touched.",
+                  "careful": "Tender because they're deconditioned, not damaged. Daily and light beats hard and occasional."
+                },
+                "photos": [
+                  {
+                    "set": "Foot-SMR",
+                    "caption": "Ball under the arch, seated first. Roll heel, arch, ball of foot slowly, then park on the tender spots."
+                  }
+                ]
+              },
+              {
+                "id": "bw-calf",
+                "name": "Calves",
+                "why": "Manual release paired with the loading that keeps it.",
+                "fields": {
+                  "tool": "RolFlex, or a firm ball",
+                  "release": "On the mid-belly of the calf — not the Achilles, not the shin bone. While compressed, slowly point and flex the foot 8–10×. Work the tighter side first.",
+                  "load": "Bilateral heel raises ×15 slow, then lower on the weaker side alone ×8. Add seated bent-knee raises for the soleus.",
+                  "notice": "Knee-to-wall distance improves on the side you worked. The ankle feels like it has more to give.",
+                  "careful": "If either calf has been operated on or injured, release that side lightly or skip it. A weak calf needs strength, not length."
+                },
+                "photos": [
+                  {
+                    "set": "Calves-SMR",
+                    "caption": "On the mid-belly of the calf. Not the Achilles, not the shin bone. Right side primary; the left is the weak one."
+                  }
+                ],
+                "cadence": {
+                  "kind": "everyNDays",
+                  "n": 2
+                }
+              },
+              {
+                "id": "bw-ham",
+                "name": "Hamstrings",
+                "why": "Manual release paired with the loading that keeps it.",
+                "fields": {
+                  "tool": "Foam roller or firm ball",
+                  "release": "Under the hamstring, seated on the floor with the leg out. Slow. Once you're on a spot, straighten and bend the knee a few times under the pressure.",
+                  "load": "Glute bridge with the feet further out ×10. Then a bodyweight hip hinge with soft knees ×10 — slow, back flat.",
+                  "notice": "The forward fold goes further with the knees soft.",
+                  "careful": "Chase the fold with knees in soft neutral, never locked back. Range here is a fair target; knee hyperextension is not."
+                },
+                "photos": [
+                  {
+                    "set": "Hamstring-SMR",
+                    "caption": "Under the hamstring, seated, leg out. Once you are on a spot, bend and straighten the knee under the pressure."
+                  },
+                  {
+                    "set": "Butt_Lift_Bridge",
+                    "caption": "The load. Bridge with the feet further out than usual."
+                  }
+                ],
+                "cadence": {
+                  "kind": "everyNDays",
+                  "n": 2
+                }
+              },
+              {
+                "id": "bw-pec",
+                "name": "Chest & front of shoulder",
+                "why": "Manual release paired with the loading that keeps it.",
+                "fields": {
+                  "tool": "Soft ball against a wall",
+                  "release": "Ball between your chest and a wall, just below and inside the front of the shoulder — the meaty part near the armpit, not on bone. Lean in, then slowly raise and lower that arm.",
+                  "load": "Wall angels ×8 with the low back flat. Then banded external rotation ×12, elbow tucked at your side.",
+                  "notice": "Shoulders sit back without effort. The chest stops caving in on the lungs. Breath gets deeper on its own.",
+                  "careful": "Do not force shoulders-back-chest-out. That retraction is the move that reproduces thoracic-outlet symptoms in people who have them — let the position come from underneath."
+                },
+                "photos": [
+                  {
+                    "set": "External_Rotation_with_Band",
+                    "caption": "The load, standing. Yours is the same with the elbow tucked at your side. Do not force the shoulders back — that retraction is what reproduces the thoracic outlet symptoms.",
+                    "approx": true
+                  }
+                ],
+                "cadence": {
+                  "kind": "everyNDays",
+                  "n": 2
+                }
+              },
+              {
+                "id": "bw-lat",
+                "name": "Lat & back of armpit",
+                "why": "Manual release paired with the loading that keeps it.",
+                "fields": {
+                  "tool": "Firm ball, side-lying",
+                  "release": "Lie on your side, arm overhead, ball in the back wall of the armpit. Small movements, not long rolls.",
+                  "load": "Lat squeeze isometric — arms at your sides, squeeze the armpits down toward the hips, 5 sec ×10. Then assisted hang, feet partly down, 20–40 sec, pulling the shoulder blades DOWN.",
+                  "notice": "Ribs stop flaring. Belly breath comes easier. Traps quieten.",
+                  "careful": "If a shoulder subluxes or feels unstable overhead, keep the feet partly on the ground during hangs until the scapular base is solid."
+                },
+                "photos": [
+                  {
+                    "set": "Latissimus_Dorsi-SMR",
+                    "caption": "Side-lying, arm overhead, in the back wall of the armpit. Small movements, not long rolls."
+                  },
+                  {
+                    "set": "Scapular_Pull-Up",
+                    "caption": "The load. Hang, then raise yourself a few inches WITHOUT bending the arms — a reverse shrug that depresses the shoulder blades. This is the \"pull the blades DOWN\" cue, and it is the exact drill rather than an approximation."
+                  }
+                ],
+                "cadence": {
+                  "kind": "everyNDays",
+                  "n": 2
+                }
+              },
+              {
+                "id": "bw-thor",
+                "name": "Mid & upper back",
+                "why": "Manual release paired with the loading that keeps it.",
+                "fields": {
+                  "tool": "Foam roller",
+                  "release": "Roller across the mid-back, arms crossed over the chest. A few passes, then park on a stiff segment and drape backwards over it. Breathe into it. Don't crank.",
+                  "load": "Cat-cow ×8 with real attention to the cow — that's the direction you've lost. Then prone Y-raises ×10, light.",
+                  "notice": "Standing tall stops being effort. Head sits back over the shoulders.",
+                  "careful": "Extend from the mid-back, not the low back. If it hinges down low, move the roller up."
+                },
+                "photos": [
+                  {
+                    "set": "Rhomboids-SMR",
+                    "caption": "Roller across the mid-back, arms crossed over the chest. Park on a stiff segment and drape back over it."
+                  },
+                  {
+                    "set": "Cat_Stretch",
+                    "caption": "Cat-cow. Give real attention to the cow direction — that is the one you have lost."
+                  }
+                ],
+                "cadence": {
+                  "kind": "everyNDays",
+                  "n": 2
+                }
+              },
+              {
+                "id": "bw-neck",
+                "name": "Base of skull",
+                "why": "Manual release paired with the loading that keeps it.",
+                "fields": {
+                  "tool": "Two balls in a sock, or the foam peanut",
+                  "release": "Lie on your back and place them either side of the spine right at the base of the skull. Let the head rest into them, 3–5 min. Run slow extended-exhale breathing the whole time.",
+                  "load": "Chin nods — lying on your back, gently nod the chin toward the throat without lifting the head. Hold 5 sec ×10. These are the deep neck flexors, the stabilizers whose absence makes the neck feel like it needs cracking.",
+                  "notice": "The urge to crack drops. Forward-head posture is easier to correct and holds longer.",
+                  "careful": "This replaces neck cracking. Self-manipulating the cervical spine with lax connective tissue is the one item here with a serious downside — the vertebral arteries run through the joints you would be torquing."
+                },
+                "photos": [
+                  {
+                    "set": "Isometric_Neck_Exercise_-_Front_And_Back",
+                    "caption": "The load, seated: gentle resistance with no actual movement of the head. Yours is done lying on your back — nod the chin toward the throat without lifting the head, hold 5 seconds. Resistance, never rotation.",
+                    "approx": true
+                  }
+                ],
+                "cadence": {
+                  "kind": "everyNDays",
+                  "n": 2
+                }
+              },
+              {
+                "id": "bw-quad",
+                "name": "Front of thigh",
+                "why": "Manual release paired with the loading that keeps it.",
+                "fields": {
+                  "tool": "Foam roller",
+                  "release": "Roller down the front of the thigh, weight regulated through your arms. Slow.",
+                  "load": "Bodyweight squat to a box or chair ×10, strict form. Then step-downs ×8 each side, slow and controlled.",
+                  "notice": "Less pull on the kneecap. The deep squat comes easier.",
+                  "careful": "The kneeling lean-back stretch is intense on a knee in deep flexion. Keep it propped and short — or swap it for a half-kneeling hip flexor stretch with the pelvis tucked under. Same chain, far more control."
+                },
+                "photos": [
+                  {
+                    "set": "Quadriceps-SMR",
+                    "caption": "Roller down the front of the thigh, weight regulated through the arms. Slow."
+                  }
+                ],
+                "cadence": {
+                  "kind": "everyNDays",
+                  "n": 3
+                }
+              }
+            ]
+          },
+          {
+            "id": "bw-breath",
+            "name": "Breathing",
+            "order": 1,
+            "items": [
+              {
+                "id": "bw-br-9090",
+                "name": "90/90 hip lift",
+                "why": "Breathing is upstream of most of it. Everything else on this list is downstream effect.",
+                "fields": {
+                  "tool": "A wall, plus a rolled hand towel or a small inflatable ball — the 5–6 inch kind, like a child's playground ball — to hold between the knees",
+                  "notice": "Low back rests flat on the floor without you holding it there. Ribs feel dropped rather than flared. This is the drill that most directly targets the anterior tilt and rib flare you identified yourself.",
+                  "careful": "This is not a glute bridge. An inch of lift, no more. If you get lightheaded, stop and breathe normally for a minute — that is the CO2 shift, and it settles as tolerance builds."
+                },
+                "photos": [
+                  {
+                    "set": "Pelvic_Tilt_Into_Bridge",
+                    "caption": "Not the drill, but it shows the tilt underneath it. Yours is an inch of lift with the feet on a wall, on a long exhale.",
+                    "approx": true
+                  }
+                ]
+              },
+              {
+                "id": "bw-br-belly",
+                "name": "All-fours belly lift",
+                "why": "Breathing is upstream of most of it. Everything else on this list is downstream effect.",
+                "fields": {
+                  "tool": "None",
+                  "notice": "You can feel your back widen on the inhale rather than your chest rising.",
+                  "careful": "This one makes people lightheaded faster than the 90/90. Sit back on your heels if it does."
+                },
+                "photos": [
+                  {
+                    "set": "Stomach_Vacuum",
+                    "caption": "The belly-lift mechanic, standing: exhale everything out, then draw the navel up toward the spine and hold. Yours is the same draw on all fours with the tailbone tucked, then breathing into the BACK of the ribs.",
+                    "approx": true
+                  }
+                ]
+              },
+              {
+                "id": "bw-br-co2",
+                "name": "CO2 tolerance",
+                "why": "Breathing is upstream of most of it. Everything else on this list is downstream effect.",
+                "fields": {
+                  "tool": "Phone timer",
+                  "notice": "Under 10 seconds is a very reactive set-point. 10–20 is reactive and common with a breathing pattern disorder. 20–30 is moderate. 40+ is well regulated. The number rising over weeks IS the thing you are trying to fix, and it is the only hard metric in this document.",
+                  "careful": "Do it sitting or lying, never standing, given the orthostatic picture."
+                },
+                "cadence": {
+                  "kind": "everyNDays",
+                  "n": 7
+                }
+              },
+              {
+                "id": "bw-br-exhale",
+                "name": "Extended exhale",
+                "why": "Breathing is upstream of most of it. Everything else on this list is downstream effect.",
+                "fields": {
+                  "tool": "None",
+                  "notice": "Tissue lets go faster under release when you are doing this than when you are not. Test it on a spot you know well.",
+                  "careful": "If the count feels like a struggle, shorten both numbers and keep the ratio. 3 in, 5 out is fine."
+                }
+              },
+              {
+                "id": "bw-br-nasal",
+                "name": "Nose only, all day",
+                "why": "Breathing is upstream of most of it. Everything else on this list is downstream effect.",
+                "fields": {
+                  "tool": "Awareness",
+                  "notice": "Reaching for the mouth constantly is data, not failure — it points at nasal obstruction, which is already on your list.",
+                  "careful": "Do not tape your mouth at night. That advice is everywhere in this space and it is specifically wrong for you: you can reproduce your own airway collapse, and taping removes the escape route."
+                }
+              }
+            ]
+          },
+          {
+            "id": "bw-range",
+            "name": "Range you own",
+            "order": 2,
+            "items": [
+              {
+                "id": "bw-rg-cr",
+                "name": "Contract–relax",
+                "why": "Loaded lengthening — the real answer to a nervous system guarding a range.",
+                "fields": {
+                  "tool": "A belt, strap, towel, wall, or doorframe. Something immovable to push against",
+                  "notice": "Range gained this way tends to still be there tomorrow. Range gained from passive holding usually is not. This is the tool for the question you actually asked.",
+                  "careful": "25–50% effort, not maximum. Only on restricted muscle — never used to push a joint that subluxes further into range."
+                },
+                "photos": [
+                  {
+                    "set": "Seated_Hamstring",
+                    "caption": "The method itself. A partner braces the shoulders while you push your torso BACK at 25–50% for 10–20 seconds, then relax into the new range. A belt, wall or doorframe does the same job solo — the partner is just what the library had."
+                  },
+                  {
+                    "set": "Seated_Floor_Hamstring_Stretch",
+                    "caption": "The starting position, not the whole method: move only to the FIRST real tension, then push against something immovable for 6–10 seconds before easing in.",
+                    "approx": true
+                  }
+                ],
+                "cadence": {
+                  "kind": "everyNDays",
+                  "n": 3
+                }
+              },
+              {
+                "id": "bw-rg-ham",
+                "name": "Contract–relax: hamstring",
+                "why": "Loaded lengthening — the real answer to a nervous system guarding a range.",
+                "fields": {
+                  "tool": "Belt, strap, or towel",
+                  "notice": "Forward fold goes deeper — with soft knees, which is the version that counts.",
+                  "careful": "Knee softly bent throughout. This drill is the safe route to the range you want; locking the knee out to gain a few degrees is the unsafe one."
+                },
+                "photos": [
+                  {
+                    "set": "Leg-Up_Hamstring_Stretch",
+                    "caption": "On your back, knee softly bent. Yours uses a strap round the arch — press the heel down into it for 8 seconds, then draw the leg closer."
+                  }
+                ],
+                "cadence": {
+                  "kind": "everyNDays",
+                  "n": 3
+                }
+              },
+              {
+                "id": "bw-rg-calf",
+                "name": "Contract–relax: calf",
+                "why": "Loaded lengthening — the real answer to a nervous system guarding a range.",
+                "fields": {
+                  "tool": "A wall",
+                  "notice": "Knee-to-wall distance increases. The deep squat gets easier, because the ankle stops being the limiter.",
+                  "careful": "If either calf has been operated on or injured, go lighter on that side."
+                },
+                "photos": [
+                  {
+                    "set": "Calf_Stretch_Hands_Against_Wall",
+                    "caption": "Ball of the foot up the wall, heel down. Press in at 25–50%, hold 8 seconds, then lean the shin closer."
+                  },
+                  {
+                    "set": "Standing_Soleus_And_Achilles_Stretch",
+                    "caption": "The bent-knee version, which reaches the soleus. Worth doing both — lighter on the left."
+                  }
+                ],
+                "cadence": {
+                  "kind": "everyNDays",
+                  "n": 3
+                }
+              },
+              {
+                "id": "bw-rg-ecc",
+                "name": "Eccentric heel drops",
+                "why": "Loaded lengthening — the real answer to a nervous system guarding a range.",
+                "fields": {
+                  "tool": "A step or stair with a rail",
+                  "notice": "Calves get stronger and longer at the same time. This is how you get range that holds instead of range you have to keep re-earning.",
+                  "careful": "Eccentrics cause real delayed soreness, and delayed is the operative word given the post-exertional picture. Start at half the volume you think you need and watch the following two days before adding any."
+                },
+                "photos": [
+                  {
+                    "set": "Calf_Raise_On_A_Dumbbell",
+                    "caption": "The foot position and the balance support. Yours is the edge of a stair with a rail: rise on BOTH, shift to ONE, lower that heel over a slow count of 5 well below the step, then come back up on BOTH. Never up on one leg.",
+                    "approx": true
+                  }
+                ],
+                "cadence": {
+                  "kind": "everyNDays",
+                  "n": 4
+                }
+              },
+              {
+                "id": "bw-rg-squat",
+                "name": "Deep squat hang",
+                "why": "Loaded lengthening — the real answer to a nervous system guarding a range.",
+                "fields": {
+                  "tool": "A doorframe, post, or the edge of a heavy table",
+                  "notice": "Over weeks you need less and less arm support. That is the progression — not more depth, but how much of your own weight you can hold down there.",
+                  "careful": "Heels stay down. If they lift, the ankle is the limiter — do the calf work and take more weight through your arms in the meantime."
+                },
+                "photos": [
+                  {
+                    "set": "Bodyweight_Squat",
+                    "caption": "The squat pattern. Yours is a hang from a doorframe: the progression is needing less arm support, not more depth.",
+                    "approx": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "bw-ribs",
+            "name": "Ribs & diaphragm",
+            "order": 3,
+            "items": [
+              {
+                "id": "bw-rb-inter",
+                "name": "Between the ribs",
+                "why": "This works what pulls on the rib cage, not the cage itself.",
+                "fields": {
+                  "tool": "A TENNIS BALL, or your FOAM lacrosse ball. Soft. Not the firm rubber one, and not a big inflatable exercise ball",
+                  "notice": "Side ribs expand more on the inhale. The breath feels wider rather than just deeper.",
+                  "careful": "Light pressure only. This is bone with thin muscle strips between — a firm ball lands on the rib instead of in the gap, and you bruise easily. If it feels like pressing on bone, move the ball."
+                },
+                "cadence": {
+                  "kind": "everyNDays",
+                  "n": 3
+                }
+              },
+              {
+                "id": "bw-rb-diaph",
+                "name": "Under the rib margin",
+                "why": "This works what pulls on the rib cage, not the cage itself.",
+                "fields": {
+                  "tool": "Your fingers. There is no tool for this",
+                  "notice": "Belly breath comes without effort afterwards. This is the most direct access you have to the muscle itself, and the psoas attaches into the same lumbar fascia — your best release and your main symptom are literally continuous tissue.",
+                  "careful": "Not on a full stomach. Gentle — you are reaching under the ribs near organs, and patience works far better than pressure. Sharp pain means stop."
+                },
+                "cadence": {
+                  "kind": "everyNDays",
+                  "n": 2
+                }
+              },
+              {
+                "id": "bw-rb-side",
+                "name": "Side-lying rib opener",
+                "why": "This works what pulls on the rib cage, not the cage itself.",
+                "fields": {
+                  "tool": "Foam roller or a rolled towel",
+                  "notice": "Rotation and side-bending get easier. Pairs naturally with the lat work.",
+                  "careful": "Roller under the ribs, not the waist. If it presses into soft belly, move it up."
+                },
+                "photos": [
+                  {
+                    "set": "Side-Lying_Floor_Stretch",
+                    "caption": "Side-lying with the top arm overhead. Yours adds a roller under the bottom ribs and eight breaths into the upside ribs.",
+                    "approx": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "bw-airway",
+            "name": "Airway & tongue",
+            "order": 4,
+            "items": [
+              {
+                "id": "bw-aw-posture",
+                "name": "Tongue posture",
+                "why": "Myofunctional therapy. Real evidence for mild apnea and upper-airway resistance, and rarely offered.",
+                "fields": {
+                  "tool": "None",
+                  "notice": "You already use this deliberately as an airway compensation. The goal is making it automatic, including while asleep, which is where it would actually help the collapse.",
+                  "careful": "Jaw tension means you are pressing with the jaw instead of the tongue. Teeth stay apart."
+                }
+              },
+              {
+                "id": "bw-aw-press",
+                "name": "Tongue press & suction",
+                "why": "Myofunctional therapy. Real evidence for mild apnea and upper-airway resistance, and rarely offered.",
+                "fields": {
+                  "tool": "None",
+                  "notice": "Waking less dry-mouthed. Tongue posture starting to hold without attention. Effects on sleep take months, not days — this is the slowest-acting thing in this document and also one of the highest-value.",
+                  "careful": "Jaw fatigue is expected; jaw pain is not. Given the TMJ picture, go easy on the wide-open suction hold and cut the range right back if the joint complains."
+                }
+              },
+              {
+                "id": "bw-aw-palate",
+                "name": "Soft palate & throat",
+                "why": "Myofunctional therapy. Real evidence for mild apnea and upper-airway resistance, and rarely offered.",
+                "fields": {
+                  "tool": "A glass of water",
+                  "notice": "Doubles as direct vagal work — the vagus nerve supplies the larynx. It is also relevant to the voice thread.",
+                  "careful": "Nothing to speak of. This is the safest thing in the whole document."
+                }
+              }
+            ]
+          },
+          {
+            "id": "bw-nerve",
+            "name": "Nerve glides",
+            "order": 5,
+            "items": [
+              {
+                "id": "bw-nv-sciatic",
+                "name": "Sciatic glide",
+                "why": "Different tissue, different rules. Some of what reads as muscle tightness is neural.",
+                "fields": {
+                  "tool": "A chair",
+                  "notice": "If your hamstring range improves from this when stretching has not moved it, the restriction was never muscular.",
+                  "careful": "This is flossing, not stretching — never hold the end position. If it reproduces pain, tingling, or numbness, reduce the range until it does not. More is not better here; this is one of the few drills where overdoing it clearly makes things worse."
+                }
+              },
+              {
+                "id": "bw-nv-median",
+                "name": "Median nerve glide",
+                "why": "Different tissue, different rules. Some of what reads as muscle tightness is neural.",
+                "fields": {
+                  "tool": "None",
+                  "notice": "Arm symptoms that come and go with position are usually neural rather than muscular. This tests that directly.",
+                  "careful": "Given the thoracic outlet picture, start with a much smaller range than feels necessary. If it reproduces numbness or tingling, halve the range. Never push into symptoms."
+                },
+                "photos": [
+                  {
+                    "set": "Side_Wrist_Pull",
+                    "caption": "The arm and wrist position. Yours is a GLIDE, not this held stretch — move in and out continuously, about 2 seconds each way, and never park at the end position.",
+                    "approx": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "bw-balance",
+            "name": "Balance & feet",
+            "order": 6,
+            "items": [
+              {
+                "id": "bw-bl-prog",
+                "name": "Single-leg progression",
+                "why": "Proprioception training — the direct route to knowing where your body is and what it is doing.",
+                "fields": {
+                  "tool": "Bare feet, and a wall or counter within reach",
+                  "notice": "Your foot will be visibly working — toes gripping, arch adjusting constantly. That is the foot-to-brain conversation you are trying to restart.",
+                  "careful": "Stay within reach of a counter. The Level 3 head turns can trigger dizziness given the dysautonomia — if the room moves, sit down and come back to it another day at a slower speed."
+                },
+                "photos": [
+                  {
+                    "set": "Balance_Board",
+                    "caption": "Balance training on an unstable surface — roughly Level 4 of your progression. Levels 1–3 come first and need nothing but bare feet and a counter within reach.",
+                    "approx": true
+                  }
+                ]
+              },
+              {
+                "id": "bw-bl-toes",
+                "name": "Toe control",
+                "why": "Proprioception training — the direct route to knowing where your body is and what it is doing.",
+                "fields": {
+                  "tool": "Bare feet, a towel",
+                  "notice": "Individual toe control is a direct readout of the nerve pathway you are trying to rebuild. Watching it go from impossible to easy is the clearest progress marker in this entire document.",
+                  "careful": "Cramping is common at first. Stop, stretch the foot out, come back tomorrow."
+                }
+              }
+            ]
+          },
+          {
+            "id": "bw-vagal",
+            "name": "Vagal & nervous system",
+            "order": 7,
+            "items": [
+              {
+                "id": "bw-vg-mat",
+                "name": "Acupressure mat",
+                "why": "Direct downregulation. Cheap, and most of it needs no equipment at all.",
+                "fields": {
+                  "tool": "The mat you already have",
+                  "notice": "You said yourself that it helps and that you underuse it. Attach it to a fixed cue — after dinner, or while reading — rather than relying on remembering.",
+                  "careful": "Your skin bruises and marks easily. A thin t-shirt for the first few sessions is a sensible place to start."
+                },
+                "cadence": {
+                  "kind": "everyNDays",
+                  "n": 2
+                }
+              },
+              {
+                "id": "bw-vg-hum",
+                "name": "Humming & gargling",
+                "why": "Direct downregulation. Cheap, and most of it needs no equipment at all.",
+                "fields": {
+                  "tool": "Your voice, and a glass of water",
+                  "notice": "The vagus nerve supplies the larynx, so this is about as direct as non-invasive vagal stimulation gets without a device.",
+                  "careful": "None."
+                }
+              },
+              {
+                "id": "bw-vg-face",
+                "name": "Cold on the face",
+                "why": "Direct downregulation. Cheap, and most of it needs no equipment at all.",
+                "fields": {
+                  "tool": "A bowl of cold water, or a cold pack",
+                  "notice": "One of the very few things that shifts autonomic state within seconds rather than minutes.",
+                  "careful": "Cold is a mast cell trigger for some people — test small and stop if you get flushing, itching, or hives. Not while alone if you are prone to feeling faint."
+                },
+                "cadence": {
+                  "kind": "everyNDays",
+                  "n": 7
+                }
+              }
+            ]
+          }
+        ],
+        "createdAt": "2026-08-23T01:35:19.887Z",
+        "updatedAt": "2026-08-23T01:35:19.887Z"
+      }
+    ],
+    "days": [],
+    "labs": [],
+    "settings": []
+  }
+}
