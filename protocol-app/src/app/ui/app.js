@@ -15,6 +15,7 @@ import { viewProtocols } from './viewProtocols.js';
 import { viewEditor } from './viewEditor.js';
 import { viewSupply } from './viewSupply.js';
 import { viewData } from './viewData.js';
+import { viewSession } from './viewSession.js';
 import { viewDisclaimer, accepted } from './viewDisclaimer.js';
 import { surfacePastFailures, installGlobalNet, plainReason } from './announcer.js';
 import { recordFailure } from '../failLog.js';
@@ -39,6 +40,9 @@ const state = {
   // looked back at (decision 21). Reset whenever a tab is tapped, because
   // "Today" should always mean today when you come back to it.
   viewingDate: null,
+  // A block being run rather than listed: { protocolId, blockId }. The session
+  // owns the whole screen while it lasts — no tabs, no scrolling past it.
+  session: null,
 };
 
 export function applyTheme(value) {
@@ -92,6 +96,19 @@ async function render() {
     clear(main);
 
     let view;
+    if (state.session) {
+      view = await viewSession({
+        ...state.session,
+        done: () => { state.session = null; render(); },
+      });
+      main.append(view);
+      state.currentView = view;
+      // Deliberately no tab bar: a session is one thing at a time, and a row
+      // of tabs under it is an invitation to stop.
+      document.querySelector('nav.tabs').replaceChildren();
+      window.scrollTo(0, 0);
+      return;
+    }
     if (state.tab === 'protocols' && state.editingId) {
       view = await viewEditor({
         protocolId: state.editingId,
@@ -114,6 +131,7 @@ async function render() {
           render();
         },
         stamp: (s) => { state.todayStamp = s; },
+        startSession: (protocolId, blockId) => { state.session = { protocolId, blockId }; render(); },
       });
     }
     main.append(view);
@@ -200,19 +218,32 @@ export async function init() {
  */
 async function seedContentOnce() {
   try {
-    const done = await store.getSetting('seed.applied');
-    if (done?.value) return;
-    const existing = await store.loadProtocols();
-    if (existing.length > 0) {
-      // Somebody already has their own content; do not add to it uninvited.
-      await store.putSetting({ key: 'seed.applied', value: 'skipped-existing', at: nowIso() });
-      return;
-    }
     const res = await fetch(new URL('../../content/starter.json', import.meta.url));
     if (!res.ok) throw new Error(`starter content: HTTP ${res.status}`);
-    const out = await store.importFile(await res.text());
-    if (!out.ok) throw new Error(out.errors?.map((e) => `${e.path}: ${e.message}`).join('; ') || 'invalid');
-    await store.putSetting({ key: 'seed.applied', value: 'v1', at: nowIso() });
+    const text = await res.text();
+    const file = JSON.parse(text);
+    const version = String(file.seedVersion ?? 'v1');
+
+    const applied = await store.getSetting('seed.applied');
+    if (applied?.value === version) return; // nothing new to add
+
+    const existing = await store.loadProtocols();
+    const have = new Set(existing.map((p) => p.id));
+
+    // Only what this device does not already have. Never an overwrite: if a
+    // protocol is here, it is here as the person left it — edited, renamed,
+    // switched off, whatever they decided. New content arrives; nothing that
+    // exists is argued with.
+    const fresh = (file.data?.protocols ?? []).filter((p) => !have.has(p.id));
+    if (fresh.length) {
+      const out = await store.importFile(JSON.stringify({
+        ...file,
+        data: { ...file.data, protocols: fresh },
+      }));
+      if (!out.ok) throw new Error(out.errors?.map((e) => `${e.path}: ${e.message}`).join('; ') || 'invalid');
+      console.info(`[protocol-app] added ${fresh.length} protocol(s) from the shipped content`);
+    }
+    await store.putSetting({ key: 'seed.applied', value: version, at: nowIso() });
   } catch (error) {
     // Loud, not fatal: the app still works, and the person can import
     // anything themselves — but they should know why it is empty.

@@ -404,7 +404,7 @@ function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, 
   );
 }
 
-export async function viewToday({ reload, stamp, date: viewing } = {}) {
+export async function viewToday({ reload, stamp, date: viewing, startSession } = {}) {
   const date = viewing ?? localDateKey();
   const isToday = date === localDateKey();
 
@@ -571,8 +571,17 @@ export async function viewToday({ reload, stamp, date: viewing } = {}) {
       timeLabel(b) ? h('span.chip', {}, timeLabel(b)) : null,
       t.multipleActive ? h('span.chip', {}, b.protocolName) : null,
     );
+    // Run it, rather than read it. A block with more than one thing in it is a
+    // session: the app takes you through, one item at a time, and the list
+    // below is what you get when you would rather do it yourself.
+    const start = startSession && isToday && b.items.length > 1
+      ? h('button.btn.primary.start-session', {
+          onclick: () => startSession(b.protocolId, b.blockId),
+        }, `Start — ${b.items.length} things`)
+      : null;
     return h('section.card' + flavour, { 'aria-label': `${b.name} block` },
       head,
+      start,
       b.items.map((it) => checkRow(it, day, it.why, {
         openNotes,
         writeKey,

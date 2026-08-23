@@ -2,7 +2,7 @@
   "format": "protocol-app/v1",
   "kind": "backup",
   "schemaVersion": 2,
-  "exportedAt": "2026-08-23T01:56:15.671Z",
+  "exportedAt": "2026-08-23T03:06:30.192Z",
   "data": {
     "protocols": [
       {
@@ -200,8 +200,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T01:56:15.671Z",
-        "updatedAt": "2026-08-23T01:56:15.671Z"
+        "createdAt": "2026-08-23T03:06:30.192Z",
+        "updatedAt": "2026-08-23T03:06:30.192Z"
       },
       {
         "id": "seed-daily-flow",
@@ -535,8 +535,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T01:56:15.671Z",
-        "updatedAt": "2026-08-23T01:56:15.671Z"
+        "createdAt": "2026-08-23T03:06:30.192Z",
+        "updatedAt": "2026-08-23T03:06:30.192Z"
       },
       {
         "id": "seed-support",
@@ -683,8 +683,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T01:56:15.671Z",
-        "updatedAt": "2026-08-23T01:56:15.671Z"
+        "createdAt": "2026-08-23T03:06:30.192Z",
+        "updatedAt": "2026-08-23T03:06:30.192Z"
       },
       {
         "id": "seed-body-work",
@@ -1335,8 +1335,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T01:56:15.671Z",
-        "updatedAt": "2026-08-23T01:56:15.671Z"
+        "createdAt": "2026-08-23T03:06:30.192Z",
+        "updatedAt": "2026-08-23T03:06:30.192Z"
       },
       {
         "id": "seed-routine-full-body",
@@ -1473,8 +1473,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T01:56:15.671Z",
-        "updatedAt": "2026-08-23T01:56:15.671Z"
+        "createdAt": "2026-08-23T03:06:30.192Z",
+        "updatedAt": "2026-08-23T03:06:30.192Z"
       },
       {
         "id": "seed-routine-upper-body",
@@ -1611,8 +1611,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T01:56:15.671Z",
-        "updatedAt": "2026-08-23T01:56:15.671Z"
+        "createdAt": "2026-08-23T03:06:30.192Z",
+        "updatedAt": "2026-08-23T03:06:30.192Z"
       },
       {
         "id": "seed-routine-lower-body",
@@ -1749,8 +1749,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T01:56:15.671Z",
-        "updatedAt": "2026-08-23T01:56:15.671Z"
+        "createdAt": "2026-08-23T03:06:30.192Z",
+        "updatedAt": "2026-08-23T03:06:30.192Z"
       },
       {
         "id": "seed-routine-push-day",
@@ -1887,8 +1887,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T01:56:15.671Z",
-        "updatedAt": "2026-08-23T01:56:15.671Z"
+        "createdAt": "2026-08-23T03:06:30.192Z",
+        "updatedAt": "2026-08-23T03:06:30.192Z"
       },
       {
         "id": "seed-routine-pull-day",
@@ -2025,8 +2025,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T01:56:15.671Z",
-        "updatedAt": "2026-08-23T01:56:15.671Z"
+        "createdAt": "2026-08-23T03:06:30.192Z",
+        "updatedAt": "2026-08-23T03:06:30.192Z"
       },
       {
         "id": "seed-routine-mobility-flow",
@@ -2183,8 +2183,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T01:56:15.671Z",
-        "updatedAt": "2026-08-23T01:56:15.671Z"
+        "createdAt": "2026-08-23T03:06:30.192Z",
+        "updatedAt": "2026-08-23T03:06:30.192Z"
       }
     ],
     "days": [],

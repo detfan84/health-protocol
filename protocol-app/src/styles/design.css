@@ -207,6 +207,28 @@ label { display: block; font-size: var(--fs-sm); color: var(--ink-muted); margin
 .field-row { display: flex; gap: var(--sp-2); }
 .field-row > * { flex: 1; min-width: 0; }
 
+/* the session player — one thing at a time */
+.session { padding-bottom: var(--sp-6); }
+.session-top { display: flex; justify-content: space-between; align-items: center; gap: var(--sp-2); }
+.session-name { font-size: var(--fs-xl); margin: var(--sp-3) 0 var(--sp-1); }
+.session-dose { color: var(--ink-muted); font-size: var(--fs-md); margin: 0 0 var(--sp-2); }
+.session-fields { display: grid; gap: var(--sp-3); margin: var(--sp-4) 0; font-size: var(--fs-md); line-height: 1.55; }
+.session-fields .field-label { display: block; min-width: 0; margin-bottom: 2px; }
+.session-timer {
+  display: flex; align-items: center; gap: var(--sp-4);
+  margin: var(--sp-4) 0; padding: var(--sp-4);
+  background: var(--surface-2); border-radius: var(--radius);
+}
+.session-clock { font-size: 2.75rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.session-go { flex: 1; min-height: 56px; font-size: var(--fs-md); }
+.session-actions {
+  position: sticky; bottom: var(--sp-3);
+  display: grid; gap: var(--sp-2); margin-top: var(--sp-5);
+  background: var(--bg); padding-top: var(--sp-2);
+}
+.session-next { min-height: 60px; font-size: var(--fs-md); }
+.start-session { width: 100%; margin: var(--sp-2) 0 var(--sp-1); min-height: 52px; }
+
 /* training log */
 .training {
   margin-top: var(--sp-2);
