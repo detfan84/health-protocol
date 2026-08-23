@@ -26,6 +26,10 @@ globalThis.window = dom.window;
 globalThis.document = dom.window.document;
 globalThis.HTMLElement = dom.window.HTMLElement;
 globalThis.Event = dom.window.Event;
+// jsdom's EventTarget only accepts jsdom's AbortSignal, so the shim has to be
+// coherent: Node's global AbortController would be rejected at addEventListener.
+globalThis.AbortController = dom.window.AbortController;
+globalThis.AbortSignal = dom.window.AbortSignal;
 globalThis.localStorage = dom.window.localStorage;
 // deliberately NOT wiring navigator.clipboard — the copy fallback is under test
 
@@ -40,7 +44,7 @@ const buttonIn = (card, label) =>
    them WITH a document. */
 const { recordFailure, pendingFailures, dismissFailures } = await import('../src/app/failLog.js');
 const { guarded, surfacePastFailures, _resetForTests: resetAnnouncer } = await import('../src/app/ui/announcer.js');
-const { blankDay, normalizeDay, bumpWater } = await import('../src/app/trackerOps.js');
+const { blankDay, normalizeDay, bumpWaterMl } = await import('../src/app/trackerOps.js');
 const store = await import('../src/app/store.js');
 const { viewToday } = await import('../src/app/ui/viewToday.js');
 const { getOne, put } = await import('../src/lib/db.js');
@@ -192,21 +196,21 @@ test('db: operations reject with the operation and store named, original error k
 
 test('ruling A: absence stays absence — no write path invents a zero, no reader coerces one', () => {
   const day = blankDay('2026-08-18');
-  assert.equal('water' in day, false, 'a fresh record carries no water number at all');
+  assert.equal('waterMl' in day, false, 'a fresh record carries no water number at all');
 
   const n1 = normalizeDay({ date: '2026-08-18', checks: {}, food: [] }, '2026-08-18');
-  assert.equal('water' in n1, false, 'normalize leaves absence alone');
-  const n2 = normalizeDay({ date: '2026-08-18', water: Number.NaN }, '2026-08-18');
-  assert.equal('water' in n2, false, 'junk is absence, not zero');
-  const n3 = normalizeDay({ date: '2026-08-18', water: 0, updatedAt: 'x' }, '2026-08-18');
-  assert.equal(n3.water, 0, 'a stored, explicit zero passes through untouched');
+  assert.equal('waterMl' in n1, false, 'normalize leaves absence alone');
+  const n2 = normalizeDay({ date: '2026-08-18', waterMl: Number.NaN }, '2026-08-18');
+  assert.equal('waterMl' in n2, false, 'junk is absence, not zero');
+  const n3 = normalizeDay({ date: '2026-08-18', waterMl: 0, updatedAt: 'x' }, '2026-08-18');
+  assert.equal(n3.waterMl, 0, 'a stored, explicit zero passes through untouched');
 
-  const same = bumpWater(day, -1);
+  const same = bumpWaterMl(day, -237);
   assert.equal(same, day, 'a minus-tap on nothing changes nothing — not even updatedAt');
-  const one = bumpWater(day, +1);
-  assert.equal(one.water, 1);
-  const zero = bumpWater(one, -1);
-  assert.equal(zero.water, 0, 'tapped down to zero is a real, user-made zero — and it stays');
+  const one = bumpWaterMl(day, +237);
+  assert.equal(one.waterMl, 237);
+  const zero = bumpWaterMl(one, -237);
+  assert.equal(zero.waterMl, 0, 'tapped down to zero is a real, user-made zero — and it stays');
 });
 
 test('ruling A: a day without water survives the round trip without growing a zero', async () => {
@@ -240,8 +244,9 @@ test('a failed tap announces, paints nothing, fabricates nothing; Retry complete
   assert.ok(btn);
   assert.equal(btn.getAttribute('aria-pressed'), 'false');
 
-  const waterCount = main.querySelector('.count');
-  assert.equal(waterCount.textContent, '—', 'unlogged water reads as "—", not 0');
+  const waterAmount = main.querySelector('#water-amount');
+  assert.equal(waterAmount.value, '', 'unlogged water reads as empty, not 0');
+  assert.equal(waterAmount.placeholder, '—', 'and the empty box says so');
 
   // Injected failure: the storage connection dies under the app.
   db.close();

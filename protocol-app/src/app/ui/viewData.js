@@ -5,6 +5,7 @@ import { h, clear } from './dom.js';
 import * as store from '../store.js';
 import { localDateKey, nowIso } from '../../lib/core.js';
 import { STORES } from '../../lib/schema.js';
+import { unitsOf } from '../../lib/units.js';
 import { guarded } from './announcer.js';
 
 const STORE_LABELS = {
@@ -130,6 +131,43 @@ export async function viewData({ applyTheme }) {
           ['auto', 'light', 'dark'].map((t) =>
             h('option', { value: t, selected: (themeSetting?.value ?? 'auto') === t },
               t === 'auto' ? 'Match device' : t[0].toUpperCase() + t.slice(1)),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  /* ------------------------------- units ------------------------------- */
+  // K2: one global setting, imperial by default. It changes how numbers READ,
+  // never what is stored — volumes live in millilitres underneath, so flipping
+  // this re-reads history instead of reinterpreting it.
+  const unitsSetting = await store.getSetting('ui.units');
+  let persistedUnits = unitsOf(unitsSetting);
+  root.append(
+    h('div.card', {},
+      h('div.card-head', {}, h('h2', {}, 'Units')),
+      h('p.muted', {}, 'How amounts are shown. Your records are stored in one form underneath, so switching this changes the reading, never the history.'),
+      h('div.field', {},
+        h('label', { for: 'units' }, 'Measurements'),
+        h('select', {
+          id: 'units',
+          onchange: (e) => {
+            const chosen = e.target.value;
+            guarded(
+              () => store.putSetting({ key: 'ui.units', value: chosen, updatedAt: nowIso() }),
+              {
+                what: 'The units change',
+                onOk: () => { persistedUnits = chosen; },
+                onFail: () => { e.target.value = persistedUnits; },
+              },
+            );
+          },
+        },
+          [
+            ['imperial', 'US — ounces, pounds'],
+            ['metric', 'Metric — millilitres, kilograms'],
+          ].map(([value, label]) =>
+            h('option', { value, selected: persistedUnits === value }, label),
           ),
         ),
       ),

@@ -10,6 +10,7 @@ import { nowIso, localDateKey } from '../lib/core.js';
 import {
   openDb,
   put,
+  mutate,
   getOne,
   getAll,
   removeOne,
@@ -75,6 +76,40 @@ export async function saveDay(day) {
   const db = await ready();
   await put(db, STORES.DAYS, day);
   return day;
+}
+
+// Day writes run one at a time, in the order the taps happened. IndexedDB
+// serialises overlapping readwrite transactions on its own; this chain also
+// keeps the ORDER honest, so the last tap is the one that stands.
+let dayQueue = Promise.resolve();
+
+/**
+ * Change today's record safely: read and write in one transaction, behind the
+ * queue. `change(day)` gets the normalized record and returns its successor
+ * (or the same object to write nothing new).
+ *
+ * Every tracker write on Today goes through here rather than load-then-save,
+ * because seventeen quick taps must be seventeen recorded taps.
+ */
+export function mutateDay(date, change) {
+  const run = dayQueue.then(async () => {
+    const db = await ready();
+    let result;
+    await mutate(db, STORES.DAYS, date, (raw) => {
+      const current = normalizeDay(raw, date);
+      const next = change(current);
+      result = next;
+      // An op that returns its input means "nothing to record" — a minus-tap
+      // on an unlogged tally, say. Writing anyway would stamp a record into
+      // existence that the person never made (ruling A).
+      return next === current ? undefined : next;
+    });
+    return result;
+  });
+  // The queue must survive a failed write — one rejected tap cannot wedge
+  // every tap after it.
+  dayQueue = run.catch(() => {});
+  return run;
 }
 
 /* ----------------------------- settings ------------------------------ */

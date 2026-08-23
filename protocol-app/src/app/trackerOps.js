@@ -14,6 +14,7 @@
 // counts survive export → wipe → import like everything else.
 
 import { newId, nowIso } from '../lib/core.js';
+import { legacyGlassesToMl } from '../lib/units.js';
 
 function clone(x) {
   return structuredClone(x);
@@ -22,7 +23,7 @@ function clone(x) {
 /* ----------------------------- day record ---------------------------- */
 
 /** A fresh, empty record for a local date key ('YYYY-MM-DD').
- *  No `water` field: absence means "never logged" (ruling A, Aug 18 2026).
+ *  No `waterMl` field: absence means "never logged" (ruling A, Aug 18 2026).
  *  A zero enters a record only when the person's own taps put it there. */
 export function blankDay(date) {
   return { date, checks: {}, food: [], updatedAt: nowIso() };
@@ -34,11 +35,24 @@ export function normalizeDay(day, date) {
   d.date = d.date ?? date;
   d.checks = d.checks ?? {};
   d.food = Array.isArray(d.food) ? d.food : [];
-  // Ruling A: absent stays absent. Coercing a missing count into 0 is the
+  // A day record written by v0.2 counts water in "glasses". Adopt it into
+  // millilitres here — the same conversion the schema-2 rung uses — so a day
+  // that arrives through an old backup import reads the same as one that was
+  // in the database at upgrade time. The provenance rides along: a converted
+  // number is never presented as one the person logged.
+  if (Number.isFinite(d.water) && !Number.isFinite(d.waterMl)) {
+    d.waterMl = legacyGlassesToMl(d.water);
+    d.waterFromGlasses = d.water;
+  }
+  delete d.water;
+  // Ruling A: absent stays absent. Coercing a missing volume into 0 is the
   // exact bug class this law exists to kill — an unlogged day is not a
   // zero-water day. A stored, finite number (including a real 0 the person
   // tapped down to) passes through untouched; anything else is absence.
-  if (!Number.isFinite(d.water)) delete d.water;
+  if (!Number.isFinite(d.waterMl)) {
+    delete d.waterMl;
+    delete d.waterFromGlasses;
+  }
   return d;
 }
 
@@ -79,16 +93,30 @@ export function removeFood(day, foodId) {
   return d;
 }
 
-/** Water is a simple tally of glasses — the record itself, not a target.
+/** Water is a volume the person drank — the record itself, not a target.
+ *  Stored in millilitres whatever the screen reads (K2); `deltaMl` is one
+ *  tap's worth, from units.js.
+ *
  *  Three-state (ruling A): before the first tap there is no number at all.
  *  A minus-tap on nothing stays nothing — it does not invent an explicit 0.
- *  Once tapped, the count is real; tapping down to 0 stores a true, user-made
- *  zero, which is a different fact from "never logged". */
-export function bumpWater(day, delta) {
-  const has = Number.isFinite(day.water);
-  if (!has && delta <= 0) return day; // nothing logged; nothing to lower
+ *  Once tapped, the volume is real; tapping down to 0 stores a true,
+ *  user-made zero, which is a different fact from "never logged". */
+export function bumpWaterMl(day, deltaMl) {
+  const has = Number.isFinite(day.waterMl);
+  if (!has && deltaMl <= 0) return day; // nothing logged; nothing to lower
   const d = clone(day);
-  d.water = Math.max(0, (has ? d.water : 0) + delta);
+  d.waterMl = Math.max(0, (has ? d.waterMl : 0) + deltaMl);
+  d.updatedAt = nowIso();
+  return d;
+}
+
+/** The typed total, in ml. `undefined` clears the day back to never-logged —
+ *  emptying the box is a correction, not a zero. */
+export function setWaterMl(day, ml) {
+  const d = clone(day);
+  if (ml === undefined) delete d.waterMl;
+  else d.waterMl = Math.max(0, Math.round(ml));
+  delete d.waterFromGlasses; // a typed number is logged, not derived
   d.updatedAt = nowIso();
   return d;
 }

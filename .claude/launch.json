@@ -22,6 +22,30 @@
         "--host"
       ],
       "port": 4173
+    },
+    {
+      "name": "protocol-app",
+      "runtimeExecutable": "C:/Program Files/nodejs/node.exe",
+      "runtimeArgs": [
+        "node_modules/vite/bin/vite.js",
+        "protocol-app",
+        "--port",
+        "5175"
+      ],
+      "port": 5175
+    },
+    {
+      "name": "protocol-app-static",
+      "runtimeExecutable": "C:/Program Files/nodejs/node.exe",
+      "runtimeArgs": [
+        "node_modules/vite/bin/vite.js",
+        "preview",
+        "--outDir",
+        "protocol-app",
+        "--port",
+        "5176"
+      ],
+      "port": 5176
     }
   ]
 }

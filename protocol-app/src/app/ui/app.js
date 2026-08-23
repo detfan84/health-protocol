@@ -16,6 +16,8 @@ import { viewEditor } from './viewEditor.js';
 import { viewSupply } from './viewSupply.js';
 import { viewData } from './viewData.js';
 import { surfacePastFailures, installGlobalNet, plainReason } from './announcer.js';
+import { hhmm } from '../todayModel.js';
+import { localDateKey } from '../../lib/core.js';
 
 const TABS = [
   { id: 'today', label: 'Today' },
@@ -24,7 +26,9 @@ const TABS = [
   { id: 'data', label: 'Data' },
 ];
 
-const state = { tab: 'today', editingId: null };
+// todayStamp: what the Today screen was drawn for — the date, and the next
+// moment its grouping changes. Set by viewToday, read by watchForStaleScreen.
+const state = { tab: 'today', editingId: null, todayStamp: null, currentView: null };
 
 export function applyTheme(value) {
   const el = document.documentElement;
@@ -70,6 +74,10 @@ function paintOpenFailure(error) {
 async function render() {
   const main = document.querySelector('main');
   try {
+    // Let the outgoing screen put its house in order — flush anything typed,
+    // drop the page-level listeners it added.
+    if (typeof state.currentView?._beforeUnmount === 'function') state.currentView._beforeUnmount();
+    state.currentView = null;
     clear(main);
 
     let view;
@@ -88,11 +96,18 @@ async function render() {
     } else if (state.tab === 'data') {
       view = await viewData({ applyTheme });
     } else {
-      view = await viewToday({ reload: () => render() });
+      view = await viewToday({
+        reload: () => render(),
+        stamp: (s) => { state.todayStamp = s; },
+      });
     }
     main.append(view);
+    state.currentView = view;
     renderTabs();
-    window.scrollTo(0, 0);
+    // A view may want the screen somewhere other than the top — Today opens on
+    // the block you are actually in, not on the first block of the morning.
+    if (typeof view._afterMount === 'function') view._afterMount();
+    else window.scrollTo(0, 0);
   } catch (error) {
     console.error('[protocol-app] render failed:', error);
     paintRenderFailure(main, error);
@@ -131,7 +146,28 @@ export async function init() {
   });
   applyTheme(theme?.value ?? 'auto');
   await render();
+  watchForStaleScreen();
   surfacePastFailures();
+}
+
+/**
+ * A phone comes back from a pocket hours later showing breakfast at dinner
+ * time. Today tells us the moment it stops being true — the next block edge —
+ * and the date it was drawn for; when either has passed, redraw.
+ *
+ * Deliberately narrow: it redraws when the day has actually moved on, not on
+ * every glance, because a redraw costs whatever is half-typed on screen.
+ */
+function watchForStaleScreen() {
+  if (typeof document.addEventListener !== 'function') return;
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible') return;
+    if (state.tab !== 'today') return;
+    const s = state.todayStamp;
+    if (!s) return;
+    const stale = s.date !== localDateKey() || (s.nextBoundaryHM && hhmm() >= s.nextBoundaryHM);
+    if (stale) render();
+  });
 }
 
 if (typeof document !== 'undefined' && document.querySelector) {

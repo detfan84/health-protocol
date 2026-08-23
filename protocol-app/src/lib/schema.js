@@ -9,8 +9,10 @@
 //      migration ladder. Web updates replace code, never data.
 //   5. Phases are optional. Multiple protocols may be active at once.
 
+import { legacyGlassesToMl } from './units.js';
+
 export const DB_NAME = 'protocol-app';
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 // Published file format identifier — shared by backups, gallery/module
 // fragments, and AI-produced imports (the deep-dive and lab doors).
@@ -36,6 +38,33 @@ export const MIGRATIONS = [
       db.createObjectStore(STORES.SETTINGS, { keyPath: 'key' });
     },
   },
+  {
+    // Water stops being counted in "glasses" and starts being a volume
+    // (decision K2). Storage is canonical ml; the screen reads oz or ml.
+    //
+    // Old records are converted, not discarded, at 1 glass = 8 fl oz — and
+    // every converted record keeps `waterFromGlasses`, because a derived
+    // number that cannot be told apart from a logged one is exactly the kind
+    // of quiet lie decision 24 exists to prevent.
+    to: 2,
+    run(db, transaction) {
+      const days = transaction.objectStore(STORES.DAYS);
+      const cursorReq = days.openCursor();
+      cursorReq.onsuccess = () => {
+        const cursor = cursorReq.result;
+        if (!cursor) return;
+        const rec = cursor.value;
+        if (Number.isFinite(rec?.water) && !Number.isFinite(rec?.waterMl)) {
+          const glasses = rec.water;
+          rec.waterMl = legacyGlassesToMl(glasses);
+          rec.waterFromGlasses = glasses;
+          delete rec.water;
+          cursor.update(rec);
+        }
+        cursor.continue();
+      };
+    },
+  },
 ];
 
 /* ------------------------------------------------------------------ *
@@ -54,7 +83,11 @@ export const MIGRATIONS = [
  * DayRecord {
  *   date 'YYYY-MM-DD' (local),                         // the key
  *   checks:  { [itemId]: { at: ISO } }                 // check-offs point at item IDs
- *   journal?, food: [ { id, at, text } ], water?: number,  // absent = never logged (ruling A); 0 only ever user-made
+ *   journal?, food: [ { id, at, text } ],
+ *   waterMl?: number,          // canonical millilitres; absent = never logged
+ *                              // (ruling A); 0 only ever user-made
+ *   waterFromGlasses?: number, // provenance: converted from a v0.2 "glasses"
+ *                              // count by the schema-2 rung, not logged
  *   checkIn?: { [metricId]: number|string },
  *   updatedAt
  * }

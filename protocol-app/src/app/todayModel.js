@@ -67,19 +67,33 @@ function itemVisible(item, phase) {
 }
 
 /**
- * buildToday({ protocols, phaseSettings, now })
+ * buildToday({ protocols, phaseSettings, now, day })
  *   protocols:     all protocols (inactive ones are ignored here)
  *   phaseSettings: { [protocolId]: settingsRecord } — may be empty
  *   now:           Date (injected for testability)
+ *   day:           today's record, for sorting done from not-done — optional;
+ *                  without it everything is simply not-done yet
  * →
  * {
  *   blocks: [ { protocolId, protocolName, blockId, name, start?, end?,
- *               isNow, items: [item…] } ]   // sorted for display
+ *               when: 'now'|'past'|'later'|'anytime', isNow, items: [item…] } ]
+ *   groups: { now, missed, anytime, later, done }   // see below
  *   phasedProtocols: [ { protocolId, protocolName, phases, current } ]
  *   multipleActive: bool                     // show protocol names on blocks?
  * }
+ *
+ * The groups are the screen (PLAN §5): what is due now, what was missed
+ * earlier, what is due sometime today, what is still coming, and what is
+ * already done. Each group is a list of { …block, items } where `items` is
+ * only the part of the block that belongs in that group, so an item appears
+ * exactly once. A block with nothing left to show does not appear at all.
+ *
+ * `missed` is unchecked items whose block window has closed (R16, Kevin
+ * Aug 22 — the answer to K4: a missed item stays on screen and stays
+ * tappable). Nothing here counts, scores or scolds — a missed item is one
+ * you can still do, listed where you can find it.
  */
-export function buildToday({ protocols, phaseSettings = {}, now = new Date() }) {
+export function buildToday({ protocols, phaseSettings = {}, now = new Date(), day = null }) {
   const active = (protocols ?? []).filter((p) => p.active === true);
   const nowHM = hhmmOfDate(now);
 
@@ -119,17 +133,66 @@ export function buildToday({ protocols, phaseSettings = {}, now = new Date() }) 
 
   // "Now": window contains the current time. A block with no end runs until
   // the next timed block starts (or end of day for the last one).
+  //
+  // Real protocols overlap — a 05:00–07:00 block and a 06:00–08:00 block are
+  // both genuinely open at 06:30 — so more than one block can be now. That is
+  // the truth, and the screen groups them together under one heading rather
+  // than tagging two cards "Now" and leaving the person to guess which.
   for (let i = 0; i < timed.length; i++) {
     const b = timed[i];
     const effectiveEnd = b.end ?? timed[i + 1]?.start ?? '24:00';
-    b.isNow = b.start <= nowHM && nowHM < effectiveEnd;
+    if (b.start <= nowHM && nowHM < effectiveEnd) b.when = 'now';
+    else if (effectiveEnd <= nowHM) b.when = 'past';
+    else b.when = 'later';
+    b.isNow = b.when === 'now';
+  }
+  for (const b of untimed) {
+    b.when = 'anytime';
+    b.isNow = false;
+  }
+
+  const ordered = [...timed, ...untimed];
+  const checked = (it) => Boolean(day?.checks?.[it.id]);
+  const part = (block, items) => ({ ...block, items });
+  const groups = { now: [], missed: [], anytime: [], later: [], done: [] };
+
+  for (const b of ordered) {
+    const open = b.items.filter((it) => !checked(it));
+    const done = b.items.filter(checked);
+    if (open.length) {
+      // 'past' with items left is the missed group — same items, found where
+      // a person would look for them rather than hidden as a punishment.
+      const key = b.when === 'past' ? 'missed' : b.when;
+      groups[key].push(part(b, open));
+    }
+    if (done.length) groups.done.push(part(b, done));
+  }
+
+  // When does this screen stop being true? The earliest moment a block opens
+  // or the current one closes — so a phone left on the counter can notice it
+  // has gone stale instead of showing breakfast at dinner time.
+  let nextBoundaryHM = null;
+  for (let i = 0; i < timed.length; i++) {
+    const b = timed[i];
+    const effectiveEnd = b.end ?? timed[i + 1]?.start ?? '24:00';
+    const edge = b.when === 'later' ? b.start : b.when === 'now' ? effectiveEnd : null;
+    if (edge && edge > nowHM && (nextBoundaryHM === null || edge < nextBoundaryHM)) {
+      nextBoundaryHM = edge;
+    }
   }
 
   return {
-    blocks: [...timed, ...untimed],
+    blocks: ordered,
+    groups,
+    nextBoundaryHM,
     phasedProtocols,
     multipleActive: active.length > 1,
   };
+}
+
+/** 'HH:MM' for a Date, in local time — the clock the blocks are written in. */
+export function hhmm(d = new Date()) {
+  return hhmmOfDate(d);
 }
 
 /* --------------------------- movement prompts ------------------------ */

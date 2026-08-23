@@ -99,6 +99,46 @@ export function getOne(db, store, key) {
   return read(db, store, 'Loading', (os) => os.get(key));
 }
 
+/**
+ * Read a record and write its successor inside ONE transaction.
+ *
+ * Why this exists: a check-off is read-modify-write, and a morning is
+ * seventeen of them as fast as a thumb moves. Done as separate read and write
+ * transactions, two taps that overlap both read the same record and the
+ * second write erases the first — a tap that painted green and did not
+ * happen. That is precisely the silent failure decision 24 forbids, so the
+ * whole cycle happens where the database can serialise it.
+ *
+ * `change(current)` is called with the stored record (undefined if none) and
+ * must return the record to store, synchronously — an await inside would let
+ * the transaction close underneath it. Returning undefined writes nothing.
+ */
+export function mutate(db, store, key, change) {
+  let out;
+  let thrown = null;
+  return tx(db, [store], 'readwrite', (t) => {
+    const os = t.objectStore(store);
+    const req = os.get(key);
+    req.onsuccess = () => {
+      try {
+        out = change(req.result);
+        if (out !== undefined) os.put(out);
+      } catch (err) {
+        // A throw inside a database event handler aborts the transaction and
+        // is then lost — the caller would hear "transaction aborted" and never
+        // the real reason. Keep it and re-throw it once the abort has landed,
+        // so the announcer says what actually went wrong (ruling B).
+        thrown = err;
+        try { t.abort(); } catch { /* already aborting */ }
+      }
+    };
+    return null;
+  }, 'Saving').then(
+    () => out,
+    (err) => { throw thrown ?? err; },
+  );
+}
+
 export function getAll(db, store) {
   return read(db, store, 'Loading', (os) => os.getAll());
 }

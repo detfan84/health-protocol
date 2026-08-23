@@ -135,8 +135,14 @@ export async function viewEditor({ protocolId, done }) {
               type: 'text', value: it.why ?? '', placeholder: 'What this piece is pushing on',
               oninput: (e) => apply(updateItem(working, b.id, it.id, { why: e.target.value })),
             })),
-            field('Notes (optional)', h('input', {
-              type: 'text', value: it.notes ?? '',
+            // A textarea, not an input: notes are the how-to — several
+            // paragraphs, including the "never take this without food" lines.
+            // A text input silently strips every newline the moment the field
+            // is written, so opening an item to fix a dose used to flatten its
+            // instructions permanently. Records outlive plans; instructions
+            // have to survive an edit.
+            field('Notes (optional) — the how-to, as many paragraphs as it takes', h('textarea', {
+              rows: '4', value: it.notes ?? '',
               oninput: (e) => apply(updateItem(working, b.id, it.id, { notes: e.target.value })),
             })),
             chips,
