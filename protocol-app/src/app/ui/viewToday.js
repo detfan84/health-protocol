@@ -665,10 +665,39 @@ export async function viewToday({ reload, stamp, date: viewing } = {}) {
 
   function renderBlocks(t) {
     if (t.blocks.length === 0) {
-      const card = h('div.card', {},
-        h('p.muted', {}, 'Nothing active yet. Build a protocol — or bring one in — in Protocols.'),
+      // An empty screen must offer the way out of being empty. This used to
+      // say "build a protocol, or bring one in" and point at another tab —
+      // a dead end for anybody who just opened the app, and the exact screen
+      // that made it look like there was nothing here.
+      blocksHost.append(
+        h('div.card', {},
+          h('h2', {}, 'Nothing on today yet'),
+          h('p.muted', {}, 'The app comes with a day to follow: two short routines, the body-work library, daily practices and a strength routine. Add them and Today fills in.'),
+          h('button.btn.primary', {
+            style: 'width:100%',
+            onclick: (e) => {
+              const btn = e.currentTarget;
+              btn.disabled = true;
+              guarded(
+                async () => {
+                  const res = await fetch(new URL('../../content/starter.json', import.meta.url));
+                  if (!res.ok) throw new Error(`starter content: HTTP ${res.status}`);
+                  const out = await store.importFile(await res.text());
+                  if (!out.ok) throw new Error(out.errors?.map((x) => x.message).join('; ') || 'invalid');
+                  await store.putSetting({ key: 'seed.applied', value: 'v1-by-hand', at: nowIso() });
+                  return out;
+                },
+                {
+                  what: 'Adding the starter content',
+                  onOk: () => reload?.(),
+                  onFail: () => { btn.disabled = false; },
+                },
+              );
+            },
+          }, 'Add what the app comes with'),
+          h('p.muted', {}, 'Or build your own, or import a file, in Protocols.'),
+        ),
       );
-      blocksHost.append(card);
       return;
     }
     // The order is the day as it is lived: what is open right now, what is

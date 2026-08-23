@@ -7,6 +7,7 @@ import { localDateKey, nowIso } from '../../lib/core.js';
 import { STORES } from '../../lib/schema.js';
 import { unitsOf } from '../../lib/units.js';
 import { disclaimerBody } from './viewDisclaimer.js';
+import { BUILD } from '../../lib/build.js';
 import { remindersCard } from './viewReminders.js';
 import { guarded } from './announcer.js';
 
@@ -296,6 +297,46 @@ export async function viewData({ applyTheme }) {
           ),
         ),
       ),
+    ),
+  );
+
+  /* ------------------------------ version ------------------------------ */
+  // Two questions this answers, both of which came up the hard way: which
+  // version is this phone actually running, and how do I make it not be an
+  // old one. A phone can sit on cached code for days and look identical.
+  const swInfo = 'serviceWorker' in navigator
+    ? await navigator.serviceWorker.getRegistration().catch(() => null)
+    : null;
+  root.append(
+    h('div.card', {},
+      h('div.card-head', {}, h('h2', {}, 'Version')),
+      h('p.tech', {}, BUILD),
+      h('p.muted', {},
+        swInfo?.active
+          ? 'Offline support is on, which means this device keeps a copy of the app. If the screen looks older than it should, use the button below.'
+          : 'Offline support is not running on this device yet.'),
+      h('button.btn', {
+        style: 'width:100%',
+        onclick: async (e) => {
+          const btn = e.currentTarget;
+          btn.disabled = true;
+          btn.textContent = 'Fetching the latest…';
+          try {
+            // Everything a stale phone can be holding: the worker, its caches,
+            // and the browser's own copy of each file. User data is in
+            // IndexedDB and is not touched by any of this.
+            for (const reg of await navigator.serviceWorker?.getRegistrations?.() ?? []) {
+              await reg.unregister();
+            }
+            for (const key of await caches?.keys?.() ?? []) await caches.delete(key);
+          } catch (err) {
+            console.error('[protocol-app] could not clear the cached app:', err);
+          }
+          // Cache-busted, so the reload cannot come back from the same copy.
+          location.replace(`${location.pathname}?fresh=${Date.now()}`);
+        },
+      }, 'Get the latest version'),
+      h('p.muted', {}, 'This only replaces the app’s code. Your protocols, records and settings are untouched.'),
     ),
   );
 

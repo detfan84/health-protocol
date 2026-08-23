@@ -8,7 +8,8 @@
 //
 // This is a copy, not a build. Nothing is compiled, minified or transformed.
 
-import { cp, rm, mkdir } from 'node:fs/promises';
+import { cp, rm, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { execSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -34,6 +35,23 @@ await mkdir(dist, { recursive: true });
 for (const entry of SHIPPED) {
   await cp(resolve(appDir, entry), resolve(dist, entry), { recursive: true });
 }
+// Stamp the build. Every deploy gets an identifier the app can show and a
+// cache name the service worker cannot confuse with the last one — the two
+// things that make "it looks the same on my phone" answerable.
+const stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 13) + 'Z';
+let sha = '';
+try {
+  sha = execSync('git rev-parse --short HEAD', { cwd: appDir }).toString().trim();
+} catch { /* not a git checkout; the timestamp alone still identifies it */ }
+const build = sha ? `${stamp}-${sha}` : stamp;
+
+const buildFile = resolve(dist, 'src/lib/build.js');
+await writeFile(buildFile, (await readFile(buildFile, 'utf8')).replace("export const BUILD = 'dev';", `export const BUILD = '${build}';`));
+
+const swFile = resolve(dist, 'sw.js');
+await writeFile(swFile, (await readFile(swFile, 'utf8')).replace("const CACHE = 'protocol-shell';", `const CACHE = 'shell-${build}';`));
+console.log(`stamped build ${build}`);
+
 // Fail closed: a missing file here means a deploy that half-works, which is
 // worse than one that stops.
 for (const entry of SHIPPED) {

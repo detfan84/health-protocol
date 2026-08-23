@@ -256,8 +256,22 @@ function askToKeepTheData() {
 function registerWorker() {
   if (!('serviceWorker' in navigator)) return;
   if (location.protocol !== 'https:' && location.hostname !== 'localhost') return;
+  // When a new worker takes over, the page in front of the person is still the
+  // old one. Reload once, so a deploy actually arrives instead of waiting for
+  // them to close every tab — which on a phone means never.
+  let reloading = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (reloading) return;
+    reloading = true;
+    location.reload();
+  });
   navigator.serviceWorker
     .register(new URL('../../../sw.js', import.meta.url), { scope: './' })
+    .then((reg) => {
+      // Ask on every launch. A phone that sits on an old copy for days is the
+      // failure this whole path exists to prevent.
+      reg.update?.().catch(() => undefined);
+    })
     .catch((e) => console.error('[protocol-app] offline support unavailable:', e));
 }
 
