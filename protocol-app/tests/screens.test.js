@@ -351,3 +351,47 @@ test('sets and reps are recorded, shown back, and survive an un-tick', async () 
   assert.equal(day.checks['ex-squat'], undefined, 'the tick came off');
   assert.equal(day.log['ex-squat'].sets[0].reps, 12, 'and the work you wrote down is still there');
 });
+
+test('the library is comprehensive, merged, and every item can be picked up', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const text = await readFile(new URL('../src/content/library.json', import.meta.url), 'utf8');
+  const lib = JSON.parse(text);
+
+  // The point of the app: a large shelf people self-select from, not a
+  // curated day for one person (Kevin, 23 Aug).
+  assert.ok(lib.items.length >= 250, `the library should be comprehensive, got ${lib.items.length}`);
+
+  const kinds = {};
+  for (const it of lib.items) kinds[it.kind] = (kinds[it.kind] ?? 0) + 1;
+  for (const kind of ['exercise', 'stretch', 'bodywork', 'practice', 'selftest']) {
+    assert.ok(kinds[kind] >= 10, `${kind}: only ${kinds[kind] ?? 0} — a filter with nothing behind it is worse than no filter`);
+  }
+
+  // Merged, not discarded: a name that exists in two source files keeps what
+  // both knew, and does not vanish from its own category.
+  const names = lib.items.map((i) => i.name.toLowerCase());
+  assert.equal(new Set(names).size, names.length, 'the same movement must not appear twice');
+  const dog = lib.items.find((i) => /downward dog/i.test(i.name));
+  assert.ok(dog, 'a stretch that also exists in the exercise library survives as itself');
+  assert.equal(dog.kind, 'stretch');
+  assert.ok(dog.fields?.release, 'and keeps its how-to');
+
+  // Everything a person can pick has enough to act on.
+  for (const it of lib.items) {
+    assert.ok(it.id && it.name, 'every item is identifiable');
+    assert.ok(it.kind, `${it.name} has no kind`);
+    const actionable = it.fields?.release || it.why || it.levels?.length;
+    assert.ok(actionable, `${it.name} says nothing about what to do`);
+  }
+
+  // Searchable by the things people actually search by.
+  assert.ok(new Set(lib.items.flatMap((i) => i.muscles ?? [])).size >= 40, 'muscles to filter by');
+  assert.ok(new Set(lib.items.map((i) => i.equipment).filter(Boolean)).size >= 10, 'equipment to filter by');
+
+  // And no brand-name supplement content or one person's laterality, same as
+  // the shipped day (decision 3).
+  const blob = text.toLowerCase();
+  for (const word of ['rho ', 'boost blenz', 'the right hip', 'surgically altered']) {
+    assert.equal(blob.includes(word), false, `the library must not carry "${word}"`);
+  }
+});

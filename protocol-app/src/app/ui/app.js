@@ -16,6 +16,7 @@ import { viewEditor } from './viewEditor.js';
 import { viewSupply } from './viewSupply.js';
 import { viewData } from './viewData.js';
 import { viewSession } from './viewSession.js';
+import { viewLibrary } from './viewLibrary.js';
 import { viewDisclaimer, accepted } from './viewDisclaimer.js';
 import { surfacePastFailures, installGlobalNet, plainReason } from './announcer.js';
 import { recordFailure } from '../failLog.js';
@@ -24,7 +25,8 @@ import { localDateKey, nowIso } from '../../lib/core.js';
 
 const TABS = [
   { id: 'today', label: 'Today' },
-  { id: 'protocols', label: 'Protocols' },
+  { id: 'library', label: 'Library' },
+  { id: 'protocols', label: 'Plans' },
   { id: 'supply', label: 'Supply' },
   { id: 'data', label: 'Data' },
 ];
@@ -119,6 +121,8 @@ async function render() {
         openEditor: (id) => { state.editingId = id; render(); },
         reload: () => render(),
       });
+    } else if (state.tab === 'library') {
+      view = await viewLibrary({ reload: () => render() });
     } else if (state.tab === 'supply') {
       view = await viewSupply();
     } else if (state.tab === 'data') {

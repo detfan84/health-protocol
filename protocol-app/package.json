@@ -8,8 +8,9 @@
     "convert": "node scripts/convert-legacy.mjs",
     "icons": "node scripts/make-icons.mjs",
     "content": "node scripts/build-content.mjs",
+    "library": "node scripts/build-library.mjs",
     "stage": "node scripts/stage-dist.mjs",
-    "deploy": "node scripts/stage-dist.mjs && wrangler deploy"
+    "deploy": "node scripts/build-content.mjs && node scripts/build-library.mjs && node scripts/stage-dist.mjs && wrangler deploy"
   },
   "devDependencies": {
     "fake-indexeddb": "^6.2.5",

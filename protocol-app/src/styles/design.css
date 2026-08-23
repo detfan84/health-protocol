@@ -207,6 +207,16 @@ label { display: block; font-size: var(--fs-sm); color: var(--ink-muted); margin
 .field-row { display: flex; gap: var(--sp-2); }
 .field-row > * { flex: 1; min-width: 0; }
 
+/* the library */
+details.lib-item { padding: var(--sp-3); }
+details.lib-item > summary {
+  cursor: pointer; min-height: var(--tap);
+  display: flex; flex-direction: column; justify-content: center;
+}
+details.lib-item > summary .name { font-size: var(--fs-md); }
+details.lib-item[open] > summary { margin-bottom: var(--sp-2); }
+nav.tabs button { font-size: var(--fs-sm); padding: 0 2px; }
+
 /* the session player — one thing at a time */
 .session { padding-bottom: var(--sp-6); }
 .session-top { display: flex; justify-content: space-between; align-items: center; gap: var(--sp-2); }
