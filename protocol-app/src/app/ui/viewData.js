@@ -7,6 +7,7 @@ import { localDateKey, nowIso } from '../../lib/core.js';
 import { STORES } from '../../lib/schema.js';
 import { unitsOf } from '../../lib/units.js';
 import { disclaimerBody } from './viewDisclaimer.js';
+import { remindersCard } from './viewReminders.js';
 import { guarded } from './announcer.js';
 
 const STORE_LABELS = {
@@ -75,6 +76,31 @@ export async function viewData({ applyTheme }) {
       exportNote,
     ),
   );
+
+  /* -------------------------- home screen ------------------------------ */
+  // Shown only in a browser tab, because that is the only place it is useful.
+  //
+  // Two things hang off installing on iPhone, and neither is obvious: an
+  // installed app is the only place the browser will consider keeping your
+  // data indefinitely, and it is the only place a notification can ever
+  // arrive while the app is closed. iOS gives a page no way to offer the
+  // install, so the honest move is to say the steps plainly, once.
+  //
+  // The warning matters more than the pitch: a Home Screen app and a Safari
+  // tab do not share storage. Somebody who builds a protocol in a tab and
+  // then installs opens an empty app and thinks they lost everything.
+  const standalone = typeof window.matchMedia === 'function'
+    && (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true);
+  if (!standalone) {
+    root.append(
+      h('div.card', {},
+        h('div.card-head', {}, h('h2', {}, 'Put it on your home screen')),
+        h('p.muted', {}, 'On iPhone: the Share button, then "Add to Home Screen". On Android: the browser menu, then "Install app" or "Add to Home screen".'),
+        h('p.muted', {}, 'It opens like an app, works with no signal, and it is the only version a phone will keep long-term or ever notify you from.'),
+        h('p.muted', {}, h('strong', {}, 'Before you do: export a backup and import it into the installed app.'), ' The installed app has its own separate storage — anything entered here in the browser will not be there.'),
+      ),
+    );
+  }
 
   /* --------------------------- storage state --------------------------- */
   // Whether the browser has actually promised to keep this, said plainly.
@@ -148,6 +174,9 @@ export async function viewData({ applyTheme }) {
       results,
     ),
   );
+
+  /* ---------------------------- reminders ----------------------------- */
+  root.append(await remindersCard());
 
   /* ---------------------------- appearance ---------------------------- */
   const themeSetting = await store.getSetting('ui.theme');
