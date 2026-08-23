@@ -17,7 +17,8 @@
 // (Automatic advancing by phase length is the next foundation item on the
 // roadmap, not this session; the stored startedAt is what it will need.)
 
-import { dueToday } from '../lib/cadence.js';
+import { dueToday, daysBetween, addDays } from '../lib/cadence.js';
+import { dateKeyFromIso } from '../lib/core.js';
 import { unavailableReason } from './trackerOps.js';
 
 /** The local date key for a Date — the same shape core.localDateKey uses. */
@@ -53,9 +54,69 @@ export function makePhaseSetting(protocolId, phaseId, startedAt, nowIsoStr) {
     key: phaseKey(protocolId),
     protocolId,
     phaseId,
-    startedAt, // local date key — what auto-advance will count from
+    startedAt, // local date key — what auto-advance counts from
     updatedAt: nowIsoStr,
   };
+}
+
+/**
+ * Where a phased protocol has got to by `today` (decision 14).
+ *
+ * A phase with a length runs out; the next one starts the day after it does.
+ * Nobody should have to remember to move the pointer along — a twelve-week
+ * plan that still says "week one" in March is a plan the app has stopped
+ * telling the truth about.
+ *
+ * Pure. It reports where things stand and leaves writing to the caller, so a
+ * screen that merely looks at a past day cannot advance anybody's plan.
+ *
+ * Three deliberate limits:
+ *   - **A phase with no length never expires.** Absence is "not configured",
+ *     not zero (ruling A) — an open-ended phase waits for a person, forever.
+ *   - **The last phase is the end.** It never rolls over or wraps.
+ *   - **It counts from a real date or not at all.** With a stored pointer that
+ *     is its startedAt; without one it is the day the plan was made, which is
+ *     already recorded. Nothing is stamped just to have something to count from.
+ *
+ * → { phase, startedAt, moved } — `moved` is true when the pointer belongs
+ *   somewhere other than where it is stored.
+ */
+export function phaseAsOf(protocol, phaseSetting, today) {
+  const phases = [...(protocol.phases ?? [])].sort((a, b) => a.order - b.order);
+  if (phases.length === 0) return { phase: null, startedAt: null, moved: false };
+
+  let index = phases.findIndex((p) => p.id === phaseSetting?.phaseId);
+  if (index < 0) index = 0; // no pointer, or one pointing at an edited-away phase
+
+  let startedAt = phaseSetting?.startedAt ?? dateKeyFromIso(protocol.createdAt);
+  if (!startedAt || !today) return { phase: phases[index], startedAt, moved: false };
+
+  const from = startedAt;
+  while (index < phases.length - 1) {
+    const length = phases[index].days;
+    if (!Number.isInteger(length) || length <= 0) break;
+    if (daysBetween(startedAt, today) < length) break;
+    // Step by exactly the phase's length rather than to today, so a plan looked
+    // at three weeks late lands on the phase it would have reached anyway, with
+    // its boundaries still where they belong.
+    startedAt = addDays(startedAt, length);
+    index += 1;
+  }
+
+  return {
+    phase: phases[index],
+    startedAt,
+    moved: startedAt !== from || phases[index].id !== phaseSetting?.phaseId,
+  };
+}
+
+/** How the current phase is going — for the screen, never for commentary. */
+export function phaseProgress(phase, startedAt, today) {
+  if (!phase || !startedAt || !today) return null;
+  const elapsed = daysBetween(startedAt, today);
+  if (elapsed < 0) return null;
+  const total = Number.isInteger(phase.days) && phase.days > 0 ? phase.days : null;
+  return { dayNumber: elapsed + 1, total };
 }
 
 /* --------------------------- today building -------------------------- */
@@ -112,18 +173,22 @@ export function buildToday({
 } = {}) {
   const active = (protocols ?? []).filter((p) => p.active === true);
   const nowHM = hhmmOfDate(now);
+  const todayKey = day?.date ?? localDateKeyOf(now);
 
   const phasedProtocols = [];
   const blocks = [];
 
   for (const p of active) {
-    const { phase } = currentPhase(p, phaseSettings[p.id]);
+    // Where the plan has got to, not where the pointer was last left (D14).
+    const { phase, startedAt } = phaseAsOf(p, phaseSettings[p.id], todayKey);
     if ((p.phases ?? []).length > 0) {
       phasedProtocols.push({
         protocolId: p.id,
         protocolName: p.name,
         phases: [...p.phases].sort((a, b) => a.order - b.order),
         current: phase,
+        startedAt,
+        progress: phaseProgress(phase, startedAt, todayKey),
       });
     }
     for (const b of [...(p.blocks ?? [])].sort((a, b) => a.order - b.order)) {
@@ -168,7 +233,6 @@ export function buildToday({
   }
 
   const ordered = [...timed, ...untimed];
-  const todayKey = day?.date ?? localDateKeyOf(now);
   const checked = (it) => Boolean(day?.checks?.[it.id]);
   const part = (block, items) => ({ ...block, items });
   const groups = { now: [], missed: [], anytime: [], later: [], done: [], unavailable: [], asNeeded: [] };

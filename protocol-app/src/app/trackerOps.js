@@ -61,15 +61,119 @@ export function normalizeDay(day, date) {
 }
 
 /**
- * The one tap. Unchecked → checked (with the moment it happened);
- * checked → unchecked. Nothing else changes.
+ * The one tap. Unchecked → checked; checked → unchecked. Nothing else changes.
+ *
+ * What lands in the record is a SNAPSHOT, taken at tap time (decision 20): the
+ * item's name and dose as they were configured when you tapped, and the units
+ * actually taken where a supply dose is configured. Plans get edited — an item
+ * gets renamed, a dose gets halved — and a record that only stores an id reads
+ * a year later as whatever the plan says today. Records outlive plan edits, so
+ * they have to carry their own copy of what they were about.
+ *
+ * `snapshot` may be a plain ISO string, which is the older call shape and still
+ * means "just the moment".
  */
-export function toggleCheck(day, itemId, at = nowIso()) {
+export function toggleCheck(day, itemId, snapshot = {}) {
+  const s = typeof snapshot === 'string' ? { at: snapshot } : (snapshot ?? {});
   const d = clone(day);
-  if (d.checks[itemId]) delete d.checks[itemId];
-  else d.checks[itemId] = { at };
+  if (d.checks[itemId]) {
+    delete d.checks[itemId];
+  } else {
+    const rec = { at: s.at ?? nowIso() };
+    // Every field optional, and absent means "not configured" rather than
+    // empty (ruling A) — a nameless item writes no name, not "".
+    if (s.name) rec.name = String(s.name);
+    if (s.dose) rec.dose = String(s.dose);
+    if (Number.isFinite(s.units)) rec.units = s.units;
+    if (s.unitName) rec.unitName = String(s.unitName);
+    d.checks[itemId] = rec;
+  }
   d.updatedAt = nowIso();
   return d;
+}
+
+/* ------------------------------ supply dose --------------------------- */
+//
+// Decision 22: per item, an optional dose config — how many units one check-off
+// consumes, what a unit is called, and how strong one is. Check-off decrements
+// silently; the units are visible and editable after the tap; un-checking
+// restores exactly. Blank is not zero: an item with no dose configured is not
+// being dose-tracked, and nothing about it moves.
+
+/**
+ * How many units one check-off of this item consumes, or null when it is not
+ * being tracked that way. Both halves are required — a count with no dose is
+ * somebody keeping a number by hand, and a dose with no count has nothing to
+ * come out of.
+ */
+export function doseUnits(supply) {
+  if (!supply) return null;
+  if (!Number.isFinite(supply.unitsPerDose) || supply.unitsPerDose <= 0) return null;
+  if (!Number.isFinite(supply.count)) return null;
+  return supply.unitsPerDose;
+}
+
+/** A supply record with its count moved by `delta`, or undefined if it cannot move. */
+function moveCount(supply, delta) {
+  if (!supply || !Number.isFinite(supply.count) || delta === 0) return undefined;
+  return { ...supply, count: Math.max(0, supply.count + delta), updatedAt: nowIso() };
+}
+
+/**
+ * One tap, with the bottle it comes out of — the pure half of decision 22.
+ *
+ * → { day, supply? } — `supply` present only when the count actually moved.
+ * The caller writes both in one transaction (db.mutateAcross), because a tick
+ * against a bottle that never went down is a record that lies.
+ *
+ * What is deducted is what the count can cover: a bottle that says 1 left
+ * cannot give up a dose of 2, and the honest reading of that is that the count
+ * was wrong, not that the app should invent stock or go negative. The units are
+ * recorded as deducted, so un-checking restores exactly what was taken, and the
+ * editable line after the tap is where somebody says what they really took.
+ */
+export function applyCheckToggle({ day, item, supply, at = nowIso() } = {}) {
+  const existing = day.checks?.[item.id];
+
+  if (existing) {
+    const next = toggleCheck(day, item.id);
+    const back = Number.isFinite(existing.units) ? existing.units : 0;
+    return { day: next, supply: moveCount(supply, back) };
+  }
+
+  const perDose = doseUnits(supply);
+  const snapshot = { at, name: item.name, dose: item.dose };
+  if (perDose !== null) {
+    snapshot.units = Math.min(perDose, supply.count);
+    snapshot.unitName = supply.unitName;
+  }
+  return {
+    day: toggleCheck(day, item.id, snapshot),
+    supply: perDose === null ? undefined : moveCount(supply, -snapshot.units),
+  };
+}
+
+/**
+ * Correct the units on a check that has already happened — "it says two, I took
+ * one." The count moves by the difference, so the bottle and the record stay
+ * in step, and clearing the field means "I am not saying", not zero.
+ */
+export function setCheckUnits({ day, supply, itemId, units } = {}) {
+  const existing = day.checks?.[itemId];
+  if (!existing) return {}; // nothing recorded to correct
+
+  const was = Number.isFinite(existing.units) ? existing.units : 0;
+  const now = Number.isFinite(units) && units >= 0 ? Math.round(units) : null;
+  if (now === was) return {};
+
+  const rec = { ...existing };
+  if (now === null) delete rec.units;
+  else rec.units = now;
+
+  const d = clone(day);
+  d.checks[itemId] = rec;
+  d.updatedAt = nowIso();
+  return { day: d, supply: moveCount(supply, was - (now ?? 0)) };
 }
 
 export function setJournal(day, text) {
@@ -237,24 +341,45 @@ export function supplyKey(itemId) {
  * `name` is a label snapshot so the record stays readable even if the item
  * is later removed from the plan (records outlive plans by design).
  */
-export function makeSupply(itemId, { name, count, note } = {}, existing) {
+export function makeSupply(itemId, { name, count, note, unitsPerDose, unitName, unitStrength } = {}, existing) {
   const rec = existing ? clone(existing) : { key: supplyKey(itemId), itemId };
   if (name !== undefined) rec.name = String(name);
-  if (count !== undefined) {
-    // Careful: Number('') is 0 in JS. A cleared field must mean "not
-    // tracking a number for this" — never a silent "zero on hand".
-    const blank = count === null || String(count).trim() === '';
-    const c = Number(count);
-    if (!blank && Number.isFinite(c) && c >= 0) rec.count = c;
-    else delete rec.count;
-  }
-  if (note !== undefined) {
-    const n = String(note).trim();
-    if (n) rec.note = n;
-    else delete rec.note;
-  }
+
+  // Careful: Number('') is 0 in JS. A cleared field must mean "not tracking a
+  // number for this" — never a silent "zero on hand" (ruling A).
+  const num = (raw, { min = 0 } = {}) => {
+    const blank = raw === null || String(raw).trim() === '';
+    const n = Number(raw);
+    return !blank && Number.isFinite(n) && n >= min ? n : undefined;
+  };
+  const text = (raw) => {
+    const t = String(raw).trim();
+    return t || undefined;
+  };
+  const set = (key, value) => {
+    if (value === undefined) delete rec[key];
+    else rec[key] = value;
+  };
+
+  if (count !== undefined) set('count', num(count));
+  // Zero units per dose is not a dose, so the floor here is 1 rather than 0.
+  if (unitsPerDose !== undefined) set('unitsPerDose', num(unitsPerDose, { min: 1 }));
+  if (unitName !== undefined) set('unitName', text(unitName));
+  if (unitStrength !== undefined) set('unitStrength', text(unitStrength));
+  if (note !== undefined) set('note', text(note));
+
   rec.updatedAt = nowIso();
   return rec;
+}
+
+/** Is this item being supply-tracked at all? Any one field is enough. */
+export function isTracked(supply) {
+  if (!supply) return false;
+  return Number.isFinite(supply.count)
+    || Number.isFinite(supply.unitsPerDose)
+    || Boolean(supply.unitName)
+    || Boolean(supply.unitStrength)
+    || Boolean(supply.note);
 }
 
 /* ------------------------------- pause -------------------------------- */

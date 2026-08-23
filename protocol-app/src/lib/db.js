@@ -139,6 +139,59 @@ export function mutate(db, store, key, change) {
   );
 }
 
+/**
+ * The same read-modify-write cycle as `mutate`, across SEVERAL records that
+ * may live in different stores — all inside one transaction.
+ *
+ * A check-off that decrements a supply count is two records in two stores that
+ * have to move together: a tick recorded against a bottle that never went down,
+ * or a bottle that went down with no tick to explain it, are both records that
+ * lie about what happened. Ruling B, point 6 says multi-store mutations happen
+ * in one transaction, and this is the machinery for it — either both land or
+ * neither does.
+ *
+ * `targets` is [{ store, key }, …]. `change(currentValues)` receives them in
+ * the same order (undefined where nothing is stored) and returns an array of
+ * successors, again in order; an `undefined` entry writes nothing. It must be
+ * synchronous — an await inside would let the transaction close underneath it.
+ */
+export function mutateAcross(db, targets, change) {
+  if (!Array.isArray(targets) || targets.length === 0) {
+    return Promise.reject(ctx('Saving', 'nothing', new Error('no records named')));
+  }
+  let out;
+  let thrown = null;
+  const stores = [...new Set(targets.map((t) => t.store))];
+  return tx(db, stores, 'readwrite', (t) => {
+    const current = new Array(targets.length);
+    let pending = targets.length;
+    targets.forEach((target, i) => {
+      const req = t.objectStore(target.store).get(target.key);
+      req.onsuccess = () => {
+        current[i] = req.result;
+        pending -= 1;
+        if (pending > 0) return;
+        try {
+          out = change(current);
+          (out ?? []).forEach((value, j) => {
+            if (value !== undefined) t.objectStore(targets[j].store).put(value);
+          });
+        } catch (err) {
+          // Same reason as `mutate`: a throw inside a database event handler
+          // aborts the transaction and is then lost. Keep it, re-throw once the
+          // abort has landed, so the announcer says what actually went wrong.
+          thrown = err;
+          try { t.abort(); } catch { /* already aborting */ }
+        }
+      };
+    });
+    return null;
+  }, 'Saving').then(
+    () => out,
+    (err) => { throw thrown ?? err; },
+  );
+}
+
 export function getAll(db, store) {
   return read(db, store, 'Loading', (os) => os.getAll());
 }

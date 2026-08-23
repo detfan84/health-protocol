@@ -17,7 +17,7 @@ import { h, clear } from './dom.js';
 import * as store from '../store.js';
 import { icon } from './icons.js';
 import { buildToday } from '../todayModel.js';
-import { localDateKey } from '../../lib/core.js';
+import { localDateKey, displayTime, timeFormatOf } from '../../lib/core.js';
 
 /**
  * How a protocol presents itself on the menu. Seeded protocols get a look;
@@ -60,6 +60,7 @@ const minutes = (block) => {
 export async function viewHome({ open, startSession }) {
   const date = localDateKey();
   const [protocols, day] = await Promise.all([store.loadProtocols(), store.loadDay(date)]);
+  const fmt = timeFormatOf(await store.getSetting('ui.timeFormat'));
   const today = buildToday({ protocols, now: new Date(), day });
 
   const root = h('div.home', {});
@@ -98,7 +99,7 @@ export async function viewHome({ open, startSession }) {
         h('div.card', {},
           h('p.muted', {},
             nextUp
-              ? `Nothing scheduled this minute. Next is ${nextUp.name}${nextUp.start ? ` at ${nextUp.start}` : ''}.`
+              ? `Nothing scheduled this minute. Next is ${nextUp.name}${nextUp.start ? ` at ${displayTime(nextUp.start, fmt)}` : ''}.`
               : 'Nothing scheduled this minute. Pick anything below — it all counts.'),
         ),
       ),

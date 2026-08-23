@@ -26,6 +26,56 @@ export function localDateKey(d = new Date()) {
   return `${y}-${m}-${day}`;
 }
 
+/* ------------------------------ clock ----------------------------- */
+//
+// Decision 23: times are shown in the device's own convention by default, with
+// an in-app override for anybody whose phone disagrees with their head — and
+// the STORED format never changes. A block that starts at 'HH:MM' is stored as
+// 'HH:MM' whichever way it is read, so a plan shared between two people with
+// different phones is the same plan.
+
+export const TIME_FORMATS = ['auto', '12', '24'];
+
+/** The stored setting, made safe. Anything unrecognised means "follow the device". */
+export function timeFormatOf(setting) {
+  const v = setting?.value;
+  return TIME_FORMATS.includes(v) ? v : 'auto';
+}
+
+/** Does this device write clock times with AM/PM? */
+export function deviceUses12Hour() {
+  try {
+    return new Intl.DateTimeFormat(undefined, { hour: 'numeric' }).resolvedOptions().hour12 === true;
+  } catch {
+    return false; // no Intl worth trusting: 24-hour is the unambiguous one
+  }
+}
+
+/**
+ * 'HH:MM' → what this person reads. Anything that is not a clock time comes
+ * back untouched: an unparseable value is somebody else's data, and inventing
+ * a time for it would be worse than showing it raw (ruling A).
+ */
+export function displayTime(value, format = 'auto') {
+  const m = /^(\d{1,2}):(\d{2})$/.exec(String(value ?? '').trim());
+  if (!m) return String(value ?? '');
+  const hour = Number(m[1]);
+  const minute = m[2];
+  if (hour > 23) return String(value); // '24:00' is an internal end-of-day marker
+  const padded = String(hour).padStart(2, '0');
+  const twelve = format === '12' || (format === 'auto' && deviceUses12Hour());
+  if (!twelve) return `${padded}:${minute}`;
+  const suffix = hour < 12 ? 'AM' : 'PM';
+  return `${hour % 12 === 0 ? 12 : hour % 12}:${minute} ${suffix}`;
+}
+
+/** 'YYYY-MM-DD' from an ISO timestamp, in local time. Blank input → null. */
+export function dateKeyFromIso(iso) {
+  if (typeof iso !== 'string' || !iso) return null;
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? null : localDateKey(d);
+}
+
 /* ----------------------------- merge ------------------------------ */
 /**
  * Record-level referee: whichever record was touched most recently wins.

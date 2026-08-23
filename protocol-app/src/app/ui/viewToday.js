@@ -18,14 +18,15 @@
 import { h, clear } from './dom.js';
 import { buildToday, makePhaseSetting } from '../todayModel.js';
 import {
-  toggleCheck, setJournal, addFood, removeFood, bumpWaterMl, setWaterMl,
+  setJournal, addFood, removeFood, bumpWaterMl, setWaterMl,
   unavailableReason, addSet, updateSet, removeSet, setDuration, trainingLog, lastLoggedBefore,
+  applyCheckToggle, setCheckUnits,
 } from '../trackerOps.js';
 import { unitsOf, stepMl, volumeUnitLabel, displayVolume, parseVolume, weightUnitLabel, displayWeight, parseWeight } from '../../lib/units.js';
 import { cadenceOf, cadenceLabel, addDays, dueToday } from '../../lib/cadence.js';
 import { guarded } from './announcer.js';
 import * as store from '../store.js';
-import { localDateKey, nowIso } from '../../lib/core.js';
+import { localDateKey, nowIso, displayTime, timeFormatOf } from '../../lib/core.js';
 
 /** 'YYYY-MM-DD' → a local Date at midnight. */
 function dateFromKey(key) {
@@ -45,9 +46,10 @@ function scrollToY(y) {
   try { window.scrollTo(0, y); } catch { /* no viewport to move */ }
 }
 
-function timeLabel(b) {
-  if (b.start && b.end) return `${b.start}–${b.end}`;
-  if (b.start) return `from ${b.start}`;
+function timeLabel(b, fmt = 'auto') {
+  const t = (v) => displayTime(v, fmt);
+  if (b.start && b.end) return `${t(b.start)}–${t(b.end)}`;
+  if (b.start) return `from ${t(b.start)}`;
   return null;
 }
 
@@ -315,7 +317,11 @@ function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, 
       'aria-label': `${item.name} — done today`,
       onclick: () =>
         guarded(
-          () => store.mutateDay(writeKey(), (fresh) => toggleCheck(fresh, item.id)),
+          // The tick and the bottle move together, in one transaction
+          // (decision 22). For anything without a supply dose configured this
+          // is exactly the old one-tap write, with a snapshot on it.
+          () => store.mutateDayWithSupply(writeKey(), item.id, ({ day: fresh, supply }) =>
+            applyCheckToggle({ day: fresh, item, supply })),
           {
             what: `The check-off for ${item.name}`,
             // Paint only after the write confirms — a checkmark is a receipt,
@@ -338,8 +344,40 @@ function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, 
   // this screen unusable, and pausing is something you do occasionally and on
   // purpose. (R16 — a person must be able to stop the app asking, and start it
   // again whenever they want.)
+  // What came out of the bottle, after the fact (decision 22). Only ever shown
+  // for something that actually decremented, and only once it has: this is a
+  // correction, not a question the app asks before you have done anything.
+  // Clearing it means "I am not saying", which is not the same as zero.
+  const recorded = day.checks[item.id];
+  const unitsLine = Number.isFinite(recorded?.units)
+    ? h('div.field-row', {},
+        h('div', {},
+          h('label', { for: `units-${item.id}` }, `Taken (${recorded.unitName || 'units'})`),
+          h('input', {
+            type: 'number', min: '0', inputmode: 'numeric', id: `units-${item.id}`,
+            value: String(recorded.units),
+            'aria-label': `Units taken of ${item.name}`,
+            onchange: (e) => {
+              const raw = String(e.target.value).trim();
+              const n = raw === '' ? null : Number(e.target.value);
+              guarded(
+                () => store.mutateDayWithSupply(writeKey(), item.id, ({ day: fresh, supply }) =>
+                  setCheckUnits({ day: fresh, supply, itemId: item.id, units: n })),
+                {
+                  what: `What you took of ${item.name}`,
+                  onOk: (next) => { Object.assign(day, next); onChanged?.(next); },
+                },
+              );
+            },
+          }),
+        ),
+        h('span.why', {}, 'Your supply count moves with this. Leave it empty to say nothing.'),
+      )
+    : null;
+
   const options = onPause
     ? h('div.item-options', {},
+        unitsLine,
         unavailable?.kind === 'out-of-stock'
           ? h('span.why', {}, 'Not being asked for: the supply count is zero. Restock it on Supply — it is on the Home menu — and it comes back on its own.')
           : unavailable
@@ -368,7 +406,8 @@ function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, 
       training?._renderSets?.();
       const hasWork = Boolean(next.log?.[item.id]);
       if (hasWork && !next.checks[item.id]) {
-        guarded(() => store.mutateDay(writeKey(), (fresh) => toggleCheck(fresh, item.id)), {
+        guarded(() => store.mutateDayWithSupply(writeKey(), item.id, ({ day: fresh, supply }) =>
+          applyCheckToggle({ day: fresh, item, supply })), {
           what: `The check-off for ${item.name}`,
           onOk: (after) => {
             Object.assign(day, after);
@@ -421,12 +460,17 @@ export async function viewToday({ reload, stamp, date: viewing, startSession, mo
     store.loadPauses(),
     store.loadSupplies(),
   ]);
-  const phaseSettings = await store.loadPhaseSettings(protocols);
+  // Catch the phase pointers up with the calendar before anything is drawn —
+  // and only ever for today (decision 21: looking back changes nothing).
+  const loaded = await store.loadPhaseSettings(protocols);
+  const phaseSettings = isToday ? await store.advancePhases(protocols, loaded, date) : loaded;
   // Read once, up here: the day's rows need it for weights, the water card
   // needs it for volumes, and a second read would be a second answer.
   const units = unitsOf(await store.getSetting('ui.units'));
   // Opt-in, and absent means off (R17) — the law's posture is the default.
   const showWeekly = (await store.getSetting('ui.weeklyCount'))?.value === true;
+  // Device convention unless somebody said otherwise (decision 23).
+  const timeFmt = timeFormatOf(await store.getSetting('ui.timeFormat'));
   const state = { day, history, pauses, supplies };
   // A past day is looked at from its own end: every block's window has closed,
   // so nothing is "now" and what is left is simply what was not recorded.
@@ -523,8 +567,20 @@ export async function viewToday({ reload, stamp, date: viewing, startSession, mo
         h('option', { value: ph.id, selected: ph.id === pp.current?.id }, ph.name),
       ),
     );
+    // Where the plan has got to, stated rather than implied. A phase moves
+    // itself along when the days you set for it run out (D14), and an app that
+    // did that silently would be changing the plan behind somebody's back.
+    // This is information about the plan, not commentary about the person.
+    const where = pp.progress
+      ? pp.progress.total
+        ? `Day ${pp.progress.dayNumber} of ${pp.progress.total}. It moves on by itself when the days run out.`
+        : `Day ${pp.progress.dayNumber}. This phase has no set length, so it waits for you.`
+      : null;
     root.append(
-      h('div.card', {}, h('div.field', {}, h('label', {}, `${pp.protocolName} — current phase`), select)),
+      h('div.card', {},
+        h('div.field', {}, h('label', {}, `${pp.protocolName} — current phase`), select),
+        where ? h('p.why', {}, where) : null,
+      ),
     );
   }
 
@@ -574,7 +630,7 @@ export async function viewToday({ reload, stamp, date: viewing, startSession, mo
       'div.card-head',
       {},
       h('h2', {}, b.name),
-      timeLabel(b) ? h('span.chip', {}, timeLabel(b)) : null,
+      timeLabel(b, timeFmt) ? h('span.chip', {}, timeLabel(b, timeFmt)) : null,
       t.multipleActive ? h('span.chip', {}, b.protocolName) : null,
     );
     // Run it, rather than read it. A block with more than one thing in it is a

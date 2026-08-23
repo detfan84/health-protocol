@@ -14,11 +14,12 @@ import * as store from '../store.js';
 import { guarded } from './announcer.js';
 import { icon } from './icons.js';
 import { lookFor, minutes } from './viewHome.js';
-import { localDateKey } from '../../lib/core.js';
+import { localDateKey, displayTime, timeFormatOf } from '../../lib/core.js';
 import { cadenceOf, cadenceLabel } from '../../lib/cadence.js';
 
 export async function viewArea({ areaId, back, startSession, openEditor }) {
   const [protocols, day] = await Promise.all([store.loadProtocols(), store.loadDay(localDateKey())]);
+  const fmt = timeFormatOf(await store.getSetting('ui.timeFormat'));
   const p = protocols.find((x) => x.id === areaId);
 
   const root = h('div');
@@ -88,7 +89,11 @@ export async function viewArea({ areaId, back, startSession, openEditor }) {
       h('section.card', {},
         h('div.card-head', {},
           h('h2', {}, b.name),
-          b.start ? h('span.chip', {}, b.end ? `${b.start}–${b.end}` : `from ${b.start}`) : null,
+          b.start
+            ? h('span.chip', {}, b.end
+                ? `${displayTime(b.start, fmt)}–${displayTime(b.end, fmt)}`
+                : `from ${displayTime(b.start, fmt)}`)
+            : null,
         ),
         h('p.muted', {}, `${b.items.length} ${b.items.length === 1 ? 'thing' : 'things'} · about ${minutes(b)} min${doneCount ? ` · ${doneCount} done today` : ''}`),
         h('button.btn.primary', {

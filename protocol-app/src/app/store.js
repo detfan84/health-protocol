@@ -12,6 +12,7 @@ import {
   openDb,
   put,
   mutate,
+  mutateAcross,
   getOne,
   getAll,
   removeOne,
@@ -21,7 +22,7 @@ import {
 } from '../lib/db.js';
 import { normalizeDay } from './trackerOps.js';
 import { supplyKey, pauseKey, makePause } from './trackerOps.js';
-import { phaseKey } from './todayModel.js';
+import { phaseKey, phaseAsOf, makePhaseSetting } from './todayModel.js';
 
 let _db = null;
 
@@ -113,11 +114,69 @@ export function mutateDay(date, change) {
   return run;
 }
 
+/**
+ * A check-off, and the bottle it comes out of, in one transaction.
+ *
+ * Decision 22's auto-decrement, done where it cannot half-happen: the day
+ * record and the supply count are read, moved together and written together,
+ * so there is no window in which a tick exists against stock that never went
+ * down (ruling B, point 6). Behind the same queue as every other day write,
+ * because a fast thumb is still a fast thumb.
+ *
+ * `apply({ day, supply })` is the pure decision — see trackerOps — and returns
+ * { day, supply? }. Resolves to the day record, like mutateDay.
+ */
+export function mutateDayWithSupply(date, itemId, apply) {
+  const run = dayQueue.then(async () => {
+    const db = await ready();
+    let result;
+    await mutateAcross(
+      db,
+      [
+        { store: STORES.DAYS, key: date },
+        { store: STORES.SETTINGS, key: supplyKey(itemId) },
+      ],
+      ([rawDay, rawSupply]) => {
+        const current = normalizeDay(rawDay, date);
+        const out = apply({ day: current, supply: rawSupply }) ?? {};
+        result = out.day ?? current;
+        // Same rule as mutateDay: an op that changed nothing writes nothing,
+        // rather than stamping a record into existence nobody made (ruling A).
+        return [
+          out.day && out.day !== current ? out.day : undefined,
+          out.supply,
+        ];
+      },
+    );
+    return result;
+  });
+  dayQueue = run.catch(() => {});
+  return run;
+}
+
 /* ----------------------------- settings ------------------------------ */
 
 export async function getSetting(key) {
   const db = await ready();
   return getOne(db, STORES.SETTINGS, key);
+}
+
+/**
+ * Change one settings record safely — read and write in ONE transaction.
+ *
+ * The same lesson as mutateDay, learned again on the supply screen: a save that
+ * loads the record, edits it in JavaScript and puts it back has a gap in the
+ * middle, and three fields saved in quick succession all read the same
+ * pre-edit record and the last one wins. Two of the three edits vanish, with a
+ * green tick over each of them — a silent failure of exactly the class ruling A
+ * and ruling B exist to end.
+ *
+ * `change(current)` gets the stored record (undefined if none) and returns its
+ * successor, synchronously.
+ */
+export async function mutateSetting(key, change) {
+  const db = await ready();
+  return mutate(db, STORES.SETTINGS, key, change);
 }
 
 export async function putSetting(record) {
@@ -143,6 +202,31 @@ export async function loadPhaseSettings(protocols) {
   return out;
 }
 
+/**
+ * Move every phased protocol's pointer to where the calendar says it is
+ * (decision 14), and hand back the settings as they now stand.
+ *
+ * The arithmetic is pure and lives in todayModel; this only writes, and only
+ * for a protocol whose pointer genuinely belongs somewhere else. A write here
+ * is the app catching up with the plan the person already made — the phase
+ * lengths are theirs — so it is not a decision being taken on their behalf.
+ *
+ * Call it for today only. Looking back at last Tuesday must never advance
+ * anybody's plan (decision 21: viewing a past day changes nothing).
+ */
+export async function advancePhases(protocols, settings, today = localDateKey()) {
+  const out = { ...settings };
+  for (const p of protocols ?? []) {
+    if (p.active !== true || (p.phases ?? []).length === 0) continue;
+    const at = phaseAsOf(p, out[p.id], today);
+    if (!at.moved || !at.phase || !at.startedAt) continue;
+    const rec = makePhaseSetting(p.id, at.phase.id, at.startedAt, nowIso());
+    await putSetting(rec);
+    out[p.id] = rec;
+  }
+  return out;
+}
+
 /** { [itemId]: supplyRecord } for the supply screen. */
 export async function loadSupplies() {
   const all = await allSettings();
@@ -153,10 +237,6 @@ export async function loadSupplies() {
     }
   }
   return out;
-}
-
-export async function loadSupply(itemId) {
-  return getSetting(supplyKey(itemId));
 }
 
 /** { [itemId]: pauseRecord } — what the app has been asked to stop asking for. */

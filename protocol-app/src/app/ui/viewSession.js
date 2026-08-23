@@ -21,7 +21,7 @@ import { h, clear } from './dom.js';
 import * as store from '../store.js';
 import { guarded } from './announcer.js';
 import { localDateKey } from '../../lib/core.js';
-import { toggleCheck, addSet, updateSet, trainingLog } from '../trackerOps.js';
+import { applyCheckToggle, addSet, updateSet, trainingLog } from '../trackerOps.js';
 import { unitsOf, weightUnitLabel, displayWeight, parseWeight } from '../../lib/units.js';
 
 const FIELD_ORDER = [
@@ -88,7 +88,11 @@ export async function viewSession({ protocolId, blockId, done }) {
 
   function markDone(item, then) {
     guarded(
-      () => store.mutateDay(localDateKey(), (fresh) => (fresh.checks[item.id] ? fresh : toggleCheck(fresh, item.id))),
+      // Passing an item marks it done ONCE — running the same block twice must
+      // not take a second dose out of the bottle. The supply moves with the
+      // tick, in one transaction (decision 22).
+      () => store.mutateDayWithSupply(localDateKey(), item.id, ({ day: fresh, supply }) =>
+        (fresh.checks[item.id] ? { day: fresh } : applyCheckToggle({ day: fresh, item, supply }))),
       {
         what: `The check-off for ${item.name}`,
         onOk: (next) => { Object.assign(day, next); then?.(); },

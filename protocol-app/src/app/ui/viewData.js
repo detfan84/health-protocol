@@ -3,7 +3,7 @@
 
 import { h, clear } from './dom.js';
 import * as store from '../store.js';
-import { localDateKey, nowIso } from '../../lib/core.js';
+import { localDateKey, nowIso, displayTime, timeFormatOf, deviceUses12Hour } from '../../lib/core.js';
 import { STORES } from '../../lib/schema.js';
 import { unitsOf } from '../../lib/units.js';
 import { disclaimerBody } from './viewDisclaimer.js';
@@ -322,6 +322,47 @@ export async function viewData({ applyTheme, applyScheme, go }) {
             ['metric', 'Metric — millilitres, kilograms'],
           ].map(([value, label]) =>
             h('option', { value, selected: persistedUnits === value }, label),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  /* ------------------------------- clock -------------------------------- */
+  // Decision 23. The device's own convention is the default, because that is
+  // what somebody's eyes already read without thinking. The override is for
+  // the case the default cannot cover — a phone set one way by a person who
+  // thinks the other way — and it changes the READING only: a block that
+  // starts at 06:30 is stored as 06:30 either way, so a plan shared between
+  // two people with differently-set phones is still the same plan.
+  const timeSetting = await store.getSetting('ui.timeFormat');
+  let persistedTime = timeFormatOf(timeSetting);
+  root.append(
+    h('div.card', {},
+      h('div.card-head', {}, h('h2', {}, 'Clock')),
+      h('p.muted', {}, `How times are shown. Your device is set to ${deviceUses12Hour() ? 'AM and PM' : 'the 24-hour clock'} — following it is the default, and this only changes what you read, never what is stored.`),
+      h('div.field', {},
+        h('label', { for: 'time-format' }, 'Times'),
+        h('select', {
+          id: 'time-format',
+          onchange: (e) => {
+            const chosen = e.target.value;
+            guarded(
+              () => store.putSetting({ key: 'ui.timeFormat', value: chosen, updatedAt: nowIso() }),
+              {
+                what: 'The clock setting',
+                onOk: () => { persistedTime = chosen; },
+                onFail: () => { e.target.value = persistedTime; },
+              },
+            );
+          },
+        },
+          [
+            ['auto', `Follow this device (${displayTime('18:30', 'auto')})`],
+            ['12', `AM and PM (${displayTime('18:30', '12')})`],
+            ['24', `24-hour (${displayTime('18:30', '24')})`],
+          ].map(([value, label]) =>
+            h('option', { value, selected: persistedTime === value }, label),
           ),
         ),
       ),

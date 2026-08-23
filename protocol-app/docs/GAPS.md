@@ -105,6 +105,16 @@ for no reason is a referee that has stopped refereeing.
 `HANDOFF.md` is more generous than the code in five places. Corrected here so they are not
 planned against.
 
+> **All five closed 23 Aug 2026** — the Phase 1 build queue (Q2, Q3, Q4, Q6) finished in one
+> session. Suite 104 → 135. Diagnoses kept below; what each one now does is in §4.
+>
+> One bug found while verifying rather than by a test, and worth recording as its own lesson:
+> the supply screen saved a field at a time with a load-then-save gap in the middle, so three
+> edits in quick succession all read the same pre-edit record and two of them vanished under a
+> green tick. It is the same failure `mutateDay` was written to prevent, in a store nobody had
+> thought to protect. `store.mutateSetting` now closes it. **The tests were green throughout** —
+> it took driving the real screen to see it.
+
 - **D20 check-off snapshots — not built.** `trackerOps.js:67` writes `{ at }` and nothing
   else. No item name, no dose, no units-actually-taken. Rename an item or change its dose and
   every past record silently changes meaning — precisely what D20 exists to prevent.
@@ -128,9 +138,23 @@ planned against.
 ## 4 · Recommended order
 
 1. ~~**Regression repair** — §2.1 through §2.4.~~ **Done 23 Aug.**
-2. **Finish Phase 1** — Q2 snapshots (D20), Q3 auto-decrement (D22), Q4 time display, Q6
-   phase auto-advance. Phase 1's done-when is *Kevin's real daily use runs entirely on the new
-   build*, and D20 + D22 are what make a supplement block honest.
+2. ~~**Finish Phase 1** — Q2, Q3, Q4, Q6.~~ **Done 23 Aug.** What shipped:
+   - **Q2 / D20** — a check-off records the item's name, its dose, and the units actually taken,
+     at tap time. Rename an item afterwards and the record still says what you took.
+   - **Q3 / D22** — per item, an optional dose: units per dose, what a unit is called, how strong
+     one is. Check off and the count goes down; un-check and it comes back exactly; correct the
+     units afterwards and the count follows. Both stores move in one transaction (ruling B).
+     The screen now lists only what is actually tracked, with everything else folded by area —
+     it used to ask how many calf stretches you had left.
+   - **Q4 / D23** — times read in the device's convention by default, with an override on the
+     You screen. Storage stays `HH:MM`, so a shared plan is the same plan on both phones.
+   - **Q6 / D14** — a phase with a length runs out and the next one starts, cascading correctly
+     for a plan opened months late, never wrapping past the last phase, and never advancing a
+     protocol that is switched off or a day being looked back at.
+
+   **Phase 1's done-when is not met yet**, and it is not a build item: *Kevin's real daily use
+   runs entirely on the new build, and the round trip loses nothing.* The machinery is there;
+   the loop count in `Working_Record_v1.md` §1 is still 0.
 3. **Schema extension step (D15)** — the roadmap's own first P2 item, and the stores every
    day-engine piece writes into. Needs Kevin's line first: the ladder is append-only, so a
    released rung is never edited (see §5, G1).
