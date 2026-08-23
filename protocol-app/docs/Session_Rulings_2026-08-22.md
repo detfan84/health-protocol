@@ -96,6 +96,86 @@ carried the name; it now appears in the app, the manifest, the home-screen
 icon and every calendar alert. Closes the "name the app" item in roadmap
 Phase 0, provisionally.
 
+## R23 — Today carries nothing until the composer fills it (Kevin, closing the R21 tail).
+
+R21 killed the four hard-coded movement prompts and left an open question: does Today carry
+anything in the meantime? Kevin's answer: **nothing now, and the composer properly.** No
+interim shim — a "deal me something" button would be a small composer, and building one twice
+is the cost that ruling exists to avoid. Empty is honest: the four anchors are always there,
+and the seeded areas are substantial. R21's open item closes here.
+
+## R24 — In-app nudges get built now, narrowly (Kevin).
+
+D12 names in-app delivery — open-triggered and while-open — as v1's actual reminder mechanism,
+and it has never been built: `src/lib/reminders.js` has one consumer, the settings screen. R16's
+missed-item prompt has nowhere to live because R19 established that no closed-app notification
+on any delivery path can know what you have already done today. Ruled: build one in-app surface
+that reads the schedule that already exists. **Narrow on purpose** — the composer changes what
+the surface is told to say, not the surface.
+
+## R25 — Pain is the medium of this work. Teach once, sequence the on-ramp, never warn per item (Kevin).
+
+*The substantive ruling of this session, and a content-law-level position. Kevin's reasoning is
+carried at length because future sessions will need it, not just the conclusion.*
+
+- **Most of this work is painful, and so far all of it has been good work.** Rolling out the
+  armpit and the back of the shoulder is intense; hitting a nerve that runs the length of the arm
+  is part of it. What it does is wake up what has been asleep.
+- **For this app's beachhead, pain is not the exception — it is the daily baseline.** The EDS/HSD
+  camp lives there already. Kevin: *"when your daily life has sucked for so many years... if
+  you're telling me there's a chance, then it's probably worth trying."*
+- **So the honest pitch is not "this will be gentle."** It is: this is going to suck, here is what
+  it does, here is why it is worth it — easier breathing, the weight of the head coming off the
+  neck, joint pain slowly dissipating, the musculoskeletal system coming back into alignment,
+  feeling more free. Kevin believes people buy in when you say that straight.
+- **The app does not adjudicate good pain versus bad pain in the moment.** *"I don't want to be
+  dictating in the moment what they should and shouldn't be doing for their own best interest."*
+  Nobody can call that for someone else's body. Learning to read those signals **is** the skill the
+  app teaches — it is the awareness curriculum, not a safety interlock.
+- **Warning fatigue is the named failure mode.** An app that says be-careful before every item gets
+  ignored before every item: *"it's just gonna be warning, warning, warning all the time"* — and
+  then nobody does anything, which is its own harm.
+- **What he will give is fair warning, once and properly:** this is somewhat dangerous, here is
+  what it looks like, you need to pay attention to what your body is telling you and understand the
+  consequences of your actions.
+- **Safety by sequencing, not by warning.** The releases a beginner is walked through first are the
+  ones that do not risk a joint leaving its socket — front of the hip, glutes and hips. The genuinely
+  hazardous case, from Kevin's own practice: a muscle locked for years finally lets go, and you are
+  managing the tension between letting it relax and letting the joint fall out of position. That is
+  real, it is not for week one, and **content ordering** is what handles it — not a dialog.
+
+**Build consequences** *[derived — Claude's reading of the ruling; strike any line to reverse it]:*
+
+1. **The D42 "pain or joint" chip is struck as written.** It presumed pain was exceptional. Under
+   this ruling it is the normal case, so a chip routing pain to a stop-and-evaluate card would fire
+   on ordinary sessions and manufacture exactly the fatigue named above.
+2. **Its narrower successor is a joint signal, not a pain signal** — *it gave way / it felt
+   unstable*. That is an event report, not a judgment about how much something hurt, and it is the
+   one thing law 10 genuinely needs to hear. Still no arithmetic. The limiting-factor chips become:
+   **muscle gave out · ran out of steam · it gave way.**
+3. **The Careful field stays exactly as it is.** Content at the point of action, inline, in the
+   flow — not a dialog you dismiss. Kevin's objection is to interruption, not to information.
+4. **The one-time teaching piece is promoted to the on-ramp** — soreness literacy,
+   breathe-through-intensity, find-a-muscle, from FRAMEWORK's teaching list — carrying the "this is
+   going to suck and here is why it is worth it" framing in Kevin's voice, under content law 3
+   (define the fair test up front) and law 5 (epistemic status travels with the claim).
+5. **Open, deliberately:** whether that piece is a screen at onboarding, or a dismissible card the
+   first time a release item is dealt ("don't tell me again"). Kevin raised all three shapes and
+   ruled none. **The copy gets written first and the shape follows it** — this is a Kevin-writes
+   item, not a build item.
+
+## R26 — The template slate waits for the library to fill out (Kevin). **Reopens K5's staging, not its mechanism.**
+
+The library is a partial fill — some body work, some fascia work, some exercise, some breathing —
+and far from full scope on any of them. Kevin expects a great deal more to be added across all of
+it. So the slate is not ratified now: **a template is built by pulling from the whole library once
+the library is fuller**, each one addressing a specific pattern.
+
+The mechanism is untouched — a template is still a preset over the one shared catalog, the same
+machinery the quiz uses (D16/K5). What changes is the gate: **"template slate ratification (K5)"
+leaves roadmap Phase 0's open list** and becomes a downstream item gated on library depth rather
+than on Kevin's availability. Nothing is waiting on him for it.
+
 ## Correction-log entries
 
 - 2026-08-23 — the app had been deployed for four days and Kevin did not know

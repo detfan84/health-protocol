@@ -26,6 +26,8 @@ Ten-second entries at the moment of friction: `date — what's wrong — where i
 - 2026-08-22 — water still counted in "glasses" on screen four months after the April brief and two rulings (K2) — `src/app/ui/viewToday.js` → fixed this session (ounces/ml, global unit setting, schema-2 conversion of old records).
 - 2026-08-22 — K4 (missed item) was dropped rather than replaced when FRAMEWORK v3 superseded PLAN §3–5; found by the drop-check, ruled same day as R16 — `docs/PLAN_3-5_dropcheck.md`.
 - 2026-08-22 — roadmap layer 1 records "39 tests green"; the suite is 50 — `Protocol_App_Roadmap_v1_7.md` layer 1.
+- 2026-08-23 — **closes the Aug-22 `GAPS.md` entry above**: the file did not exist, so it was written rather than located — `docs/GAPS.md`, now the standing built-vs-specced register. Three ledger rows corrected by the same pass (39 / 45 / 94 tests recorded; 97 measured), and five items `HANDOFF.md` lists as built measured as partial (D20, D22, D12, D36, Q4/Q6).
+- 2026-08-23 — commit `197da3e` (menu → area → session) dropped the Plans and Supply tabs from navigation without a replacement, leaving both screens unreachable, no way to create or switch off a protocol, and a live instruction on Today pointing at the unreachable Supply screen — `src/app/ui/app.js` (dead branches at 153, 158), `src/app/ui/viewToday.js:344` → `docs/GAPS.md` §2.1.
 
 ## 3 · Expectation → outcome ledger (canon 4.1)
 
