@@ -23,6 +23,12 @@ export async function viewData({ applyTheme }) {
   );
 
   /* ------------------------------ export ------------------------------ */
+  const lastExport = await store.getSetting('backup.lastExportedAt').catch(() => null);
+  const exportNote = h('p.muted', {},
+    lastExport?.value
+      ? `Last backup: ${new Date(lastExport.value).toLocaleDateString()} — ${lastExport.summary ?? 'exported'}.`
+      : 'No backup taken from this device yet.',
+  );
   root.append(
     h('div.card', {},
       h('div.card-head', {}, h('h2', {}, 'Backup')),
@@ -33,19 +39,56 @@ export async function viewData({ applyTheme }) {
           guarded(
             async () => {
               const backup = await store.exportBackup();
-              const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+              const text = JSON.stringify(backup, null, 2);
+              const blob = new Blob([text], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
               const a = document.createElement('a');
-              a.href = URL.createObjectURL(blob);
+              a.href = url;
               a.download = `protocol-app-backup-${localDateKey()}.json`;
+              // In the document, and revoked on a later tick: a detached
+              // anchor does nothing in some browsers, and revoking the URL
+              // in the same breath can cancel the download that was just
+              // started — either way the click looks like it worked and no
+              // file arrives.
+              a.style.display = 'none';
+              document.body.append(a);
               a.click();
-              URL.revokeObjectURL(a.href);
+              setTimeout(() => { a.remove(); URL.revokeObjectURL(url); }, 30_000);
+
+              const d = backup.data ?? {};
+              const summary = `${d.protocols?.length ?? 0} protocols, ${d.days?.length ?? 0} days, ${d.labs?.length ?? 0} labs, ${Math.round(text.length / 1024)} KB`;
+              await store.putSetting({ key: 'backup.lastExportedAt', value: nowIso(), summary });
+              return summary;
             },
             {
               what: 'The backup export',
               detail: 'The backup file was not produced. Exporting only reads — nothing on the device changed.',
+              // Say what was written. A download that silently never lands
+              // looks exactly like one that did.
+              onOk: (summary) => {
+                exportNote.textContent = `Last backup: just now — ${summary}. Check your downloads; if nothing arrived, the browser blocked it.`;
+              },
             },
           ),
       }, 'Export backup'),
+      exportNote,
+    ),
+  );
+
+  /* --------------------------- storage state --------------------------- */
+  // Whether the browser has actually promised to keep this, said plainly.
+  // The app asks once at startup; this is the answer, not a reassurance.
+  const persisted = await store.getSetting('storage.persisted').catch(() => null);
+  const keepLine = persisted == null
+    ? 'This browser has not been asked yet, or does not offer the promise.'
+    : persisted.value
+      ? 'This browser has promised to keep your data until you delete it.'
+      : 'This browser has NOT promised to keep your data. Phones clear storage for apps they think are idle — on iPhone, adding this to your home screen and opening it regularly is what keeps it.';
+  root.append(
+    h('div.card', {},
+      h('div.card-head', {}, h('h2', {}, 'Will this device keep it?')),
+      h('p.muted', {}, keepLine),
+      h('p.muted', {}, 'Either way, an exported backup is the only copy nothing on this device can take away.'),
     ),
   );
 

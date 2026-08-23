@@ -9,6 +9,7 @@ import assert from 'node:assert/strict';
 
 import {
   blankDay,
+  normalizeDay,
   toggleCheck,
   setJournal,
   addFood,
@@ -22,7 +23,6 @@ import {
   currentPhase,
   makePhaseSetting,
   phaseKey,
-  MOVEMENT_PROMPTS,
 } from '../src/app/todayModel.js';
 import * as store from '../src/app/store.js';
 
@@ -186,13 +186,20 @@ test('phases: first phase is current by default; the pointer changes what shows'
   assert.equal(dangling.phase.id, 'ph1');
 });
 
-test('movement prompts: permanent ids, checks store like any item check', () => {
-  assert.ok(MOVEMENT_PROMPTS.length >= 3);
-  assert.ok(MOVEMENT_PROMPTS.every((m) => m.id.startsWith('mv-') && m.name && m.why));
+test('retired movement prompts leave their history alone', () => {
+  // The four generic prompts were removed (Kevin, Aug 22). Days that recorded
+  // them keep those checks: the plan changing never rewrites what happened.
+  const day = normalizeDay(
+    { date: '2026-08-17', checks: { 'mv-walk': { at: '2026-08-17T08:00:00.000Z' } }, food: [] },
+    '2026-08-17',
+  );
+  assert.ok(day.checks['mv-walk'], 'an old check-off survives the item disappearing');
 
-  let day = blankDay('2026-08-17');
-  day = toggleCheck(day, MOVEMENT_PROMPTS[0].id);
-  assert.ok(day.checks['mv-walk']);
+  // And nothing on Today puts them back — no block, no group, no card.
+  const t = buildToday({ protocols: [], now: new Date(2026, 7, 22, 8, 0), day });
+  assert.equal(t.blocks.length, 0);
+  const everything = ['now', 'missed', 'anytime', 'later', 'done'].flatMap((k) => t.groups[k]);
+  assert.equal(everything.length, 0, 'an empty plan means an empty day, not four suggestions');
 });
 
 /* --------------------------- store behavior --------------------------- */

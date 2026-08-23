@@ -16,7 +16,7 @@
 // as 0 (ruling A) — an unlogged tally is not a zero tally.
 
 import { h, clear } from './dom.js';
-import { buildToday, MOVEMENT_PROMPTS, MOVEMENT_SAFETY_LINE, makePhaseSetting } from '../todayModel.js';
+import { buildToday, makePhaseSetting } from '../todayModel.js';
 import { toggleCheck, setJournal, addFood, removeFood, bumpWaterMl, setWaterMl } from '../trackerOps.js';
 import { unitsOf, stepMl, volumeUnitLabel, displayVolume, parseVolume } from '../../lib/units.js';
 import { guarded } from './announcer.js';
@@ -296,17 +296,6 @@ export async function viewToday({ reload, stamp } = {}) {
     const top = nowCard.getBoundingClientRect().top + window.scrollY;
     scrollToY(Math.max(0, top - 12));
   };
-
-  /* ----------------------------- movement --------------------------- */
-  root.append(
-    h(
-      'section.card',
-      { 'aria-label': 'Movement' },
-      h('div.card-head', {}, h('h2', {}, 'Movement')),
-      h('p.muted', {}, MOVEMENT_SAFETY_LINE),
-      MOVEMENT_PROMPTS.map((m) => checkRow(m, day, m.why, { openNotes })),
-    ),
-  );
 
   /* ------------------------------ journal ---------------------------- */
   const journalTa = h('textarea', {

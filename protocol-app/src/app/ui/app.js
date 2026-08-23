@@ -17,7 +17,7 @@ import { viewSupply } from './viewSupply.js';
 import { viewData } from './viewData.js';
 import { surfacePastFailures, installGlobalNet, plainReason } from './announcer.js';
 import { hhmm } from '../todayModel.js';
-import { localDateKey } from '../../lib/core.js';
+import { localDateKey, nowIso } from '../../lib/core.js';
 
 const TABS = [
   { id: 'today', label: 'Today' },
@@ -148,6 +148,48 @@ export async function init() {
   await render();
   watchForStaleScreen();
   surfacePastFailures();
+  askToKeepTheData();
+  registerWorker();
+}
+
+/**
+ * Ask the browser to treat this data as worth keeping.
+ *
+ * Without it, a phone that has not opened the app for a week or two can clear
+ * the origin — every check-off, every lab result, gone, with no warning and
+ * nothing to retry. The request is free, silent, and either granted or not;
+ * the answer is stored so the Data screen can say which, honestly, instead of
+ * implying a durability nobody promised.
+ *
+ * This is not a substitute for exporting backups and the copy on Data says so.
+ */
+function askToKeepTheData() {
+  const s = navigator?.storage;
+  if (!s?.persist) return;
+  const settle = (granted) =>
+    store.putSetting({ key: 'storage.persisted', value: Boolean(granted), askedAt: nowIso() })
+      .catch((e) => console.error('[protocol-app] could not record the storage answer:', e));
+
+  s.persisted?.()
+    .then((already) => (already ? true : s.persist()))
+    .then(settle)
+    .catch((e) => console.error('[protocol-app] persistent storage request failed:', e));
+}
+
+/**
+ * The service worker: offline, and an icon on the home screen that opens
+ * without browser chrome. It caches code only — never data (see sw.js).
+ *
+ * A failure here costs offline, not correctness, so it reports to the console
+ * rather than to the announcer, which is reserved for writes that did not
+ * happen.
+ */
+function registerWorker() {
+  if (!('serviceWorker' in navigator)) return;
+  if (location.protocol !== 'https:' && location.hostname !== 'localhost') return;
+  navigator.serviceWorker
+    .register(new URL('../../../sw.js', import.meta.url), { scope: './' })
+    .catch((e) => console.error('[protocol-app] offline support unavailable:', e));
 }
 
 /**

@@ -235,11 +235,19 @@ test('a failed tap announces, paints nothing, fabricates nothing; Retry complete
   store._resetForTests();
   const db = await store.ready({ name: 'fl-integration-1' });
 
+  // Something has to be tappable, so give the day one real item. (The four
+  // hard-coded movement prompts used to serve this purpose; they were removed
+  // on 22 Aug — an empty plan is now an honestly empty day.)
+  await store.saveProtocol({
+    id: 'p-fl', name: 'Under test', active: true, phases: [],
+    blocks: [{ id: 'b-fl', name: 'Anytime', order: 0, items: [{ id: 'i-fl', name: 'One thing' }] }],
+    createdAt: 'x', updatedAt: 'x',
+  });
+
   const main = document.querySelector('main');
   while (main.firstChild) main.removeChild(main.firstChild);
   main.append(await viewToday());
 
-  // The movement prompts are always on screen; take the first check button.
   const btn = main.querySelector('button.check');
   assert.ok(btn);
   assert.equal(btn.getAttribute('aria-pressed'), 'false');

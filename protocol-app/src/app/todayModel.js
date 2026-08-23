@@ -195,22 +195,20 @@ export function hhmm(d = new Date()) {
   return hhmmOfDate(d);
 }
 
-/* --------------------------- movement prompts ------------------------ */
+/* --------------------------- movement content ------------------------ */
 //
-// Ported from the old build: a small daily set of gentle movement
-// suggestions with check-offs — not a workout program. Checks store in the
-// day record like any item check; the ids below are permanent so history
-// survives future wording changes. The Phase 2 movement module will bring
-// the real content; this is the seed, not the ceiling.
+// The four hard-coded prompts that used to live here ("take a walk", "gentle
+// stretching"…) were removed on 22 Aug 2026 at Kevin's ruling: they are a
+// placeholder standing in the way of the real thing. Movement is a program —
+// the composed day arc, its own protocols — not four generic suggestions
+// stapled to the bottom of every screen, and having both meant a person's
+// actual body work was duplicated by a stub above it.
 //
-// The safety line ships in the same breath as the prompts (roadmap PEM gate).
-
-export const MOVEMENT_PROMPTS = [
-  { id: 'mv-walk', name: 'Take a walk', why: 'Rhythmic motion settles the nervous system and gets the gut moving.' },
-  { id: 'mv-stretch', name: 'Gentle stretching', why: 'Slow stretch, easy breath — find the edge and stay kind to it.' },
-  { id: 'mv-stand', name: 'Stand up and move for a minute', why: 'Long stillness stiffens; a minute of motion pushes back.' },
-  { id: 'mv-outside', name: 'Get outside', why: 'A change of light and air counts as movement too.' },
-];
-
-export const MOVEMENT_SAFETY_LINE =
-  'For most bodies, gently nudging the edge builds capacity. If exertion tends to crash you, grow from a stable baseline instead — never through a crash.';
+// Their ids (mv-walk, mv-stretch, mv-stand, mv-outside) are retired, never
+// reused: check-offs recorded against them stay in the day records they were
+// written into, because the plan changing never rewrites what happened.
+//
+// The movement safety line went with them, having been written to ride with
+// those prompts. The PEM/capacity gate (decision 28) is where that teaching
+// belongs, and it enters with the movement module rather than as orphaned
+// copy on Today.
