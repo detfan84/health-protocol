@@ -103,11 +103,32 @@ export async function viewArea({ areaId, back, startSession, openEditor }) {
     );
   }
 
+  // The inverse of "Put this on my day". Without it the only way off the day
+  // was the Plans screen, and for one commit there was no Plans screen — so an
+  // area page could switch a protocol on and never off again.
+  const offCard = p.active === true
+    ? h('div.card', {},
+        h('p.muted', {}, 'Taking this off your day hides its parts from Today. Nothing is deleted and nothing you have recorded changes — it moves to "Not on today" on the menu, and goes back whenever you want it.'),
+        h('button.btn.quiet', {
+          style: 'width:100%',
+          onclick: (e) => {
+            e.currentTarget.disabled = true;
+            guarded(() => store.saveProtocol({ ...p, active: false }), {
+              what: `Taking ${p.name} off your day`,
+              onOk: () => back(),
+              onFail: () => { e.currentTarget.disabled = false; },
+            });
+          },
+        }, 'Take this off my day'),
+      )
+    : null;
+
   root.append(
     h('div.card', {},
       h('p.muted', {}, 'Everything here is yours to change — reorder it, retime it, remove what does not apply.'),
       h('button.btn', { style: 'width:100%', onclick: () => openEditor(p.id) }, `Edit ${p.name}`),
     ),
+    offCard,
   );
 
   return root;

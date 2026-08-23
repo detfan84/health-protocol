@@ -328,6 +328,43 @@ export async function viewData({ applyTheme, applyScheme, go }) {
     ),
   );
 
+  /* -------------------------- the weekly count -------------------------- */
+  // R17. PLAN promised "2 of 3 this week" on the item; content law 2 bans
+  // completion meters by name. Kevin's ruling is that neither answer is
+  // global — the person chooses. Off by default keeps the law's posture; on,
+  // it is their own target reflected back, which some people find motivating
+  // and others find is the app keeping score. The number is composer input
+  // regardless of whether it is ever drawn.
+  const weeklySetting = await store.getSetting('ui.weeklyCount');
+  let persistedWeekly = weeklySetting?.value === true;
+  const weeklyBox = h('input', {
+    type: 'checkbox',
+    id: 'weekly-count',
+    checked: persistedWeekly,
+    style: 'width:22px; height:22px; min-height:auto',
+    onchange: () => {
+      const want = weeklyBox.checked;
+      guarded(
+        () => store.putSetting({ key: 'ui.weeklyCount', value: want, updatedAt: nowIso() }),
+        {
+          what: 'The weekly-count setting',
+          onOk: () => { persistedWeekly = want; },
+          onFail: () => { weeklyBox.checked = persistedWeekly; },
+        },
+      );
+    },
+  });
+  root.append(
+    h('div.card', {},
+      h('div.card-head', {}, h('h2', {}, 'The weekly count')),
+      h('p.muted', {}, 'Anything set to a number of days a week can show how many of them you have had — "2 of 3 this week" — on the item itself. Off unless you want it. It is your own target, not a score, and the app never mentions it anywhere else.'),
+      h('div.row', { style: 'border:none; align-items:center; gap:12px' },
+        weeklyBox,
+        h('label', { for: 'weekly-count' }, 'Show it on the item'),
+      ),
+    ),
+  );
+
   /* ------------------------------ version ------------------------------ */
   // Two questions this answers, both of which came up the hard way: which
   // version is this phone actually running, and how do I make it not be an

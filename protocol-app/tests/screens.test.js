@@ -457,3 +457,31 @@ test('an area page holds one area, with its parts as sessions', async () => {
   starts[0].dispatchEvent(new Event('click'));
   assert.deepEqual(started, ['arc-wake']);
 });
+
+test('the weekly count is off until asked for, and then it is your own target (R17)', async () => {
+  store._resetForTests();
+  await store.ready({ name: 'screens-10' });
+  await store.saveProtocol({
+    id: 'p-week', name: 'Weekly', active: true, phases: [],
+    blocks: [{
+      id: 'wb', name: 'Whenever', order: 0,
+      items: [{ id: 'w1', name: 'Sweat', cadence: { kind: 'timesPerWeek', n: 3 } }],
+    }],
+    createdAt: 'x', updatedAt: 'x',
+  });
+
+  // Content law 2 bans completion meters, so nothing counts at anybody by
+  // default. Absence of the setting means off, not "unset and therefore on".
+  draw(await viewToday({}));
+  await settled();
+  assert.doesNotMatch(document.querySelector('main').textContent, /of 3 this week/);
+
+  // Turned on, it is the person's own number reflected back — the cadence chip
+  // stays, because "3x a week" and "0 of 3 so far" are different facts.
+  await store.putSetting({ key: 'ui.weeklyCount', value: true, updatedAt: 'x' });
+  draw(await viewToday({}));
+  await settled();
+  const text = document.querySelector('main').textContent;
+  assert.match(text, /0 of 3 this week/);
+  assert.match(text, /3× a week/);
+});

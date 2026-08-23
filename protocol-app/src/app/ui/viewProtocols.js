@@ -6,10 +6,15 @@ import * as store from '../store.js';
 import { newProtocol, setProtocolFields } from '../editorOps.js';
 import { guarded } from './announcer.js';
 
-export async function viewProtocols({ openEditor, reload }) {
+export async function viewProtocols({ openEditor, reload, back }) {
   const protocols = await store.loadProtocols();
   const root = h('div');
-  root.append(h('h1', {}, 'Protocols'));
+  root.append(
+    // Reached from the Home menu rather than a tab, so it carries its own way
+    // back — the same shape an area page uses.
+    back ? h('button.btn.quiet.small', { onclick: back, 'aria-label': 'Back to the menu' }, '‹ Back') : null,
+    h('h1', {}, 'Protocols'),
+  );
 
   if (protocols.length === 0) {
     root.append(

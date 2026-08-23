@@ -32,6 +32,10 @@ const PATHS = {
   pencil: 'M4 20h4L19.5 8.5a2.1 2.1 0 0 0-3-3L5 17v3z',
   // a list
   list: 'M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01',
+  // a bottle with a cap and a label line — what you have on hand
+  bottle: 'M10 3h4v3h-4zM8.5 6h7A1.5 1.5 0 0 1 17 7.5v11a2.5 2.5 0 0 1-2.5 2.5h-5A2.5 2.5 0 0 1 7 18.5v-11A1.5 1.5 0 0 1 8.5 6ZM9 11h6',
+  // a calendar — the plans themselves
+  plan: 'M4 6h16v14H4zM4 10h16M9 3v4M15 3v4',
 };
 
 /** @param name a key of PATHS; anything unknown draws nothing rather than a box. */

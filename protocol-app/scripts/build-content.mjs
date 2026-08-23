@@ -324,7 +324,71 @@ for (const file of available) {
   copied += 1;
 }
 
-await writeFile(resolve(OUT_DIR, 'starter.json'), `${JSON.stringify(starter, null, 2)}\n`);
+/* ------------------------- version and timestamps -------------------- *
+ *
+ * Two problems, one fix.
+ *
+ * 1. The app applies the shipped content ONCE and remembers it did, keyed on
+ *    `seedVersion` (see seedContentOnce in ui/app.js). This file never carried
+ *    one, so the key was permanently the fallback string and every launch
+ *    after the first returned early: anything added to the shipped content
+ *    would reach new installs only. The file shipped, and the app declined to
+ *    read it — the four-day empty-app lesson wearing a different hat.
+ *
+ * 2. Every run restamped createdAt/updatedAt, so starter.json diffed on every
+ *    build even when not one word of content had changed. `updatedAt` is the
+ *    merge referee (decision 15); a field that moves for no reason is a
+ *    referee that has stopped refereeing.
+ *
+ * So: fingerprint the content with the timestamps taken out. That hash IS the
+ * seed version — it changes exactly when the content changes, and never
+ * otherwise. And when it matches what is already on disk, keep the timestamps
+ * that are already there rather than writing new ones over identical content.
+ */
+function withoutStamps(value) {
+  if (Array.isArray(value)) return value.map(withoutStamps);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([k]) => !['createdAt', 'updatedAt', 'exportedAt', 'seedVersion'].includes(k))
+        .map(([k, v]) => [k, withoutStamps(v)]),
+    );
+  }
+  return value;
+}
+
+const OUT_FILE = resolve(OUT_DIR, 'starter.json');
+const fingerprint = createHash('sha256')
+  .update(JSON.stringify(withoutStamps(starter)))
+  .digest('hex')
+  .slice(0, 12);
+
+let previous = null;
+if (existsSync(OUT_FILE)) {
+  try {
+    previous = JSON.parse(await readFile(OUT_FILE, 'utf8'));
+  } catch {
+    previous = null; // unreadable or half-written: treat as absent and restamp
+  }
+}
+
+let restamped = false;
+if (previous?.seedVersion === fingerprint) {
+  // Same content. Put the existing timestamps back, so the file is byte-stable
+  // and the diff is empty.
+  starter.exportedAt = previous.exportedAt ?? starter.exportedAt;
+  const before = new Map((previous.data?.protocols ?? []).map((p) => [p.id, p]));
+  for (const p of starter.data.protocols) {
+    const was = before.get(p.id);
+    if (!was) continue;
+    if (was.createdAt) p.createdAt = was.createdAt;
+    if (was.updatedAt) p.updatedAt = was.updatedAt;
+  }
+  restamped = true;
+}
+starter.seedVersion = fingerprint;
+
+await writeFile(OUT_FILE, `${JSON.stringify(starter, null, 2)}\n`);
 
 const cards = bodyBlocks.reduce((n, b) => n + b.items.length, 0);
 console.log(`body work: ${bodyBlocks.length} sections, ${cards} cards`);
@@ -333,4 +397,5 @@ console.log('day arc: 4 anchor blocks, each with a 60-second floor');
 console.log(`support: ${supportBlocks.reduce((n, b) => n + b.items.length, 0)} practices`);
 console.log(`routines: ${routineProtocols.length} (${routineProtocols.filter((p) => p.active).map((p) => p.name).join(', ') || 'none'} switched on)`);
 console.log(`photos: ${copied} files for ${wanted.size} sets`);
+console.log(`seed version: ${fingerprint}${restamped ? ' (unchanged — timestamps kept)' : ' (new — content changed)'}`);
 console.log(`wrote src/content/starter.json (${(JSON.stringify(starter).length / 1024).toFixed(0)} KB)`);

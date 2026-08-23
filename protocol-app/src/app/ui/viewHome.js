@@ -129,11 +129,18 @@ export async function viewHome({ open, startSession }) {
   }
 
   /* -------------------------------- more --------------------------------- */
+  // Supply and Plans live here rather than in the tab bar. They were tabs
+  // until the menu → area → session redesign, which dropped them without a
+  // replacement: for one commit there was no way to reach a supply count, no
+  // way to make a protocol, and no way to switch one off — while Today went on
+  // telling anybody who ran out to "restock it on the Supply screen".
   const more = h('div.tiles', {});
   more.append(
     tile({ title: 'Library', sub: 'Everything the app can teach', iconName: 'library', accent: 'plum', onclick: () => open({ tab: 'library' }) }),
     tile({ title: 'Reference', sub: 'Food, spacing, symptoms', iconName: 'book', accent: 'ochre', onclick: () => open({ tab: 'reference' }) }),
     tile({ title: 'Track', sub: 'Journal, food, water', iconName: 'pencil', accent: 'sky', onclick: () => open({ tab: 'track' }) }),
+    tile({ title: 'Supply', sub: 'What you have on hand', iconName: 'bottle', accent: 'clay', onclick: () => open({ tab: 'supply' }) }),
+    tile({ title: 'Plans', sub: 'Make one, rename it, switch it on or off', iconName: 'plan', accent: 'dawn', onclick: () => open({ tab: 'plans' }) }),
     tile({ title: 'Everything today', sub: 'The full list, if you want it', iconName: 'list', accent: 'sage', onclick: () => open({ tab: 'day' }) }),
   );
   root.append(h('section', {}, h('h2.section-title', {}, 'More'), more));

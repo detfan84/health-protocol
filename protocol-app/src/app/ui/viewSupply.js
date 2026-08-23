@@ -7,10 +7,13 @@ import * as store from '../store.js';
 import { makeSupply } from '../trackerOps.js';
 import { guarded } from './announcer.js';
 
-export async function viewSupply() {
+export async function viewSupply({ back } = {}) {
   const [protocols, supplies] = await Promise.all([store.loadProtocols(), store.loadSupplies()]);
   const root = h('div');
   root.append(
+    // Reached from the Home menu rather than a tab, so it carries its own way
+    // back — the same shape an area page uses.
+    back ? h('button.btn.quiet.small', { onclick: back, 'aria-label': 'Back to the menu' }, '‹ Back') : null,
     h('h1', {}, 'Supply'),
     h('p.muted', {}, 'What you have on hand, in your own numbers. Leave a count blank for anything you\'d rather not track.'),
   );

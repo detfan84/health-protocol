@@ -154,9 +154,10 @@ async function render() {
       view = await viewProtocols({
         openEditor: (id) => { state.editingId = id; render(); },
         reload: () => render(),
+        back: goHome,
       });
     } else if (state.tab === 'supply') {
-      view = await viewSupply();
+      view = await viewSupply({ back: goHome });
     } else if (state.tab === 'track' || state.tab === 'day') {
       view = await viewToday({
         date: state.viewingDate ?? undefined,
@@ -258,6 +259,21 @@ export async function init() {
 }
 
 /**
+ * Which shipped protocols this device should be handed, given what it already
+ * has and what it has already been offered.
+ *
+ * Pure, and separate from the fetching around it, because the rule it encodes
+ * is the one worth pinning with a test: **new content arrives, and a decision
+ * to delete something sticks.** Both halves matter and they pull against each
+ * other — an app that never re-checks freezes its content at whatever the
+ * first launch saw, and an app that re-checks naively hands back the protocol
+ * you threw away every time the content changes.
+ */
+export function protocolsToOffer({ shipped = [], have = new Set(), offered = new Set() } = {}) {
+  return shipped.filter((p) => !have.has(p.id) && !offered.has(p.id));
+}
+
+/**
  * The content the app ships with, put in on the first run.
  *
  * Without this the app opens empty — a screen that says "nothing active yet"
@@ -276,19 +292,37 @@ async function seedContentOnce() {
     if (!res.ok) throw new Error(`starter content: HTTP ${res.status}`);
     const text = await res.text();
     const file = JSON.parse(text);
-    const version = String(file.seedVersion ?? 'v1');
+    // The version is a fingerprint of the content itself, written by
+    // scripts/build-content.mjs — it changes exactly when the content does.
+    // Its absence used to be papered over with a constant, which froze the
+    // shipped content at whatever the first launch saw. A build that forgets
+    // it is a build bug, and it says so out loud rather than going quiet.
+    const version = file.seedVersion ? String(file.seedVersion) : null;
+    if (!version) {
+      const error = new Error('starter.json has no seedVersion — run `npm run content`');
+      console.error('[protocol-app]', error.message);
+      recordFailure({ what: 'The shipped content version', error });
+    }
 
     const applied = await store.getSetting('seed.applied');
-    if (applied?.value === version) return; // nothing new to add
+    if (version && applied?.value === version) return; // nothing new to offer
 
     const existing = await store.loadProtocols();
     const have = new Set(existing.map((p) => p.id));
 
-    // Only what this device does not already have. Never an overwrite: if a
-    // protocol is here, it is here as the person left it — edited, renamed,
-    // switched off, whatever they decided. New content arrives; nothing that
-    // exists is argued with.
-    const fresh = (file.data?.protocols ?? []).filter((p) => !have.has(p.id));
+    // What has this device ever been OFFERED? Not the same question as what it
+    // has. Somebody who deleted a seeded protocol decided something, and an app
+    // that hands it back at the next content update is arguing with them — so
+    // the offer is remembered separately from the result.
+    //
+    // Installs from before this list existed have no record of what they were
+    // offered, so what they currently hold is the best evidence there is. The
+    // honest cost, stated rather than hidden: a protocol deleted before this
+    // upgrade can return once, at the next content change, and then stay gone.
+    const offered = new Set(Array.isArray(applied?.ids) ? applied.ids : [...have]);
+
+    const shipped = file.data?.protocols ?? [];
+    const fresh = protocolsToOffer({ shipped, have, offered });
     if (fresh.length) {
       const out = await store.importFile(JSON.stringify({
         ...file,
@@ -297,7 +331,13 @@ async function seedContentOnce() {
       if (!out.ok) throw new Error(out.errors?.map((e) => `${e.path}: ${e.message}`).join('; ') || 'invalid');
       console.info(`[protocol-app] added ${fresh.length} protocol(s) from the shipped content`);
     }
-    await store.putSetting({ key: 'seed.applied', value: version, at: nowIso() });
+    for (const p of shipped) offered.add(p.id);
+    await store.putSetting({
+      key: 'seed.applied',
+      value: version ?? applied?.value ?? null,
+      ids: [...offered],
+      at: nowIso(),
+    });
   } catch (error) {
     // Loud, not fatal: the app still works, and the person can import
     // anything themselves — but they should know why it is empty.

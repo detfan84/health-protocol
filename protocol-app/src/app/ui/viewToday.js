@@ -22,7 +22,7 @@ import {
   unavailableReason, addSet, updateSet, removeSet, setDuration, trainingLog, lastLoggedBefore,
 } from '../trackerOps.js';
 import { unitsOf, stepMl, volumeUnitLabel, displayVolume, parseVolume, weightUnitLabel, displayWeight, parseWeight } from '../../lib/units.js';
-import { cadenceOf, cadenceLabel, addDays } from '../../lib/cadence.js';
+import { cadenceOf, cadenceLabel, addDays, dueToday } from '../../lib/cadence.js';
 import { guarded } from './announcer.js';
 import * as store from '../store.js';
 import { localDateKey, nowIso } from '../../lib/core.js';
@@ -306,7 +306,7 @@ function trainingBlock(item, day, { units, writeKey, onLogged, lastTime }) {
   return host;
 }
 
-function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, cadence, writeKey = localDateKey, units = 'imperial', lastTime } = {}) {
+function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, cadence, weekly, writeKey = localDateKey, units = 'imperial', lastTime } = {}) {
   const pressed = Boolean(day.checks[item.id]);
   const btn = h(
     'button.check',
@@ -341,7 +341,7 @@ function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, 
   const options = onPause
     ? h('div.item-options', {},
         unavailable?.kind === 'out-of-stock'
-          ? h('span.why', {}, 'Not being asked for: the supply count is zero. Restock it on the Supply screen and it comes back on its own.')
+          ? h('span.why', {}, 'Not being asked for: the supply count is zero. Restock it on Supply — it is on the Home menu — and it comes back on its own.')
           : unavailable
             ? h('button.btn.small', {
                 onclick: () => onPause(item, false),
@@ -391,6 +391,7 @@ function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, 
         item.name,
         item.dose ? h('span.dose', {}, ` · ${item.dose}`) : null,
         cadence ? h('span.chip.cadence', {}, cadence) : null,
+        weekly ? h('span.chip.cadence', {}, weekly) : null,
       ),
       why ? h('span.why', {}, why) : null,
       // A card with real content opens to the card; a plain item opens to its
@@ -424,6 +425,8 @@ export async function viewToday({ reload, stamp, date: viewing, startSession, mo
   // Read once, up here: the day's rows need it for weights, the water card
   // needs it for volumes, and a second read would be a second answer.
   const units = unitsOf(await store.getSetting('ui.units'));
+  // Opt-in, and absent means off (R17) — the law's posture is the default.
+  const showWeekly = (await store.getSetting('ui.weeklyCount'))?.value === true;
   const state = { day, history, pauses, supplies };
   // A past day is looked at from its own end: every block's window has closed,
   // so nothing is "now" and what is left is simply what was not recorded.
@@ -594,6 +597,7 @@ export async function viewToday({ reload, stamp, date: viewing, startSession, mo
         onPause: pauseOrResume,
         unavailable: unavailableReason(it.id, { pause: state.pauses[it.id], supply: state.supplies[it.id] }),
         cadence: cadenceChip(it),
+        weekly: weeklyChip(it),
       })),
     );
   }
@@ -628,6 +632,22 @@ export async function viewToday({ reload, stamp, date: viewing, startSession, mo
   function cadenceChip(item) {
     const c = cadenceOf(item);
     return c.kind === 'daily' ? null : cadenceLabel(c);
+  }
+
+  /**
+   * "2 of 3 this week" — off unless the person asked for it (R17).
+   *
+   * PLAN §3.5 promised this number on screen; content law 2 bans completion
+   * meters by name. Kevin's line settles it: neither answer is global, the
+   * person chooses. Off by default keeps the law's posture, and when it is on
+   * it is not the app grading anybody — it is their own target, which they set,
+   * reflected back at them. The number is composer input either way.
+   */
+  function weeklyChip(item) {
+    if (!showWeekly) return null;
+    const due = dueToday(item, date, state.history);
+    if (!Number.isFinite(due.doneThisWeek) || !Number.isFinite(due.target)) return null;
+    return `${due.doneThisWeek} of ${due.target} this week`;
   }
 
   /** R16: stop asking, or start again. Both are one write and a re-sort. */
