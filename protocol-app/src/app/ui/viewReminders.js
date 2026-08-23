@@ -15,7 +15,7 @@ import { guarded } from './announcer.js';
 import { localDateKey } from '../../lib/core.js';
 import {
   normalizeReminders, addReminder, updateReminder, removeReminder,
-  remindersFromBlocks, remindersToIcs, REMINDERS_KEY,
+  remindersFromBlocks, remindersToIcs, expandTimes, KINDS, REMINDERS_KEY,
 } from '../../lib/reminders.js';
 
 const DAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -35,14 +35,20 @@ export async function remindersCard() {
   }
 
   function timeRow(t) {
+    const repeats = Boolean(t.everyMinutes);
+    const fires = expandTimes(t, rec.quiet);
     return h('div.editor-item', {},
       h('div.field-row', {},
-        h('div', {}, h('label', { class: 'visually-hidden' }, `Time for ${t.label ?? 'reminder'}`),
-          h('input', {
-            type: 'time', value: t.at,
-            'aria-label': `Time for ${t.label ?? 'this reminder'}`,
-            onchange: (e) => save(updateReminder(rec, t.id, { at: e.target.value }), 'The reminder time'),
-          })),
+        h('div', {},
+          h('label', { class: 'visually-hidden' }, `Kind of reminder at ${t.at}`),
+          h('select', {
+            'aria-label': `Kind of reminder at ${t.at}`,
+            onchange: (e) => save(updateReminder(rec, t.id, { kind: e.target.value }), 'The reminder kind'),
+          },
+            Object.entries(KINDS).map(([value, k]) =>
+              h('option', { value, selected: t.kind === value }, k.label)),
+          ),
+        ),
         h('div', { style: 'flex:2' },
           h('input', {
             type: 'text', value: t.label ?? '', placeholder: 'What it is for',
@@ -54,6 +60,36 @@ export async function remindersCard() {
           onclick: () => save(removeReminder(rec, t.id), 'Removing the reminder'),
         }, 'Remove'),
       ),
+      h('div.field-row', {},
+        h('div', {},
+          h('label', {}, repeats ? 'From' : 'At'),
+          h('input', {
+            type: 'time', value: t.at,
+            'aria-label': `Time for ${t.label ?? 'this reminder'}`,
+            onchange: (e) => save(updateReminder(rec, t.id, { at: e.target.value }), 'The reminder time'),
+          })),
+        repeats
+          ? h('div', {},
+              h('label', {}, 'Until'),
+              h('input', {
+                type: 'time', value: t.until,
+                'aria-label': `End of the window for ${t.label ?? 'this reminder'}`,
+                onchange: (e) => save(updateReminder(rec, t.id, { until: e.target.value }), 'The reminder window'),
+              }))
+          : null,
+        repeats
+          ? h('div', {},
+              h('label', {}, 'Every (min)'),
+              h('input', {
+                type: 'number', min: '5', max: '720', step: '5', value: String(t.everyMinutes),
+                'aria-label': `Minutes between ${t.label ?? 'these reminders'}`,
+                onchange: (e) => save(updateReminder(rec, t.id, { everyMinutes: Number(e.target.value) }), 'How often the reminder repeats'),
+              }))
+          : null,
+      ),
+      repeats
+        ? h('p.why', {}, `${fires.length} a day: ${fires.slice(0, 6).join(', ')}${fires.length > 6 ? '\u2026' : ''}`)
+        : null,
       h('div.chip-row', {},
         DAY_LABELS.map((label, i) =>
           h('button.phase-chip', {
@@ -105,17 +141,58 @@ export async function remindersCard() {
     card.append(
       h('div.field-row', { style: 'margin-top:var(--sp-3)' },
         h('button.btn', {
-          onclick: () => save(addReminder(rec, { at: '08:00' }), 'Adding a reminder'),
+          onclick: () => save(addReminder(rec, { at: '08:00', kind: 'block' }), 'Adding a reminder'),
         }, 'Add a time'),
+        h('button.btn', {
+          onclick: () => save(addReminder(rec, { kind: 'snack', label: 'Move a little' }), 'Adding a repeating nudge'),
+        }, 'Add a repeating nudge'),
         suggestions.length
           ? h('button.btn', {
               onclick: () => {
                 let next = rec;
-                for (const s of suggestions) next = addReminder(next, s);
+                for (const s of suggestions) next = addReminder(next, { ...s, kind: 'block' });
                 save(next, 'Adding reminders for your blocks');
               },
             }, `Use my ${suggestions.length} block times`)
           : null,
+      ),
+    );
+
+    /* ---------------------------- quiet hours -------------------------- */
+    // Repeating nudges only. A time you typed yourself is a time you meant,
+    // and the app does not know better than you about your own evening.
+    const quiet = rec.quiet ?? { from: '21:00', to: '07:00' };
+    card.append(
+      h('div', { style: 'margin-top:var(--sp-3)' },
+        h('p', {}, h('strong', {}, 'Quiet hours')),
+        h('p.muted', {}, 'Repeating nudges stay out of this window. Times you set yourself are left alone \u2014 if you asked for 21:30, you meant 21:30.'),
+        h('div.field-row', {},
+          h('div', {},
+            h('label', { for: 'quiet-on' }, 'Use quiet hours'),
+            h('select', {
+              id: 'quiet-on',
+              onchange: (e) => save(
+                e.target.value === 'on' ? { ...rec, quiet } : { ...rec, quiet: null },
+                'The quiet hours setting',
+              ),
+            },
+              [['off', 'Off'], ['on', 'On']].map(([v, l]) =>
+                h('option', { value: v, selected: Boolean(rec.quiet) === (v === 'on') }, l)),
+            ),
+          ),
+          rec.quiet
+            ? h('div', {}, h('label', {}, 'From'), h('input', {
+                type: 'time', value: rec.quiet.from, 'aria-label': 'Quiet hours start',
+                onchange: (e) => save({ ...rec, quiet: { ...rec.quiet, from: e.target.value } }, 'Quiet hours'),
+              }))
+            : null,
+          rec.quiet
+            ? h('div', {}, h('label', {}, 'To'), h('input', {
+                type: 'time', value: rec.quiet.to, 'aria-label': 'Quiet hours end',
+                onchange: (e) => save({ ...rec, quiet: { ...rec.quiet, to: e.target.value } }, 'Quiet hours'),
+              }))
+            : null,
+        ),
       ),
     );
 
@@ -135,7 +212,7 @@ export async function remindersCard() {
               const url = URL.createObjectURL(blob);
               const a = document.createElement('a');
               a.href = url;
-              a.download = 'protocol-reminders.ics';
+              a.download = 'shoes-of-peace-reminders.ics';
               a.style.display = 'none';
               document.body.append(a);
               a.click();

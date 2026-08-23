@@ -10,7 +10,7 @@ import assert from 'node:assert/strict';
 
 import {
   blankReminders, normalizeReminders, addReminder, updateReminder, removeReminder,
-  remindersFromBlocks, remindersToIcs, REMINDERS_KEY,
+  remindersFromBlocks, remindersToIcs, expandTimes, inQuietHours, KINDS, REMINDERS_KEY,
 } from '../src/lib/reminders.js';
 
 const NOW = new Date(Date.UTC(2026, 7, 22, 12, 0, 0));
@@ -149,10 +149,85 @@ test('no times means a valid, empty calendar rather than a broken one', () => {
 
 test('the file says what it is, because a calendar entry has to explain itself later', () => {
   const text = ics(addReminder(blankReminders(), { at: '08:00', label: 'Binder window' }));
-  assert.match(text.replace(/\r\n /g, ''), /SUMMARY:Protocol: Binder window/);
+  assert.match(text.replace(/\r\n /g, ''), /SUMMARY:Shoes of Peace: Binder window/);
   assert.match(
     text.replace(/\r\n /g, ''),
-    /DESCRIPTION:A reminder you set in Protocol\. It knows the time only/,
+    /DESCRIPTION:A reminder you set in Shoes of Peace\. It knows the time only/,
     'and it admits what it cannot know',
   );
+});
+
+/* --------------------------- kinds and cadence ------------------------ */
+
+test('a reminder kind brings its own cadence, and the shape is what matters', () => {
+  let r = addReminder(blankReminders(), { kind: 'snack', label: 'Move' });
+  const snack = r.times[0];
+  assert.equal(snack.kind, 'snack');
+  assert.equal(snack.everyMinutes, KINDS.snack.everyMinutes, 'the kind supplies the starting shape');
+  assert.ok(snack.until);
+
+  // …and the person can override it without it stopping being that kind.
+  r = updateReminder(r, snack.id, { everyMinutes: 240 });
+  assert.equal(r.times[0].everyMinutes, 240);
+  assert.equal(r.times[0].kind, 'snack');
+
+  // A one-off kind has no window at all.
+  r = updateReminder(r, snack.id, { kind: 'winddown' });
+  assert.equal('everyMinutes' in r.times[0], false);
+  assert.equal('until' in r.times[0], false);
+
+  // Junk intervals are refused rather than half-applied.
+  let bad = addReminder(blankReminders(), { at: '09:00', everyMinutes: 1, until: '17:00' });
+  assert.equal('everyMinutes' in bad.times[0], false, 'every minute is not a reminder, it is a fault');
+  bad = addReminder(blankReminders(), { at: '09:00', everyMinutes: 60 });
+  assert.equal('everyMinutes' in bad.times[0], false, 'repeating without a window is not a schedule');
+});
+
+test('a repeating nudge expands to the times it actually fires', () => {
+  const r = addReminder(blankReminders(), { at: '09:00', until: '17:00', everyMinutes: 120, kind: 'snack' });
+  assert.deepEqual(expandTimes(r.times[0]), ['09:00', '11:00', '13:00', '15:00', '17:00']);
+
+  const once = addReminder(blankReminders(), { at: '21:30', kind: 'winddown' });
+  assert.deepEqual(expandTimes(once.times[0]), ['21:30'], 'a one-off is just itself');
+
+  const overnight = addReminder(blankReminders(), { at: '22:00', until: '02:00', everyMinutes: 120 });
+  assert.deepEqual(expandTimes(overnight.times[0]), ['22:00', '00:00', '02:00'], 'a window may cross midnight');
+});
+
+test('quiet hours silence the repeating nudges and leave chosen times alone', () => {
+  const quiet = { from: '12:00', to: '14:00' };
+  assert.equal(inQuietHours('12:30', quiet), true);
+  assert.equal(inQuietHours('14:00', quiet), false, 'the end is exclusive');
+  assert.equal(inQuietHours('23:00', { from: '21:00', to: '07:00' }), true, 'windows wrap midnight');
+  assert.equal(inQuietHours('08:00', { from: '21:00', to: '07:00' }), false);
+
+  const r = addReminder(blankReminders(), { at: '09:00', until: '17:00', everyMinutes: 60 });
+  const fires = expandTimes(r.times[0], quiet);
+  assert.equal(fires.includes('12:00'), false);
+  assert.equal(fires.includes('13:00'), false);
+  assert.equal(fires.includes('11:00'), true);
+  assert.equal(fires.includes('14:00'), true);
+});
+
+test('the calendar file carries one event per firing, with stable ids', () => {
+  let r = addReminder(blankReminders(), { at: '09:00', until: '15:00', everyMinutes: 120, label: 'Move' });
+  r = { ...r, quiet: { from: '12:30', to: '13:30' } };
+  const text = remindersToIcs(r, { from: '2026-08-23', now: NOW });
+
+  // 09:00, 11:00, 15:00 — 13:00 lands inside quiet hours and is not written.
+  assert.equal((text.match(/BEGIN:VEVENT/g) ?? []).length, 3);
+  assert.ok(text.includes('DTSTART:20260823T090000'));
+  assert.ok(text.includes('DTSTART:20260823T150000'));
+  assert.ok(!text.includes('DTSTART:20260823T130000'), 'quiet hours reach the file, not just the screen');
+  assert.ok(text.includes('RRULE:FREQ=DAILY'), 'each firing repeats daily');
+
+  const uids = [...text.matchAll(/UID:([^\r\n]+)/g)].map((m) => m[1]);
+  assert.equal(new Set(uids).size, uids.length, 'every event needs its own id');
+  assert.ok(uids.every((u) => u.startsWith(r.times[0].id)), 'ids stay tied to the reminder they came from');
+
+  // Re-exporting the same schedule gives the same ids, so a calendar updates
+  // its events instead of collecting duplicates.
+  const again = remindersToIcs(r, { from: '2026-08-24', now: NOW });
+  const uids2 = [...again.matchAll(/UID:([^\r\n]+)/g)].map((m) => m[1]);
+  assert.deepEqual(uids2, uids);
 });

@@ -165,12 +165,64 @@ export async function viewData({ applyTheme }) {
       }
     },
   });
+  // Pasting, as well as picking a file. Moving a JSON file from a laptop to a
+  // phone is a small ordeal — mail it to yourself, find it in Downloads, hope
+  // the file picker sees it — and the text is the same text either way. This
+  // is also the door an AI-produced protocol comes through (decision 25: the
+  // validator is the boundary, and pasting does not skip it).
+  const pasted = h('textarea', {
+    id: 'import-paste',
+    rows: '4',
+    placeholder: 'Or paste the contents of a protocol or backup file here.',
+  });
+  function showImportLines(res) {
+    const lines = [];
+    if (res.ok) {
+      lines.push('Imported. Nothing was deleted — imports only ever add or update.');
+      for (const [storeName, st] of Object.entries(res.stats ?? {})) {
+        lines.push(`${STORE_LABELS[storeName] ?? storeName}: ${st.added} added, ${st.updated} updated, ${st.kept} kept as-is (yours was newer).`);
+      }
+    } else {
+      lines.push("That couldn't be imported. Nothing on this device changed.");
+      for (const err of res.errors ?? []) {
+        lines.push(`• ${err.path}: ${err.message}${err.hint ? ` — ${err.hint}` : ''}`);
+      }
+    }
+    for (const w of res.warnings ?? []) lines.push(`Repaired on the way in — ${w.path}: ${w.message}`);
+    results.textContent = lines.join('\n');
+  }
   root.append(
     h('div.card', {},
-      h('div.card-head', {}, h('h2', {}, 'Import a backup')),
+      h('div.card-head', {}, h('h2', {}, 'Bring something in')),
       h('p.muted', {}, 'Importing merges. Records you have that the file doesn\'t stay put; where both sides have a record, the newer one wins. An import can never delete anything.'),
       h('label', { for: 'import-file', class: 'visually-hidden' }, 'Choose a backup file'),
       fileInput,
+      h('div.field', { style: 'margin-top:var(--sp-3)' },
+        h('label', { for: 'import-paste' }, 'Or paste it — easier than moving a file to a phone'),
+        pasted,
+      ),
+      h('button.btn', {
+        style: 'width:100%',
+        onclick: () => {
+          const text = pasted.value.trim();
+          if (!text) return;
+          clear(results);
+          guarded(
+            () => store.importFile(text),
+            {
+              what: 'The import',
+              detail: 'The import stopped before finishing. The whole import writes in one storage transaction, so nothing was partially applied — this device is exactly as it was.',
+              copyText: () => pasted.value,
+              onOk: (res) => {
+                showImportLines(res);
+                // Clear only what actually went in; a rejected paste stays put
+                // so nobody has to go and find it again.
+                if (res.ok) pasted.value = '';
+              },
+            },
+          );
+        },
+      }, 'Import pasted text'),
       results,
     ),
   );

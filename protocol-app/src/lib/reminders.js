@@ -21,6 +21,25 @@ import { newId } from './core.js';
 
 export const REMINDERS_KEY = 'reminders';
 
+/**
+ * The kinds of reminder, because they do not want the same cadence (Kevin,
+ * Aug 23). A block reminder happens once, at a time that means something. A
+ * movement snack or a posture check is the opposite: it wants to come round
+ * again through the day, and the exact minute matters not at all.
+ *
+ * `kind` carries the intent and the sensible starting shape. What the app
+ * actually schedules is the shape — a kind is never behaviour of its own, so
+ * anybody can drag a posture check to every four hours and it stays a posture
+ * check.
+ */
+export const KINDS = {
+  block: { label: 'Part of the day', repeats: false },
+  winddown: { label: 'Wind-down', repeats: false },
+  snack: { label: 'Movement snack', repeats: true, everyMinutes: 120, at: '09:00', until: '18:00' },
+  posture: { label: 'Posture check', repeats: true, everyMinutes: 45, at: '09:00', until: '17:00' },
+  other: { label: 'Something else', repeats: false },
+};
+
 /** Off, with nothing scheduled. Opt-in is the hard rule (decision 12). */
 export function blankReminders() {
   return { key: REMINDERS_KEY, enabled: false, times: [] };
@@ -31,6 +50,13 @@ export function normalizeReminders(rec) {
   const r = rec ? structuredClone(rec) : blankReminders();
   r.key = REMINDERS_KEY;
   r.enabled = r.enabled === true;
+  // Quiet hours apply to REPEATING nudges only. A time you typed yourself is a
+  // time you meant, even if it is 22:30 — the app does not overrule it.
+  if (r.quiet && HHMM.test(String(r.quiet.from ?? '')) && HHMM.test(String(r.quiet.to ?? ''))) {
+    r.quiet = { from: String(r.quiet.from), to: String(r.quiet.to) };
+  } else {
+    delete r.quiet;
+  }
   r.times = Array.isArray(r.times) ? r.times.filter(isTime).map(fixTime) : [];
   r.times.sort((a, b) => (a.at < b.at ? -1 : a.at > b.at ? 1 : 0));
   return r;
@@ -41,8 +67,16 @@ const isTime = (t) => t && typeof t === 'object' && HHMM.test(String(t.at ?? '')
 
 function fixTime(t) {
   const out = { id: String(t.id ?? newId()), at: String(t.at) };
+  out.kind = KINDS[t.kind] ? String(t.kind) : 'block';
   const label = String(t.label ?? '').trim();
   if (label) out.label = label;
+  // A repeating nudge: from `at` until `until`, every `everyMinutes`. Only
+  // these three fields make a reminder repeat — the kind is a label.
+  const every = Number(t.everyMinutes);
+  if (Number.isInteger(every) && every >= 5 && every <= 12 * 60 && HHMM.test(String(t.until ?? ''))) {
+    out.everyMinutes = every;
+    out.until = String(t.until);
+  }
   // days: 0 = Sunday … 6 = Saturday. Absent means every day.
   if (Array.isArray(t.days)) {
     const days = [...new Set(t.days.map(Number).filter((d) => Number.isInteger(d) && d >= 0 && d <= 6))];
@@ -51,10 +85,20 @@ function fixTime(t) {
   return out;
 }
 
-export function addReminder(rec, { at, label, days } = {}) {
+export function addReminder(rec, { at, label, days, kind, everyMinutes, until } = {}) {
   const r = normalizeReminders(rec);
-  if (!HHMM.test(String(at ?? ''))) return r; // a broken time is not a schedule
-  r.times.push(fixTime({ id: newId(), at, label, days }));
+  const preset = KINDS[kind] ?? {};
+  const start = at ?? preset.at;
+  if (!HHMM.test(String(start ?? ''))) return r; // a broken time is not a schedule
+  r.times.push(fixTime({
+    id: newId(),
+    at: start,
+    label,
+    days,
+    kind,
+    everyMinutes: everyMinutes ?? preset.everyMinutes,
+    until: until ?? preset.until,
+  }));
   return normalizeReminders(r);
 }
 
@@ -73,6 +117,30 @@ export function updateReminder(rec, id, patch) {
     if (fixed.days) t.days = fixed.days;
     else delete t.days;
   }
+  if (patch.kind !== undefined && KINDS[patch.kind]) {
+    t.kind = patch.kind;
+    // Changing kind offers that kind's shape, but only where the person has
+    // not already said otherwise — switching to "posture check" should not
+    // silently rewrite a window somebody set on purpose.
+    const preset = KINDS[patch.kind];
+    if (preset.repeats && t.everyMinutes === undefined) {
+      t.everyMinutes = preset.everyMinutes;
+      t.until = preset.until;
+    }
+    if (!preset.repeats) {
+      delete t.everyMinutes;
+      delete t.until;
+    }
+  }
+  if (patch.everyMinutes !== undefined || patch.until !== undefined) {
+    const next = fixTime({
+      ...t,
+      everyMinutes: patch.everyMinutes ?? t.everyMinutes,
+      until: patch.until ?? t.until,
+    });
+    if (next.everyMinutes) { t.everyMinutes = next.everyMinutes; t.until = next.until; }
+    else { delete t.everyMinutes; delete t.until; }
+  }
   return normalizeReminders(r);
 }
 
@@ -80,6 +148,39 @@ export function removeReminder(rec, id) {
   const r = normalizeReminders(rec);
   r.times = r.times.filter((x) => x.id !== id);
   return r;
+}
+
+/* ------------------------- when it actually fires -------------------- */
+
+const toMinutes = (hhmm) => Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3, 5));
+const toHHMM = (mins) => `${String(Math.floor(mins / 60) % 24).padStart(2, '0')}:${String(mins % 60).padStart(2, '0')}`;
+
+/** Is this clock time inside a quiet window? Windows may wrap midnight. */
+export function inQuietHours(at, quiet) {
+  if (!quiet) return false;
+  const t = toMinutes(at), from = toMinutes(quiet.from), to = toMinutes(quiet.to);
+  return from <= to ? t >= from && t < to : t >= from || t < to;
+}
+
+/**
+ * One reminder → the clock times it actually fires at.
+ *
+ * A one-off is itself. A repeating nudge is its window, stepped, with quiet
+ * hours removed. This is the single expansion everything downstream uses, so
+ * the calendar file and any future in-app nudge can never disagree about when
+ * something happens.
+ */
+export function expandTimes(t, quiet) {
+  if (!t?.everyMinutes || !t.until) return [t.at];
+  const start = toMinutes(t.at);
+  let end = toMinutes(t.until);
+  if (end < start) end += 24 * 60; // a window may run past midnight
+  const out = [];
+  for (let m = start; m <= end && out.length < 96; m += t.everyMinutes) {
+    const at = toHHMM(m);
+    if (!inQuietHours(at, quiet)) out.push(at);
+  }
+  return out;
 }
 
 /** The times a protocol's timed blocks suggest — a starting point, not a rule. */
@@ -153,7 +254,7 @@ function localStart(dateKey, at) {
  * The event body says what this is and where it came from, because in six
  * months "Protocol" in a calendar needs to explain itself.
  */
-export function remindersToIcs(rec, { appName = 'Protocol', from, now = new Date() } = {}) {
+export function remindersToIcs(rec, { appName = 'Shoes of Peace', from, now = new Date() } = {}) {
   const r = normalizeReminders(rec);
   const startDate = from ?? `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   const dtstamp = stamp(now);
@@ -172,11 +273,16 @@ export function remindersToIcs(rec, { appName = 'Protocol', from, now = new Date
       ? `RRULE:FREQ=WEEKLY;BYDAY=${t.days.map((d) => DAY_CODES[d]).join(',')}`
       : 'RRULE:FREQ=DAILY';
     const title = t.label ? `${appName}: ${t.label}` : `${appName} reminder`;
+    // A repeating nudge becomes one daily event per firing. Calendars handle
+    // sub-daily recurrence inconsistently, and a reminder that only works in
+    // some calendars is worse than none — so the app does the arithmetic and
+    // hands over something every calendar understands.
+    for (const at of expandTimes(t, r.quiet)) {
     lines.push(
       'BEGIN:VEVENT',
-      `UID:${t.id}@protocol-app.local`,
+      `UID:${t.id}-${at.replace(':', '')}@protocol-app.local`,
       `DTSTAMP:${dtstamp}`,
-      `DTSTART:${localStart(startDate, t.at)}`,
+      `DTSTART:${localStart(startDate, at)}`,
       'DURATION:PT5M',
       'TRANSP:TRANSPARENT',
       rule,
@@ -189,6 +295,7 @@ export function remindersToIcs(rec, { appName = 'Protocol', from, now = new Date
       'END:VALARM',
       'END:VEVENT',
     );
+    }
   }
 
   lines.push('END:VCALENDAR');

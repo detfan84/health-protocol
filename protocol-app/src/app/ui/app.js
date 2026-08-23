@@ -29,7 +29,16 @@ const TABS = [
 
 // todayStamp: what the Today screen was drawn for — the date, and the next
 // moment its grouping changes. Set by viewToday, read by watchForStaleScreen.
-const state = { tab: 'today', editingId: null, todayStamp: null, currentView: null };
+const state = {
+  tab: 'today',
+  editingId: null,
+  todayStamp: null,
+  currentView: null,
+  // Which day Today is showing. null = today itself; a date key = a day being
+  // looked back at (decision 21). Reset whenever a tab is tapped, because
+  // "Today" should always mean today when you come back to it.
+  viewingDate: null,
+};
 
 export function applyTheme(value) {
   const el = document.documentElement;
@@ -98,7 +107,11 @@ async function render() {
       view = await viewData({ applyTheme });
     } else {
       view = await viewToday({
-        reload: () => render(),
+        date: state.viewingDate ?? undefined,
+        reload: (opts) => {
+          if (opts && 'date' in opts) state.viewingDate = opts.date ?? null;
+          render();
+        },
         stamp: (s) => { state.todayStamp = s; },
       });
     }
@@ -123,7 +136,7 @@ function renderTabs() {
     nav.append(
       h('button', {
         'aria-current': state.tab === t.id ? 'page' : null,
-        onclick: () => { state.tab = t.id; state.editingId = null; render(); },
+        onclick: () => { state.tab = t.id; state.editingId = null; state.viewingDate = null; render(); },
       }, t.label),
     );
   }

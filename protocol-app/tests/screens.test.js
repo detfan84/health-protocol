@@ -130,3 +130,41 @@ test('the disclaimer gates the app until it is accepted, and the acceptance is w
   assert.equal(rec.value.version, ACCEPTED_VERSION, 'the version is recorded, so new wording can ask again');
   assert.ok(rec.value.at, 'and when');
 });
+
+test('a past day can be looked at and corrected, and writes land on that day', async () => {
+  store._resetForTests();
+  await store.ready({ name: 'screens-4' });
+  await store.saveProtocol(dayLongProtocol());
+
+  const { localDateKey } = await import('../src/lib/core.js');
+  const { addDays } = await import('../src/lib/cadence.js');
+  const yesterday = addDays(localDateKey(), -1);
+
+  let asked = null;
+  draw(await viewToday({ date: yesterday, reload: (o) => { asked = o; } }));
+  await settled();
+
+  const main = document.querySelector('main');
+  assert.match(main.textContent, /already happened/, 'the screen says plainly that this is not today');
+  assert.equal(main.querySelector('h1').textContent, 'That day');
+  assert.equal(main.querySelector('.card.now'), null, 'nothing is "now" on a day that is over');
+
+  // Ticking something off files it under THAT day, not under today.
+  const btn = main.querySelector('button.check');
+  btn.dispatchEvent(new Event('click'));
+  await settled(10);
+
+  const then = await store.loadDay(yesterday);
+  const now = await store.loadDay(localDateKey());
+  assert.equal(Object.keys(then.checks).length, 1, 'the correction landed on the day being corrected');
+  assert.deepEqual(now.checks, {}, 'and today was left alone');
+
+  // The date picker cannot reach into the future.
+  const picker = main.querySelector('input[type=date]');
+  assert.equal(picker.value, yesterday);
+  assert.equal(picker.max, localDateKey(), 'there is no record of a day that has not happened');
+
+  // The arrows ask the shell to move; they never navigate by themselves.
+  [...main.querySelectorAll('button')].find((b) => b.textContent === '‹').dispatchEvent(new Event('click'));
+  assert.deepEqual(asked, { date: addDays(yesterday, -1) });
+});

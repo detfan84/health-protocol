@@ -19,10 +19,23 @@ import { h, clear } from './dom.js';
 import { buildToday, makePhaseSetting } from '../todayModel.js';
 import { toggleCheck, setJournal, addFood, removeFood, bumpWaterMl, setWaterMl, unavailableReason } from '../trackerOps.js';
 import { unitsOf, stepMl, volumeUnitLabel, displayVolume, parseVolume } from '../../lib/units.js';
-import { cadenceOf, cadenceLabel } from '../../lib/cadence.js';
+import { cadenceOf, cadenceLabel, addDays } from '../../lib/cadence.js';
 import { guarded } from './announcer.js';
 import * as store from '../store.js';
 import { localDateKey, nowIso } from '../../lib/core.js';
+
+/** 'YYYY-MM-DD' → a local Date at midnight. */
+function dateFromKey(key) {
+  const [y, m, d] = String(key).split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+
+/** The last minute of a given day — how a finished day is looked at. */
+function endOfDay(key) {
+  const d = dateFromKey(key);
+  d.setHours(23, 59, 0, 0);
+  return d;
+}
 
 /** Scroll, where scrolling exists — jsdom and headless renders have no view. */
 function scrollToY(y) {
@@ -74,7 +87,7 @@ function notesBlock(notes, itemId, openNotes, extra) {
   return el;
 }
 
-function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, cadence } = {}) {
+function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, cadence, writeKey = localDateKey } = {}) {
   const pressed = Boolean(day.checks[item.id]);
   const btn = h(
     'button.check',
@@ -83,7 +96,7 @@ function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, 
       'aria-label': `${item.name} — done today`,
       onclick: () =>
         guarded(
-          () => store.mutateDay(localDateKey(), (fresh) => toggleCheck(fresh, item.id)),
+          () => store.mutateDay(writeKey(), (fresh) => toggleCheck(fresh, item.id)),
           {
             what: `The check-off for ${item.name}`,
             // Paint only after the write confirms — a checkmark is a receipt,
@@ -143,8 +156,15 @@ function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, 
   );
 }
 
-export async function viewToday({ reload, stamp } = {}) {
-  const date = localDateKey();
+export async function viewToday({ reload, stamp, date: viewing } = {}) {
+  const date = viewing ?? localDateKey();
+  const isToday = date === localDateKey();
+
+  // Which day a write lands in. Today re-asks the clock at write time, so a
+  // phone left open overnight files this morning's taps under this morning; a
+  // past day is fixed, because that is the day being corrected.
+  const writeKey = () => (isToday ? localDateKey() : date);
+
   const [protocols, day, history, pauses, supplies] = await Promise.all([
     store.loadProtocols(),
     store.loadDay(date),
@@ -154,7 +174,10 @@ export async function viewToday({ reload, stamp } = {}) {
   ]);
   const phaseSettings = await store.loadPhaseSettings(protocols);
   const state = { day, history, pauses, supplies };
-  const today = buildToday({ protocols, phaseSettings, now: new Date(), day, history, pauses, supplies });
+  // A past day is looked at from its own end: every block's window has closed,
+  // so nothing is "now" and what is left is simply what was not recorded.
+  const asOf = isToday ? new Date() : endOfDay(date);
+  const today = buildToday({ protocols, phaseSettings, now: asOf, day, history, pauses, supplies });
 
   // Instructions the person has opened, by item id — kept across the
   // re-sorts a tap causes, so reading stays read.
@@ -165,15 +188,51 @@ export async function viewToday({ reload, stamp } = {}) {
   const leaving = new AbortController();
 
   const root = h('div');
-  const dateText = new Date().toLocaleDateString(undefined, {
+  const dateText = dateFromKey(date).toLocaleDateString(undefined, {
     weekday: 'long',
     month: 'long',
     day: 'numeric',
   });
-  root.append(h('h1', {}, 'Today'), h('p.muted', {}, dateText));
+
+  // Past days are viewable and correctable (decision 21). Arrows for the day
+  // before and after, and a typed date for anything further back. There is no
+  // forward arrow past today: a record of a day that has not happened is not
+  // a record of anything.
+  const go = (key) => reload?.({ date: key === localDateKey() ? undefined : key });
+  const picker = h('input', {
+    type: 'date',
+    value: date,
+    max: localDateKey(),
+    'aria-label': 'Show another day',
+    style: 'max-width:11rem',
+    onchange: (e) => { if (e.target.value && e.target.value <= localDateKey()) go(e.target.value); },
+  });
+  root.append(
+    h('h1', {}, isToday ? 'Today' : 'That day'),
+    h('div.field-row', { style: 'align-items:center' },
+      h('button.btn.small', {
+        'aria-label': 'The day before',
+        onclick: () => go(addDays(date, -1)),
+      }, '‹'),
+      h('div.grow', {}, h('p.muted', { style: 'margin:0' }, dateText)),
+      isToday
+        ? null
+        : h('button.btn.small', {
+            'aria-label': 'The day after',
+            onclick: () => go(addDays(date, +1)),
+          }, '›'),
+      isToday ? null : h('button.btn.small', { onclick: () => go(localDateKey()) }, 'Today'),
+    ),
+    h('div.field', { style: 'margin-top:var(--sp-2)' }, picker),
+    isToday
+      ? null
+      : h('p.muted', {}, 'You are looking at a day that has already happened. Ticking something here is not cheating — a record you correct is a record that is more true.'),
+  );
 
   /* ------------------------- phase pointers ------------------------- */
-  for (const pp of today.phasedProtocols) {
+  // Only on today: the phase pointer is where the plan is NOW, and changing
+  // it from inside a past day would edit the present by accident.
+  for (const pp of isToday ? today.phasedProtocols : []) {
     // The select may only display a phase that actually persisted. On a
     // failed write it snaps back — the screen never gets ahead of storage.
     let persisted = pp.current?.id ?? pp.phases[0]?.id;
@@ -217,18 +276,18 @@ export async function viewToday({ reload, stamp } = {}) {
   function rerenderBlocks() {
     return guarded(
       async () => {
-        const today2 = localDateKey();
+        const key = writeKey();
         const [ps, fresh, hist, paused, supply] = await Promise.all([
           store.loadProtocols(),
-          store.loadDay(today2),
-          store.loadRecentDays(today2),
+          store.loadDay(key),
+          store.loadRecentDays(key),
           store.loadPauses(),
           store.loadSupplies(),
         ]);
         const settings = await store.loadPhaseSettings(ps);
         Object.assign(state, { day: fresh, history: hist, pauses: paused, supplies: supply });
         return buildToday({
-          protocols: ps, phaseSettings: settings, now: new Date(),
+          protocols: ps, phaseSettings: settings, now: isToday ? new Date() : endOfDay(key),
           day: fresh, history: hist, pauses: paused, supplies: supply,
         });
       },
@@ -260,6 +319,7 @@ export async function viewToday({ reload, stamp } = {}) {
       head,
       b.items.map((it) => checkRow(it, day, it.why, {
         openNotes,
+        writeKey,
         onChanged: rerenderBlocks,
         onPause: pauseOrResume,
         unavailable: unavailableReason(it.id, { pause: state.pauses[it.id], supply: state.supplies[it.id] }),
@@ -334,8 +394,10 @@ export async function viewToday({ reload, stamp } = {}) {
       groupSection(t, { key: 'now', title: 'Now' }),
       groupSection(t, {
         key: 'missed',
-        title: 'Still open from earlier',
-        note: 'Their time has passed. Tap them if you get to them — nothing here is counted against you.',
+        title: isToday ? 'Still open from earlier' : 'Not recorded',
+        note: isToday
+          ? 'Their time has passed. Tap them if you get to them — nothing here is counted against you.'
+          : 'Nothing was recorded for these. Tick anything you did and forgot to mark.',
         foldOver: 8,
       }),
       groupSection(t, { key: 'anytime', title: 'Anytime today' }),
@@ -365,7 +427,7 @@ export async function viewToday({ reload, stamp } = {}) {
 
   // Tell the shell what this screen assumes, so it can notice when the day
   // has moved past it (see watchForStaleScreen in app.js).
-  stamp?.({ date, nextBoundaryHM: today.nextBoundaryHM });
+  stamp?.(isToday ? { date, nextBoundaryHM: today.nextBoundaryHM } : null);
 
   root._beforeUnmount = () => {
     saveJournal();
@@ -402,7 +464,7 @@ export async function viewToday({ reload, stamp } = {}) {
       // Read the field at write time (and at every retry) — what saves is
       // what the person sees in the box. The box is never cleared, so a
       // failure strands nothing (ruling B, point 2).
-      () => store.mutateDay(localDateKey(), (fresh) => setJournal(fresh, journalTa.value)),
+      () => store.mutateDay(writeKey(), (fresh) => setJournal(fresh, journalTa.value)),
       {
         what: 'The journal entry',
         copyText: () => journalTa.value,
@@ -447,7 +509,7 @@ export async function viewToday({ reload, stamp } = {}) {
             'aria-label': `Remove food entry: ${f.text}`,
             onclick: () =>
               guarded(
-                () => store.mutateDay(localDateKey(), (fresh) => removeFood(fresh, f.id)),
+                () => store.mutateDay(writeKey(), (fresh) => removeFood(fresh, f.id)),
                 {
                   what: `Removing the food entry "${f.text}"`,
                   onOk: (next) => renderFood(next),
@@ -465,7 +527,7 @@ export async function viewToday({ reload, stamp } = {}) {
     const text = foodInput.value;
     if (!text.trim()) return;
     guarded(
-      () => store.mutateDay(localDateKey(), (fresh) => addFood(fresh, text)),
+      () => store.mutateDay(writeKey(), (fresh) => addFood(fresh, text)),
       {
         what: `The food entry "${text.trim()}"`,
         copyText: () => text,
@@ -528,7 +590,7 @@ export async function viewToday({ reload, stamp } = {}) {
     return guarded(
       // A minus-tap on nothing returns the same record, and mutateDay writes
       // nothing at all for it — no record is invented (ruling A).
-      () => store.mutateDay(localDateKey(), (fresh) => bumpWaterMl(fresh, deltaMl)),
+      () => store.mutateDay(writeKey(), (fresh) => bumpWaterMl(fresh, deltaMl)),
       {
         what: 'The water amount',
         onOk: (next) => paint(next),
@@ -537,7 +599,7 @@ export async function viewToday({ reload, stamp } = {}) {
   }
   amount.addEventListener('change', () =>
     guarded(
-      () => store.mutateDay(localDateKey(), (fresh) => setWaterMl(fresh, parseVolume(amount.value, units))),
+      () => store.mutateDay(writeKey(), (fresh) => setWaterMl(fresh, parseVolume(amount.value, units))),
       {
         what: 'The water amount',
         copyText: () => amount.value,
