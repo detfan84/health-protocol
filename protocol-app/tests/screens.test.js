@@ -102,3 +102,31 @@ test('the editor keeps multi-paragraph instructions instead of flattening them',
   assert.ok(notes, 'notes are edited in a textarea — a text input strips every newline');
   assert.ok(notes.value.includes('\n\n'), 'and the paragraph break survives being drawn');
 });
+
+test('the disclaimer gates the app until it is accepted, and the acceptance is written down', async () => {
+  const { viewDisclaimer, accepted, ACCEPTED_VERSION, ACCEPTED_KEY } =
+    await import('../src/app/ui/viewDisclaimer.js');
+
+  store._resetForTests();
+  await store.ready({ name: 'screens-3' });
+
+  assert.equal(await accepted(), false, 'a fresh device has agreed to nothing');
+
+  let opened = false;
+  draw(viewDisclaimer({ onAccept: () => { opened = true; } }));
+  const text = document.querySelector('main').textContent;
+  assert.match(text, /not medical advice/i);
+  assert.match(text, /Physical risk is real/i, 'the specific risks are named, not implied');
+  assert.match(text, /stays on this device/i);
+
+  const btn = [...document.querySelectorAll('button')].find((b) => /I understand/.test(b.textContent));
+  assert.ok(btn, 'there is exactly one way past it');
+  btn.dispatchEvent(new Event('click'));
+  await settled(10);
+
+  assert.equal(opened, true, 'accepting opens the app');
+  assert.equal(await accepted(), true);
+  const rec = await store.getSetting(ACCEPTED_KEY);
+  assert.equal(rec.value.version, ACCEPTED_VERSION, 'the version is recorded, so new wording can ask again');
+  assert.ok(rec.value.at, 'and when');
+});

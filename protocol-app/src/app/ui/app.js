@@ -15,6 +15,7 @@ import { viewProtocols } from './viewProtocols.js';
 import { viewEditor } from './viewEditor.js';
 import { viewSupply } from './viewSupply.js';
 import { viewData } from './viewData.js';
+import { viewDisclaimer, accepted } from './viewDisclaimer.js';
 import { surfacePastFailures, installGlobalNet, plainReason } from './announcer.js';
 import { hhmm } from '../todayModel.js';
 import { localDateKey, nowIso } from '../../lib/core.js';
@@ -145,6 +146,23 @@ export async function init() {
     return null;
   });
   applyTheme(theme?.value ?? 'auto');
+
+  // Nothing before this: not the tabs, not a check-off, not a glimpse of
+  // somebody's routine. PLAN §2 calls the disclaimer mandatory for a
+  // shareable app, and a gate you can see past is not a gate.
+  const ok = await accepted().catch((e) => {
+    console.error('[protocol-app] could not read the acceptance record:', e);
+    return false; // unreadable means unaccepted — err toward showing it again
+  });
+  if (!ok) {
+    const main = document.querySelector('main');
+    clear(main);
+    main.append(viewDisclaimer({ onAccept: () => { init(); } }));
+    document.querySelector('nav.tabs').replaceChildren();
+    surfacePastFailures();
+    return;
+  }
+
   await render();
   watchForStaleScreen();
   surfacePastFailures();

@@ -6,6 +6,7 @@ import * as store from '../store.js';
 import { localDateKey, nowIso } from '../../lib/core.js';
 import { STORES } from '../../lib/schema.js';
 import { unitsOf } from '../../lib/units.js';
+import { disclaimerBody } from './viewDisclaimer.js';
 import { guarded } from './announcer.js';
 
 const STORE_LABELS = {
@@ -213,6 +214,19 @@ export async function viewData({ applyTheme }) {
             h('option', { value, selected: persistedUnits === value }, label),
           ),
         ),
+      ),
+    ),
+  );
+
+  /* ---------------------------- the warning ---------------------------- */
+  // Re-readable, always. Consent that can only be read once is a dark pattern
+  // with better manners.
+  root.append(
+    h('div.card', {},
+      h('div.card-head', {}, h('h2', {}, 'Safety and disclaimer')),
+      h('details.notes', {},
+        h('summary', {}, 'Read it again'),
+        ...disclaimerBody(),
       ),
     ),
   );
