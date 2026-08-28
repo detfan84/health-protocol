@@ -1,0 +1,597 @@
+{
+  "format": "protocol-app/authored-v1",
+  "category": "vestibular",
+  "_meta": {
+    "file": "vestibular.json — authored content, first file on the authored path.",
+    "status": "DRAFT — Kevin's edit pass pending. Not ratified content.",
+    "source": "PT_Session_Capture_Aug26_2026_v1.md — drills demonstrated 26 Aug 2026 by Kevin's PT (DPT, POTS/EDS specialty practice). Written from Kevin's dictation in the app's own words; nothing reproduced from a clinic handout.",
+    "shape_note": "Authored against the library-item shape as described in Repo_Inventory_Report_2026-08-28.md §1b — the file itself was not read. CC: if any key here doesn't match the loader, report the mismatch rather than dropping the field.",
+    "new_fields_used": "evidence, tier, role, audience (on careful) — Tier 1 browse-side per strategy v0.5 §6. If the loader rejects them, that is a finding, not a reason to strip them.",
+    "vocabulary_note": "muscles[] here uses terms not in the ~44-entry census (oculomotor, cervical). Per D40 the vocabulary is a census, not a cap — adding is a file edit with an introduced-on date. Proposed additions: oculomotor (eye movement), cervical movement sense. Kevin's call at S1.",
+    "open_from_capture": "Seated or standing for the eye drills · home frequency · duration for smooth pursuit · whether near-far is its own category · progression criteria. All marked undetermined below rather than guessed.",
+    "landed": "2026-08-28, per CC_Task_S0b step 3.4. Merged into the catalogue by scripts/build-catalog.mjs.",
+    "cc_transcription_note": "Dropped 1 explicit null(s) on the way in (saccades-horizontal.everyNDays). A null is not a value — an absent key says the same thing without the app having to test for it. Reported rather than done silently.",
+    "cc_field_findings": "carefulAudience moved out of fields to a sibling of it on 28 Aug (Kevin's call), so the D29 gating information survives into a person's day; the validator filters fields to the five K3 keys. Items changed: saccades-horizontal, saccades-vertical, near-far-shifts, smooth-pursuit, laser-path-trace, walk-straight-leg-scoop, walk-side-lunge, walk-knee-to-chest.",
+    "appended_28_aug": "Two different sources in this file, and the distinction matters. CLINICIAN-DEMONSTRATED: nothing here — the eight drills from the 26 Aug visit are already in vestibular.json. APP CONTENT: all five items below are standard rehabilitation material the app is adding, NOT things Kevin's PT prescribed. Each says so on its face. Three of them are worth asking him about at a visit; that is flagged per item.",
+    "ordering": "dizziness-which-kind should sit FIRST in the module, ahead of every drill. It is the protective card and it changes whether some of the drills are the right thing at all.",
+    "collision_flag": "balance-standing-ladder overlaps the imported body-work card 'Single-leg progression' (id from the legacy import) and possibly 'Toe control'. The build halts on duplicate names, not on overlapping content, so this will load — but two items teaching the same ladder is a content problem, not a build problem. Kevin's call at his edit pass or at S1: merge, retire the legacy card, or keep both with distinct scopes.",
+    "open_questions_for_the_PT": "Does he want gaze stabilization (head moving, eyes fixed) in the mix, or is head-still work the whole plan for now? · Is visual-motion tolerance appropriate given the orthostatic picture? · Where does barefoot/plantar sensory work sit relative to the balance ladder?"
+  },
+  "items": [
+    {
+      "id": "dizziness-which-kind",
+      "name": "Two kinds of dizziness — which one is yours?",
+      "kind": "practice",
+      "category": "vestibular",
+      "categoryName": "Eyes, balance & orientation",
+      "tracking": "check",
+      "tier": "established",
+      "role": "awareness-cue",
+      "why": "Read this before any drill in this section. Two very different things both get called dizziness, and the drills here are aimed at one of them.",
+      "fields": {
+        "release": "Notice what brings yours on and what settles it.\n\nThe **standing** pattern: it arrives when you stand up, get worse the longer you stay upright, and eases when you sit or lie down. It often comes with a racing heart, greying vision, or heat. This is a blood-flow and blood-pressure pattern.\n\nThe **motion** pattern: it arrives when you turn your head, roll over in bed, look up, or walk down a busy aisle. Sitting still doesn't necessarily fix it, and standing up isn't what set it off. This is a balance-and-orientation pattern.",
+        "notice": "Which one describes yours — and be open to both. Having one does not protect you from the other; in people with orthostatic problems, motion-provoked dizziness turns out to be common too. The useful question is not which label fits but which of the two is happening in any given episode.",
+        "careful": "The drills in this section train the motion pattern. **They do not treat the standing pattern, and doing them standing can make it worse.** If yours is mostly the standing kind, do them seated, and take the standing pattern to a clinician — it has its own management and this isn't it.",
+        "load": "Whichever you have, tell your clinician which one it is and what provokes it. That sentence is worth more in a visit than a general report of dizziness."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Read it",
+          "note": "Once. Come back if the pattern changes."
+        }
+      ],
+      "evidence": {
+        "grade": "established as a clinical distinction; the overlap between the two is well documented",
+        "basis": "Orthostatic and vestibular causes of dizziness are separated routinely in clinical assessment. In people with orthostatic intolerance, vestibular symptoms are common rather than rare — in one clinic series nearly all reported unsteadiness and roughly half reported vertigo, and a majority were offered vestibular rehabilitation. Which is why this card teaches both/and rather than either/or."
+      },
+      "sourceNote": "App content, not from Kevin's PT.",
+      "carefulAudience": "orthostatic"
+    },
+    {
+      "id": "eye-shared-guide",
+      "name": "Eye drills — how to run them",
+      "kind": "practice",
+      "category": "vestibular",
+      "categoryName": "Eyes, balance & orientation",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "awareness-cue",
+      "why": "These train how well your eyes aim, follow, and refocus. Read this once; it applies to every eye drill in this section.",
+      "fields": {
+        "tool": "Two sticky notes with a + drawn on each, and a pen.",
+        "release": "The head stays still in all of them. Only the eyes move. If your neck starts doing the work, stop and reset — that is the drill quietly turning into something else.",
+        "notice": "Whether your eyes land cleanly on a target or overshoot and correct. Whether they follow a moving target smoothly or in small jumps. That noticing is the point as much as the reps are."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Read it",
+          "note": "One read is enough. It stays here to come back to."
+        }
+      ],
+      "evidence": {
+        "grade": "established as a rehabilitation approach for vestibular and oculomotor dysfunction; not studied specifically in POTS",
+        "basis": "Vestibular rehabilitation is standard care for peripheral vestibular hypofunction and PPPD. In POTS, vestibular symptoms are common and examination is recommended, but no POTS-specific trial exists."
+      }
+    },
+    {
+      "id": "saccades-horizontal",
+      "name": "Eye jumps — side to side",
+      "kind": "practice",
+      "category": "vestibular",
+      "categoryName": "Eyes, balance & orientation",
+      "tracking": "duration",
+      "tier": "exploratory",
+      "role": "awareness-cue",
+      "why": "Trains your eyes to land accurately on a target instead of overshooting and correcting.",
+      "equipment": "Two sticky notes with a + on each",
+      "muscles": [
+        "oculomotor"
+      ],
+      "fields": {
+        "tool": "Two sticky notes, each with a + drawn on it.",
+        "release": "Put one target at the far left edge of your vision and one at the far right. They stay put. Head still. Jump your eyes from one + to the other, refocusing on each as fast as you can.",
+        "notice": "Do your eyes land right on the +, or overshoot and slide back? Small corrections before you arrive are the thing being looked for.",
+        "careful": "This can bring on dizziness or nausea. Mild, settling discomfort is expected. A ramp that keeps climbing is a stop."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "As demonstrated",
+          "note": "30 seconds. Position (seated or standing) not yet confirmed — ask."
+        }
+      ],
+      "target": {
+        "seconds": 30
+      },
+      "_undetermined": [
+        "position",
+        "home frequency",
+        "progression rungs"
+      ],
+      "carefulAudience": [
+        "orthostatic"
+      ]
+    },
+    {
+      "id": "saccades-vertical",
+      "name": "Eye jumps — up and down",
+      "kind": "practice",
+      "category": "vestibular",
+      "categoryName": "Eyes, balance & orientation",
+      "tracking": "duration",
+      "tier": "exploratory",
+      "role": "awareness-cue",
+      "why": "Same skill as the side-to-side version, in the plane that usually gets less practice.",
+      "equipment": "Two sticky notes with a + on each",
+      "muscles": [
+        "oculomotor"
+      ],
+      "fields": {
+        "tool": "Two sticky notes, each with a + drawn on it.",
+        "release": "One target high, one low, both at the edges of your vision. They stay put. Head still. Jump your eyes between them, refocusing each time.",
+        "notice": "Same as side to side — landing clean, or overshooting and correcting.",
+        "careful": "Can bring on dizziness or nausea. Mild and settling is expected; a climbing ramp is a stop."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "As demonstrated",
+          "note": "30 seconds."
+        }
+      ],
+      "target": {
+        "seconds": 30
+      },
+      "_undetermined": [
+        "position",
+        "home frequency",
+        "progression rungs"
+      ],
+      "carefulAudience": [
+        "orthostatic"
+      ]
+    },
+    {
+      "id": "near-far-shifts",
+      "name": "Near and far shifts",
+      "kind": "practice",
+      "category": "vestibular",
+      "categoryName": "Eyes, balance & orientation",
+      "tracking": "duration",
+      "tier": "exploratory",
+      "role": "awareness-cue",
+      "why": "Trains the eyes to converge and refocus between something close and something far — the skill that gets used every time you look up from a screen.",
+      "equipment": "Two sticky notes with a + on each",
+      "muscles": [
+        "oculomotor"
+      ],
+      "fields": {
+        "tool": "Two sticky notes, each with a + drawn on it.",
+        "release": "One target close to your face, one across the room. Head still. Shift your eyes between them, letting each come into focus before moving on.",
+        "notice": "How long each one takes to sharpen. Whether one direction is harder than the other.",
+        "careful": "Can bring on dizziness or nausea. Mild and settling is expected; a climbing ramp is a stop."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "As demonstrated",
+          "note": "30 seconds."
+        }
+      ],
+      "target": {
+        "seconds": 30
+      },
+      "_undetermined": [
+        "position",
+        "home frequency",
+        "whether this belongs in its own category rather than with the eye jumps — mechanically it is focusing, not jumping"
+      ],
+      "carefulAudience": [
+        "orthostatic"
+      ]
+    },
+    {
+      "id": "smooth-pursuit",
+      "name": "Following a moving target",
+      "kind": "practice",
+      "category": "vestibular",
+      "categoryName": "Eyes, balance & orientation",
+      "tracking": "duration",
+      "tier": "exploratory",
+      "role": "awareness-cue",
+      "why": "Trains your eyes to follow something continuously instead of chasing it in small jumps.",
+      "equipment": "One sticky note with a + on it",
+      "muscles": [
+        "oculomotor"
+      ],
+      "fields": {
+        "tool": "One sticky note with a + drawn on it.",
+        "release": "Hold the note out in front of you. Head still. Move the note slowly side to side and follow the + the whole way with your eyes — following it, not jumping ahead to where it is going.",
+        "notice": "Whether the follow is smooth or your eyes jump and catch up. That difference is exactly what an examiner watches for.",
+        "careful": "Can bring on dizziness or nausea. Mild and settling is expected; a climbing ramp is a stop."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "As demonstrated",
+          "note": "Duration not stated — ask."
+        }
+      ],
+      "_undetermined": [
+        "duration",
+        "position",
+        "home frequency"
+      ],
+      "carefulAudience": [
+        "orthostatic"
+      ]
+    },
+    {
+      "id": "laser-path-trace",
+      "name": "Tracing a path with a laser",
+      "kind": "practice",
+      "category": "vestibular",
+      "categoryName": "Eyes, balance & orientation",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "balance",
+      "why": "Trains steady, accurate control of where you are pointing — first with your hand, later with your head, which is where it becomes a neck position-sense drill.",
+      "equipment": "Laser pointer (the head-mountable kind) and a winding line drawn on a wall",
+      "muscles": [
+        "cervical movement sense"
+      ],
+      "sides": false,
+      "fields": {
+        "tool": "A laser pointer and a winding line on the wall — more a road than a maze.",
+        "release": "Stand facing the line and trace it end to end with the laser beam, keeping the dot on the line.",
+        "notice": "How far the dot strays, and whether you drift smoothly back or jerk back.",
+        "careful": "Rung 3 stacks a balance demand on a drill that can already make you dizzy. Do it near a counter. If your ankles are unstable, earn rung 2 first."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Hand-held",
+          "note": "Hold the laser in your hand. This is where the clinic started — deliberately, to keep it light."
+        },
+        {
+          "level": 2,
+          "name": "Head-mounted",
+          "note": "Wear the laser. Now your neck aims the beam, not your hand. This is the version the tool is built for."
+        },
+        {
+          "level": 3,
+          "name": "On an unstable surface",
+          "note": "Head-mounted, standing on a wobble board or similar. Clinic-mentioned as the way to make it harder. No purchase needed — the boards are already on hand."
+        }
+      ],
+      "_undetermined": [
+        "what the examiner scores",
+        "what earns the next rung",
+        "home frequency"
+      ],
+      "carefulAudience": [
+        "orthostatic",
+        "hypermobile"
+      ]
+    },
+    {
+      "id": "walk-straight-leg-scoop",
+      "name": "Walking straight-leg scoop",
+      "kind": "exercise",
+      "category": "vestibular",
+      "categoryName": "Eyes, balance & orientation",
+      "tracking": "check",
+      "tier": "established",
+      "role": "stretch",
+      "why": "Opens the whole back line of the leg with each step, while you are already moving — a stretch that doesn't require standing still.",
+      "equipment": "Open floor, a room's length",
+      "muscles": [
+        "hamstrings",
+        "gastrocnemius",
+        "soleus",
+        "thoracolumbar fascia"
+      ],
+      "fields": {
+        "release": "Step the lead leg out with the heel down and the toe pulled up, knee straight. Hinge forward over that leg and scoop your hands upward through the air as you go. Alternate legs, walking the length of the room.",
+        "load": "Pair with posterior-chain strengthening in the days after — bridges or hinges — so the new range gets used.",
+        "notice": "Where the stretch lands: behind the knee, mid-hamstring, or up into the low back. That tells you which part is actually tight.",
+        "careful": "Straight does not mean locked. If your knee snaps back past straight, stop short of that — the aim is a long hamstring, not a hyperextended joint."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "As demonstrated",
+          "note": "A handful of passes across the room. Rep count not stated — ask."
+        }
+      ],
+      "_undetermined": [
+        "reps or passes",
+        "home frequency"
+      ],
+      "carefulAudience": [
+        "hypermobile"
+      ]
+    },
+    {
+      "id": "walk-side-lunge",
+      "name": "Walking side lunge",
+      "kind": "exercise",
+      "category": "vestibular",
+      "categoryName": "Eyes, balance & orientation",
+      "tracking": "check",
+      "tier": "established",
+      "role": "stretch",
+      "why": "Opens the inner thigh in the sideways direction that almost nothing else in a day asks for.",
+      "equipment": "Open floor, a room's length",
+      "muscles": [
+        "adductors"
+      ],
+      "fields": {
+        "release": "Step wide to the side and sink into that hip, keeping the trailing leg straight and both feet flat. Come up, step through, repeat down the room.",
+        "load": "Pair with adductor and glute-medius strengthening so the range you open has something holding it.",
+        "notice": "Whether one side sinks further than the other, and whether the trailing foot wants to roll.",
+        "careful": "Controlled descent. Do not drop into the bottom of the range and bounce."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "As demonstrated",
+          "note": "A handful of passes across the room."
+        }
+      ],
+      "_undetermined": [
+        "reps or passes",
+        "home frequency"
+      ],
+      "carefulAudience": [
+        "hypermobile"
+      ]
+    },
+    {
+      "id": "walk-knee-to-chest",
+      "name": "Walking knee-to-chest",
+      "kind": "exercise",
+      "category": "vestibular",
+      "categoryName": "Eyes, balance & orientation",
+      "tracking": "check",
+      "tier": "established",
+      "role": "stretch",
+      "why": "Opens the back of the hip on the moving leg while the standing leg quietly practises balance.",
+      "equipment": "Open floor, a room's length",
+      "muscles": [
+        "gluteus maximus",
+        "deep hip rotators",
+        "psoas/iliacus"
+      ],
+      "fields": {
+        "release": "Each step, lift the knee and draw it in toward your chest with both hands, then release it and step through onto that foot. Alternate down the room.",
+        "load": "Pair with glute and hip-flexor strengthening.",
+        "notice": "The standing leg. Balance on one side is often noticeably worse — that is information, not a failure.",
+        "careful": "Pull the knee in; don't wrench it. If the standing leg's balance is poor, do this near a wall."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "As demonstrated",
+          "note": "A handful of passes across the room."
+        }
+      ],
+      "_undetermined": [
+        "reps or passes",
+        "home frequency"
+      ],
+      "carefulAudience": [
+        "hypermobile",
+        "orthostatic"
+      ]
+    },
+    {
+      "id": "balance-standing-ladder",
+      "name": "Standing balance — the ladder",
+      "kind": "exercise",
+      "category": "vestibular",
+      "categoryName": "Eyes, balance & orientation",
+      "tracking": "duration",
+      "tier": "established",
+      "role": "balance",
+      "sides": true,
+      "why": "Balance is a skill that rebuilds with practice, and it is the one your ankles, hips and eyes are all doing at once. Each rung takes away one source of information so the others have to work harder.",
+      "equipment": "A counter or wall within reach; later, a wobble board",
+      "muscles": [
+        "foot intrinsics (arch)",
+        "tibialis anterior",
+        "peroneals",
+        "glute med/min",
+        "deep hip rotators"
+      ],
+      "fields": {
+        "tool": "Something to catch yourself on. Not optional — the whole ladder assumes it is there.",
+        "release": "Work at the rung where you can hold steady for about 30 seconds with only occasional touches for support. Not the hardest rung you can survive — the hardest one you can do well. When 30 seconds is easy and quiet, move up.",
+        "notice": "Which direction you drift, and whether one side is worse. Whether your toes claw the floor — that is your foot gripping because something upstream isn't holding. Whether closing your eyes changes everything, which tells you how much of your balance is running on vision.",
+        "careful": "Near a counter, every rung, every time. Knees soft — if yours snap back past straight, keep a small bend and treat that as part of the drill. If you have a history of ankle instability, earn each rung rather than skipping to the boards.",
+        "load": "Calf raises and single-leg hip work on the same days. Balance is a skill, but it still needs something underneath it that can hold."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Feet together",
+          "note": "Stand with feet touching, arms relaxed. 30 seconds. Harder than it sounds if it has been a while."
+        },
+        {
+          "level": 2,
+          "name": "Heel to toe",
+          "note": "One foot directly in front of the other, heel touching toe. 30 seconds each way."
+        },
+        {
+          "level": 3,
+          "name": "One leg",
+          "note": "Other foot off the floor, not resting on the standing leg. 30 seconds a side."
+        },
+        {
+          "level": 4,
+          "name": "One leg, eyes closed",
+          "note": "Same, eyes shut. This is where most people find out how much they were using vision. Expect a big drop — that is the point of the rung."
+        },
+        {
+          "level": 5,
+          "name": "One leg, head turning",
+          "note": "Eyes open, turn your head slowly side to side, then up and down, while balancing. The first rung where the balance system and the eyes have to negotiate."
+        },
+        {
+          "level": 6,
+          "name": "Unstable surface",
+          "note": "Wobble or dome board, eyes open, two feet first and one foot later. Counter within reach."
+        },
+        {
+          "level": 7,
+          "name": "Foot board, single foot",
+          "note": "The two-section board with the forefoot and rearfoot moving separately. Start in its most stable configuration and free it up as you go."
+        }
+      ],
+      "target": {
+        "seconds": 30
+      },
+      "evidence": {
+        "grade": "established direction, small trials",
+        "basis": "Exercise programmes including balance and proprioceptive work in hypermobility syndromes improve balance, proprioception, strength and pain across a small set of trials, with no adverse effects reported. The trials are few and small; the direction is consistent."
+      },
+      "sourceNote": "App content, not from Kevin's PT. Rungs 6 and 7 use equipment already owned.",
+      "carefulAudience": "hypermobile, orthostatic"
+    },
+    {
+      "id": "gaze-stabilization",
+      "name": "Holding a target while your head moves",
+      "kind": "practice",
+      "category": "vestibular",
+      "categoryName": "Eyes, balance & orientation",
+      "tracking": "duration",
+      "tier": "exploratory",
+      "role": "awareness-cue",
+      "why": "The opposite of the eye drills. There, the head stays still and the eyes move. Here the eyes stay locked and the head moves — which is the reflex that keeps the world from sliding around when you walk, turn, or look over your shoulder.",
+      "equipment": "A card or sticky note with a letter or + on it",
+      "muscles": [
+        "oculomotor"
+      ],
+      "fields": {
+        "tool": "A target you can hold at arm's length — a letter is better than a dot, because you can tell whether it stays sharp.",
+        "release": "Seated. Hold the target at arm's length and keep your eyes locked on it. Turn your head slowly side to side while the target stays still and stays in focus. The head moves; the target doesn't; your gaze doesn't leave it. Then the same with a nodding motion.",
+        "notice": "Whether the letter stays sharp or smears as your head turns. Smearing means the reflex isn't keeping up — slow the head down until it stays sharp, and that speed is your starting point.",
+        "careful": "This one provokes more than the head-still drills. Seated first, always. Short — build up from well under a minute. Mild dizziness that settles within a few minutes afterward is expected; dizziness that keeps climbing, or nausea, is a stop. If you are prone to migraine, start shorter still.",
+        "load": "Nothing to load. Sit for a minute afterward before standing up."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Seated, side to side",
+          "note": "Start at 15–20 seconds and only extend if it settles cleanly. Slow enough that the letter stays sharp."
+        },
+        {
+          "level": 2,
+          "name": "Seated, up and down",
+          "note": "Same, nodding. Usually harder."
+        },
+        {
+          "level": 3,
+          "name": "Standing, near support",
+          "note": "Same drills upright. Only once the seated versions are comfortable."
+        }
+      ],
+      "evidence": {
+        "grade": "established for vestibular hypofunction and persistent postural-perceptual dizziness; not studied in POTS specifically",
+        "basis": "Gaze stabilization is a core component of standard vestibular rehabilitation and has a real trial base in those populations. No trial has tested it in orthostatic intolerance, where symptoms overlap but the mechanism differs."
+      },
+      "sourceNote": "App content, not from Kevin's PT — worth asking him whether he wants this in the mix yet, since it is a step up in provocation from the head-still drills he started with.",
+      "carefulAudience": "orthostatic"
+    },
+    {
+      "id": "visual-motion-tolerance",
+      "name": "Getting used to busy visual scenes",
+      "kind": "practice",
+      "category": "vestibular",
+      "categoryName": "Eyes, balance & orientation",
+      "tracking": "duration",
+      "tier": "exploratory",
+      "role": "awareness-cue",
+      "why": "For people whose dizziness is set off by a supermarket aisle, scrolling, or traffic — the system leaning too hard on vision, so busy vision overwhelms it.",
+      "equipment": "A moving scene — a video of a crowd or traffic, or a real one",
+      "muscles": [],
+      "fields": {
+        "release": "Seated, feet flat. Watch a moving scene for a short, fixed time — start under a minute. Let your eyes rest on it rather than chasing any one thing. Stop at the time you set, not at the point where you feel bad.",
+        "notice": "Where the discomfort starts, and how long it takes to fade afterward. The fade time is the number worth watching over weeks; if it shortens, that is the change you were after.",
+        "careful": "Set the duration before you start and hold to it — this is a drill people overdo because the effect arrives late. Not while standing, not while driving, and not before something you need to be well for. If it triggers a headache or a migraine pattern, this is one to raise with a clinician rather than push through.",
+        "load": "Nothing. Sit until it settles."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Short and seated",
+          "note": "30–60 seconds, a scene you choose. Note how long the after-effect lasts."
+        },
+        {
+          "level": 2,
+          "name": "Longer",
+          "note": "Extend only when the after-effect from rung 1 is brief."
+        },
+        {
+          "level": 3,
+          "name": "Real environments",
+          "note": "A shop or a busy street, briefly, with a way to sit down."
+        }
+      ],
+      "evidence": {
+        "grade": "established as a component of vestibular rehabilitation for visually-provoked dizziness; not studied in POTS",
+        "basis": "Habituation to visual motion is standard practice for persistent postural-perceptual dizziness, where over-reliance on vision is part of the picture. Whether it helps when the dizziness is orthostatic in origin is untested — which is why the card above it matters."
+      },
+      "sourceNote": "App content, not from Kevin's PT — worth asking whether it fits his plan given the orthostatic findings.",
+      "carefulAudience": "orthostatic"
+    },
+    {
+      "id": "plantar-sensory",
+      "name": "Waking up the soles of the feet",
+      "kind": "practice",
+      "category": "vestibular",
+      "categoryName": "Eyes, balance & orientation",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "balance",
+      "sides": true,
+      "why": "Your feet are one of the three things balance runs on, alongside the inner ear and vision. Shoes hold them still and flat all day, and the information they send gets quieter.",
+      "equipment": "Different surfaces — carpet, tile, a towel, a ball; bare feet",
+      "muscles": [
+        "foot intrinsics (arch)",
+        "plantar fascia"
+      ],
+      "fields": {
+        "tool": "Bare feet and a few different textures. Nothing to buy.",
+        "release": "Seated. Roll a ball slowly under the foot with light pressure — enough to feel it, not enough to be release work. Then stand and walk slowly across two or three different surfaces, paying attention to what each one feels like under the arch, the heel, the ball of the foot. A minute or two per foot.",
+        "notice": "Whether the two feet report differently. Whether parts of the sole feel vague or numb compared to others. That vagueness is what this is aimed at.",
+        "careful": "Light. This is about sensation, not pressure — the arch release card is where pressure belongs. If you have reduced feeling in your feet from any cause, that belongs to a clinician before it belongs to a drill.",
+        "load": "Follow with a rung of the balance ladder while still barefoot. The information is freshest right afterward, which is the whole reason to pair them."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Seated, ball and textures",
+          "note": "1–2 minutes a foot."
+        },
+        {
+          "level": 2,
+          "name": "Barefoot walking on varied surfaces",
+          "note": "A few slow minutes."
+        },
+        {
+          "level": 3,
+          "name": "Paired with balance",
+          "note": "Sensory work, then straight into your balance rung, barefoot."
+        }
+      ],
+      "evidence": {
+        "grade": "single small trial, promising and directly on-population",
+        "basis": "A 2025 randomised trial in 65 young adults with generalized joint hypermobility tested a two-week home plantar sensory training programme against information alone, measuring touch, vibration, two-point discrimination, proprioception, strength and balance. One trial in an asymptomatic group is a starting point, not a settled finding — but it is unusually close to the population this module serves."
+      },
+      "sourceNote": "App content, not from Kevin's PT — worth asking where he'd place it relative to the balance ladder."
+    }
+  ]
+}

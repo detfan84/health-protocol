@@ -1,0 +1,431 @@
+{
+  "format": "protocol-app/authored-v1",
+  "category": "entry-points",
+  "_meta": {
+    "file": "entry-points.json — draft v1, 28 Aug 2026",
+    "status": "DRAFT — Kevin's edit pass pending. Doubles as the K3 template's first real-use test (K3 is provisional; first use holds veto).",
+    "scope": "The entry set named in FRAMEWORK v3: hands, feet, jaw, forearms — dense with findable points, self-treatable at a desk, instant feedback. The thenar-web point is the guaranteed find the first-run experience is built around.",
+    "epistemic_frame": "Per content law 5 and the FRAMEWORK ruling. What the app teaches you to notice is the PHENOMENON: spots that are tender out of proportion to the pressure, sensations that spread beyond the spot, and the softening that happens under sustained contact. The MECHANISM story — that these are taut-band lesions in muscle — is contested in the literature (Quintner, Bove & Cohen 2015; rebutted by Dommerholt & Gerwin the same year; unresolved). Traditional names and spread patterns are written as claims, never as anatomy. Nothing here is reproduced from a copyrighted point atlas; locations are described from standard anatomy in the app's own words.",
+    "tier": "All items exploratory tier.",
+    "vocabulary_note": "muscles[] uses census entries where they exist (hand/thenar intrinsics, forearm extensors, forearm flexors, foot intrinsics, plantar fascia, masseter, temporalis). Jaw lumping is one of D40's three open provisional flags — masseter and temporalis are kept separate here, which is a vote for not lumping. Kevin's call at S1.",
+    "shape_note": "Authored against the library-item shape per Repo_Inventory_Report §1b. CC: report any field the loader rejects rather than dropping it.",
+    "landed": "2026-08-28, per Content Build Tracker \"next three\" item 0."
+  },
+  "items": [
+    {
+      "id": "points-how-to-press",
+      "name": "Finding a spot, and how to press it",
+      "kind": "bodywork",
+      "category": "entry-points",
+      "categoryName": "Tender points",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "awareness-cue",
+      "why": "Read once. It applies to every point in this section, and most of the skill is in here rather than in any single spot.",
+      "fields": {
+        "tool": "A thumb, a knuckle, or a small ball. Nothing sharp, nothing motorised.",
+        "release": "Press slowly until you meet something that feels tender out of proportion to how hard you are pressing. That mismatch is the find — not the hardest pressure you can stand. Hold steady contact rather than rubbing. Somewhere between 20 and 90 seconds, most spots either soften under your finger or they don't; both are answers.",
+        "notice": "Three things. Tenderness that doesn't match the pressure. Sensation that spreads somewhere other than where you are pressing. And whether the spot eases while you hold it. Easing under sustained pressure is the response worth chasing; more pain the longer you hold is a reason to come off.",
+        "careful": "Never press into a pulse, into the front of the throat, or hard onto bone. Numbness, pins and needles, or electric sensation means you are on a nerve — come off and move. Bruising means too hard.",
+        "load": "A point that eases is a door opened. Use the range afterward — move the joint it crosses, or load the muscle — or it closes again."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Read it",
+          "note": "Comes back here whenever a point card says 'how do I do this again?'"
+        }
+      ],
+      "evidence": {
+        "grade": "phenomenon: established as observable · mechanism: contested",
+        "basis": "That tender spots exist, spread sensation, and soften under sustained pressure is uncontroversial and self-verifiable. Why they exist is unresolved in the literature."
+      }
+    },
+    {
+      "id": "point-thenar-web",
+      "name": "The web of the thumb",
+      "kind": "bodywork",
+      "category": "entry-points",
+      "categoryName": "Tender points",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "The most reliable find on most people. If you have never located a tender point before, start here — it usually takes under a minute.",
+      "equipment": "Your other thumb",
+      "muscles": [
+        "hand/thenar intrinsics"
+      ],
+      "fields": {
+        "tool": "The thumb and index finger of your other hand.",
+        "release": "Pinch the fleshy web between your thumb and index finger, squeezing from both sides rather than pressing straight down. Work slowly toward the bone of the index finger — the tender spot usually sits closer to that side than to the middle. Hold what you find.",
+        "notice": "Most people are surprised by how tender this is. Sensation often spreads into the thumb or up the back of the hand. Compare sides — one is usually worse, and that difference is your first real finding.",
+        "careful": "Firm squeeze, not a crush. Coming off with a bruise means it was too hard.",
+        "load": "Afterward, open and close your hand fully several times, spread the fingers wide, and make a real fist. Use what you opened."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Find it",
+          "note": "Just locate it and hold. 30–60 seconds a side."
+        },
+        {
+          "level": 2,
+          "name": "Work the area",
+          "note": "Once you know where it is, work slowly across the whole web rather than parking on one spot."
+        }
+      ],
+      "evidence": {
+        "grade": "traditional claim, widely described",
+        "basis": "Spread into the thumb and hand is the pattern traditionally described for this area. Recorded as a claim; your own experience is the better evidence here."
+      }
+    },
+    {
+      "id": "point-thumb-mound",
+      "name": "The mound below the thumb",
+      "kind": "bodywork",
+      "category": "entry-points",
+      "categoryName": "Tender points",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "This muscle group works every time you grip, pinch, type, or hold a phone — which is most of the day.",
+      "equipment": "Thumb, or a small ball against a desk",
+      "muscles": [
+        "hand/thenar intrinsics"
+      ],
+      "fields": {
+        "tool": "Your other thumb, or roll the mound on a small ball against a table.",
+        "release": "Press into the fleshy pad at the base of your thumb, on the palm side. Work it in strips from the wrist toward the thumb, pausing wherever it bites.",
+        "notice": "Tenderness here often shows up on the side you hold your phone with. Sensation can spread into the thumb itself or into the wrist.",
+        "careful": "Stay on the muscle pad, off the wrist crease — the nerve and vessels run there.",
+        "load": "Grip and release something soft ten times, then spread the fingers wide and hold."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Thumb pressure",
+          "note": "60 seconds a side."
+        },
+        {
+          "level": 2,
+          "name": "Ball on a desk",
+          "note": "More pressure, less thumb fatigue — and it frees the other hand."
+        }
+      ]
+    },
+    {
+      "id": "point-hand-outer-edge",
+      "name": "The outer edge of the palm",
+      "kind": "bodywork",
+      "category": "entry-points",
+      "categoryName": "Tender points",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "The pinky-side pad takes the load every time you rest your hand on a desk, a mouse, or a steering wheel.",
+      "equipment": "Thumb, or a small ball",
+      "muscles": [
+        "hand/thenar intrinsics"
+      ],
+      "fields": {
+        "tool": "Your other thumb, or a ball against a table.",
+        "release": "Press into the pad running along the little-finger side of your palm, from the wrist out toward the base of the pinky. Slow strips, pausing where it bites.",
+        "notice": "Often tender on the hand you lean on. Compare to the other side.",
+        "careful": "Ease off if you get pins and needles into the ring or little finger — a nerve runs near the wrist on this side.",
+        "load": "Spread all five fingers wide, hold, then make a fist. Three or four times."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Thumb pressure",
+          "note": "60 seconds a side."
+        }
+      ]
+    },
+    {
+      "id": "point-forearm-outside",
+      "name": "The outside of the forearm, near the elbow",
+      "kind": "bodywork",
+      "category": "entry-points",
+      "categoryName": "Tender points",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "These muscles hold your wrist steady all day while your fingers do the work. They are a common source of elbow and hand complaints that have nothing wrong with the elbow itself.",
+      "equipment": "Thumb, knuckles, or a ball against a desk",
+      "muscles": [
+        "forearm extensors"
+      ],
+      "fields": {
+        "tool": "The thumb of your other hand, your knuckles, or a ball on a table.",
+        "release": "Rest your forearm palm-down. Find the muscle mass on the thumb side, just below the elbow crease — it bulges when you lift your hand at the wrist. Press into it and hold. Work down the muscle a few centimetres at a time.",
+        "notice": "Sensation often spreads toward the outside of the elbow or into the back of the hand. Lifting your wrist while you press makes the muscle move under your finger, which helps you tell muscle from bone.",
+        "careful": "Off the bony point of the elbow. Sharp pain right on that bone is a different problem and not a pressure target.",
+        "load": "Afterward, make slow wrist circles both directions, then press your palm flat on a table and lean gently to open the front of the forearm."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Find and hold",
+          "note": "60 seconds a side."
+        },
+        {
+          "level": 2,
+          "name": "Press while moving",
+          "note": "Hold pressure and slowly lift and lower your wrist. The moving version usually finds more than the still one."
+        }
+      ],
+      "evidence": {
+        "grade": "traditional claim, widely described",
+        "basis": "Spread toward the outer elbow and back of the hand is the traditionally described pattern for this muscle group."
+      }
+    },
+    {
+      "id": "point-forearm-inside",
+      "name": "The inside of the forearm, near the elbow",
+      "kind": "bodywork",
+      "category": "entry-points",
+      "categoryName": "Tender points",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "The gripping muscles. Anything you hold — a bag, a bar, a phone — loads these, and they rarely get anything back.",
+      "equipment": "Thumb, or a ball against a desk",
+      "muscles": [
+        "forearm flexors"
+      ],
+      "fields": {
+        "tool": "Your other thumb, or a ball on a table.",
+        "release": "Turn your forearm palm-up. Find the muscle mass just below the elbow crease on the little-finger side of centre. Press and hold, then work down the muscle.",
+        "notice": "Sensation can spread toward the wrist or into the palm. Make a fist while you press and you'll feel the muscle bunch under your finger.",
+        "careful": "Stay off the elbow crease itself, and off anything that pulses. Pins and needles into the fingers means move.",
+        "load": "Open the hand wide and hold; then wrist circles both directions."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Find and hold",
+          "note": "60 seconds a side."
+        },
+        {
+          "level": 2,
+          "name": "Press while gripping",
+          "note": "Hold pressure and slowly open and close your fist."
+        }
+      ]
+    },
+    {
+      "id": "point-foot-arch",
+      "name": "The arch of the foot",
+      "kind": "bodywork",
+      "category": "entry-points",
+      "categoryName": "Tender points",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "The foot is dense with findable spots and gives faster feedback than almost anywhere else — many people feel a change in how they stand within a minute.",
+      "equipment": "A ball — tennis, lacrosse, or a golf ball for more bite",
+      "muscles": [
+        "foot intrinsics (arch)",
+        "plantar fascia"
+      ],
+      "fields": {
+        "tool": "A ball on the floor. Softer for more surface, harder for more depth.",
+        "release": "Seated, roll the ball slowly from the heel toward the ball of the foot along the inside arch. When you meet a spot that bites, stop and rest your weight there rather than rolling through it.",
+        "notice": "Tenderness that spreads toward the heel or forward into the toes. Afterward, stand up and compare how the two feet meet the floor — that difference is usually the most convincing thing in this whole section.",
+        "careful": "Seated first, standing later. If you have had heel pain that is worst on the first steps of the morning, keep the pressure moderate and stop if it aggravates.",
+        "load": "Stand and press the ball of the big toe into the floor without curling it. Then rise onto the toes slowly, five times."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Seated, softer ball",
+          "note": "1–2 minutes a foot."
+        },
+        {
+          "level": 2,
+          "name": "Seated, harder ball",
+          "note": "More depth. Same time."
+        },
+        {
+          "level": 3,
+          "name": "Standing",
+          "note": "Bodyweight through the ball, near a counter for balance."
+        }
+      ]
+    },
+    {
+      "id": "point-foot-heel",
+      "name": "Where the arch meets the heel",
+      "kind": "bodywork",
+      "category": "entry-points",
+      "categoryName": "Tender points",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "The anchor point of the whole arch. Tightness upstream in the calf tends to show up here.",
+      "equipment": "A ball, or thumbs",
+      "muscles": [
+        "plantar fascia",
+        "foot intrinsics (arch)"
+      ],
+      "fields": {
+        "tool": "A ball, or both thumbs.",
+        "release": "Find the front edge of the heel pad, where the softer arch tissue begins. Press there and hold. Pulling your toes back with your other hand puts the tissue on tension and often makes the spot easier to find.",
+        "notice": "Whether it spreads forward into the arch. Compare sides.",
+        "careful": "Moderate pressure. This area does not respond well to being attacked, and if morning first-step pain is part of your picture, less is more.",
+        "load": "Calf raises, slow down on the lowering — the calf is upstream of this and it is the more useful place to get stronger."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Thumbs",
+          "note": "60 seconds a foot."
+        },
+        {
+          "level": 2,
+          "name": "Ball, seated",
+          "note": "Same, with more depth."
+        }
+      ]
+    },
+    {
+      "id": "point-foot-forefoot",
+      "name": "The ball of the foot and between the toes",
+      "kind": "bodywork",
+      "category": "entry-points",
+      "categoryName": "Tender points",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "Shoes hold the forefoot still all day. The small muscles between the long bones stop being asked to do anything, and they get tender.",
+      "equipment": "Thumbs",
+      "muscles": [
+        "foot intrinsics (arch)"
+      ],
+      "fields": {
+        "tool": "Thumb and finger, one on top and one underneath.",
+        "release": "Find the grooves between the long bones on the top of the foot, behind the toes. Press gently into a groove and hold. Work each one. Then squeeze the ball of the foot from top and bottom.",
+        "notice": "Sensation spreading into the toes. Often one groove is far worse than the others.",
+        "careful": "Gentle here — this is a thin area with nerves running between the bones. Burning or electric sensation into the toes means come off.",
+        "load": "Spread the toes apart without curling them, hold, release. Ten times. Harder than it sounds and the point of the whole thing."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Gentle grooves",
+          "note": "About 30 seconds per groove."
+        }
+      ]
+    },
+    {
+      "id": "point-jaw-cheek",
+      "name": "The jaw muscle in the cheek",
+      "kind": "bodywork",
+      "category": "entry-points",
+      "categoryName": "Tender points",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "One of the most consistently tender spots on people who hold tension, and one almost nobody has ever touched deliberately.",
+      "equipment": "Fingertips",
+      "muscles": [
+        "masseter"
+      ],
+      "fields": {
+        "tool": "Two or three fingertips. Outside the mouth only.",
+        "release": "Clench your teeth lightly and feel the muscle bulge in your cheek, above the jaw angle. Unclench, then press into it with fingertips and hold. Work up and down its length.",
+        "notice": "Tenderness that spreads toward the teeth, the ear, or up the side of the head is the traditionally described pattern here. Notice too where your teeth sit when you are not thinking about it — they are meant to be slightly apart.",
+        "careful": "Outside the mouth only. Inside-the-mouth jaw work belongs to a dentist or a trained clinician, not to a self-care app. If your jaw clicks, locks, or has slipped out of place, keep pressure light and raise it with a clinician.",
+        "load": "Rest the tongue on the roof of the mouth with teeth slightly apart and lips closed — the resting position — then open and close the jaw slowly a few times, keeping it tracking straight."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Light fingertip pressure",
+          "note": "60 seconds a side."
+        },
+        {
+          "level": 2,
+          "name": "Press while opening",
+          "note": "Hold pressure and open the jaw slowly. More finding, same pressure."
+        }
+      ],
+      "evidence": {
+        "grade": "traditional claim, widely described",
+        "basis": "Spread toward the teeth and ear is the pattern traditionally described for this muscle. Recorded as a claim."
+      },
+      "carefulAudience": "hypermobile"
+    },
+    {
+      "id": "point-jaw-temple",
+      "name": "The temple",
+      "kind": "bodywork",
+      "category": "entry-points",
+      "categoryName": "Tender points",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "A closing muscle for the jaw that most people have never thought of as a muscle at all.",
+      "equipment": "Fingertips",
+      "muscles": [
+        "temporalis"
+      ],
+      "fields": {
+        "tool": "Fingertips.",
+        "release": "Put your fingers flat on your temple and clench lightly — you will feel it move. Unclench, then press with small circles or steady holds across the whole fan-shaped area above and in front of the ear.",
+        "notice": "Sensation spreading toward the temple, behind the eye, or into the upper teeth is traditionally described here.",
+        "careful": "Moderate pressure. If you get headaches, work lighter and shorter and see whether it settles or provokes.",
+        "load": "Same as the cheek: resting jaw position, then slow open and close."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Fingertip circles",
+          "note": "60 seconds a side."
+        }
+      ]
+    },
+    {
+      "id": "point-jaw-hinge",
+      "name": "Just below the ear",
+      "kind": "bodywork",
+      "category": "entry-points",
+      "categoryName": "Tender points",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "Where the jaw hinge and the muscles around it sit — often tender, and often connected to ear fullness and jaw noise.",
+      "equipment": "Fingertips",
+      "muscles": [
+        "masseter"
+      ],
+      "fields": {
+        "tool": "One or two fingertips.",
+        "release": "Find the hollow just in front of your earlobe. Open and close your jaw and you will feel the hinge move under your finger. Press gently into the soft tissue just below and behind that, not onto the joint itself.",
+        "notice": "Whether the jaw tracks straight when it opens or veers to one side. Whether there is a click, and if so, where in the movement.",
+        "careful": "Not on the joint, and not hard. Clicking, locking, or a jaw that shifts out of line is a clinician's question, not something to press harder on — this is more common in hypermobile people, and pressure is not the answer to it.",
+        "load": "Slow open and close with the tongue held on the roof of the mouth — it guides the jaw straight."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Light pressure",
+          "note": "30–60 seconds a side."
+        }
+      ],
+      "carefulAudience": "hypermobile"
+    }
+  ]
+}
