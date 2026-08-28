@@ -2,10 +2,14 @@
 // into your day.
 //
 // This is the app's actual purpose (Kevin, 23 Aug): a large library that
-// anybody can self-select from, not a curated day for one person. 287 items —
-// exercises with their progression ladders, stretches, body-work cards with
-// photographs, daily practices, measured self-tests — searchable by name, by
-// muscle, by equipment, by what kind of thing it is.
+// anybody can self-select from, not a curated day for one person — exercises
+// with their progression ladders, stretches, body-work cards with photographs,
+// daily practices, measured self-tests — searchable by name, by muscle, by
+// equipment, by what kind of thing it is.
+//
+// The count is deliberately not written down here. It used to say 287 while
+// the file held 258, because a number in a comment is a fact with nobody
+// checking it. `npm run catalog` prints the real one, and the screen shows it.
 //
 // Nothing here judges what you pick. Being in the library costs nothing and
 // asks nothing; adding is one tap, removing is one tap on the other screen.
@@ -29,6 +33,17 @@ const FIELD_LABELS = {
   load: 'Then load it',
   notice: 'Notice',
   careful: 'Careful',
+};
+
+// Content law 5: a claim carries its epistemic status. An evidence grade that
+// ships in the file and renders nowhere does not satisfy that — it satisfies
+// the author, which is a different thing. Tolerant of both shapes an authored
+// item might use: a bare string is the grade, an object may add the basis.
+const evidenceOf = (e) => (typeof e === 'string' ? { grade: e } : (e ?? {}));
+
+const TIER_LABELS = {
+  exploratory: 'Exploratory',
+  established: 'Established',
 };
 
 /** Where a picked item goes: one protocol, made the first time it is needed. */
@@ -135,7 +150,7 @@ export async function viewLibrary({ reload } = {}) {
 
   /* ------------------------------ adding ------------------------------- */
 
-  async function addToDay(item, btn) {
+  async function addToDay(item, btn, chosenLevel) {
     btn.disabled = true;
     return guarded(
       async () => {
@@ -158,7 +173,13 @@ export async function viewLibrary({ reload } = {}) {
 
         // The library item becomes an ordinary plan item — the same shape as
         // everything else, so nothing about it is special once it is yours.
-        const level = item.levels?.[0];
+        //
+        // The rung travels. This used to take levels[0] unconditionally, so
+        // whichever rung a person was actually on, their day said rung 1 —
+        // which is worse than silent when a clinician has deliberately put
+        // somebody on an easier one.
+        const levels = item.levels ?? [];
+        const level = levels.find((l) => l.level === chosenLevel) ?? levels[0];
         const planItem = {
           id: item.id,
           name: item.name,
@@ -166,10 +187,30 @@ export async function viewLibrary({ reload } = {}) {
           ...(item.fields ? { fields: item.fields } : {}),
           ...(item.photos?.length ? { photos: item.photos } : {}),
           ...(item.tracking && item.tracking !== 'check' ? { tracking: item.tracking } : {}),
-          ...(item.tracking === 'sets' ? { target: { sets: 3, reps: 10 } } : {}),
-          ...(item.tracking === 'duration' ? { target: { seconds: 45 } } : {}),
+          // The plan asks for what the item says, or it asks for nothing.
+          //
+          // This used to synthesise 3 × 10 for anything tracked in sets and 45
+          // seconds for anything tracked by duration — numbers nobody derived,
+          // shown to the person as the prescription. Canon 3.7: no uncertainty
+          // was experienced when they were written, which is exactly how an
+          // invented number gets mistaken for a known one. The PT said thirty
+          // seconds and the app would have said forty-five.
+          //
+          // Absent stays absent. A blank asks the person to fill it in; a
+          // confident wrong number tells them not to look.
+          ...(item.target ? { target: item.target } : {}),
+          ...(item.carefulAudience ? { carefulAudience: item.carefulAudience } : {}),
+          ...(item.tier ? { tier: item.tier } : {}),
           ...(item.everyNDays ? { cadence: { kind: 'everyNDays', n: item.everyNDays } } : {}),
-          ...(level?.note ? { dose: level.note } : {}),
+          ...(level ? { activeLevel: level.level } : {}),
+          // A dose and a rung are different things, and we separated them on
+          // purpose. The dose is what the plan asks for; the rung note says
+          // which version you are doing. When an item has a real dose that is
+          // the dose — otherwise the chosen rung's note stands in, which is
+          // what ladder items have always done.
+          ...(item.dose
+            ? { dose: item.dose }
+            : level?.note ? { dose: level.note } : {}),
         };
         block.items.push(planItem);
         await store.saveProtocol(picks);
@@ -197,6 +238,8 @@ export async function viewLibrary({ reload } = {}) {
     const hay = [
       item.name, item.category, item.categoryName, item.equipment,
       (item.muscles ?? []).join(' '), item.why,
+      item.tier, evidenceOf(item.evidence).grade, evidenceOf(item.evidence).basis,
+      item.dose, item.sourceNote,
       Object.values(item.fields ?? {}).join(' '),
       (item.levels ?? []).map((l) => `${l.name} ${l.note ?? ''}`).join(' '),
     ].join(' ').toLowerCase();
@@ -205,21 +248,34 @@ export async function viewLibrary({ reload } = {}) {
 
   function card(item) {
     const kindLabel = KINDS.find(([k]) => k === item.kind)?.[1] ?? item.kind;
+    // Which rung goes into the day. Defaults to the first, which is the
+    // gentlest — a ladder's bottom rung is a real answer, not a failure state.
+    let chosenLevel = item.levels?.[0]?.level;
     const addBtn = h('button.btn' + (owned.has(item.id) ? '' : '.primary'), {
       style: 'width:100%; margin-top:var(--sp-2)',
       disabled: owned.has(item.id) ? '' : null,
-      onclick: (e) => addToDay(item, e.currentTarget),
+      onclick: (e) => addToDay(item, e.currentTarget, chosenLevel),
     }, owned.has(item.id) ? 'Already in your day' : 'Add to my day');
 
     return h('details.card.lib-item', {},
       h('summary', {},
         h('span.name', {}, item.name),
         h('span.why', {},
-          [kindLabel, item.categoryName ?? item.category, item.equipment?.replace(/_/g, ' ')]
-            .filter(Boolean).join(' · '),
+          [
+            TIER_LABELS[item.tier] ?? item.tier,
+            kindLabel,
+            item.categoryName ?? item.category,
+            item.equipment?.replace(/_/g, ' '),
+          ].filter(Boolean).join(' · '),
         ),
       ),
       item.why ? h('p.muted', {}, item.why) : null,
+      item.dose
+        ? h('div.fields', {},
+            h('div.field-line', {},
+              h('span.field-label', {}, 'Dose'),
+              h('span', {}, item.dose)))
+        : null,
       item.fields
         ? h('div.fields', {},
             Object.keys(FIELD_LABELS)
@@ -229,11 +285,38 @@ export async function viewLibrary({ reload } = {}) {
                 h('span', {}, item.fields[k]))),
           )
         : null,
+      item.evidence
+        ? h('div.fields', { style: 'margin-top:var(--sp-3)' },
+            h('div.field-line', {},
+              h('span.field-label', {}, 'Evidence'),
+              h('span', {}, evidenceOf(item.evidence).grade ?? 'not graded')),
+            evidenceOf(item.evidence).basis
+              ? h('p.why', {}, evidenceOf(item.evidence).basis)
+              : null,
+          )
+        : null,
+      item.sourceNote
+        ? h('div.fields', { style: 'margin-top:var(--sp-2)' },
+            h('div.field-line', {},
+              h('span.field-label', {}, 'Source'),
+              h('span', {}, item.sourceNote)))
+        : null,
       item.levels?.length
         ? h('div', { style: 'margin-top:var(--sp-3)' },
             h('span.field-label', {}, item.kind === 'stretch' ? 'How hard' : 'Where to start'),
             h('div', {}, item.levels.map((l) =>
               h('p.why', {}, `${l.level}. ${l.name}${l.note ? ` — ${l.note}` : ''}`))),
+          )
+        : null,
+      item.levels?.length > 1
+        ? h('div.field', { style: 'margin-top:var(--sp-2)' },
+            h('label', { for: `lib-level-${item.id}` }, 'Start at'),
+            h('select', {
+              id: `lib-level-${item.id}`,
+              onchange: (e) => { chosenLevel = Number(e.target.value); },
+            }, item.levels.map((l) =>
+              h('option', { value: String(l.level), selected: l.level === chosenLevel },
+                `${l.level}. ${l.name}`))),
           )
         : null,
       item.photos?.length

@@ -139,6 +139,9 @@ export async function viewSession({ protocolId, blockId, done }) {
     /* -------------------------------- what -------------------------------- */
     stage.append(
       h('h1.session-name', {}, item.name),
+      // The session runner is exactly where an exploratory drill stops feeling
+      // exploratory — it is the surface you meet on the fortieth repetition.
+      item.tier === 'exploratory' ? h('p.why', {}, 'Exploratory — worth trying, not established. The grade is on this item in the library.') : null,
       item.dose ? h('p.session-dose', {}, item.dose) : null,
       item.why ? h('p.muted', {}, item.why) : null,
     );

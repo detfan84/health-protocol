@@ -19,6 +19,15 @@ import { CADENCE_KINDS } from './cadence.js';
 
 const KINDS = ['backup', 'protocol', 'fragment'];
 
+// Where an image stands with the person using it (D38 as amended, Kevin
+// 28 Aug 2026). Images ship found-but-unchecked and are confirmed or rejected
+// by doing the thing they illustrate, not by a review pass before shipping.
+const PHOTO_STATUSES = ['found-unchecked', 'checked', 'rejected'];
+
+// Content tiers (FRAMEWORK, "The content system"): the basics, and the ones
+// clearly labelled worth trying.
+const TIERS = ['established', 'exploratory'];
+
 function isObj(x) {
   return typeof x === 'object' && x !== null && !Array.isArray(x);
 }
@@ -84,19 +93,64 @@ function fixItem(raw, path, ctx) {
     }
     if (Object.keys(fields).length) item.fields = fields;
   }
+  // Who a careful line is FOR (D29 as applied in strategy v0.5 §9A). Universal
+  // stop signals are taught once and belong to everybody; POPULATION cautions —
+  // hypermobile dosing, orthostatic positioning, PEM pacing — ride behind
+  // self-selection or a toggle, and are neither forced on general users nor
+  // withheld from the community they serve.
+  //
+  // It sits BESIDE `fields` rather than inside it, so the five K3 keys stay
+  // five (Kevin's call, 28 Aug). Before this, the tag was authored inside
+  // `fields` and filtered out here — the gating model's own input never
+  // reached the day it was supposed to gate.
+  //
+  // The audience list is open, not a closed set: D40's rule is that a
+  // vocabulary is a census, not a cap. An unknown audience is carried, not
+  // dropped — S4 rules on the vocabulary, and until then guessing which tags
+  // are legitimate would be this file inventing content policy.
+  if (raw.carefulAudience != null) {
+    const raw_list = Array.isArray(raw.carefulAudience)
+      ? raw.carefulAudience
+      : String(raw.carefulAudience).split(',');
+    const audiences = [...new Set(
+      raw_list.map((a) => asTrimmed(String(a)).toLowerCase()).filter(Boolean),
+    )];
+    if (audiences.length) item.carefulAudience = audiences;
+    else ctx.warn(path + '.carefulAudience', 'Empty — ignored, so this careful text is not gated to anybody.');
+  }
   // Photos: two frames of the real movement, which a still cannot show.
   // `approx` means "close, but not exactly this drill" and the card says so —
   // a picture that quietly misleads is worse than no picture.
   if (Array.isArray(raw.photos)) {
     const photos = raw.photos
       .filter(isObj)
-      .map((ph) => {
+      .map((ph, i) => {
         const set = asTrimmed(String(ph.set ?? ''));
         if (!set || !/^[A-Za-z0-9_.-]+$/.test(set)) return null; // no paths, no traversal
         const out = { set };
         const caption = asTrimmed(String(ph.caption ?? ''));
         if (caption) out.caption = caption;
         if (ph.approx === true) out.approx = true;
+        // `approx` and `status` are different claims and both can be true.
+        // `approx` is what the caption already says — close, not exactly this
+        // drill. `status` is whether a human has actually looked at it yet.
+        //
+        // An ABSENT status stays absent. It means nobody has recorded a view,
+        // which is not the same as somebody choosing "unchecked" — three-state
+        // absence, the same rule as everywhere else in this app.
+        const status = asTrimmed(String(ph.status ?? ''));
+        if (PHOTO_STATUSES.includes(status)) {
+          out.status = status;
+          const reason = asTrimmed(String(ph.rejectedReason ?? ''));
+          if (status === 'rejected') {
+            if (reason) out.rejectedReason = reason;
+            else ctx.warn(`${path}.photos[${i}].rejectedReason`, 'This image is marked rejected with no reason — kept as rejected, but a rejection nobody can read teaches the next person nothing.');
+          } else if (reason) {
+            ctx.warn(`${path}.photos[${i}].rejectedReason`, `A reason only means something on a rejection — dropped, because this image is "${status}".`);
+          }
+        } else if (status) {
+          ctx.warn(`${path}.photos[${i}].status`, `"${ph.status}" is not an image status — ignored. Known: ${PHOTO_STATUSES.join(', ')}.`);
+        }
         return out;
       })
       .filter(Boolean);
@@ -119,6 +173,34 @@ function fixItem(raw, path, ctx) {
       if (n !== undefined && Number.isFinite(n) && n > 0) target[k] = Math.round(n);
     }
     if (Object.keys(target).length) item.target = target;
+  }
+  // Which rung of the ladder this person is actually on. A catalogue item
+  // carries the whole progression (`levels`); the plan item carries the one
+  // that was chosen. Without it the app hands everybody rung 1, which is not a
+  // neutral default: a clinician who deliberately regresses somebody to an
+  // easier rung is then contradicted by their own app.
+  // The tier travels into the day, and the grade behind it does not.
+  //
+  // Canon 3.8 is about hedges eroding as information is summarised across
+  // document generations. The same mechanism runs across SURFACES: the library
+  // says "worth trying", the day said nothing, and by the fortieth repetition
+  // an exploratory drill is just something you do. One word carries the hedge;
+  // the full grade stays reference material in the library (Kevin, 28 Aug).
+  //
+  // An unfamiliar tier is KEPT and reported, never dropped — a label nobody
+  // recognised is still a label somebody wrote on purpose.
+  const tier = asTrimmed(String(raw.tier ?? ''));
+  if (tier) {
+    item.tier = tier;
+    if (!TIERS.includes(tier)) {
+      ctx.warn(path + '.tier', `"${raw.tier}" is not a content tier we know — kept as written. The known ones are ${TIERS.join(' and ')}.`);
+    }
+  }
+  const activeLevel = asNumber(raw.activeLevel);
+  if (activeLevel !== undefined && Number.isInteger(activeLevel) && activeLevel > 0) {
+    item.activeLevel = activeLevel;
+  } else if (raw.activeLevel != null) {
+    ctx.warn(path + '.activeLevel', `"${raw.activeLevel}" is not a rung number — ignored, so this item has no chosen rung.`);
   }
   // Cadence travels with the plan: "3× a week" is part of what the protocol
   // says to do, so a protocol shared with somebody else carries it. What does

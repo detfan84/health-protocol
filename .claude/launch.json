@@ -3,7 +3,7 @@
   "configurations": [
     {
       "name": "dev",
-      "runtimeExecutable": "C:/Program Files/nodejs/node.exe",
+      "runtimeExecutable": "node",
       "runtimeArgs": [
         "node_modules/vite/bin/vite.js",
         "--port",
@@ -13,7 +13,7 @@
     },
     {
       "name": "prod",
-      "runtimeExecutable": "C:/Program Files/nodejs/node.exe",
+      "runtimeExecutable": "node",
       "runtimeArgs": [
         "node_modules/vite/bin/vite.js",
         "preview",
@@ -25,7 +25,7 @@
     },
     {
       "name": "protocol-app",
-      "runtimeExecutable": "C:/Program Files/nodejs/node.exe",
+      "runtimeExecutable": "node",
       "runtimeArgs": [
         "node_modules/vite/bin/vite.js",
         "protocol-app",
@@ -36,7 +36,7 @@
     },
     {
       "name": "protocol-app-static",
-      "runtimeExecutable": "C:/Program Files/nodejs/node.exe",
+      "runtimeExecutable": "node",
       "runtimeArgs": [
         "node_modules/vite/bin/vite.js",
         "preview",

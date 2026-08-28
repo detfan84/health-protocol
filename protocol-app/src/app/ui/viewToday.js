@@ -429,6 +429,11 @@ function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, 
       h('span.name', {},
         item.name,
         item.dose ? h('span.dose', {}, ` · ${item.dose}`) : null,
+        // "Worth trying" has to survive the trip from the library to the day,
+        // or by the fortieth repetition it is just something you do. The grade
+        // behind the word stays in the library; this is the hedge, not the
+        // reference (law 5, and canon 3.8's erosion across surfaces).
+        item.tier === 'exploratory' ? h('span.chip.cadence', {}, 'Exploratory') : null,
         cadence ? h('span.chip.cadence', {}, cadence) : null,
         weekly ? h('span.chip.cadence', {}, weekly) : null,
       ),

@@ -145,6 +145,162 @@ test('validator: wrong format is caught with the fix in the hint', () => {
   assert.match(res.errors[0].hint, new RegExp(FILE_FORMAT));
 });
 
+test('validator: the rung a person is actually on survives the round trip', () => {
+  // A catalogue item holds the whole ladder; the plan item holds the chosen
+  // rung. Before this field existed everybody's day said rung 1, which is the
+  // app quietly contradicting whoever set the rung.
+  const res = validateFile({
+    format: FILE_FORMAT,
+    kind: 'protocol',
+    protocol: {
+      name: 'Eyes and balance',
+      blocks: [{
+        name: 'Session',
+        items: [
+          { name: 'Tracing a path with a laser', activeLevel: 2, dose: 'Hand-held' },
+          { name: 'Eye jumps', activeLevel: '3' },      // string, coerced
+          { name: 'Walking scoop', activeLevel: 'two' }, // nonsense, ignored
+          { name: 'Side lunge' },                        // absent stays absent
+        ],
+      }],
+    },
+  });
+  assert.equal(res.ok, true, JSON.stringify(res.errors));
+  const items = res.value.protocol.blocks[0].items;
+  assert.equal(items[0].activeLevel, 2, 'the chosen rung is kept');
+  assert.equal(items[1].activeLevel, 3, 'a numeric string is coerced, like every other number here');
+  assert.equal(items[2].activeLevel, undefined, 'nonsense is dropped rather than guessed');
+  assert.equal(items[3].activeLevel, undefined, 'no rung chosen stays no rung chosen');
+  assert.ok(
+    res.warnings.some((w) => /activeLevel/.test(w.path)),
+    'the dropped rung is reported, not hidden',
+  );
+});
+
+test('validator: an image records whether anybody has actually looked at it', () => {
+  // D38 as amended (Kevin, 28 Aug): images ship found-but-unchecked and are
+  // confirmed or rejected by doing the thing. `approx` is a different claim —
+  // "close, not exactly this drill" — and the two coexist.
+  const res = validateFile({
+    format: FILE_FORMAT,
+    kind: 'protocol',
+    protocol: {
+      name: 'Body work',
+      blocks: [{
+        name: 'Release',
+        items: [{
+          name: 'Base of skull',
+          photos: [
+            { set: 'A_Set', status: 'checked' },
+            { set: 'B_Set', status: 'rejected', rejectedReason: 'the model is holding the position, not moving through it' },
+            { set: 'C_Set', status: 'rejected' },                      // no reason
+            { set: 'D_Set', status: 'looks-fine' },                    // not a status
+            { set: 'E_Set', status: 'checked', rejectedReason: 'stale' }, // reason without a rejection
+            { set: 'F_Set', approx: true, status: 'found-unchecked' },  // both claims
+            { set: 'G_Set' },                                           // absent stays absent
+          ],
+        }],
+      }],
+    },
+  });
+  assert.equal(res.ok, true, JSON.stringify(res.errors));
+  const photos = res.value.protocol.blocks[0].items[0].photos;
+  const bySet = Object.fromEntries(photos.map((ph) => [ph.set, ph]));
+
+  assert.equal(bySet.A_Set.status, 'checked');
+  assert.equal(bySet.B_Set.status, 'rejected');
+  assert.match(bySet.B_Set.rejectedReason, /holding the position/, 'the reason is kept — it is the whole point of a rejection');
+  assert.equal(bySet.C_Set.status, 'rejected', 'a reasonless rejection is still a rejection, not a discard');
+  assert.equal(bySet.C_Set.rejectedReason, undefined);
+  assert.equal(bySet.D_Set.status, undefined, 'an unknown status is ignored rather than invented');
+  assert.equal(bySet.E_Set.rejectedReason, undefined, 'a reason means nothing without a rejection');
+  assert.equal(bySet.F_Set.approx, true, 'approx and status are different claims');
+  assert.equal(bySet.F_Set.status, 'found-unchecked');
+  assert.equal(bySet.G_Set.status, undefined, 'nobody has looked is not the same as unchecked-was-chosen');
+
+  const paths = res.warnings.map((w) => w.path).join(' ');
+  for (const i of [2, 3, 4]) {
+    assert.match(paths, new RegExp(`photos\\[${i}\\]`), `photo ${i} was repaired and said so`);
+  }
+});
+
+test('validator: who a careful line is for survives into the day', () => {
+  // D29 as applied in strategy v0.5 §9A. The tag used to be authored inside
+  // `fields`, which the validator filters to the five K3 keys — so the gating
+  // model's own input never reached the day it was supposed to gate.
+  const res = validateFile({
+    format: FILE_FORMAT,
+    kind: 'protocol',
+    protocol: {
+      name: 'Entry points',
+      blocks: [{
+        name: 'Desk',
+        items: [
+          { name: 'The jaw muscle', carefulAudience: 'hypermobile' },
+          { name: 'Knee to chest', carefulAudience: 'hypermobile, Orthostatic' },
+          { name: 'Laser trace', carefulAudience: ['orthostatic', 'hypermobile', 'orthostatic'] },
+          { name: 'Eye jumps', carefulAudience: '  ' },
+          { name: 'Nose breathing' },
+          { name: 'Old shape', fields: { careful: 'Go gently.', carefulAudience: 'hypermobile' } },
+        ],
+      }],
+    },
+  });
+  assert.equal(res.ok, true, JSON.stringify(res.errors));
+  const it = res.value.protocol.blocks[0].items;
+
+  assert.deepEqual(it[0].carefulAudience, ['hypermobile'], 'a single tag becomes a list');
+  assert.deepEqual(it[1].carefulAudience, ['hypermobile', 'orthostatic'], 'a comma list splits and lowercases');
+  assert.deepEqual(it[2].carefulAudience, ['orthostatic', 'hypermobile'], 'an array is kept, deduped, in order');
+  assert.equal(it[3].carefulAudience, undefined, 'empty gates nobody');
+  assert.equal(it[4].carefulAudience, undefined, 'ungated content stays ungated');
+
+  // The old placement is still filtered out — which is why build-catalog.mjs
+  // refuses to ship it rather than leaving it to be discovered here.
+  assert.equal(it[5].fields.careful, 'Go gently.', 'the careful text survives');
+  assert.equal(it[5].fields.carefulAudience, undefined, 'the tag inside fields does not');
+  assert.equal(it[5].carefulAudience, undefined);
+});
+
+test('validator: an audience it has never heard of is carried, not dropped', () => {
+  // D40: a vocabulary is a census, not a cap. S4 rules on the audience list;
+  // until then this file guessing which tags are legitimate would be the
+  // validator inventing content policy.
+  const res = validateFile({
+    format: FILE_FORMAT, kind: 'protocol',
+    protocol: { name: 'x', blocks: [{ name: 'b', items: [{ name: 'i', carefulAudience: 'post-surgical' }] }] },
+  });
+  assert.deepEqual(res.value.protocol.blocks[0].items[0].carefulAudience, ['post-surgical']);
+});
+
+test('validator: the tier travels into the day, because a hedge that stops at the library erodes', () => {
+  // Canon 3.8's mechanism, across surfaces rather than document generations:
+  // the library says "worth trying", the day says nothing, and by the fortieth
+  // repetition the drill is just something you do.
+  const res = validateFile({
+    format: FILE_FORMAT, kind: 'protocol',
+    protocol: {
+      name: 'Eyes',
+      blocks: [{
+        name: 'Session',
+        items: [
+          { name: 'Eye jumps', tier: 'exploratory' },
+          { name: 'Walking scoop', tier: 'established' },
+          { name: 'Something new', tier: 'provisional' }, // unknown, kept + reported
+          { name: 'Ungraded' },
+        ],
+      }],
+    },
+  });
+  assert.equal(res.ok, true, JSON.stringify(res.errors));
+  const it = res.value.protocol.blocks[0].items;
+  assert.equal(it[0].tier, 'exploratory');
+  assert.equal(it[1].tier, 'established');
+  assert.equal(it[2].tier, 'provisional', 'a label nobody recognised is still one somebody wrote on purpose');
+  assert.ok(res.warnings.some((w) => /tier/.test(w.path)), 'and it is reported rather than accepted silently');
+  assert.equal(it[3].tier, undefined, 'ungraded stays ungraded — no default tier is invented');
+});
+
 /* ------------------------ composition (fragments) --------------------- */
 
 test('fragment merges into a protocol: adds blocks/items, never clobbers', () => {

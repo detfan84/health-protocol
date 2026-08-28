@@ -377,12 +377,28 @@ test('the library is comprehensive, merged, and every item can be picked up', as
   assert.ok(dog.fields?.release, 'and keeps its how-to');
 
   // Everything a person can pick has enough to act on.
+  //
+  // This check used to accept `why`, and so it could not fail for the reason it
+  // existed. Body-work items all carry a `why` — but it is the SECTION note,
+  // identical across every card in the section, and a sentence shared by ten
+  // cards cannot be the instructions for any one of them. Twenty-two cards
+  // shipped with no how-to at all and the suite stayed green the whole time.
+  //
+  // So: a `why` counts only when it belongs to this item alone. A string that
+  // appears on more than one item is the section talking, not the item.
+  const whyCounts = new Map();
+  for (const it of lib.items) {
+    if (it.why) whyCounts.set(it.why, (whyCounts.get(it.why) ?? 0) + 1);
+  }
+  const mute = [];
   for (const it of lib.items) {
     assert.ok(it.id && it.name, 'every item is identifiable');
     assert.ok(it.kind, `${it.name} has no kind`);
-    const actionable = it.fields?.release || it.why || it.levels?.length;
-    assert.ok(actionable, `${it.name} says nothing about what to do`);
+    const ownWhy = it.why && whyCounts.get(it.why) === 1 ? it.why : null;
+    if (!(it.fields?.release || it.levels?.length || ownWhy)) mute.push(`${it.id} "${it.name}"`);
   }
+  assert.deepEqual(mute, [],
+    `${mute.length} item(s) say nothing about what to do — a tool, a warning and a shared section note is not instructions`);
 
   // Searchable by the things people actually search by.
   assert.ok(new Set(lib.items.flatMap((i) => i.muscles ?? [])).size >= 40, 'muscles to filter by');
@@ -484,4 +500,210 @@ test('the weekly count is off until asked for, and then it is your own target (R
   const text = document.querySelector('main').textContent;
   assert.match(text, /0 of 3 this week/);
   assert.match(text, /3× a week/);
+});
+
+test('the library sends the rung you chose into your day, not rung one', async () => {
+  // The bug this pins: whichever rung a person was actually on, the add flow
+  // took levels[0] and their day said rung 1. Kevin's PT deliberately put him
+  // on a regressed rung of a three-rung drill — an app that then hands him
+  // rung 1 is not merely unhelpful, it contradicts his clinician.
+  const { readFile } = await import('node:fs/promises');
+  const libText = await readFile(new URL('../src/content/library.json', import.meta.url), 'utf8');
+
+  // viewLibrary fetches its catalogue; node's fetch will not open a file: URL.
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async () => ({ ok: true, status: 200, json: async () => JSON.parse(libText) });
+
+  try {
+    store._resetForTests();
+    await store.ready({ name: 'screens-library-rung' });
+    const { viewLibrary } = await import('../src/app/ui/viewLibrary.js');
+    const main = draw(await viewLibrary());
+    await settled();
+
+    // Narrow to the one item with a real ladder, the way a person would.
+    const search = main.querySelector('#library-search');
+    search.value = 'tracing a path';
+    search.dispatchEvent(new dom.window.Event('input'));
+    await settled();
+
+    const picker = main.querySelector('#lib-level-laser-path-trace');
+    assert.ok(picker, 'an item with more than one rung offers a choice of rung');
+    assert.equal(picker.options.length, 3, 'all three rungs are offered');
+    assert.equal(Number(picker.value), 1, 'and it opens on the gentlest, which is a real answer');
+
+    picker.value = '2';
+    picker.dispatchEvent(new dom.window.Event('change'));
+
+    const card = picker.closest('details');
+    card.querySelector('button.btn').dispatchEvent(new dom.window.Event('click'));
+    await settled(12);
+
+    const picks = (await store.loadProtocols()).find((p) => p.id === 'my-picks');
+    assert.ok(picks, 'the pick landed in a protocol');
+    const added = picks.blocks[0].items.find((i) => i.id === 'laser-path-trace');
+    assert.ok(added, 'the item is in the day');
+    assert.equal(added.activeLevel, 2, 'the day records the rung that was chosen');
+    assert.match(added.dose, /Wear the laser/, "and the instructions are that rung's, not rung one's");
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+});
+
+test('the library asks for what the item says, and invents nothing when it says nothing', async () => {
+  // It used to synthesise 3 × 10 for anything tracked in sets and 45 seconds
+  // for anything tracked by duration — numbers nobody derived, shown as the
+  // prescription. Canon 3.7: no uncertainty was experienced when they were
+  // written. Kevin's PT said thirty seconds; the app would have said 45.
+  const { readFile } = await import('node:fs/promises');
+  const libText = await readFile(new URL('../src/content/library.json', import.meta.url), 'utf8');
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async () => ({ ok: true, status: 200, json: async () => JSON.parse(libText) });
+
+  try {
+    store._resetForTests();
+    await store.ready({ name: 'screens-library-target' });
+    const { viewLibrary } = await import('../src/app/ui/viewLibrary.js');
+    const main = draw(await viewLibrary());
+    await settled();
+
+    const search = main.querySelector('#library-search');
+    const add = async (query, id) => {
+      search.value = query;
+      search.dispatchEvent(new dom.window.Event('input'));
+      await settled();
+      const card = main.querySelector(`#lib-level-${id}`)?.closest('details')
+        ?? [...main.querySelectorAll('details')].find((d) => d.querySelector('button.btn'));
+      card.open = true;
+      card.querySelector('button.btn').dispatchEvent(new dom.window.Event('click'));
+      await settled(12);
+    };
+
+    await add('eye jumps side to side', 'saccades-horizontal');
+    await add('ab wheel', 'ex-ab-wheel-rollout');
+
+    const picks = (await store.loadProtocols()).find((p) => p.id === 'my-picks');
+    const byId = Object.fromEntries(picks.blocks[0].items.map((i) => [i.id, i]));
+
+    const eyes = byId['saccades-horizontal'];
+    assert.ok(eyes, 'the authored drill was added');
+    assert.deepEqual(eyes.target, { seconds: 30 }, "the clinician's thirty seconds, not the app's forty-five");
+    assert.deepEqual(eyes.carefulAudience, ['orthostatic'], 'and the audience the careful text is gated to');
+
+    const wheel = byId['ex-ab-wheel-rollout'];
+    assert.ok(wheel, 'the legacy exercise was added');
+    assert.equal(wheel.tracking, 'sets', 'still logged as sets');
+    assert.equal(wheel.target, undefined, 'but the plan asks for nothing, because the item says nothing');
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+});
+
+test('the library shows a claim\'s epistemic status, because law 5 says it travels with the claim', async () => {
+  // An evidence grade that ships in the file and renders nowhere satisfies the
+  // author, not the law. The audience who notices first is a clinician reading
+  // "worth trying" content with no visible grading — which is exactly who the
+  // vestibular module is built to be shown to.
+  const { readFile } = await import('node:fs/promises');
+  const libText = await readFile(new URL('../src/content/library.json', import.meta.url), 'utf8');
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async () => ({ ok: true, status: 200, json: async () => JSON.parse(libText) });
+
+  try {
+    store._resetForTests();
+    await store.ready({ name: 'screens-library-evidence' });
+    const { viewLibrary } = await import('../src/app/ui/viewLibrary.js');
+    const main = draw(await viewLibrary());
+    await settled();
+
+    const search = main.querySelector('#library-search');
+    search.value = 'eye drills how to run them';
+    search.dispatchEvent(new dom.window.Event('input'));
+    await settled();
+
+    const card = [...main.querySelectorAll('details')].find((d) => /Eye drills/i.test(d.textContent));
+    assert.ok(card, 'the shared guide is findable');
+    card.open = true;
+
+    assert.match(card.textContent, /Exploratory/, 'the tier is on the card face, not buried');
+    assert.match(card.textContent, /Evidence/, 'the grade is labelled');
+    assert.match(card.textContent, /not studied specifically in POTS/, 'and the grade itself is shown');
+    assert.match(card.textContent, /no POTS-specific trial exists/, 'with the basis under it');
+
+    // Findable by it too — a grade nobody can search for is half-shipped.
+    search.value = 'exploratory';
+    search.dispatchEvent(new dom.window.Event('input'));
+    await settled();
+    assert.match(main.textContent, /Eye drills/, 'tier is searchable');
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+});
+
+test('an exploratory item still says so once it is in your day', async () => {
+  store._resetForTests();
+  await store.ready({ name: 'screens-tier-in-day' });
+  await store.saveProtocol({
+    id: 'p-tier', name: 'Eyes', active: true, phases: [],
+    blocks: [{
+      id: 'b-tier', name: 'Session', order: 0,
+      items: [
+        { id: 'i-exp', name: 'Eye jumps', tier: 'exploratory', fields: { release: 'Head still.' } },
+        { id: 'i-plain', name: 'Bodyweight squat', fields: { release: 'Sit down, stand up.' } },
+      ],
+    }],
+    createdAt: '2026-08-01T00:00:00.000Z', updatedAt: '2026-08-01T00:00:00.000Z',
+  });
+
+  const main = draw(await viewToday({ reload: () => {}, stamp: () => {} }));
+  await settled();
+
+  const rows = [...main.querySelectorAll('.row')];
+  const exploratory = rows.find((r) => /Eye jumps/.test(r.textContent));
+  const plain = rows.find((r) => /Bodyweight squat/.test(r.textContent));
+  assert.ok(exploratory && plain, 'both items are on the day');
+  assert.match(exploratory.textContent, /Exploratory/, 'the hedge survives the trip from the library');
+  assert.equal(/Exploratory/.test(plain.textContent), false, 'and an untiered item is not labelled anything');
+});
+
+test('the library says who wrote an item, and what it asks for', async () => {
+  // The provenance split exists so a clinician can see at a glance which items
+  // are his and which are the app's. Invisible, it may as well not have been
+  // written — and it was invisible until this rendered.
+  const { readFile } = await import('node:fs/promises');
+  const libText = await readFile(new URL('../src/content/library.json', import.meta.url), 'utf8');
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async () => ({ ok: true, status: 200, json: async () => JSON.parse(libText) });
+
+  try {
+    store._resetForTests();
+    await store.ready({ name: 'screens-library-source' });
+    const { viewLibrary } = await import('../src/app/ui/viewLibrary.js');
+    const main = draw(await viewLibrary());
+    await settled();
+    const search = main.querySelector('#library-search');
+    const find = async (q, re) => {
+      search.value = q;
+      search.dispatchEvent(new dom.window.Event('input'));
+      await settled();
+      const card = [...main.querySelectorAll('details')].find((d) => re.test(d.textContent));
+      if (card) card.open = true;
+      return card;
+    };
+
+    const gaze = await find('holding a target while your head moves', /Holding a target/i);
+    assert.ok(gaze, 'the authored drill is findable');
+    assert.match(gaze.textContent, /Source/, 'provenance is labelled');
+    assert.match(gaze.textContent, /not from Kevin's PT/, 'and says which side of the line it is on');
+
+    // And the ported dose shows, rather than sitting in the file unread — the
+    // same failure this whole pass was about.
+    const toes = await find('toe control', /Toe control/i);
+    assert.ok(toes, 'the ported card is findable');
+    assert.match(toes.textContent, /Dose/, 'its dose is labelled');
+    assert.match(toes.textContent, /takes two minutes/, 'and shown');
+    assert.match(toes.textContent, /TOWEL SCRUNCH/, 'and so are the instructions that were dropped in the port');
+  } finally {
+    globalThis.fetch = realFetch;
+  }
 });
