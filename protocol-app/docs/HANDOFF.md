@@ -222,3 +222,39 @@ Two ways forward, and they are not exclusive:
 
 Route 2 unblocks the home screen next session. Route 1 is the content job that makes the
 live estimate mean something, and it is now visible as a number that will move.
+
+### Pace — what it actually took you (29 Aug)
+
+Kevin: *"allow for people to add the time it actually took them to do so they can know
+exactly what their pace is, and for some things, they might get quicker over time."*
+
+`log[itemId].took = { seconds, at, source }` — wall-clock time spent, which is **not** the
+same as `seconds`, a duration-tracked dose. A plank held for forty-five seconds and a
+body-work card that took you four minutes are different numbers.
+
+**Two ways it arrives, and they are not the same claim.** The session runner measures the
+gap between putting a card on screen and being told to move on (`source: 'session'`) — real,
+and it also counts reading the card and answering the door. A typed number is somebody
+saying (`source: 'typed'`), and it always wins: the runner never overwrites it.
+
+**A measurement the instrument cannot make is not recorded.** Over an hour from the runner
+is dropped — somebody who left the app open did not spend two hours on one release, and
+writing it down would poison their own pace. A person may still type it: that is their
+statement rather than ours.
+
+**`typical` is the median**, so one strange session does not redefine what "usually" means.
+
+**And there is no verdict.** Getting quicker is not obviously better — a release rushed is a
+release wasted, and a faster flow may only be efficiency — so pace reports the change and
+attaches nothing to it. Same rule as an unlabelled measurement in `TAXONOMY.md` §5.3.
+
+**The payoff, and the reason this matters for the presets:** `lengthForYou(items, history)`
+tells a block in a person's own times where they have them, falling back to the card's where
+they do not, and reports how many were yours. *"About 8 min"* is what the cards say; *"about
+11 min"* is what it takes you. With 369 items carrying no duration, a person's own times are
+the faster route to an honest estimate than authoring 369 numbers — **the app can learn the
+day it is actually being used.**
+
+Not wired into the home screen yet. `lengthForYou` exists and is tested; `viewHome` still
+calls `lengthOf`. That is a one-line change and belongs with the home-screen work, where the
+copy can say which kind of number it is showing.

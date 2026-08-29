@@ -95,3 +95,66 @@ test('the shipped day is described honestly, block by block', async () => {
   const arc = blocks.find((b) => b.id === 'arc-wake');
   assert.match(lengthText(lengthOf(arc.items)), /^about \d+ min$/, 'the arc is fully timed and reads as a length');
 });
+
+/* --------------------------------- pace ---------------------------------- */
+// Kevin, 29 Aug: "allow for people to add the time it actually took them to do
+// so they can know exactly what their pace is, and for some things, they might
+// get quicker over time."
+
+import { tookSeries, paceOf, paceText, lengthForYou } from '../src/lib/durations.js';
+
+const dayWith = (date, itemId, took) => [date, { log: { [itemId]: { took } } }];
+const hist = (...rows) => Object.fromEntries(rows);
+
+test('typical is the median, so one strange session does not move "usually"', () => {
+  // The runner can measure four minutes and then forty, because somebody
+  // answered the door. A mean would let that redefine what usually means.
+  const h = hist(
+    dayWith('2026-08-01', 'a', { seconds: 240, source: 'session' }),
+    dayWith('2026-08-08', 'a', { seconds: 2400, source: 'session' }),
+    dayWith('2026-08-15', 'a', { seconds: 260, source: 'session' }),
+  );
+  assert.equal(paceOf(h, 'a').typical, 260);
+});
+
+test('pace reports the change and attaches no verdict to it', () => {
+  // Getting quicker is not obviously better — a release rushed is a release
+  // wasted — so there is no direction here, unlike a measurement with a stated
+  // `better` (readings.js §5.3).
+  const h = hist(
+    dayWith('2026-08-01', 'a', { seconds: 300, source: 'typed' }),
+    dayWith('2026-08-15', 'a', { seconds: 180, source: 'typed' }),
+  );
+  const p = paceOf(h, 'a');
+  assert.equal(p.change, -120);
+  assert.equal(p.direction, undefined, 'no verdict');
+  assert.match(paceText(p), /Usually about/);
+  assert.doesNotMatch(paceText(p), /better|worse|improv|faster/i);
+});
+
+test('one timing says so rather than calling itself a habit', () => {
+  const h = hist(dayWith('2026-08-01', 'a', { seconds: 240, source: 'typed' }));
+  assert.match(paceText(paceOf(h, 'a')), /the one time you timed it/);
+  assert.equal(paceText(paceOf({}, 'a')), null);
+});
+
+test('a block can be told in your own times, and says how many are yours', () => {
+  // The payoff for recording pace: "about 8 min" is what the cards say, and
+  // "about 11" is what it takes you. Different claims.
+  const h = hist(dayWith('2026-08-01', 'a', { seconds: 600, source: 'typed' }));
+  const items = [{ id: 'a', amount: { seconds: 60 } }, { id: 'b', amount: { seconds: 60 } }, { id: 'c' }];
+  const theirs = lengthOf(items);
+  const yours = lengthForYou(items, h);
+  assert.equal(theirs.seconds, 120, 'what the cards say');
+  assert.equal(yours.seconds, 660, 'what it takes you — your ten minutes, not the card’s one');
+  assert.equal(yours.yours, 1);
+  assert.equal(yours.untimed, 1, 'and the one nobody has timed is still counted, not filled in');
+});
+
+test('the series keeps where each number came from', () => {
+  const h = hist(
+    dayWith('2026-08-01', 'a', { seconds: 300, source: 'session' }),
+    dayWith('2026-08-08', 'a', { seconds: 240, source: 'typed' }),
+  );
+  assert.deepEqual(tookSeries(h, 'a').map((r) => r.source), ['session', 'typed']);
+});

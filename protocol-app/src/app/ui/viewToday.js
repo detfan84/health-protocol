@@ -19,12 +19,13 @@ import { h, clear } from './dom.js';
 import { buildToday, makePhaseSetting } from '../todayModel.js';
 import {
   setJournal, addFood, removeFood, bumpWaterMl, setWaterMl,
-  unavailableReason, addSet, updateSet, removeSet, setDuration, setReading, trainingLog, lastLoggedBefore,
+  unavailableReason, addSet, updateSet, removeSet, setDuration, setReading, setTook, trainingLog, lastLoggedBefore,
   applyCheckToggle, setCheckUnits,
 } from '../trackerOps.js';
 import { unitsOf, stepMl, volumeUnitLabel, displayVolume, parseVolume, weightUnitLabel, displayWeight, parseWeight } from '../../lib/units.js';
 import { cadenceOf, cadenceLabel, addDays, dueToday } from '../../lib/cadence.js';
 import { seriesFor, summarise, sparkPath, summaryText } from '../../lib/readings.js';
+import { paceOf, paceText } from '../../lib/durations.js';
 import { guarded } from './announcer.js';
 import * as store from '../store.js';
 import { localDateKey, nowIso, displayTime, timeFormatOf } from '../../lib/core.js';
@@ -263,6 +264,50 @@ function trainingBlock(item, day, { units, writeKey, onLogged, lastTime, history
   });
 
   const rows = h('div.sets', {});
+  /**
+   * How long it actually took, and what it usually takes.
+   *
+   * Offered on everything except duration-tracked items, where the logged
+   * seconds already IS the time and asking twice would collect the same number
+   * under two names.
+   *
+   * The pace line reports and does not judge. Getting quicker is not obviously
+   * better — a release rushed is a release wasted — so there is no direction
+   * word here and no arrow.
+   */
+  function tookRow(log) {
+    if (item.tracking === 'duration') return null;
+    const current = log?.took;
+    const host = h('div.took', {});
+    host.append(
+      h('div.field-row', {},
+        h('div', {},
+          h('label', {}, 'Took you'),
+          h('input', {
+            type: 'number', min: '1', inputmode: 'numeric',
+            value: Number.isFinite(current?.seconds) ? String(Math.round(current.seconds / 60)) : '',
+            placeholder: 'min',
+            'aria-label': `Minutes ${item.name} took you`,
+            onchange: (e) => {
+              const raw = e.target.value.trim();
+              const n = Number(raw);
+              write(
+                (fresh) => setTook(fresh, item.id, raw !== '' && Number.isFinite(n) ? n * 60 : undefined, { source: 'typed' }),
+                `How long ${item.name} took`,
+              );
+            },
+          }),
+        ),
+      ),
+    );
+    if (current?.source === 'session') {
+      host.append(h('p.muted', {}, 'Measured while you ran it, so it counts reading the card too. Type over it if that is not right.'));
+    }
+    const pace = paceText(paceOf(history, item.id, day));
+    if (pace) host.append(h('p.muted', {}, pace));
+    return host;
+  }
+
   function renderSets() {
     clear(rows);
     const log = trainingLog(day, item.id);
@@ -337,6 +382,8 @@ function trainingBlock(item, day, { units, writeKey, onLogged, lastTime, history
         if (item.sides) delta.prepend(h('span.field-label', {}, label[side]));
         rows.append(delta);
       }
+      const tookM = tookRow(log);
+      if (tookM) rows.append(tookM);
       if (item.measure.better) {
         rows.append(h('p.muted', {}, `${item.measure.better === 'higher' ? 'Higher' : 'Lower'} is better. It is your own number — nothing is compared to anybody else's.`));
       }
@@ -417,6 +464,8 @@ function trainingBlock(item, day, { units, writeKey, onLogged, lastTime, history
         },
       }, (trainingLog(day, item.id)?.sets ?? []).length ? 'Add another set' : 'Log a set'),
     );
+    const took = tookRow(log);
+    if (took) rows.append(took);
   }
   renderSets();
   host.append(rows);

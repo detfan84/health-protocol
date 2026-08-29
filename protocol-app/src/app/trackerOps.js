@@ -254,7 +254,7 @@ function withLog(day, itemId, change) {
   d.log = d.log ?? {};
   const current = d.log[itemId] ?? {};
   const next = change(clone(current));
-  if (!next || (!next.sets?.length && !Number.isFinite(next.seconds) && !Object.keys(next.readings ?? {}).length)) {
+  if (!next || (!next.sets?.length && !Number.isFinite(next.seconds) && !Object.keys(next.readings ?? {}).length && !Number.isFinite(next.took?.seconds))) {
     delete d.log[itemId];                       // nothing recorded is nothing
     if (Object.keys(d.log).length === 0) delete d.log;
   } else {
@@ -354,6 +354,44 @@ function cleanReading(raw, at) {
   if (!('value' in out) && !('outcomeId' in out)) return null;
   out.at = at;
   return out;
+}
+
+/**
+ * How long this actually took today (Kevin, 29 Aug: "allow for people to add
+ * the time it actually took them to do so they can know exactly what their
+ * pace is").
+ *
+ * Distinct from `seconds`, which is a duration-tracked DOSE — a plank held for
+ * forty-five. `took` is wall-clock time spent, and the two only coincide when
+ * the dose is the whole activity.
+ *
+ * `source` is kept because the two ways of getting this number are not equally
+ * good. `session` is the runner measuring the gap between showing a card and
+ * being told to move on: real, and it also counts reading the card, answering
+ * the door and losing the thread. `typed` is somebody saying. A typed number
+ * always wins, and the pace read-back can prefer them.
+ *
+ * Passing undefined clears it. Nothing is a zero until it is typed.
+ */
+export function setTook(day, itemId, seconds, { source = 'typed', at = nowIso() } = {}) {
+  return withLog(day, itemId, (log) => {
+    const next = { ...log };
+    if (!Number.isFinite(seconds) || seconds <= 0) { delete next.took; return next; }
+    // A measurement the instrument cannot make is not recorded. Somebody who
+    // left the app open for two hours did not spend two hours on one release,
+    // and writing that down would poison their own pace with a number nobody
+    // meant. Typed values are a person's claim and are taken as given.
+    if (source === 'session' && seconds > 3600) return next;
+    // The runner never overwrites what a person typed.
+    if (source === 'session' && log.took?.source === 'typed') return next;
+    next.took = { seconds: Math.round(seconds), at, source };
+    return next;
+  });
+}
+
+/** How long it took today, or undefined. */
+export function took(day, itemId) {
+  return day.log?.[itemId]?.took;
 }
 
 function cleanSet(raw) {

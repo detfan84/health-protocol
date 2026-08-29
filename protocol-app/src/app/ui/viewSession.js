@@ -21,7 +21,7 @@ import { h, clear } from './dom.js';
 import * as store from '../store.js';
 import { guarded } from './announcer.js';
 import { localDateKey } from '../../lib/core.js';
-import { applyCheckToggle, addSet, updateSet, trainingLog } from '../trackerOps.js';
+import { applyCheckToggle, addSet, updateSet, trainingLog, setTook } from '../trackerOps.js';
 import { unitsOf, weightUnitLabel, displayWeight, parseWeight } from '../../lib/units.js';
 
 const FIELD_ORDER = [
@@ -59,6 +59,12 @@ export async function viewSession({ protocolId, blockId, done }) {
   let index = 0;
   let timer = null;
   let remaining = 0;
+  // When the current card was put on screen. The runner can measure how long a
+  // person spent on it, which is a real number and an imperfect one: it counts
+  // reading the card and answering the door as well as doing the thing. It is
+  // recorded as `source: 'session'`, never over a typed value, and not at all
+  // when it is implausible — see setTook.
+  let shownAt = null;
   let wakeLock = null;
 
   // A guided session is the one screen where the phone must not sleep in your
@@ -101,8 +107,19 @@ export async function viewSession({ protocolId, blockId, done }) {
     );
   }
 
+  function recordElapsed() {
+    if (shownAt == null) return;
+    const seconds = Math.round((Date.now() - shownAt) / 1000);
+    shownAt = null;
+    const item = items[index];
+    if (!item || seconds < 3) return; // a card flicked past is not a time
+    store.mutateDay(date, (fresh) => setTook(fresh, item.id, seconds, { source: 'session' }))
+      .catch(() => {}); // a pace nobody asked for must never interrupt a session
+  }
+
   function advance() {
     stopTimer();
+    recordElapsed();
     if (index >= items.length - 1) return finish();
     index += 1;
     render();
@@ -110,6 +127,7 @@ export async function viewSession({ protocolId, blockId, done }) {
 
   function finish() {
     stopTimer();
+    recordElapsed();
     releaseScreen();
     clear(stage);
     stage.append(
@@ -123,6 +141,7 @@ export async function viewSession({ protocolId, blockId, done }) {
 
   function render() {
     clear(stage);
+    shownAt = Date.now();
     const item = items[index];
     const seconds = item.amount?.seconds;
     const isTimed = item.tracking === 'duration' && Number.isFinite(seconds);

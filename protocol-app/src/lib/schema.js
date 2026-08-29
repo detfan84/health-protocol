@@ -173,6 +173,12 @@ export const MIGRATIONS = [
  *   log?: { [itemId]: {
  *     sets?: [ { reps?, kg?, seconds? } ], seconds?,
  *     readings?: { left?|right?|both?: { value?, outcomeId?, tell?, at } },
+ *     took?: { seconds, at, source: 'typed'|'session' },
+ *                              // how long it ACTUALLY took, which is not the
+ *                              // same as `seconds` (a duration-tracked dose).
+ *                              // `source` is kept because a person saying and
+ *                              // the runner measuring are different claims,
+ *                              // and a typed one always wins.
  *   } },                       // what was actually done — beside the checks,
  *                              // never inside them, so a tap cannot erase it.
  *                              // A reading keeps the words its outcome had at

@@ -120,3 +120,93 @@ export function lengthText(len) {
   }
   return `${span}, plus ${len.untimed} with no clock on ${len.untimed === 1 ? 'it' : 'them'}`;
 }
+
+/* ------------------------------- your pace ------------------------------- */
+
+/**
+ * Every time this item has actually taken, oldest first.
+ *
+ * Kevin, 29 Aug: "for some things, they might get quicker over time." So the
+ * dates come along, and so does where each number came from — a session
+ * measurement and a typed one are not the same claim.
+ */
+export function tookSeries(history, itemId, extra = null) {
+  const rows = [];
+  const take = (date, rec) => {
+    const t = rec?.log?.[itemId]?.took;
+    if (Number.isFinite(t?.seconds)) rows.push({ date, ...t });
+  };
+  for (const [date, rec] of Object.entries(history ?? {})) take(date, rec);
+  if (extra) take(extra.date, extra);
+  const seen = new Set();
+  return rows
+    .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0))
+    .filter((r) => (seen.has(r.date) ? false : seen.add(r.date)));
+}
+
+/**
+ * What this usually takes you.
+ *
+ * → { times, typical, last, change? }
+ *
+ * `typical` is the MEDIAN, not the mean. One session where the app was left
+ * open, or one day of doing it properly for the first time, should not move
+ * what "usually" means.
+ *
+ * There is **no direction**. Getting quicker is not obviously better — rushing
+ * a release is worse, and getting faster at a flow may only be efficiency — so
+ * this reports the change and attaches no verdict to it, the same rule an
+ * unlabelled measurement follows (§5.3).
+ */
+export function paceOf(history, itemId, extra = null) {
+  const series = tookSeries(history, itemId, extra);
+  if (!series.length) return { times: 0 };
+  const values = series.map((r) => r.seconds).sort((a, b) => a - b);
+  const mid = Math.floor(values.length / 2);
+  const typical = values.length % 2 ? values[mid] : Math.round((values[mid - 1] + values[mid]) / 2);
+  const out = { times: series.length, typical, last: series[series.length - 1] };
+  if (series.length > 1) out.change = series[series.length - 1].seconds - series[0].seconds;
+  return out;
+}
+
+/** "usually about 4 min · last time 3 min" — a report, never a verdict. */
+export function paceText(pace) {
+  if (!pace.times) return null;
+  const m = (s) => (s < 90 ? `${Math.round(s)} sec` : `${Math.max(1, Math.round(s / 60))} min`);
+  if (pace.times === 1) return `Took you ${m(pace.last.seconds)} the one time you timed it.`;
+  const same = pace.typical === pace.last.seconds;
+  return same
+    ? `Usually about ${m(pace.typical)}, over ${pace.times} times.`
+    : `Usually about ${m(pace.typical)} · last time ${m(pace.last.seconds)}. ${pace.times} timed.`;
+}
+
+/**
+ * The same length, told with a person's own times where they have them.
+ *
+ * This is the payoff for recording pace at all: "about 8 min" is what the cards
+ * say, and "about 11 min" is what it takes YOU. The estimate says which it is,
+ * because those are different claims.
+ */
+export function lengthForYou(items, history) {
+  let seconds = 0;
+  let secondsMax = 0;
+  let timed = 0;
+  let yours = 0;
+  for (const it of items) {
+    const pace = paceOf(history, it.id);
+    if (pace.times) {
+      seconds += pace.typical;
+      secondsMax += pace.typical;
+      timed += 1;
+      yours += 1;
+      continue;
+    }
+    const a = it.amount;
+    if (!Number.isFinite(a?.seconds)) continue;
+    const mult = a.perSide && it.sides !== false ? 2 : 1;
+    seconds += a.seconds * mult;
+    secondsMax += (a.secondsMax ?? a.seconds) * mult;
+    timed += 1;
+  }
+  return { seconds, secondsMax, timed, untimed: items.length - timed, yours };
+}

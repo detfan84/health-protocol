@@ -21,6 +21,8 @@ import {
   readings,
   addSet,
   trainingLog,
+  setTook,
+  took,
 } from '../src/app/trackerOps.js';
 import {
   buildToday,
@@ -383,4 +385,42 @@ test('readings and sets can live on the same item without clobbering each other'
   day = addSet(day, 'x', { reps: 8 });
   assert.equal(readings(day, 'x').both.value, 12);
   assert.equal(trainingLog(day, 'x').sets.length, 1);
+});
+
+/* ------------------------------ took (pace) ------------------------------ */
+
+test('a typed time is kept, and clearing it makes it absent', () => {
+  let day = blankDay('2026-08-29');
+  day = setTook(day, 'bw-ham', 240);
+  assert.equal(took(day, 'bw-ham').seconds, 240);
+  assert.equal(took(day, 'bw-ham').source, 'typed');
+  day = setTook(day, 'bw-ham', undefined);
+  assert.equal(took(day, 'bw-ham'), undefined);
+  assert.equal(day.log, undefined);
+});
+
+test('the runner never overwrites what a person typed', () => {
+  let day = blankDay('2026-08-29');
+  day = setTook(day, 'bw-ham', 240, { source: 'typed' });
+  day = setTook(day, 'bw-ham', 900, { source: 'session' });
+  assert.equal(took(day, 'bw-ham').seconds, 240, 'a person saying beats an instrument measuring');
+});
+
+test('a measurement the instrument cannot make is not recorded', () => {
+  // Somebody who left the app open for two hours did not spend two hours on one
+  // release, and writing that down would poison their own pace.
+  let day = blankDay('2026-08-29');
+  day = setTook(day, 'bw-ham', 7200, { source: 'session' });
+  assert.equal(took(day, 'bw-ham'), undefined);
+  // A person is allowed to claim it, though — that is their statement, not ours.
+  day = setTook(day, 'bw-ham', 7200, { source: 'typed' });
+  assert.equal(took(day, 'bw-ham').seconds, 7200);
+});
+
+test('a time survives an un-tick, like every other typed number', () => {
+  let day = blankDay('2026-08-29');
+  day = setTook(day, 'bw-ham', 240);
+  day = toggleCheck(day, 'bw-ham');
+  day = toggleCheck(day, 'bw-ham');
+  assert.equal(took(day, 'bw-ham').seconds, 240);
 });
