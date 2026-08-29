@@ -524,3 +524,57 @@ test('an addition that has not worked yet says so where a reader will see it', a
   assert.match(ball.sourceNote, /the release was not/);
   assert.match(ball.fields.careful, /sciatic/i, 'and the nerve that runs through there is named');
 });
+
+test('the hamstring gap is closed, and the nerve question gates the release work', async () => {
+  // Filtering on `hamstrings` returned 22 items and one release, against four
+  // for the calf — a gap that only became countable once the anatomy graph
+  // existed. Four now, and one of them asks whether the muscle is the problem.
+  const lib = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
+  const idx = new Map(lib.anatomy.map((n) => [n.id, n]));
+  const rollUp = (id) => {
+    const out = new Set();
+    const walk = (n) => {
+      if (!n || out.has(n) || !idx.has(n)) return;
+      out.add(n);
+      for (const p of idx.get(n).parents ?? []) walk(p);
+    };
+    walk(id);
+    return out;
+  };
+  const releases = lib.items
+    .filter((i) => (i.effect ?? []).includes('release'))
+    .filter((i) => (i.target ?? []).some((t) => rollUp(t).has('hamstrings')));
+  assert.equal(releases.length, 4);
+
+  // Law 1: release is never scheduled alone.
+  const belly = lib.items.find((i) => i.id === 'release-hamstring-belly-pin-and-move');
+  assert.ok(belly.loadAfter?.length, 'the release names its loading partner');
+
+  // And its prerequisite is conditional, like every other one.
+  const [pre] = belly.before;
+  assert.equal(pre.item, 'release-hamstring-nerve-or-muscle');
+  assert.match(pre.when, /^Only if/);
+  assert.match(pre.when, /skip this/, 'and says when not to bother');
+});
+
+test('nothing in the catalogue tells you to press behind the knee', async () => {
+  // The popliteal fossa carries the nerves and vessels for the whole lower leg.
+  // Every hamstring release that could plausibly drift into it says not to.
+  const lib = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
+  const hamstringReleases = lib.items.filter((i) => i.id.startsWith('release-hamstring-') && (i.effect ?? []).includes('release'));
+  assert.ok(hamstringReleases.length >= 2);
+  for (const it of hamstringReleases) {
+    assert.match(it.fields.careful, /crease behind the knee/, `${it.id} must warn off the back of the knee`);
+  }
+});
+
+test('equipment is a facet value, never a sentence taken apart', () => {
+  // `new Set("Foam roller")` is a set of characters, and seeding the equipment
+  // set from a prose string filed 334 items under "F", "o", "a", "m". The prose
+  // is instruction and belongs in fields.tool.
+  const [prose] = tagAll([{ id: 'a', name: 'A', category: 'release', equipment: 'Foam roller or firm ball' }]);
+  assert.ok(!('equipment' in prose), 'prose is not a filter value');
+  assert.equal(prose.fields.tool, 'Foam roller or firm ball', 'it becomes the tool line instead');
+  const [enumish] = tagAll([{ id: 'b', name: 'B', category: 'release', equipment: 'foam_roller' }]);
+  assert.deepEqual(enumish.equipment, ['roller']);
+});

@@ -312,9 +312,10 @@ The library filter had to move too. It read the free-text `muscles` field, so it
 and not walk one; picking *Glutes* missed everything tagged `glute-max`. It reads the graph now,
 and the graph ships with the catalogue.
 
-**What this surfaced:** filtering on `hamstrings` returns 22 items and **one** release. Kevin's
-own report is that calves and hamstrings are the tightest things he has left. Four releases and
-one is a content gap, and it is now visible as a number rather than as a feeling.
+**What this surfaced:** filtering on `hamstrings` returned 22 items and **one** release, against
+four for the calf — a content gap that was a feeling until the graph made it a number. **Closed
+29 Aug**: `src/content/authored/release-hamstring.json` brings it to four, and the gap being
+countable is what made it fixable.
 
 ---
 

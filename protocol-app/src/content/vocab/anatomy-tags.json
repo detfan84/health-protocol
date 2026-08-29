@@ -214,9 +214,36 @@
       "why": "A teaching card."
     },
     {
+      "id": "load-hamstring-long-lever-bridge",
+      "target": [
+        "hamstrings",
+        "glute-max"
+      ]
+    },
+    {
       "id": "points-how-to-press",
       "noTarget": true,
       "why": "A teaching card."
+    },
+    {
+      "id": "release-hamstring-belly-pin-and-move",
+      "target": [
+        "hamstrings"
+      ]
+    },
+    {
+      "id": "release-hamstring-lateral-vs-medial",
+      "target": [
+        "biceps-femoris",
+        "medial-hamstrings"
+      ]
+    },
+    {
+      "id": "release-hamstring-nerve-or-muscle",
+      "target": [
+        "sciatic-nerve",
+        "hamstrings"
+      ]
     },
     {
       "id": "sup-acupressure",

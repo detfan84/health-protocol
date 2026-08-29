@@ -1,0 +1,140 @@
+{
+  "format": "protocol-app/authored-v1",
+  "module": "release-hamstring",
+  "note": "The hamstring release module. Filtering the catalogue on `hamstrings` returned 22 items and exactly one release, against four for the calf — a gap that only became visible once the anatomy graph made it countable (TAXONOMY §3.3). Four items: the belly with movement under pressure, the outer-versus-inner distinction, the question of whether it is the nerve at all, and the loading half that keeps any of it.",
+  "items": [
+    {
+      "id": "release-hamstring-belly-pin-and-move",
+      "name": "The belly of the hamstring — pin it, then bend the knee",
+      "kind": "bodywork",
+      "category": "release",
+      "role": "release",
+      "technique": "tech-pin-and-move",
+      "tracking": "duration",
+      "amount": {
+        "seconds": 90
+      },
+      "dose": "60–90 sec a side",
+      "sides": true,
+      "tier": "established",
+      "why": "Pressure alone asks the tissue to let go. Pressure plus movement asks it to let go while it slides, which is what it has to do every time you walk.",
+      "equipment": [
+        "ball",
+        "roller",
+        "chair"
+      ],
+      "context": [
+        "floor",
+        "chair"
+      ],
+      "fields": {
+        "tool": "A firm ball or a roller. A chair or step works better than the floor for most people — the leg hangs and the angle is easier to control.",
+        "release": "Sit with the back of the thigh over the ball, halfway between the sitting bone and the back of the knee. Let your weight settle. When you are on a spot that answers back, slowly straighten and bend the knee five or six times without moving the ball.",
+        "notice": "The spot usually softens on the third or fourth bend, not the first. If nothing changes in ninety seconds, move the ball an inch and start again rather than pressing harder.",
+        "careful": "Stay in the meaty middle. Do not work in the crease behind the knee — the nerves and vessels for the whole lower leg run through there, and they are not what you are trying to release.",
+        "load": "Once the range is there, spend it: a slow hip hinge with soft knees, or a single-leg deadlift holding nothing. Range you do not use goes back."
+      },
+      "sourceNote": "Written for this app from ordinary practice, not carried from a source.",
+      "loadAfter": [
+        {
+          "id": "load-hamstring-long-lever-bridge",
+          "name": "Bridging with the feet far out"
+        }
+      ],
+      "before": [
+        {
+          "item": "release-hamstring-nerve-or-muscle",
+          "when": "Only if stretching this hamstring has never changed it. Years of daily stretching with no change is the sign that the length being tested might be the nerve rather than the muscle — and if it is, releasing the muscle is aimed at the wrong tissue. If it responds to stretching normally, skip this and get on with it.",
+          "test": "release-hamstring-nerve-or-muscle"
+        }
+      ]
+    },
+    {
+      "id": "release-hamstring-lateral-vs-medial",
+      "name": "Outer or inner hamstring — they are not the same complaint",
+      "kind": "bodywork",
+      "category": "release",
+      "role": "release",
+      "technique": "tech-sustained-pressure",
+      "tracking": "duration",
+      "amount": {
+        "seconds": 120
+      },
+      "dose": "60 sec each side of the thigh",
+      "sides": true,
+      "tier": "established",
+      "why": "\"Tight hamstrings\" is usually tight in one particular line. The outer one runs to the outside of the knee and often comes with a hip that turns out; the inner two run to the inside and often come with a hip that collapses in. Working the middle misses both.",
+      "equipment": [
+        "ball",
+        "chair"
+      ],
+      "context": [
+        "floor",
+        "chair"
+      ],
+      "fields": {
+        "tool": "A firm ball. Sitting on a chair or step gives you a finer angle than the floor.",
+        "release": "Sit on the ball under the back of the thigh, then roll your leg outward to bring the outer line over it, and inward to bring the inner line over it. Work each for about a minute. One side is almost always worse than the other.",
+        "notice": "Which line is worse is the useful information — more than how tender either one is. Note it and see whether it is the same next week.",
+        "careful": "The inner line sits near the groin as it climbs; stay on the back of the thigh rather than wrapping around it. And nothing in the crease behind the knee.",
+        "load": "Hinge work loads both lines. If the outer is the tight one, single-leg work will show you why faster than more rolling will."
+      },
+      "sourceNote": "Written for this app from ordinary practice, not carried from a source.",
+      "loadAfter": [
+        {
+          "id": "load-hamstring-long-lever-bridge",
+          "name": "Bridging with the feet far out"
+        }
+      ]
+    },
+    {
+      "id": "release-hamstring-nerve-or-muscle",
+      "name": "Tight hamstrings that never loosen — is it the muscle at all?",
+      "kind": "bodywork",
+      "category": "nerve",
+      "role": "awareness-cue",
+      "tracking": "check",
+      "tier": "established",
+      "why": "A hamstring that has been stretched daily for years and has not changed is worth a second question. The sciatic nerve runs the length of the back of the thigh, and a nerve under tension produces a pulling that feels exactly like a short muscle — and does not respond to stretching it.",
+      "context": [
+        "floor",
+        "chair"
+      ],
+      "fields": {
+        "tool": "Nothing. This is a way of telling two things apart.",
+        "release": "Sit tall on a chair, straighten one knee, and note where the pull is and how strong. Now tuck your chin to your chest and see whether the pull changes. Then lift your chin to the ceiling and see again.\n\nA muscle does not care what your head is doing. If the pull rises with the chin tucked and eases with it lifted, the length being tested is the nerve, not the hamstring.",
+        "notice": "Neural pull tends to be described as a line, a wire or a zing, and it stops abruptly. Muscular pull is broad and dull and fades gradually. Both can be true at once.",
+        "careful": "If it is the nerve, more stretching is the wrong answer and can make it worse. Glide it rather than lengthen it, and if there is numbness, weakness, or pain that runs past the knee into the foot, that is a conversation with a clinician rather than a card to work through."
+      },
+      "sourceNote": "Written for this app from ordinary practice, not carried from a source."
+    },
+    {
+      "id": "load-hamstring-long-lever-bridge",
+      "name": "Bridging with the feet far out — the hamstring doing its own job",
+      "kind": "bodywork",
+      "category": "release",
+      "role": "activate",
+      "tracking": "sets",
+      "amount": {
+        "sets": 2,
+        "reps": 10
+      },
+      "dose": "2 × 10, slow",
+      "tier": "established",
+      "why": "A hamstring that is short is very often a hamstring that is not being asked for anything. Releasing it and then leaving it alone gives the tightness somewhere to come back to. This is the loading half of law 1, at the end of the range you just opened.",
+      "equipment": [
+        "none"
+      ],
+      "context": [
+        "floor"
+      ],
+      "fields": {
+        "tool": "Floor.",
+        "release": "On your back, heels much further from your backside than a normal bridge — nearly straight legs, weight on the heels. Lift the hips. You should feel this in the back of the thigh rather than in the buttock. Lower slowly.",
+        "notice": "Cramping in the hamstring on the first few is common and is information: that muscle is being asked for something it is not used to giving. Shorten the lever a little and build out.",
+        "careful": "If the low back does the lifting, bring the heels in until the hamstring takes it back. Height is not the point here."
+      },
+      "sourceNote": "Written for this app from ordinary practice, not carried from a source."
+    }
+  ]
+}

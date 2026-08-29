@@ -127,12 +127,34 @@ export function tagItem(item, overrides = new Map()) {
   const tradition = TRADITION_BY_CATEGORY[item.category];
   if (tradition && !out.tradition) out.tradition = tradition;
 
-  const equipment = new Set(out.equipment ?? []);
+  // `equipment` arrives as one of two things: a short enum-ish value from the
+  // exercise import ("bodyweight", "band"), or prose written for a reader
+  // ("A ball and a wall, or a foam roller"). Only the first is a facet value.
+  //
+  // Seeding the set from `out.equipment` directly turned the second kind into
+  // its own letters — `new Set("Foam roller")` is a set of characters — and
+  // shipped 334 items filed under "F", "o", "a", "m". A string is iterable and
+  // that is exactly why this has to be explicit.
+  const prose = typeof out.equipment === 'string' ? out.equipment : null;
+  const equipment = new Set(Array.isArray(out.equipment) ? out.equipment : []);
   const fromCategory = EQUIPMENT_BY_CATEGORY[item.category];
   if (fromCategory) equipment.add(fromCategory);
-  const fromField = EQUIPMENT_BY_FIELD[item.equipment];
+  const fromField = prose ? EQUIPMENT_BY_FIELD[prose] : undefined;
   if (fromField) equipment.add(fromField);
+
   if (equipment.size) out.equipment = [...equipment].sort();
+  else delete out.equipment;
+
+  // Prose that mapped to nothing is instruction, not a filter. It belongs in
+  // fields.tool, where the card already says what to pick up — and where most
+  // of these items were already carrying the same sentence.
+  if (prose && !fromField) {
+    const fields = { ...(out.fields ?? {}) };
+    if (!fields.tool) {
+      fields.tool = prose;
+      out.fields = fields;
+    }
+  }
 
   return out;
 }
