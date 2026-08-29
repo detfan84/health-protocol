@@ -1,24 +1,39 @@
-// viewHome.js — the front door: a menu, not a list.
+// viewHome.js — the front door: your day, and one door to everything else.
 //
 // What this replaces, and why (Kevin, 23 Aug): "I don't like how it's all in
 // one big list... every block is on the same page. Why can't we do different
 // pages for different blocks?" He is right. Everything the app knows was
 // arriving on one screen at once, which is not a design — it is an absence of
-// one. A person opening this wants three things, in this order:
+// one.
 //
-//   1. What am I doing right now?          → one card, with Start on it
-//   2. My day                              → the anchors, as places to go
-//   3. What else can I work on?            → areas, each its own page
+// And then (29 Aug): "the day arc shouldn't be parked alongside the things
+// that are contained within it." The first answer to the first complaint was a
+// grid of tiles — five active protocols, six "More" destinations, five
+// switched-off ones — with The day arc sitting beside Body work, Daily flow
+// and Support, which are the four places the arc DRAWS FROM. Sixteen tiles is
+// not a menu either; it is the same list with borders on it, and it made a
+// container look like a sibling of its contents.
 //
-// Nothing here is a list of items. Items live inside a session or inside an
-// area page. The front door holds destinations.
+// So the front door is now four things, in this order:
+//
+//   1. Right now                → one card, with Start on it
+//   2. The rest of today        → what is still open, as places to go
+//   3. Browse                   → the one door the "More" row was six bad
+//                                 answers to (the faceted library, TAXONOMY §8)
+//   4. A thin row               → Everything today · Supply · Plans
+//
+// The protocols themselves have not gone anywhere: they fold up at the bottom,
+// where a plan is a plan rather than a peer of the day it feeds. Every area
+// page is still one tap from here, which is the rule that matters — commit
+// 197da3e dropped Supply and Plans off this screen with nothing to replace
+// them, and every screen still rendered perfectly in isolation.
 
-import { h, clear } from './dom.js';
+import { h } from './dom.js';
 import * as store from '../store.js';
 import { icon } from './icons.js';
 import { buildToday } from '../todayModel.js';
 import { localDateKey, displayTime, timeFormatOf } from '../../lib/core.js';
-import { lengthOf, lengthText } from '../../lib/durations.js';
+import { lengthForYou, lengthTextForYou } from '../../lib/durations.js';
 
 /**
  * How a protocol presents itself on the menu. Seeded protocols get a look;
@@ -53,22 +68,81 @@ function tile({ title, sub, iconName, accent, onclick, wide = false }) {
   );
 }
 
-// How long a block reads as. This used to be
-//   block.items.reduce((n, it) => n + (it.amount?.seconds ?? 60), 0)
-// — a minute invented for every item with no duration, summed, and shown to a
-// person as though the app knew. Most of the day carries no clock at all, so
-// most of that number was fabricated. Canon 3.7: no uncertainty was
-// experienced while writing it, which is exactly how a made-up number gets
-// mistaken for a known one.
-//
-// It says what it knows and counts what it does not.
-const lengthLabel = (block) => lengthText(lengthOf(block.items));
+/**
+ * How long a block reads as, and whose number that is.
+ *
+ * This used to be
+ *   block.items.reduce((n, it) => n + (it.amount?.seconds ?? 60), 0)
+ * — a minute invented for every item with no duration, summed, and shown to a
+ * person as though the app knew. Most of the day carries no clock at all, so
+ * most of that number was fabricated. Canon 3.7: no uncertainty was
+ * experienced while writing it, which is exactly how a made-up number gets
+ * mistaken for a known one.
+ *
+ * Now it says what it knows, counts what it does not, and — given a person's
+ * recorded times — prefers theirs and says so. "About 8 min" is what the cards
+ * claim; "about 11 min · your own times" is what it actually takes them. With
+ * 369 catalogue items carrying no duration at all, their own history is the
+ * faster route to an honest estimate than authoring 369 numbers.
+ */
+const lengthLabel = (block, history = {}) => lengthTextForYou(lengthForYou(block.items, history));
+
+/**
+ * The rest of the day, split by whether the day actually asks for it yet.
+ *
+ * → { scheduled, anytime }
+ *
+ * `scheduled` is what has a place in the day — still open from earlier, also
+ * open now, coming up at eight — each labelled with WHY it is on screen. A
+ * block whose window closed an hour ago and one that opens at ten are both
+ * "not done", and reading them as the same thing is how a screen stops being
+ * useful.
+ *
+ * `anytime` is the other thirteen. This split is the whole lesson of the first
+ * cut of this screen: with the real shipped content the front door drew
+ * NINETEEN rows, because every body-work section and every support section is
+ * an untimed block and therefore "the rest of today". That is not a day; it is
+ * the library wearing a schedule, and it is the same failure as the sixteen
+ * tiles it replaced. The suite was green throughout — the fixture had two
+ * protocols. Open what a person opens.
+ *
+ * So the untimed blocks fold to one line, the way Today folds a large group,
+ * and the day keeps its shape.
+ *
+ * "When needed" and "not asking right now" are deliberately absent from both:
+ * they are answers to a question nobody asked this minute.
+ */
+function restOfToday(groups, fmt) {
+  const scheduled = [];
+  for (const b of groups.now.slice(1)) scheduled.push({ block: b, when: 'also open now' });
+  for (const b of groups.missed) scheduled.push({ block: b, when: 'still open from earlier' });
+  for (const b of groups.later) {
+    scheduled.push({ block: b, when: b.start ? `from ${displayTime(b.start, fmt)}` : 'later today' });
+  }
+  const anytime = groups.anytime.map((b) => ({ block: b, when: 'anytime today' }));
+  return { scheduled, anytime };
+}
 
 export async function viewHome({ open, startSession }) {
   const date = localDateKey();
-  const [protocols, day] = await Promise.all([store.loadProtocols(), store.loadDay(date)]);
+  // The same reads Today makes, for the same reason: a cadence question
+  // ("have I had my three this week?") answered without the week is answered
+  // wrong, and this screen was asking it with an empty history. `history` also
+  // carries what things have actually taken, which is what turns an estimate
+  // from the cards' number into the person's own.
+  const [protocols, day, history, pauses, supplies] = await Promise.all([
+    store.loadProtocols(),
+    store.loadDay(date),
+    store.loadRecentDays(date),
+    store.loadPauses(),
+    store.loadSupplies(),
+  ]);
+  // Read, never advanced: `phaseAsOf` works out where a plan has got to
+  // without writing anything, and moving somebody's phase pointer is not a
+  // thing opening the front door should do. Today owns that write.
+  const phaseSettings = await store.loadPhaseSettings(protocols);
   const fmt = timeFormatOf(await store.getSetting('ui.timeFormat'));
-  const today = buildToday({ protocols, now: new Date(), day });
+  const today = buildToday({ protocols, phaseSettings, now: new Date(), day, history, pauses, supplies });
 
   const root = h('div.home', {});
   const hour = new Date().getHours();
@@ -90,7 +164,7 @@ export async function viewHome({ open, startSession }) {
         h('h2.section-title', {}, 'Right now'),
         h('div.card.now-card', {},
           h('h3', {}, b.name),
-          h('p.muted', {}, `${b.items.length} left · ${lengthLabel(b)}`),
+          h('p.muted', {}, `${b.items.length} left · ${lengthLabel(b, history)}`),
           h('button.btn.primary', {
             style: 'width:100%',
             onclick: () => startSession(b.protocolId, b.blockId),
@@ -113,66 +187,139 @@ export async function viewHome({ open, startSession }) {
     );
   }
 
-  /* -------------------------------- areas -------------------------------- */
-  // One tile per protocol, because a protocol IS an area: the day arc's four
-  // anchors, the body-work sections, a strength routine. Tapping opens that
-  // area's own page rather than dumping its items here.
-  const active = protocols.filter((p) => p.active === true);
-  const inactive = protocols.filter((p) => p.active !== true);
+  /* --------------------------- the rest of today ------------------------- */
+  // What is left, as blocks rather than as protocols. This is the half of the
+  // old tile grid that was actually about today: a person wants "the evening
+  // wind-down, still open" and not "Body work, 8 parts, 41 things".
+  const { scheduled, anytime } = restOfToday(today.groups, fmt);
+  const dayRow = ({ block, when }) => h('button.day-row', {
+    onclick: () => startSession(block.protocolId, block.blockId),
+  },
+    h('span.day-row-body', {},
+      h('span.day-row-title', {},
+        block.name,
+        today.multipleActive ? h('span.day-row-from', {}, ` · ${block.protocolName}`) : null,
+      ),
+      h('span.day-row-sub', {}, `${when} · ${block.items.length} left · ${lengthLabel(block, history)}`),
+    ),
+    h('span.day-row-go', {}, 'Start'),
+  );
 
-  if (active.length) {
-    const grid = h('div.tiles', {});
-    for (const p of active) {
-      const look = lookFor(p);
-      const count = p.blocks.reduce((n, b) => n + b.items.length, 0);
-      grid.append(tile({
-        title: p.name,
-        sub: `${p.blocks.length} ${p.blocks.length === 1 ? 'part' : 'parts'} · ${count} things`,
-        iconName: look.icon,
-        accent: look.accent,
-        onclick: () => open({ area: p.id }),
-      }));
+  if (scheduled.length || anytime.length) {
+    const section = h('section', {}, h('h2.section-title', {}, 'The rest of today'));
+    if (scheduled.length) {
+      const list = h('div.day-list', {});
+      for (const row of scheduled) list.append(dayRow(row));
+      section.append(list);
+    } else {
+      section.append(h('p.muted', {}, 'Nothing else is scheduled. What is below is yours to pick up whenever.'));
     }
-    root.append(h('section', {}, h('h2.section-title', {}, 'Your day'), grid));
+
+    if (anytime.length) {
+      const things = anytime.reduce((n, r) => n + r.block.items.length, 0);
+      const list = h('div.day-list', {});
+      for (const row of anytime) list.append(dayRow(row));
+      section.append(
+        h('details.anytime-fold', {},
+          h('summary', {},
+            `Anytime today — ${anytime.length} ${anytime.length === 1 ? 'part' : 'parts'}, ${things} things`),
+          list,
+        ),
+      );
+    }
+    root.append(section);
+  } else if (nowBlocks.length) {
+    root.append(
+      h('section', {},
+        h('h2.section-title', {}, 'The rest of today'),
+        h('div.card', {}, h('p.muted', {}, 'Nothing else is open. Anything below is there when you want it.')),
+      ),
+    );
   }
 
-  /* -------------------------------- more --------------------------------- */
-  // Supply and Plans live here rather than in the tab bar. They were tabs
-  // until the menu → area → session redesign, which dropped them without a
-  // replacement: for one commit there was no way to reach a supply count, no
-  // way to make a protocol, and no way to switch one off — while Today went on
-  // telling anybody who ran out to "restock it on the Supply screen".
-  const more = h('div.tiles', {});
-  more.append(
-    tile({ title: 'Library', sub: 'Everything the app can teach', iconName: 'library', accent: 'plum', onclick: () => open({ tab: 'library' }) }),
-    tile({ title: 'Reference', sub: 'Food, spacing, symptoms', iconName: 'book', accent: 'ochre', onclick: () => open({ tab: 'reference' }) }),
-    tile({ title: 'Track', sub: 'Journal, food, water', iconName: 'pencil', accent: 'sky', onclick: () => open({ tab: 'track' }) }),
-    tile({ title: 'Supply', sub: 'What you have on hand', iconName: 'bottle', accent: 'clay', onclick: () => open({ tab: 'supply' }) }),
-    tile({ title: 'Plans', sub: 'Make one, rename it, switch it on or off', iconName: 'plan', accent: 'dawn', onclick: () => open({ tab: 'plans' }) }),
-    tile({ title: 'Everything today', sub: 'The full list, if you want it', iconName: 'list', accent: 'sage', onclick: () => open({ tab: 'day' }) }),
+  /* -------------------------------- browse ------------------------------- */
+  // The one door. There used to be six here — Library, Reference, Track,
+  // Supply, Plans, Everything today — three of which are already tabs, and a
+  // row of tiles that repeats the tab bar teaches a person that neither one
+  // means anything. The library slices by effect, body part, pattern,
+  // equipment and context now, so it is a real answer to "what else can I
+  // work on" rather than a shelf named after which file something came from.
+  root.append(
+    h('section', {},
+      h('h2.section-title', {}, 'Anything else'),
+      tile({
+        title: 'Browse',
+        sub: 'Everything the app can teach — by what it does, where in the body, and what you need for it',
+        iconName: 'library',
+        accent: 'plum',
+        wide: true,
+        onclick: () => open({ tab: 'library' }),
+      }),
+      h('div.thin-row', {},
+        h('button.thin-link', { onclick: () => open({ tab: 'day' }) }, 'Everything today'),
+        h('button.thin-link', { onclick: () => open({ tab: 'supply' }) }, 'Supply'),
+        h('button.thin-link', { onclick: () => open({ tab: 'plans' }) }, 'Plans'),
+      ),
+    ),
   );
-  root.append(h('section', {}, h('h2.section-title', {}, 'More'), more));
 
-  if (inactive.length) {
-    const grid = h('div.tiles', {});
-    for (const p of inactive) {
-      const look = lookFor(p);
-      grid.append(tile({
-        title: p.name,
-        sub: 'Switched off',
-        iconName: look.icon,
-        accent: 'muted',
-        onclick: () => open({ area: p.id }),
-      }));
+  /* -------------------------------- plans -------------------------------- */
+  // Folded, and this is the whole point of the redesign: a plan is where the
+  // day comes FROM, so it sits under the day rather than beside it. Closed it
+  // is one line; open it is every area page, on and off, still one tap away.
+  const active = protocols.filter((p) => p.active === true);
+  const inactive = protocols.filter((p) => p.active !== true);
+  if (active.length || inactive.length) {
+    const counts = [
+      active.length ? `${active.length} on` : null,
+      inactive.length ? `${inactive.length} off` : null,
+    ].filter(Boolean).join(', ');
+
+    const body = h('div', {});
+    if (active.length) {
+      const grid = h('div.tiles', {});
+      for (const p of active) {
+        const look = lookFor(p);
+        const count = p.blocks.reduce((n, b) => n + b.items.length, 0);
+        grid.append(tile({
+          title: p.name,
+          sub: `${p.blocks.length} ${p.blocks.length === 1 ? 'part' : 'parts'} · ${count} things`,
+          iconName: look.icon,
+          accent: look.accent,
+          onclick: () => open({ area: p.id }),
+        }));
+      }
+      body.append(grid);
     }
-    root.append(h('section', {},
-      h('h2.section-title', {}, 'Not on today'),
-      h('p.muted', {}, 'Here when you want them. Turning one on puts it back on your day.'),
-      grid,
-    ));
+    if (inactive.length) {
+      const grid = h('div.tiles', {});
+      for (const p of inactive) {
+        const look = lookFor(p);
+        grid.append(tile({
+          title: p.name,
+          sub: 'Switched off',
+          iconName: look.icon,
+          accent: 'muted',
+          onclick: () => open({ area: p.id }),
+        }));
+      }
+      body.append(
+        h('p.muted', {}, 'Here when you want them. Turning one on puts it back on your day.'),
+        grid,
+      );
+    }
+
+    root.append(
+      h('section', {},
+        h('details.plans-fold', {},
+          h('summary', {}, `Your plans — ${counts}`),
+          body,
+        ),
+      ),
+    );
   }
 
   return root;
 }
 
-export { lookFor, lengthLabel };
+export { lookFor, lengthLabel, restOfToday };

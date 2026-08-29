@@ -28,6 +28,34 @@ const { viewEditor } = await import('../src/app/ui/viewEditor.js');
 const tick = () => new Promise((r) => setTimeout(r, 0));
 async function settled(n = 6) { for (let i = 0; i < n; i++) await tick(); }
 
+/**
+ * Raw values that reached the screen — "null", "undefined", "[object Object]".
+ *
+ * Per TEXT NODE, not over `textContent`, and this is the whole point. The
+ * version of this guard that shipped tested `/\bnull\b/` against the joined
+ * text of the page, and `append(null)` between a heading and a paragraph
+ * produces "Item 0anullnullnullTool: a soft ball" — where every "null" is
+ * flanked by word characters, so not one of them has a word boundary and the
+ * regex matches nothing. The guard was not weak about this case; it was blind
+ * to it, and the session runner shipped with three of them under the name of
+ * every item that had no tier, no dose and no why.
+ *
+ * A null child is always its own text node, so looking at nodes finds it
+ * however it is surrounded. The pattern still allows for interpolation
+ * ("undefined · 3 left"), where the raw value is inside a longer node but
+ * never inside a longer word — "annulled" is a word and must not be a finding.
+ */
+function rawValues(root) {
+  const walker = root.ownerDocument.createTreeWalker(root, 4 /* SHOW_TEXT */);
+  const found = [];
+  const pattern = /(^|[^A-Za-z])(null|undefined|\[object Object\])([^A-Za-z]|$)/;
+  while (walker.nextNode()) {
+    const value = walker.currentNode.nodeValue ?? '';
+    if (pattern.test(value)) found.push(value.trim().slice(0, 80));
+  }
+  return found;
+}
+
 function draw(view) {
   const main = document.querySelector('main');
   while (main.firstChild) main.removeChild(main.firstChild);
@@ -327,6 +355,11 @@ test('the shipped starter content is real, valid, and free of one person’s reg
     'shipped content names its author');
 });
 
+// This said "no screen" and drew one. The session runner was shipping a bare
+// "null" under the name of every item without a `tier` — on the deployed app,
+// on the first card of the day arc — for as long as that line has existed, and
+// this test was green the whole time. A guard that covers one screen is a
+// guard for one screen.
 test('no screen ever prints the word "null" at a person', async () => {
   store._resetForTests();
   await store.ready({ name: 'screens-6' });
@@ -334,15 +367,34 @@ test('no screen ever prints the word "null" at a person', async () => {
 
   const { localDateKey } = await import('../src/lib/core.js');
   const { addDays } = await import('../src/lib/cadence.js');
+  const { viewHome } = await import('../src/app/ui/viewHome.js');
+  const { viewArea } = await import('../src/app/ui/viewArea.js');
+  const { viewSession } = await import('../src/app/ui/viewSession.js');
+  const { viewProtocols } = await import('../src/app/ui/viewProtocols.js');
+  const { viewSupply } = await import('../src/app/ui/viewSupply.js');
 
-  // append(null) renders the string "null" — h() drops nulls among children,
-  // the raw DOM API does not, and the two are easy to mix up.
-  for (const date of [undefined, addDays(localDateKey(), -1)]) {
-    draw(await viewToday({ date, reload: () => {} }));
+  const noop = () => {};
+  // dayLongProtocol's items carry a name and notes and nothing else — no dose,
+  // no why, no tier — which is the shape that exposes a conditional child
+  // appended raw. `back` is dropped on purpose where a screen takes one: those
+  // two call sites build their header the same way.
+  const screens = [
+    ['Today', () => viewToday({ reload: noop })],
+    ['a past day', () => viewToday({ date: addDays(localDateKey(), -1), reload: noop })],
+    ['Home', () => viewHome({ open: noop, startSession: noop })],
+    ['an area', () => viewArea({ areaId: 'p-day', back: noop, startSession: noop, openEditor: noop })],
+    ['a session', () => viewSession({ protocolId: 'p-day', blockId: 'b0', done: noop })],
+    ['Plans', () => viewProtocols({ openEditor: noop, reload: noop })],
+    ['Supply', () => viewSupply({})],
+  ];
+
+  // append(null) renders the string "null" — h() and add() drop nulls among
+  // children, the raw DOM API does not, and the two are easy to mix up.
+  for (const [name, build] of screens) {
+    draw(await build());
     await settled();
-    const text = document.querySelector('main').textContent;
-    assert.equal(/\bnull\b|\bundefined\b|\[object Object\]/.test(text), false,
-      `a raw value reached the screen for date=${date ?? 'today'}: ${text.slice(0, 200)}`);
+    assert.deepEqual(rawValues(document.querySelector('main')), [],
+      `a raw value reached ${name}`);
   }
 });
 
@@ -502,7 +554,13 @@ test('the library is comprehensive, merged, and every item can be picked up', as
     'the library names its author in text a stranger reads');
 });
 
-test('the front door is a menu, not a list', async () => {
+// Kevin, 29 Aug: "the day arc shouldn't be parked alongside the things that
+// are contained within it." The first menu answered "not one big list" with
+// sixteen tiles — five active protocols, six More destinations, five switched
+// off — which is the same list with borders on it, and it sat The day arc
+// beside the four areas it draws from. So the front door is now the day, one
+// door to the library, and the plans folded underneath.
+test('the front door is the day, not a grid of everything', async () => {
   const { viewHome } = await import('../src/app/ui/viewHome.js');
   store._resetForTests();
   await store.ready({ name: 'screens-8' });
@@ -519,18 +577,77 @@ test('the front door is a menu, not a list', async () => {
   await settled();
 
   const main = document.querySelector('main');
-  // The thing that made it unusable: every item in the app on one page.
+  // The thing that made it unusable in the first place: every item in the app
+  // on one page.
   assert.equal(main.querySelectorAll('.row').length, 0, 'no item rows on the front door');
-  assert.ok(main.querySelectorAll('.tile').length >= 4, 'areas are destinations, not lists');
   assert.match(main.textContent, /Right now/, 'the first question is what to do now');
 
-  // Tiles go somewhere rather than expanding in place.
-  const bodyTile = [...main.querySelectorAll('.tile')].find((t) => /Body work/.test(t.textContent));
-  assert.ok(bodyTile, 'each active protocol is an area');
+  // The day, as blocks. dayLongProtocol runs 05:00–11:00 and body work is
+  // untimed, so whatever the clock says there is something still open.
+  assert.ok(main.querySelectorAll('.day-row').length >= 1, 'the rest of the day is on the front door');
+  const first = main.querySelector('.day-row');
+  first.dispatchEvent(new Event('click'));
+  await settled();
+  assert.ok(opened.at(-1).b, 'a block on the front door starts that block');
+
+  // One door to everything else, not six.
+  const browse = [...main.querySelectorAll('button')].find((b) => /^Browse/.test(b.textContent));
+  assert.ok(browse, 'Browse is the door the More grid was six bad answers to');
+  browse.dispatchEvent(new Event('click'));
+  await settled();
+  assert.deepEqual(opened.at(-1), { tab: 'library' });
+
+  // The plans are still one tap away — and folded, because a plan is where the
+  // day comes from rather than a peer of it.
+  const fold = main.querySelector('details.plans-fold');
+  assert.ok(fold, 'the plans have somewhere to be');
+  assert.equal(fold.open, false, 'and they are not the front door');
+  const bodyTile = [...fold.querySelectorAll('.tile')].find((t) => /Body work/.test(t.textContent));
+  assert.ok(bodyTile, 'each protocol is still an area you can open');
   assert.match(bodyTile.textContent, /1 part/, 'a tile says how big the area is');
   bodyTile.dispatchEvent(new Event('click'));
   await settled();
   assert.deepEqual(opened.at(-1), { area: 'seed-body-work' });
+});
+
+// The test above uses two protocols and told me nothing. The shipped content
+// has eleven, and every body-work and support section is an UNTIMED block —
+// so the first cut of "the rest of today" drew nineteen rows on the real app
+// while the suite stayed green. That is the sixteen-tile problem again in a
+// different shape, and the handoff's own lesson: open what a person opens.
+//
+// So this one renders the front door on the CONTENT THAT SHIPS, and pins the
+// only property that matters — the front door does not grow with the
+// catalogue. Add fifty body-work cards and this number must not move.
+test('the front door does not grow with the catalogue', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const { viewHome } = await import('../src/app/ui/viewHome.js');
+  store._resetForTests();
+  await store.ready({ name: 'screens-8b' });
+
+  const text = await readFile(new URL('../src/content/starter.json', import.meta.url), 'utf8');
+  const out = await store.importFile(text);
+  assert.equal(out.ok, true, `the shipped content must import: ${JSON.stringify(out.errors)}`);
+
+  draw(await viewHome({ open: () => {}, startSession: () => {} }));
+  await settled();
+  const main = document.querySelector('main');
+
+  // Everything a person can see without opening a fold.
+  const shown = [...main.querySelectorAll('.day-row, .tile')]
+    .filter((el) => !el.closest('details'));
+  assert.ok(
+    shown.length <= 8,
+    `${shown.length} things on the front door before anything is opened — that is a list again`,
+  );
+
+  // And the untimed half is where it went, rather than being dropped: the
+  // body-work sections are real parts of a person's day, folded, not deleted.
+  const fold = main.querySelector('details.anytime-fold');
+  assert.ok(fold, 'the untimed blocks have somewhere to be');
+  assert.equal(fold.open, false);
+  assert.ok(fold.querySelectorAll('.day-row').length >= 8, 'and all of them are in it');
+  assert.match(fold.querySelector('summary').textContent, /Anytime today — \d+ parts, \d+ things/);
 });
 
 test('an area page holds one area, with its parts as sessions', async () => {

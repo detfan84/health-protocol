@@ -78,6 +78,11 @@ test('every screen the shell can draw has a way in', async () => {
   );
 });
 
+// Deliberately widget-agnostic. Supply and Plans were tiles in a six-tile
+// "More" grid, and the 29 Aug collapse made them links in a thin row — which
+// is a layout decision, not a reachability one. A test that pins the widget
+// makes the layout expensive to change and still would not notice the thing
+// that actually went wrong in 197da3e: the door disappearing.
 test('the Home menu offers Supply and Plans, and says where they go', async () => {
   store._resetForTests();
   await store.ready({ name: 'nav-1' });
@@ -85,14 +90,13 @@ test('the Home menu offers Supply and Plans, and says where they go', async () =
 
   const opened = [];
   const view = await viewHome({ open: (arg) => opened.push(arg), startSession: () => {} });
-  const labels = [...view.querySelectorAll('.tile-title')].map((el) => el.textContent);
-  assert.ok(labels.includes('Supply'), `Supply is not on the menu — found ${labels.join(', ')}`);
-  assert.ok(labels.includes('Plans'), `Plans is not on the menu — found ${labels.join(', ')}`);
+  const byName = (name) => [...view.querySelectorAll('button')]
+    .find((el) => el.textContent.trim() === name || el.querySelector('.tile-title')?.textContent === name);
 
   for (const name of ['Supply', 'Plans']) {
-    const tile = [...view.querySelectorAll('.tile')]
-      .find((el) => el.querySelector('.tile-title')?.textContent === name);
-    tile.dispatchEvent(new dom.window.Event('click'));
+    const door = byName(name);
+    assert.ok(door, `${name} is not on the menu at all`);
+    door.dispatchEvent(new dom.window.Event('click'));
   }
   await tick();
   assert.deepEqual(opened, [{ tab: 'supply' }, { tab: 'plans' }]);

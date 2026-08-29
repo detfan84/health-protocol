@@ -210,3 +210,19 @@ export function lengthForYou(items, history) {
   }
   return { seconds, secondsMax, timed, untimed: items.length - timed, yours };
 }
+
+/**
+ * The same sentence, saying whose number it is.
+ *
+ * "About 8 min" is what the cards say and "about 11 min" is what it takes you,
+ * and those are different claims — so the one that leans on a person's own
+ * recorded times says so, and says how much of it was theirs. A block where
+ * two of six items have ever been timed by them is not "your pace"; it is
+ * mostly the cards, with two of your numbers in it.
+ */
+export function lengthTextForYou(len) {
+  const base = lengthText(len);
+  if (!len.yours) return base;
+  if (len.yours === len.timed) return `${base} · your own times`;
+  return `${base} · ${len.yours} of ${len.timed} your own times`;
+}

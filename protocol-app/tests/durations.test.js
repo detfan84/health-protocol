@@ -101,7 +101,7 @@ test('the shipped day is described honestly, block by block', async () => {
 // so they can know exactly what their pace is, and for some things, they might
 // get quicker over time."
 
-import { tookSeries, paceOf, paceText, lengthForYou } from '../src/lib/durations.js';
+import { tookSeries, paceOf, paceText, lengthForYou, lengthTextForYou } from '../src/lib/durations.js';
 
 const dayWith = (date, itemId, took) => [date, { log: { [itemId]: { took } } }];
 const hist = (...rows) => Object.fromEntries(rows);
@@ -157,4 +157,23 @@ test('the series keeps where each number came from', () => {
     dayWith('2026-08-08', 'a', { seconds: 240, source: 'typed' }),
   );
   assert.deepEqual(tookSeries(h, 'a').map((r) => r.source), ['session', 'typed']);
+});
+
+test('an estimate says whose number it is', () => {
+  // The screens now prefer a person's own recorded times, which means the same
+  // sentence can be two different claims. It has to say which — an "about 11
+  // min" that silently switched from the cards to your history is a number
+  // that changed meaning without telling anybody.
+  const h = hist(dayWith('2026-08-01', 'a', { seconds: 600, source: 'typed' }));
+  const both = [{ id: 'a', amount: { seconds: 60 } }, { id: 'b', amount: { seconds: 60 } }];
+
+  // Nothing of theirs: the sentence is exactly what it always was.
+  assert.equal(lengthTextForYou(lengthForYou(both, {})), lengthText(lengthOf(both)));
+
+  // Some of theirs: how much, so "your pace" never stands for a block that is
+  // mostly still the cards' guess.
+  assert.match(lengthTextForYou(lengthForYou(both, h)), /1 of 2 your own times$/);
+
+  // All of theirs.
+  assert.match(lengthTextForYou(lengthForYou([both[0]], h)), /· your own times$/);
 });

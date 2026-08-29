@@ -22,6 +22,24 @@ export function h(tag, attrs = {}, ...children) {
       el.setAttribute(k, v === true ? '' : v);
     }
   }
+  return add(el, ...children);
+}
+
+/**
+ * Put children into an element that already exists, dropping the ones that are
+ * not there.
+ *
+ * `h()` has always dropped null children. The DOM's own `append()` does not —
+ * it renders the word "null" at a person — and every screen that builds a root
+ * first and fills it in later reaches for `append`. That is not hypothetical:
+ * the session runner shipped with a bare "null" under the name of every item
+ * with no `tier`, which on the deployed app was the first card of the day arc,
+ * and the guard test that exists for exactly this only ever drew Today.
+ *
+ * So: anywhere a conditional child meets an existing element, this rather than
+ * `append`.
+ */
+export function add(el, ...children) {
   for (const c of children.flat(Infinity)) {
     if (c == null || c === false) continue;
     el.append(c.nodeType ? c : document.createTextNode(String(c)));

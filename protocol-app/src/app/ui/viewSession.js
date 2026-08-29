@@ -17,7 +17,7 @@
 //     middle is a normal way to finish (content law 2, decision 8a).
 //   - Every write goes through the same guarded path as everywhere else.
 
-import { h, clear } from './dom.js';
+import { h, add, clear } from './dom.js';
 import * as store from '../store.js';
 import { guarded } from './announcer.js';
 import { localDateKey } from '../../lib/core.js';
@@ -190,7 +190,10 @@ export async function viewSession({ protocolId, blockId, done }) {
     );
 
     /* -------------------------------- what -------------------------------- */
-    stage.append(
+    // `add`, not `append`: three of these four children are conditional, and
+    // the DOM's append writes "null" where a missing one was. It did, live,
+    // under the name of every item without a tier.
+    add(stage,
       h('h1.session-name', {}, item.name),
       // The session runner is exactly where an exploratory drill stops feeling
       // exploratory — it is the surface you meet on the fortieth repetition.

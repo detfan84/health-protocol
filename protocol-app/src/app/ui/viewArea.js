@@ -18,7 +18,15 @@ import { localDateKey, displayTime, timeFormatOf } from '../../lib/core.js';
 import { cadenceOf, cadenceLabel } from '../../lib/cadence.js';
 
 export async function viewArea({ areaId, back, startSession, openEditor }) {
-  const [protocols, day] = await Promise.all([store.loadProtocols(), store.loadDay(localDateKey())]);
+  // `history` is here for one reason: the length a block reads as. Home now
+  // tells a block in a person's own recorded times where it has them, and the
+  // same block on this page saying a different number would be worse than
+  // neither screen saying one.
+  const [protocols, day, history] = await Promise.all([
+    store.loadProtocols(),
+    store.loadDay(localDateKey()),
+    store.loadRecentDays(localDateKey()),
+  ]);
   const fmt = timeFormatOf(await store.getSetting('ui.timeFormat'));
   const p = protocols.find((x) => x.id === areaId);
 
@@ -95,7 +103,7 @@ export async function viewArea({ areaId, back, startSession, openEditor }) {
                 : `from ${displayTime(b.start, fmt)}`)
             : null,
         ),
-        h('p.muted', {}, `${lengthLabel(b)}${doneCount ? ` · ${doneCount} done today` : ''}`),
+        h('p.muted', {}, `${lengthLabel(b, history)}${doneCount ? ` · ${doneCount} done today` : ''}`),
         h('button.btn.primary', {
           style: 'width:100%',
           onclick: () => startSession(p.id, b.id),
@@ -113,7 +121,7 @@ export async function viewArea({ areaId, back, startSession, openEditor }) {
   // area page could switch a protocol on and never off again.
   const offCard = p.active === true
     ? h('div.card', {},
-        h('p.muted', {}, 'Taking this off your day hides its parts from Today. Nothing is deleted and nothing you have recorded changes — it moves to "Not on today" on the menu, and goes back whenever you want it.'),
+        h('p.muted', {}, 'Taking this off your day hides its parts from Today. Nothing is deleted and nothing you have recorded changes — it moves into "Your plans" on the menu, and goes back whenever you want it.'),
         h('button.btn.quiet', {
           style: 'width:100%',
           onclick: (e) => {

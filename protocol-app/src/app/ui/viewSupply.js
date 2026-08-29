@@ -16,7 +16,7 @@
 //     many calf stretches you have left. Everything is still reachable, folded
 //     under "Start tracking something else".
 
-import { h } from './dom.js';
+import { h, add } from './dom.js';
 import * as store from '../store.js';
 import { makeSupply, isTracked, doseUnits, supplyKey } from '../trackerOps.js';
 import { guarded } from './announcer.js';
@@ -101,7 +101,7 @@ function supplyRow(item, initial) {
 export async function viewSupply({ back } = {}) {
   const [protocols, supplies] = await Promise.all([store.loadProtocols(), store.loadSupplies()]);
   const root = h('div');
-  root.append(
+  add(root,
     // Reached from the Home menu rather than a tab, so it carries its own way
     // back — the same shape an area page uses.
     back ? h('button.btn.quiet.small', { onclick: back, 'aria-label': 'Back to the menu' }, '‹ Back') : null,

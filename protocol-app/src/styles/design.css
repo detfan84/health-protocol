@@ -241,6 +241,70 @@ section:first-of-type .section-title { margin-top: var(--sp-2); }
 .now-card { border-left: 3px solid var(--accent); }
 .now-card h3 { font-size: var(--fs-lg); margin-bottom: 2px; }
 
+/* A tile that is a whole row rather than a cell — used for Browse, which is
+   the one door and should not read as one of six equal squares. */
+.tile-wide {
+  flex-direction: row; align-items: center; gap: var(--sp-3);
+  width: 100%; min-height: 0;
+}
+.tile-wide .tile-icon { flex: none; }
+.tile-wide .tile-body { flex: 1 1 auto; min-width: 0; }
+
+/* The rest of today: blocks, not items. Each row is one tap and the whole row
+   is the target — a small "Start" at the end of a 44px strip is a miss
+   waiting to happen on a phone. */
+.day-list { display: flex; flex-direction: column; gap: var(--sp-2); }
+.day-row {
+  display: flex; align-items: center; gap: var(--sp-3);
+  width: 100%; min-height: var(--tap); padding: var(--sp-3);
+  text-align: left; border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); color: var(--ink);
+  box-shadow: var(--shadow); cursor: pointer;
+}
+.day-row:active { transform: translateY(1px); }
+.day-row-body { flex: 1 1 auto; min-width: 0; }
+.day-row-title { display: block; font-size: var(--fs-md); line-height: 1.25; }
+.day-row-from { color: var(--ink-muted); }
+.day-row-sub { display: block; font-size: var(--fs-sm); color: var(--ink-muted); margin-top: 2px; }
+.day-row-go { flex: none; font-size: var(--fs-sm); color: var(--accent); }
+
+/* The untimed half of the day, folded — Body work's eight sections and the
+   three support sections are all "anytime", and drawn flat they made the
+   front door nineteen rows long. Same idiom as details.group. */
+details.anytime-fold { margin: var(--sp-3) 0 0; }
+details.anytime-fold > summary {
+  cursor: pointer; min-height: var(--tap); line-height: var(--tap);
+  font-size: var(--fs-sm); color: var(--ink-muted);
+}
+details.anytime-fold > summary:hover { color: var(--ink); }
+details.anytime-fold[open] > summary { margin-bottom: var(--sp-2); }
+
+/* The thin row: three places that are not worth a tile each and were three of
+   the six the "More" grid used to spend a screenful on. */
+.thin-row { display: flex; flex-wrap: wrap; gap: var(--sp-4); margin-top: var(--sp-3); }
+.thin-link {
+  border: 0; background: none; padding: var(--sp-2) 0; cursor: pointer;
+  min-height: var(--tap); font-size: var(--fs-sm); color: var(--ink-muted);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.thin-link:hover, .thin-link:active { color: var(--ink); }
+
+/* The plans, folded — a plan is where the day comes from, so it sits under
+   the day rather than beside it. Same summary idiom as details.group. */
+details.plans-fold { margin: var(--sp-5) 0 var(--sp-2); }
+details.plans-fold > summary {
+  /* Padding rather than line-height for the tap target: this label carries a
+     count, so it can wrap, and 44px lines make a wrapped summary look like
+     two headings. */
+  cursor: pointer; padding: var(--sp-3) 0; line-height: 1.3;
+  font-size: var(--fs-sm); text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+details.plans-fold > summary:hover { color: var(--ink); }
+details.plans-fold[open] > summary { margin-bottom: var(--sp-2); }
+details.plans-fold .tiles + .muted { margin-top: var(--sp-4); }
+details.plans-fold .muted + .tiles { margin-top: var(--sp-2); }
+
 /* area page */
 .area-head { margin-bottom: var(--sp-4); }
 .area-title { display: flex; align-items: center; gap: var(--sp-3); margin: var(--sp-3) 0 var(--sp-1); }

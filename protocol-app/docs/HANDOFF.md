@@ -9,7 +9,7 @@ is the part written for the next session specifically.*
 **Live:** https://shoes-of-peace.kevin-c-bowie.workers.dev
 **Code:** `C:\Users\kevin\Health App\protocol-app`, branch `protocol-app-v0.2`
 **Deploy:** `npm run deploy` (direct upload to Cloudflare — a git push does NOT
-deploy). **Tests:** `npm test` — **303 green** (29 Aug).
+deploy). **Tests:** `npm test` — **305 green** (29 Aug).
 
 ---
 
@@ -115,7 +115,11 @@ Reminders, Disclaimer, announcer (the fail-loudly surface).
 - Day-record writes must go through `store.mutateDay`. A plain
   load-then-save loses taps when a thumb moves fast.
 - `h()` drops null children; the raw DOM `append()` renders the word "null".
-  A test now reads every screen looking for raw values.
+  **Use `add(el, ...children)` from `dom.js`** wherever a conditional child
+  meets an element that already exists. The guard test now walks TEXT NODES
+  across seven screens — the old one joined `textContent` and tested
+  `/\bnull\b/`, which cannot see a null glued between two words, and the
+  session runner shipped three of them per card because of it.
 
 ---
 
@@ -126,8 +130,10 @@ taxonomy: *"the day arc shouldn't be parked alongside the things that are contai
 it… recommended daily arcs for simplicity, each with different levels of time commitment…
 whatever is chosen can be completely modified, or people can build their own."*
 
-**None of it is built.** The home screen still offers 5 active protocol tiles + 5 switched-off
-ones + 6 More tiles, with the day arc sitting beside the four things it draws from.
+**The tile collapse is built** (29 Aug — see §The tile collapse below). The presets, the
+time budgets and the slot editing are not. The home screen is now Right now · The rest of
+today · Browse · a thin row, with the plans folded underneath, so the day arc is no longer
+a peer of the four things it draws from.
 
 ### What the taxonomy session unblocked
 
@@ -163,8 +169,8 @@ clock on them", not silently add a minute each.
 ### Suggested order
 
 1. **Durations**, or the time-budget idea is built on an invented number.
-2. **The tile collapse** — Right now · the rest of today · Browse · a thin row. This part
-   needs nothing new and is the visible win.
+2. ~~**The tile collapse**~~ — Right now · the rest of today · Browse · a thin row. Done
+   29 Aug.
 3. **Day templates** (slots with a budget) — the presets, once 1 exists.
 4. **Slot editing** — swap, drop, add. The "make it yours" half.
 
@@ -181,26 +187,73 @@ items, 136 anatomy nodes, 6 referral sites, with zero items still carrying `kind
 
 ### Start here next session
 
-The home screen, in the order in §Where the home screen stands. The short version:
+Step 2 below is **done** — see §The tile collapse. What is left:
 
 1. **Presets carry their own authored minutes.** "Floor — about 7 minutes" is a design
    statement about a preset somebody built, not a sum over items. This is what unblocks the
-   idea without waiting on ~80 duration decisions.
-2. **Collapse the tiles** — Right now · the rest of today · Browse · a thin row. Needs
-   nothing new; Browse already exists as the faceted library. This is the visible win and
-   the thing Kevin asked for first, on 29 Aug, before the session went into taxonomy.
+   idea without waiting on ~80 duration decisions. **It needs Kevin: what ARE the presets?**
+   Four budgets (7/20/40/70) was the shape of the idea; which items each one holds is a
+   content decision nobody has made.
+2. ~~**Collapse the tiles**~~ — done 29 Aug.
 3. **Day templates** — slots with a budget. A slot can already SAY what it wants, because
    every item carries `effect`, `target`, `equipment`, `context` and `pattern`.
 4. **Slot editing** — swap, drop, add. The "make it yours" half.
 
-**One line waiting to be adopted:** `viewHome` calls `lengthOf`. `lengthForYou(items,
-history)` exists and is tested — it tells a block in a person's own recorded times where
-they have them and reports how many were theirs. It belongs in step 2, where the copy can
-say which kind of number it is showing.
+`lengthForYou` is adopted (step 2), on Home and on the area pages both — the same block
+saying two different numbers on two screens would have been worse than neither saying one.
 
 **And the honest gate on all of it:** `Working_Record_v1.md` §1 still reads **0 loops**.
 Phase 1's done-when is Kevin's real daily use running on this build, and it has not happened
 yet. Everything above is easier to judge after a few days of using the thing.
+
+---
+
+## The tile collapse, done 29 Aug
+
+Kevin, 29 Aug: *"the day arc shouldn't be parked alongside the things that are contained
+within it."* The front door was sixteen tiles — five active protocols, six "More"
+destinations, five switched-off ones — which is not a menu, it is the same list with
+borders on it. Three of the six More tiles (Library, Reference, Track) were already tabs.
+
+**The front door is now:** Right now · The rest of today · Browse · a thin row, with the
+plans folded underneath.
+
+- **The rest of today** is BLOCKS, not protocols — "Evening wind-down, from 9:00 PM, 10
+  left, about 8 min", each one a tap that starts it.
+- **Browse** is the single door the More row was six bad answers to.
+- **The thin row** is the three places that are not tabs: Everything today · Supply · Plans.
+- **Your plans** is a closed `<details>` holding every protocol tile, on and off. Nothing
+  lost a door — that is the rule 197da3e broke and the navigation test still guards it,
+  now without pinning the widget.
+
+### What the browser found and the tests did not, again
+
+The first cut drew **nineteen rows**. Every body-work section and every support section is
+an untimed block, so all thirteen of them landed in "the rest of today" — the sixteen-tile
+problem in a new shape. The suite was green: the fixture had two protocols. So the untimed
+blocks now fold to one line ("Anytime today — 13 parts, 53 things"), and there is a test
+that renders Home **on the shipped content** and fails if more than eight things are
+visible before a fold is opened. Add fifty body-work cards and that number must not move.
+
+### And a live "null" on the busiest path
+
+The session runner was appending three conditional children with the DOM's `append` rather
+than `h()` — so every item with no `tier`, no `dose` and no `why` showed **`nullnullnull`
+under its name**. On the deployed app that is the first card of the day arc.
+
+The guard test for exactly this failure existed, was green, and could not have caught it
+for two independent reasons:
+
+1. It drew **only Today**, while being named "no screen ever prints null".
+2. It tested `/\bnull\b/` against the page's joined `textContent`. Appending null between
+   a heading and a paragraph produces `Item 0anullnullnullTool: a soft ball` — every
+   "null" flanked by word characters, so **not one of them has a word boundary**. The
+   regex was not weak here; it was blind.
+
+Now: `add(el, ...children)` in `dom.js` (what `h()` always did, for elements that already
+exist), used at the three sites where a conditional child met a raw `append`; and the guard
+walks **text nodes** across seven screens. Verified failing against the old code before the
+fix went in.
 
 ---
 
