@@ -64,11 +64,17 @@ const CONTEXTS = [
 const SLICES = [
   { id: 'effect', label: 'What it does', read: (i) => i.effect ?? [] },
   { id: 'target', label: 'Where in the body', read: (i) => i.target ?? [], rollUp: true },
+  { id: 'pattern', label: 'How it moves', read: (i) => i.pattern ?? [] },
   { id: 'equipment', label: 'What you need', read: (i) => i.equipment ?? [] },
   { id: 'context', label: 'Where you are', read: (i) => i.context ?? [] },
   { id: 'type', label: 'Kind of thing', read: (i) => (i.type ? [i.type] : []) },
 ];
 const SLICE_BY_ID = Object.fromEntries(SLICES.map((s) => [s.id, s]));
+const PATTERN_LABELS = {
+  push: 'Push', pull: 'Pull', squat: 'Squat', hinge: 'Hinge', lunge: 'Lunge',
+  carry: 'Carry', rotate: 'Rotate', brace: 'Hold still under load', jump: 'Jump',
+  gait: 'Travel', strike: 'Strike',
+};
 const EQUIPMENT_LABELS = {
   none: 'Nothing', ball: 'Ball', roller: 'Foam roller', band: 'Resistance band',
   strap: 'Strap or towel', mat: 'Mat', wall: 'A wall', doorway: 'A doorway',
@@ -182,6 +188,58 @@ export async function viewLibrary({ reload } = {}) {
       [site.name, ...(site.also ?? [])].some((t) => t.toLowerCase().includes(q) || q.includes(t.toLowerCase())));
   }
 
+  /**
+   * What can pull on this region from outside it (Kevin, 29 Aug: "the person
+   * looking to stretch or release something in their leg may not realise there
+   * is something in their hip, glute or back that is pulling on it").
+   *
+   * The referral map already knew this and only answered a symptom search, so
+   * somebody browsing by body part never met it. Browsing a region is the
+   * moment the question arises, and it is the one moment the map was silent.
+   *
+   * Only candidates whose source sits OUTSIDE the chosen region are offered —
+   * the local ones are already in the results underneath, and repeating them
+   * here would bury the point.
+   */
+  function elsewhereFor(region) {
+    if (!region) return [];
+    const out = new Map();
+    for (const site of library.referral ?? []) {
+      const here = (site.at ?? []).some((n) => rollUpOf(n).has(region));
+      if (!here) continue;
+      for (const c of site.candidates) {
+        const outside = c.source.every((n) => !rollUpOf(n).has(region));
+        if (!outside) continue;
+        const key = c.source.join('+');
+        if (!out.has(key)) out.set(key, { ...c, site });
+      }
+    }
+    return [...out.values()];
+  }
+
+  function elsewhereCard(region, candidates) {
+    const card = h('details.card.referral.elsewhere', { open: true },
+      h('summary', {},
+        h('span.name', {}, `${labelFor('target', region)} — what can pull on it from elsewhere`),
+        h('span.why', {}, 'Worth knowing before you work on the spot itself. Candidates, not causes.'),
+      ),
+    );
+    for (const c of candidates) {
+      card.append(h('div.referral-row', {},
+        h('p', {},
+          h('strong', {}, c.source.map((id) => anatomyIndex.get(id)?.name ?? id).join(', ')),
+          ' — for ', c.site.name.toLowerCase(),
+          h('span.tier', { dataset: { tier: c.evidence.grade } }, TIER_LABELS[c.evidence.grade] ?? c.evidence.grade)),
+        h('p', {}, h('span.field-label', {}, 'The tell'), ' ', c.tell),
+        h('div.chip-row', {}, c.then.map((id) => {
+          const target = library.items.find((i) => i.id === id);
+          return target ? chip(target.name, false, () => { state.q = target.name.toLowerCase(); search.value = target.name; renderFilters(); render(); }) : null;
+        }).filter(Boolean)),
+      ));
+    }
+    return card;
+  }
+
   function referralCard(site) {
     const KIND = { local: 'Where it hurts', neural: 'A nerve', referred: 'Referred from', chain: 'Further up the chain' };
     const card = h('details.card.referral', { open: true },
@@ -255,6 +313,7 @@ export async function viewLibrary({ reload } = {}) {
     if (sliceId === 'equipment') return EQUIPMENT_LABELS[value] ?? value.replace(/-/g, ' ');
     if (sliceId === 'context') return Object.fromEntries(CONTEXTS)[value] ?? value;
     if (sliceId === 'type') return { practice: 'Something to do', measurement: 'Measure yourself', teaching: 'Read about it' }[value] ?? value;
+    if (sliceId === 'pattern') return PATTERN_LABELS[value] ?? value;
     if (sliceId === 'target') return anatomyIndex.get(value)?.name ?? value;
     return value;
   }
@@ -468,9 +527,10 @@ export async function viewLibrary({ reload } = {}) {
   function matchesQuery(item) {
     if (!state.q) return true;
     const hay = [
-      item.name, item.category, item.categoryName,
+      item.name,
       (item.equipment ?? []).join(' '),
       item.type, (item.effect ?? []).map((e) => `${e} ${EFFECT_LABELS[e] ?? ''}`).join(' '),
+      (item.pattern ?? []).map((v) => `${v} ${PATTERN_LABELS[v] ?? ''}`).join(' '),
       (item.target ?? []).join(' '), item.technique, item.tradition,
       (item.muscles ?? []).join(' '), item.why,
       item.tier, evidenceOf(item.evidence).grade, evidenceOf(item.evidence).basis,
@@ -582,6 +642,9 @@ export async function viewLibrary({ reload } = {}) {
     // them rather than instead of them: somebody typing "elbow" may want either.
     const site = referralFor(state.q ?? '');
     if (site) results.append(referralCard(site));
+
+    const elsewhere = elsewhereFor(state.filters.target);
+    if (elsewhere.length) results.append(elsewhereCard(state.filters.target, elsewhere));
 
     const found = library.items.filter(matches);
     results.append(

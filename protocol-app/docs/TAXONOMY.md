@@ -823,7 +823,7 @@ What it costs to do properly, all of which happened here:
 | Field | Why it is still here | What it waits on |
 |---|---|---|
 | ~~`kind`~~ | ~~provenance from the 2025 files~~ | **retired 29 Aug — §10.2** |
-| `category` | push/pull/legs is a movement pattern and no facet holds one | a `pattern` facet |
+| ~~`category`~~ | ~~push/pull/legs is a movement pattern~~ | **retired 29 Aug — §10.3** |
 | `muscles`, `regions` | evidence for the fold-in (§9.2) | the four review rows |
 | `everyNDays` | pre-dates `cadence` | nothing — a small sweep |
 
@@ -874,10 +874,10 @@ source files of the 2025 app; `type` answers the only real question in it, and t
 provenance. Dropped, and the two things it was standing in for kept: `kettlebell`, `mace` and
 `jump_rope` became `equipment`; `martial_arts` and `athletic` became `tradition`.
 
-**`category` still carries something nothing else can.** `push` (26), `pull` (22) and `legs` (29)
-are a movement pattern — one of the seven questions §1 named — and no facet holds one yet. Under
-§10.1 a legacy field keeps its name until its replacement can carry the information, and for those
-77 items this one still does. It retires when a `pattern` facet exists, and not before.
+**`category` still carried something nothing else could** — `push` (26), `pull` (22) and `legs`
+(29) are a movement pattern, one of the seven questions §1 named. Under §10.1 a legacy field keeps
+its name until its replacement can carry the information. **That reason expired on 29 Aug; see
+§10.3.**
 
 ### The browse screen slices by effect now
 
@@ -886,6 +886,53 @@ depending on which file it arrived in. The chips are effects in plain words — 
 tight · lengthen it · move it through its range · load it · wake it up* — with `measurement` and
 `teaching` as the two type slices a person asks for by name. This is §8 in code: the shelf is a
 view over one facet, and the default facet is the one somebody can answer about themselves.
+
+---
+
+## 10.3 · `pattern`, and the end of `category`
+
+**Eleven values:** push · pull · squat · hinge · lunge · carry · rotate · brace · jump · gait ·
+strike. Closed, because a pattern is how the body organises around a load and the list of ways it
+does that is short. **An item may have none** — one joint moving is below the level a pattern
+describes, and ten items say so with a reason rather than being forced into a shape.
+
+**Proposed by matching the exercise name, then read by hand.** For this one facet the name is the
+definitive signal: a Romanian deadlift is a hinge by definition. But a substring rule is a
+substring rule, and it got **ten of a hundred and forty-eight** wrong:
+
+- `Hop` matched the middle of **"Woodchop"**, making a rotation a jump.
+- `Press` made a **leg press** a pushing pattern. It is a squat lying down.
+- `Cross` turned **"Criss-Cross"**, a skipping-rope drill, into a punch.
+- `Curl` made the **Nordic hamstring curl** a pull.
+- `Pallof Press` came out as push, when resisting rotation is the entire exercise.
+
+All ten are in `pattern-tags.json` marked `corrected`, each saying what the call was. The rule
+proposed; a person decided; the file records which is which.
+
+**And with that, `category` retires.** It answered seven questions at once (§1) and every one of
+them now has a field: what it does → `effect`, what body part → `target`, what equipment →
+`equipment`, what tradition → `tradition`, is it a practice → `type`, where it sat in the UI →
+nowhere, it was never a property of anything. The last one was the pattern. Both `kind` and
+`category` are **read from at build time and dropped from the artifact** — the sources keep them,
+so the derivations go on working.
+
+### The browse stopped being local
+
+**Kevin, 29 Aug:** *"the person who is looking to stretch or release something in their leg may not
+realise there is something in their hip/glute/back that is pulling on something in their leg."*
+
+The referral map (§4) already knew that, and only answered a **symptom** search. So somebody
+browsing *Where in the body → Leg* — the exact moment the question arises — was the one person the
+map stayed silent for.
+
+Choosing a region now surfaces what refers **into** it from outside: the sciatic nerve and the deep
+hip rotators for the back of the thigh, the calves for the underside of the foot. Only sources from
+outside the chosen region, because the local ones are already in the results underneath and
+repeating them would bury the point. Each still wears its own grade, and the card still says
+*candidates, not causes*.
+
+That is §7's join key doing the thing it was for: one anatomy vocabulary, so a filter on the
+catalogue and a map of referral patterns are answering in the same words.
 
 ---
 
@@ -904,10 +951,7 @@ view over one facet, and the default facet is the one somebody can answer about 
    the body ones. Adding pelvis · spine · arms · neck · breath · stance is what makes stacking
    computable — and it is worth checking whether one field should hold both kinds, or whether
    "what the room takes" and "what the body takes" are two questions wearing one name.
-6. **A `pattern` facet** — push, pull, hinge, squat, carry, lunge, rotate. The last thing holding
-   `category` open (§10.2), and worth deciding whether a training-split concept belongs in a
-   catalogue at all or only in the routines that use it.
-7. **`role` today** — 118 items carry a `role` that mixes effect (`activate`, `release`, `stretch`,
+6. **`role` today** — 118 items carry a `role` that mixes effect (`activate`, `release`, `stretch`,
    `balance`, `nerve-glide`) with type (`technique-guide`, `awareness-cue`). It splits across
    facets 1 and 2 and then retires. Deliberate or a rename?
 
@@ -944,8 +988,10 @@ stale by 118.
 - **T6 — vocabularies are versioned data with append-only ids** (§10), so the model can change
   without a migration.
 - **T7 — `kind` retires.** It is provenance, and it already disagrees with itself.
-- **T9 — `kind` retires, `category` waits for `pattern`.** A legacy field keeps its name only while
-  it carries information nothing else can (§10.1, §10.2).
+- **T9 — `kind` and `category` both retire.** A legacy field keeps its name only while it carries
+  information nothing else can; `pattern` was the last thing `category` had (§10.1–10.3).
+- **T10 — browsing a region offers what refers into it.** The map and the catalogue share the
+  anatomy vocabulary, so the browse can ask the map a question without a second door (§10.3).
 - **T8 — a held position is an opportunity.** Stacking is §6.3's match with the base supplied by
   the catalogue rather than the day, so it needs body resources in `demands` (§6.5) and no new
   subsystem. The `stack` relation is derived, never authored per pair (§6.6).

@@ -943,7 +943,7 @@ test('the shelf is a view over one facet, and the facets compose', async () => {
 
   // Every slice is offered, and effect is the one you land on.
   const slices = chipsIn('Browse by').map((b) => b.textContent);
-  assert.deepEqual(slices, ['What it does', 'Where in the body', 'What you need', 'Where you are', 'Kind of thing']);
+  assert.deepEqual(slices, ['What it does', 'Where in the body', 'How it moves', 'What you need', 'Where you are', 'Kind of thing']);
 
   // Chips carry counts, so nothing offered is a dead end.
   const effects = chipsIn('What it does').map((b) => b.textContent);
@@ -995,4 +995,60 @@ test('a chip is never offered with nothing behind it', async () => {
   assert.ok(counts.every((n) => n > 0), 'and none of them is zero');
   const shown = Number(/^(\d+) of/.exec(main.querySelector('.result-count').textContent)[1]);
   assert.ok(Math.max(...counts) <= shown, `a chip cannot promise more than the search left: ${Math.max(...counts)} > ${shown}`);
+});
+
+test('browsing a body part says what can pull on it from elsewhere', async () => {
+  // Kevin, 29 Aug: "the person looking to stretch or release something in their
+  // leg may not realise there is something in their hip, glute or back that is
+  // pulling on it." The referral map already knew; it only answered a symptom
+  // search, so browsing by body part — the moment the question arises — was the
+  // one moment it was silent.
+  store._resetForTests();
+  await store.ready({ name: 'screens-elsewhere' });
+  const { viewLibrary } = await import('../src/app/ui/viewLibrary.js');
+  const main = draw(await viewLibrary({ open: () => {} }));
+  await settled();
+
+  const press = (group, text) => {
+    const g = [...main.querySelectorAll('[role=group]')].find((x) => x.getAttribute('aria-label') === group);
+    const b = [...g.querySelectorAll('button')].find((x) => x.textContent.startsWith(text));
+    assert.ok(b, `no "${text}" under ${group}`);
+    b.dispatchEvent(new Event('click'));
+  };
+
+  press('Browse by', 'Where in the body');
+  await settled();
+  press('Where in the body', 'Leg');
+  await settled();
+
+  const card = main.querySelector('.elsewhere');
+  assert.ok(card, 'browsing the leg offers what refers into it');
+  assert.match(card.textContent, /what can pull on it from elsewhere/);
+  assert.match(card.textContent, /Candidates, not causes/);
+  // The sciatic nerve and the deep hip rotators both refer into the back of the
+  // thigh, and neither of them is in the leg.
+  assert.match(card.textContent, /Sciatic nerve|Deep hip rotators/);
+  assert.ok(card.querySelectorAll('.tier').length >= 1, 'each still wearing its own grade');
+
+  // Only sources from OUTSIDE the region — the local ones are in the results
+  // underneath, and repeating them here would bury the point.
+  assert.doesNotMatch(card.textContent, /^Hamstrings —/m);
+});
+
+test('kind and category are gone from every shipped item', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const url = (rel) => new URL(rel, import.meta.url);
+  // T7 and T9. `kind` was the five source files of the 2025 app; `category`
+  // answered seven questions at once and the last one it held alone — the
+  // movement pattern — is a facet now.
+  const lib = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
+  const survivors = lib.items.filter((i) => i.kind || i.category || i.categoryName);
+  assert.deepEqual(survivors.map((i) => i.id), []);
+
+  // And what it was carrying survived the retirement.
+  const rdl = lib.items.find((i) => i.id === 'ex-romanian-deadlift');
+  assert.deepEqual(rdl.pattern, ['hinge']);
+  assert.deepEqual(lib.items.find((i) => i.id === 'ex-pallof-press').pattern, ['brace']);
+  assert.deepEqual(lib.items.find((i) => i.id === 'ex-woodchop').pattern, ['rotate'],
+    'and the substring rule that found a "hop" inside "Woodchop" was corrected by hand');
 });

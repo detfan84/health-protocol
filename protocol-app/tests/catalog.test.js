@@ -15,7 +15,7 @@ import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 
 import { mergeCatalog, readSource, collectSources, applyFoldin, applyAnatomyTags, checkRelations, checkReferral, versionOf } from '../scripts/build-catalog.mjs';
-import { tagAll, typeOf, effectOf } from '../scripts/facet-tags.mjs';
+import { tagAll, typeOf, effectOf, applyPatterns } from '../scripts/facet-tags.mjs';
 import { applyMeasureSpecs, unitFrom, directionFrom, cadenceFrom, whyWithout } from '../scripts/measure-specs.mjs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -166,7 +166,11 @@ test('the shipped catalogue is exactly its sources, and the authored file is in 
   const built = mergeCatalog(await collectSources());
   const overrides = JSON.parse(await readFile(url('../src/content/vocab/facet-overrides.json'), 'utf8'));
   const tags = JSON.parse(await readFile(url('../src/content/vocab/anatomy-tags.json'), 'utf8'));
-  built.items = checkRelations(applyMeasureSpecs(tagAll(applyAnatomyTags(applyFoldin(built.items, foldin, nodes).items, tags, nodes), overrides)), nodes).items;
+  const patterns = JSON.parse(await readFile(url('../src/content/vocab/pattern-tags.json'), 'utf8'));
+  built.items = checkRelations(applyMeasureSpecs(tagAll(
+    applyPatterns(applyAnatomyTags(applyFoldin(built.items, foldin, nodes).items, tags, nodes), patterns),
+    overrides,
+  )), nodes).items;
   built.version = versionOf(built.items);
   const shipped = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
 

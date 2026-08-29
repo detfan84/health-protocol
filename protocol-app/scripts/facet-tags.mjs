@@ -113,6 +113,26 @@ export function effectOf(item, type = typeOf(item)) {
  * until its replacement can carry the information — and for 77 items this one
  * still carries something nothing else does.
  */
+/**
+ * Movement pattern (TAXONOMY §10.2). Data rather than derivation, because the
+ * proposal came from matching exercise names and ten of the hundred and
+ * forty-eight were wrong — a substring rule made a leg press a push and found a
+ * hop inside "Woodchop". The corrections are in the file with their reasons.
+ */
+export function applyPatterns(items, file) {
+  const byId = new Map((file?.entries ?? []).map((e) => [e.id, e]));
+  const present = new Set(items.map((i) => i.id));
+  const orphans = [...byId.keys()].filter((id) => !present.has(id));
+  if (orphans.length) {
+    throw new Error(`pattern-tags.json names items that are not in the catalogue:\n    ${orphans.join('\n    ')}`);
+  }
+  return items.map((item) => {
+    const e = byId.get(item.id);
+    if (!e || e.noPattern || !e.pattern?.length) return item;
+    return { ...item, pattern: [...e.pattern] };
+  });
+}
+
 export function tagItem(item, overrides = new Map()) {
   const type = typeOf(item);
   const override = overrides.get(item.id);
@@ -120,7 +140,15 @@ export function tagItem(item, overrides = new Map()) {
   if (effect === null) {
     throw new Error(`item "${item.id}" has category "${item.category}", which has no effect mapping. Add it to EFFECT_BY_CATEGORY — do not guess one at build time.`);
   }
-  const { kind, ...rest } = item;
+  // `kind` and `category` both retire here (T7, T9). `kind` was the five source
+  // files of the 2025 app. `category` answered seven questions at once, and the
+  // last one it held alone — the movement pattern — is a facet now, so the rule
+  // in §10.1 has run out of reasons to keep it: a legacy field keeps its name
+  // only while it carries something nothing else can.
+  //
+  // They are read from, and then dropped. The SOURCES keep them — this is the
+  // build artifact — so the derivations above go on working.
+  const { kind, category, categoryName, ...rest } = item;
   const out = { ...rest, type };
   if (effect.length) out.effect = [...effect];
 

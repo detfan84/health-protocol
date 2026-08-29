@@ -1,0 +1,909 @@
+{
+  "format": "protocol-app/pattern-tags-v1",
+  "version": 1,
+  "note": "Movement pattern per item — the last thing `category` carried that nothing else could (TAXONOMY §10.2). Proposed by matching the exercise name, which for this facet is the definitive signal: a Romanian deadlift is a hinge by definition. Then read by hand, because a substring rule is a substring rule — `Hop` matched the middle of \"Woodchop\", `Press` made a leg press a pushing pattern, and `Cross` turned a rope drill into a punch. The ten it got wrong are marked `corrected` and say what the call was; the ten with no honest pattern say that instead.",
+  "entries": [
+    {
+      "id": "ex-a-skip",
+      "pattern": [
+        "gait"
+      ]
+    },
+    {
+      "id": "ex-ab-wheel-rollout",
+      "pattern": [
+        "brace"
+      ]
+    },
+    {
+      "id": "ex-ankle-hops",
+      "pattern": [
+        "jump"
+      ]
+    },
+    {
+      "id": "ex-arm-circles",
+      "noPattern": true,
+      "why": "A mobility drill on the push shelf. It presses nothing."
+    },
+    {
+      "id": "ex-balance-board-plank",
+      "pattern": [
+        "brace"
+      ]
+    },
+    {
+      "id": "ex-balance-board-push-up",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-balance-board-single-leg-stand",
+      "noPattern": true,
+      "why": "Standing still, on purpose."
+    },
+    {
+      "id": "ex-balance-board-squat",
+      "pattern": [
+        "squat"
+      ]
+    },
+    {
+      "id": "ex-band-pull-apart",
+      "pattern": [
+        "pull"
+      ]
+    },
+    {
+      "id": "ex-banded-chest-fly",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-banded-crab-walk",
+      "pattern": [
+        "gait"
+      ]
+    },
+    {
+      "id": "ex-banded-curl",
+      "pattern": [
+        "pull"
+      ]
+    },
+    {
+      "id": "ex-banded-deadlift",
+      "pattern": [
+        "hinge"
+      ]
+    },
+    {
+      "id": "ex-banded-face-pull",
+      "pattern": [
+        "pull"
+      ]
+    },
+    {
+      "id": "ex-banded-good-morning",
+      "pattern": [
+        "hinge"
+      ]
+    },
+    {
+      "id": "ex-banded-hip-abduction",
+      "noPattern": true,
+      "why": "One joint moving."
+    },
+    {
+      "id": "ex-banded-hip-thrust",
+      "pattern": [
+        "hinge"
+      ]
+    },
+    {
+      "id": "ex-banded-lat-pulldown",
+      "pattern": [
+        "pull"
+      ]
+    },
+    {
+      "id": "ex-banded-leg-press",
+      "pattern": [
+        "squat"
+      ],
+      "corrected": true,
+      "why": "A leg press is a squat pattern lying down. \"Press\" in the name is the machine, not the movement."
+    },
+    {
+      "id": "ex-banded-monster-walk",
+      "pattern": [
+        "gait"
+      ]
+    },
+    {
+      "id": "ex-banded-overhead-press",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-banded-push-up",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-banded-row",
+      "pattern": [
+        "pull"
+      ]
+    },
+    {
+      "id": "ex-banded-sprint",
+      "pattern": [
+        "gait"
+      ]
+    },
+    {
+      "id": "ex-banded-squat",
+      "pattern": [
+        "squat"
+      ]
+    },
+    {
+      "id": "ex-banded-tricep-pushdown",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-basic-jump",
+      "pattern": [
+        "jump"
+      ],
+      "corrected": true,
+      "why": "A rope jump. The gait rule caught it by proximity to the other rope drills."
+    },
+    {
+      "id": "ex-bear-crawl",
+      "pattern": [
+        "gait"
+      ]
+    },
+    {
+      "id": "ex-bent-over-db-row",
+      "pattern": [
+        "pull"
+      ]
+    },
+    {
+      "id": "ex-bicycle-crunch",
+      "pattern": [
+        "brace"
+      ]
+    },
+    {
+      "id": "ex-bird-dog",
+      "pattern": [
+        "brace"
+      ]
+    },
+    {
+      "id": "ex-box-jump",
+      "pattern": [
+        "jump"
+      ]
+    },
+    {
+      "id": "ex-boxer-shuffle",
+      "pattern": [
+        "gait"
+      ]
+    },
+    {
+      "id": "ex-boxing-stance-footwork",
+      "pattern": [
+        "gait"
+      ]
+    },
+    {
+      "id": "ex-broad-jump",
+      "pattern": [
+        "jump"
+      ]
+    },
+    {
+      "id": "ex-bulgarian-split-squat",
+      "pattern": [
+        "lunge"
+      ],
+      "corrected": true,
+      "why": "A split stance is a lunge pattern whatever the name says."
+    },
+    {
+      "id": "ex-calf-raise",
+      "noPattern": true,
+      "why": "One joint moving. A pattern is how the body organises around a load, and this is below that."
+    },
+    {
+      "id": "ex-chin-up",
+      "pattern": [
+        "pull"
+      ]
+    },
+    {
+      "id": "ex-concentration-curl",
+      "pattern": [
+        "pull"
+      ]
+    },
+    {
+      "id": "ex-criss-cross",
+      "pattern": [
+        "gait"
+      ],
+      "corrected": true,
+      "why": "A rope footwork drill. \"Cross\" is not a punch here — the strike rule was reading the wrong word."
+    },
+    {
+      "id": "ex-db-bench-press",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-db-bulgarian-split-squat",
+      "pattern": [
+        "lunge"
+      ],
+      "corrected": true,
+      "why": "As above."
+    },
+    {
+      "id": "ex-db-chest-fly",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-db-clean-press",
+      "pattern": [
+        "hinge",
+        "push"
+      ]
+    },
+    {
+      "id": "ex-db-curl",
+      "pattern": [
+        "pull"
+      ]
+    },
+    {
+      "id": "ex-db-floor-press",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-db-incline-press",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-db-lateral-lunge",
+      "pattern": [
+        "lunge"
+      ]
+    },
+    {
+      "id": "ex-db-overhead-press",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-db-pullover",
+      "pattern": [
+        "pull"
+      ]
+    },
+    {
+      "id": "ex-db-row",
+      "pattern": [
+        "pull"
+      ]
+    },
+    {
+      "id": "ex-db-skull-crusher",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-db-snatch",
+      "pattern": [
+        "hinge"
+      ]
+    },
+    {
+      "id": "ex-db-step-up-bench-height",
+      "pattern": [
+        "lunge"
+      ]
+    },
+    {
+      "id": "ex-db-sumo-squat",
+      "pattern": [
+        "squat"
+      ]
+    },
+    {
+      "id": "ex-db-swing",
+      "pattern": [
+        "hinge"
+      ]
+    },
+    {
+      "id": "ex-db-tricep-extension",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-dead-bug",
+      "pattern": [
+        "brace"
+      ]
+    },
+    {
+      "id": "ex-dead-hang",
+      "noPattern": true,
+      "why": "A passive hang. Nothing is pulled, which is the point of it."
+    },
+    {
+      "id": "ex-depth-drop",
+      "pattern": [
+        "jump"
+      ]
+    },
+    {
+      "id": "ex-dip",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-double-under",
+      "pattern": [
+        "gait"
+      ]
+    },
+    {
+      "id": "ex-dragon-flag",
+      "pattern": [
+        "brace"
+      ]
+    },
+    {
+      "id": "ex-elbow-strike",
+      "pattern": [
+        "strike"
+      ]
+    },
+    {
+      "id": "ex-farmers-carry",
+      "pattern": [
+        "carry"
+      ]
+    },
+    {
+      "id": "ex-front-raise",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-glute-bridge",
+      "pattern": [
+        "hinge"
+      ]
+    },
+    {
+      "id": "ex-hanging-leg-raise",
+      "pattern": [
+        "brace"
+      ]
+    },
+    {
+      "id": "ex-high-knee-jump",
+      "pattern": [
+        "jump"
+      ]
+    },
+    {
+      "id": "ex-high-knees",
+      "pattern": [
+        "gait"
+      ]
+    },
+    {
+      "id": "ex-hindu-push-up",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-hip-thrust",
+      "pattern": [
+        "hinge"
+      ]
+    },
+    {
+      "id": "ex-hollow-body-hold",
+      "pattern": [
+        "brace"
+      ]
+    },
+    {
+      "id": "ex-hook",
+      "pattern": [
+        "strike"
+      ]
+    },
+    {
+      "id": "ex-incline-db-curl",
+      "pattern": [
+        "pull"
+      ]
+    },
+    {
+      "id": "ex-inverted-row",
+      "pattern": [
+        "pull"
+      ]
+    },
+    {
+      "id": "ex-jab-cross",
+      "pattern": [
+        "strike"
+      ]
+    },
+    {
+      "id": "ex-jump-rope-tabata",
+      "noPattern": true,
+      "why": "A conditioning block rather than a pattern."
+    },
+    {
+      "id": "ex-kb-around-the-world",
+      "pattern": [
+        "rotate"
+      ]
+    },
+    {
+      "id": "ex-kb-bottoms-up-press",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-kb-clean",
+      "pattern": [
+        "hinge"
+      ]
+    },
+    {
+      "id": "ex-kb-front-rack-carry",
+      "pattern": [
+        "carry"
+      ]
+    },
+    {
+      "id": "ex-kb-goblet-squat",
+      "pattern": [
+        "squat"
+      ]
+    },
+    {
+      "id": "ex-kb-halo",
+      "pattern": [
+        "rotate"
+      ]
+    },
+    {
+      "id": "ex-kb-snatch",
+      "pattern": [
+        "hinge"
+      ]
+    },
+    {
+      "id": "ex-kb-swing",
+      "pattern": [
+        "hinge"
+      ]
+    },
+    {
+      "id": "ex-kb-turkish-get-up",
+      "pattern": [
+        "brace"
+      ]
+    },
+    {
+      "id": "ex-kb-windmill",
+      "pattern": [
+        "rotate"
+      ]
+    },
+    {
+      "id": "ex-kick-check",
+      "pattern": [
+        "strike"
+      ]
+    },
+    {
+      "id": "ex-knee-strike",
+      "pattern": [
+        "strike"
+      ]
+    },
+    {
+      "id": "ex-l-sit",
+      "pattern": [
+        "brace"
+      ]
+    },
+    {
+      "id": "ex-lateral-bound",
+      "pattern": [
+        "jump"
+      ]
+    },
+    {
+      "id": "ex-lateral-lunge",
+      "pattern": [
+        "lunge"
+      ]
+    },
+    {
+      "id": "ex-lateral-raise",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-leg-raise",
+      "pattern": [
+        "brace"
+      ]
+    },
+    {
+      "id": "ex-lunge",
+      "pattern": [
+        "lunge"
+      ]
+    },
+    {
+      "id": "ex-mace-10-to-2",
+      "pattern": [
+        "rotate"
+      ]
+    },
+    {
+      "id": "ex-mace-360",
+      "pattern": [
+        "rotate"
+      ]
+    },
+    {
+      "id": "ex-mace-barbarian-squat",
+      "pattern": [
+        "squat"
+      ]
+    },
+    {
+      "id": "ex-mace-flow",
+      "noPattern": true,
+      "why": "A sequence rather than a pattern."
+    },
+    {
+      "id": "ex-mace-grave-digger",
+      "pattern": [
+        "hinge"
+      ]
+    },
+    {
+      "id": "ex-mace-lunge-reach",
+      "pattern": [
+        "lunge"
+      ]
+    },
+    {
+      "id": "ex-mace-paddle-swing",
+      "pattern": [
+        "hinge",
+        "rotate"
+      ]
+    },
+    {
+      "id": "ex-mace-uppercut",
+      "pattern": [
+        "strike"
+      ]
+    },
+    {
+      "id": "ex-mountain-climber",
+      "pattern": [
+        "brace"
+      ]
+    },
+    {
+      "id": "ex-muay-thai-stance-movement",
+      "pattern": [
+        "gait"
+      ]
+    },
+    {
+      "id": "ex-muscle-up",
+      "pattern": [
+        "pull"
+      ]
+    },
+    {
+      "id": "ex-nordic-hamstring-curl",
+      "pattern": [
+        "hinge"
+      ],
+      "corrected": true,
+      "why": "Knee flexion under an eccentric load. \"Curl\" here is not a pulling pattern."
+    },
+    {
+      "id": "ex-pallof-press",
+      "pattern": [
+        "brace"
+      ],
+      "corrected": true,
+      "why": "The whole exercise is resisting rotation. The press is how the load is applied, not what the body is doing."
+    },
+    {
+      "id": "ex-parallel-bar-dip",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-parallel-bar-l-sit",
+      "pattern": [
+        "brace"
+      ]
+    },
+    {
+      "id": "ex-parallel-bar-swing",
+      "noPattern": true,
+      "why": "A swing on bars; none of the eleven is honest about it."
+    },
+    {
+      "id": "ex-pike-push-up",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-pistol-squat",
+      "pattern": [
+        "squat"
+      ]
+    },
+    {
+      "id": "ex-plank",
+      "pattern": [
+        "brace"
+      ]
+    },
+    {
+      "id": "ex-prone-y-t-w-raise",
+      "pattern": [
+        "pull"
+      ]
+    },
+    {
+      "id": "ex-pseudo-planche-push-up",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-pull-up",
+      "pattern": [
+        "pull"
+      ]
+    },
+    {
+      "id": "ex-push-up",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-renegade-row",
+      "pattern": [
+        "pull"
+      ]
+    },
+    {
+      "id": "ex-romanian-deadlift",
+      "pattern": [
+        "hinge"
+      ]
+    },
+    {
+      "id": "ex-roundhouse-kick",
+      "pattern": [
+        "strike"
+      ]
+    },
+    {
+      "id": "ex-russian-twist",
+      "pattern": [
+        "rotate"
+      ]
+    },
+    {
+      "id": "ex-scapular-push-up",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-shadowbox-round",
+      "pattern": [
+        "strike"
+      ]
+    },
+    {
+      "id": "ex-shoulder-tap",
+      "pattern": [
+        "push"
+      ]
+    },
+    {
+      "id": "ex-side-plank",
+      "pattern": [
+        "brace"
+      ]
+    },
+    {
+      "id": "ex-single-leg-calf-raise",
+      "noPattern": true,
+      "why": "One joint moving."
+    },
+    {
+      "id": "ex-single-leg-hop",
+      "pattern": [
+        "jump"
+      ]
+    },
+    {
+      "id": "ex-sissy-squat",
+      "pattern": [
+        "squat"
+      ]
+    },
+    {
+      "id": "ex-skater-squat",
+      "pattern": [
+        "lunge"
+      ],
+      "corrected": true,
+      "why": "Single leg, split-stance mechanics."
+    },
+    {
+      "id": "ex-skipping-for-height",
+      "pattern": [
+        "jump"
+      ]
+    },
+    {
+      "id": "ex-slip-roll",
+      "pattern": [
+        "strike"
+      ]
+    },
+    {
+      "id": "ex-split-squat-jump",
+      "pattern": [
+        "jump",
+        "lunge"
+      ],
+      "corrected": true,
+      "why": "Jumped, from a split stance."
+    },
+    {
+      "id": "ex-sprint-drill-wall-drive",
+      "pattern": [
+        "gait"
+      ]
+    },
+    {
+      "id": "ex-squat",
+      "pattern": [
+        "squat"
+      ]
+    },
+    {
+      "id": "ex-squat-jump",
+      "pattern": [
+        "jump",
+        "squat"
+      ]
+    },
+    {
+      "id": "ex-step-up",
+      "pattern": [
+        "lunge"
+      ]
+    },
+    {
+      "id": "ex-suitcase-carry",
+      "pattern": [
+        "carry"
+      ]
+    },
+    {
+      "id": "ex-superman",
+      "pattern": [
+        "brace"
+      ]
+    },
+    {
+      "id": "ex-teep",
+      "pattern": [
+        "strike"
+      ]
+    },
+    {
+      "id": "ex-tibialis-raise",
+      "noPattern": true,
+      "why": "One joint moving."
+    },
+    {
+      "id": "ex-toes-to-bar",
+      "pattern": [
+        "brace"
+      ]
+    },
+    {
+      "id": "ex-typewriter-pull-up",
+      "pattern": [
+        "pull"
+      ]
+    },
+    {
+      "id": "ex-uppercut",
+      "pattern": [
+        "strike"
+      ]
+    },
+    {
+      "id": "ex-vertical-jump-practice",
+      "pattern": [
+        "jump"
+      ]
+    },
+    {
+      "id": "ex-wall-sit",
+      "pattern": [
+        "squat"
+      ]
+    },
+    {
+      "id": "ex-woodchop",
+      "pattern": [
+        "rotate"
+      ],
+      "corrected": true,
+      "why": "Rotation under load. The jump rule matched the \"hop\" inside \"Woodchop\", which is the kind of thing a substring rule does."
+    }
+  ]
+}

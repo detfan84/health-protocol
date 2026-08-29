@@ -178,6 +178,95 @@
       ]
     },
     {
+      "id": "pattern",
+      "name": "How the body organises",
+      "question": "What movement pattern is it?",
+      "required": false,
+      "multi": true,
+      "closed": true,
+      "note": "The last question `category` was answering that nothing else could (TAXONOMY §10.2). Closed, because a pattern is how the body organises around a load and the list of ways it does that is short. An item may have none: one joint moving is below the level a pattern describes.",
+      "values": [
+        {
+          "id": "push",
+          "name": "Push",
+          "also": [
+            "press"
+          ]
+        },
+        {
+          "id": "pull",
+          "name": "Pull"
+        },
+        {
+          "id": "squat",
+          "name": "Squat"
+        },
+        {
+          "id": "hinge",
+          "name": "Hinge",
+          "also": [
+            "deadlift",
+            "bend from the hips"
+          ]
+        },
+        {
+          "id": "lunge",
+          "name": "Lunge",
+          "also": [
+            "split stance"
+          ]
+        },
+        {
+          "id": "carry",
+          "name": "Carry",
+          "also": [
+            "loaded walk"
+          ]
+        },
+        {
+          "id": "rotate",
+          "name": "Rotate",
+          "also": [
+            "twist"
+          ]
+        },
+        {
+          "id": "brace",
+          "name": "Brace",
+          "also": [
+            "anti-rotation",
+            "hold still under load"
+          ],
+          "note": "Resisting movement rather than making it. The trunk-bracing action in the anatomy graph is what it acts through."
+        },
+        {
+          "id": "jump",
+          "name": "Jump",
+          "also": [
+            "plyometric",
+            "hop"
+          ]
+        },
+        {
+          "id": "gait",
+          "name": "Travel",
+          "also": [
+            "running",
+            "footwork",
+            "crawling"
+          ]
+        },
+        {
+          "id": "strike",
+          "name": "Strike",
+          "also": [
+            "punch",
+            "kick"
+          ]
+        }
+      ]
+    },
+    {
       "id": "technique",
       "name": "How it is done",
       "question": "How is it done?",

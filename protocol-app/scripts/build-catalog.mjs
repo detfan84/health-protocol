@@ -25,7 +25,7 @@
 // failure paths can be tested rather than demonstrated once and trusted.
 
 import { readFile, writeFile, readdir } from 'node:fs/promises';
-import { tagAll } from './facet-tags.mjs';
+import { tagAll, applyPatterns } from './facet-tags.mjs';
 import { applyMeasureSpecs } from './measure-specs.mjs';
 import { existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -44,6 +44,7 @@ export const FOLDIN_FILE = resolve(CONTENT, 'vocab/anatomy-foldin.json');
 export const OVERRIDES_FILE = resolve(CONTENT, 'vocab/facet-overrides.json');
 export const TAGS_FILE = resolve(CONTENT, 'vocab/anatomy-tags.json');
 export const REFERRAL_FILE = resolve(CONTENT, 'referral.json');
+export const PATTERNS_FILE = resolve(CONTENT, 'vocab/pattern-tags.json');
 
 const rel = (p) => relative(APP, p).replace(/\\/g, '/');
 
@@ -435,7 +436,8 @@ async function main() {
     const nodes = new Map(JSON.parse(await readFile(ANATOMY_FILE, 'utf8')).nodes.map((n) => [n.id, n]));
     const applied = applyFoldin(catalog.items, JSON.parse(await readFile(FOLDIN_FILE, 'utf8')), nodes);
     const tagged = applyAnatomyTags(applied.items, JSON.parse(await readFile(TAGS_FILE, 'utf8')), nodes);
-    const faceted = applyMeasureSpecs(tagAll(tagged, JSON.parse(await readFile(OVERRIDES_FILE, 'utf8'))));
+    const patterned = applyPatterns(tagged, JSON.parse(await readFile(PATTERNS_FILE, 'utf8')));
+    const faceted = applyMeasureSpecs(tagAll(patterned, JSON.parse(await readFile(OVERRIDES_FILE, 'utf8'))));
     const related = checkRelations(faceted, nodes);
     catalog.items = related.items;
     unconditional = related.unconditional;
@@ -472,6 +474,9 @@ async function main() {
     `catalog: ${catalog.items.length} items from ${catalog.sources.length} source${catalog.sources.length === 1 ? '' : 's'} —`,
     Object.entries(byType).map(([k, n]) => `${n} ${k}`).join(', '),
   );
+  const byPattern = {};
+  for (const it of catalog.items) for (const p of it.pattern ?? []) byPattern[p] = (byPattern[p] ?? 0) + 1;
+  console.log(`pattern: ${Object.entries(byPattern).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k} ${n}`).join(' · ')}`);
   console.log(`effect: ${Object.entries(byEffect).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k} ${n}`).join(' · ')}`);
   for (const s of catalog.sources) console.log(`  ${s.file}: ${s.items}`);
   console.log(`muscles: ${new Set(catalog.items.flatMap((i) => i.muscles ?? [])).size} · equipment: ${new Set(catalog.items.map((i) => i.equipment).filter(Boolean)).size}`);
