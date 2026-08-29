@@ -3,10 +3,13 @@
 *Written 23 Aug 2026, for whoever picks this up next. Read this before the
 roadmap: the roadmap says what is intended, this says what is true.*
 
+*Updated 29 Aug 2026 after the taxonomy session — §Where the home screen stands
+is the part written for the next session specifically.*
+
 **Live:** https://shoes-of-peace.kevin-c-bowie.workers.dev
 **Code:** `C:\Users\kevin\Health App\protocol-app`, branch `protocol-app-v0.2`
 **Deploy:** `npm run deploy` (direct upload to Cloudflare — a git push does NOT
-deploy). **Tests:** `npm test` — 94 green as of this writing.
+deploy). **Tests:** `npm test` — **276 green** (29 Aug).
 
 ---
 
@@ -36,7 +39,7 @@ Two mechanical traps behind it, both still live:
 
 ## What is built
 
-**Data layer** (`src/lib/`) — `schema.js` (SCHEMA_VERSION 2, migration ladder),
+**Data layer** (`src/lib/`) — `schema.js` (SCHEMA_VERSION 3, migration ladder),
 `db.js` (every op named and contextual on failure; `mutate()` does
 read-modify-write in ONE transaction), `protocolFile.js` (forgiving validator,
 warns on every repair), `core.js`, `units.js` (volume in ml, weight in kg,
@@ -113,3 +116,59 @@ Reminders, Disclaimer, announcer (the fail-loudly surface).
   load-then-save loses taps when a thumb moves fast.
 - `h()` drops null children; the raw DOM `append()` renders the word "null".
   A test now reads every screen looking for raw values.
+
+---
+
+## Where the home screen stands (29 Aug)
+
+The thing Kevin actually asked for on 29 Aug, before the session went sideways into
+taxonomy: *"the day arc shouldn't be parked alongside the things that are contained within
+it… recommended daily arcs for simplicity, each with different levels of time commitment…
+whatever is chosen can be completely modified, or people can build their own."*
+
+**None of it is built.** The home screen still offers 5 active protocol tiles + 5 switched-off
+ones + 6 More tiles, with the day arc sitting beside the four things it draws from.
+
+### What the taxonomy session unblocked
+
+- **Collapsing the tile grid.** Browse exists now — the library slices by effect, body part,
+  pattern, equipment and context, with counts. It is the single door the "More" row was six
+  bad answers to.
+- **The arc-off shape.** Every item has an `effect`, so a grid of *release / lengthen / load /
+  calm* is real content rather than five source files wearing category names.
+- **Slot specification.** A slot can now say what it wants — an effect, a body region, a
+  piece of equipment, a context — because every one of those is a facet with values.
+
+### What it did NOT unblock, and this is the one to know
+
+**374 of 383 catalogue items have no duration.** Only 8 carry `amount.seconds`. Of the 119
+items in the shipped day, 38 have one.
+
+So *"recommended arcs at 7, 20, 40 and 70 minutes"* — the centre of the idea — **cannot be
+built honestly today.** The app does not know how long anything takes.
+
+Worse: it is already pretending. `viewHome.js:56` computes the minutes on the Right Now card
+as `it.amount?.seconds ?? 60` — **sixty seconds per untimed item, invented.** Most of that
+number is fabricated, and it is displayed to a person as though it were known. It is the same
+failure the 28 Aug correction log records for the add-flow inventing `3 × 10` and forty-five
+seconds, still live on the busiest screen in the app.
+
+**So the first job next session is not the layout. It is durations** — and the honest version
+is per item, from the content, the way the measurement units were parsed out of the cards
+rather than guessed at build time (`TAXONOMY.md` §5.2). Where an item genuinely has no
+sensible duration, it should say so and the budget should say "plus a few things with no
+clock on them", not silently add a minute each.
+
+### Suggested order
+
+1. **Durations**, or the time-budget idea is built on an invented number.
+2. **The tile collapse** — Right now · the rest of today · Browse · a thin row. This part
+   needs nothing new and is the visible win.
+3. **Day templates** (slots with a budget) — the presets, once 1 exists.
+4. **Slot editing** — swap, drop, add. The "make it yours" half.
+
+### And nothing is deployed
+
+24 commits ahead of `origin`, nothing pushed, nothing built to the worker. The live URL is
+still running the build from before 29 Aug. `npm run deploy` is a direct upload — a git push
+does not deploy (see §The one lesson that cost the most).
