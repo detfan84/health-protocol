@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "protocol-app",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["-e", "const http=require('http'),fs=require('fs'),p=require('path');const root=p.resolve('dist');const T={'.html':'text/html','.js':'text/javascript','.json':'application/json','.css':'text/css','.jpg':'image/jpeg','.png':'image/png','.webmanifest':'application/manifest+json'};http.createServer((q,s)=>{let f=p.join(root,decodeURIComponent(q.url.split('?')[0]));if(!f.startsWith(root))return s.end();if(!fs.existsSync(f)||fs.statSync(f).isDirectory())f=p.join(root,'index.html');s.writeHead(200,{'content-type':T[p.extname(f)]||'application/octet-stream'});fs.createReadStream(f).pipe(s);}).listen(8788,()=>console.log('serving dist on 8788'));"],
+      "port": 8788
+    }
+  ]
+}

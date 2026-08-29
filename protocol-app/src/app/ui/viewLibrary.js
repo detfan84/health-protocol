@@ -197,19 +197,24 @@ export async function viewLibrary({ reload } = {}) {
    * somebody browsing by body part never met it. Browsing a region is the
    * moment the question arises, and it is the one moment the map was silent.
    *
-   * Only candidates whose source sits OUTSIDE the chosen region are offered —
-   * the local ones are already in the results underneath, and repeating them
-   * here would bury the point.
+   * Everything except the `local` candidates, because those are already in the
+   * results underneath and repeating them here would bury the point.
+   *
+   * The first version worked this out geometrically — anything whose source did
+   * not roll up into the chosen region — and it dropped the single most useful
+   * row in the file. The sciatic nerve sits under `hip` and `leg` in the graph,
+   * because that is where it runs, so browsing the leg filtered out "your
+   * hamstring may not be a short muscle at all". The map already says which
+   * candidates are local; deriving it again from the anatomy was re-answering a
+   * question the data had answered better.
    */
   function elsewhereFor(region) {
     if (!region) return [];
     const out = new Map();
     for (const site of library.referral ?? []) {
-      const here = (site.at ?? []).some((n) => rollUpOf(n).has(region));
-      if (!here) continue;
+      if (!(site.at ?? []).some((n) => rollUpOf(n).has(region))) continue;
       for (const c of site.candidates) {
-        const outside = c.source.every((n) => !rollUpOf(n).has(region));
-        if (!outside) continue;
+        if (c.kind === 'local') continue;
         const key = c.source.join('+');
         if (!out.has(key)) out.set(key, { ...c, site });
       }
@@ -566,7 +571,13 @@ export async function viewLibrary({ reload } = {}) {
           [
             TIER_LABELS[item.tier] ?? item.tier,
             doesLabel,
-            (item.equipment ?? []).join(', ').replace(/_/g, ' ') || null,
+            // Labels, not ids — this was printing "none", "pullup-bar" and
+            // "balance-board" at people. And `none` is dropped entirely:
+            // needing nothing is the default, not a feature worth a line.
+            (item.equipment ?? [])
+              .filter((e) => e !== 'none')
+              .map((e) => EQUIPMENT_LABELS[e] ?? e.replace(/-/g, ' '))
+              .join(', ') || null,
           ].filter(Boolean).join(' · '),
         ),
       ),
