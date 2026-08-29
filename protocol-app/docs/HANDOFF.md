@@ -9,7 +9,7 @@ is the part written for the next session specifically.*
 **Live:** https://shoes-of-peace.kevin-c-bowie.workers.dev
 **Code:** `C:\Users\kevin\Health App\protocol-app`, branch `protocol-app-v0.2`
 **Deploy:** `npm run deploy` (direct upload to Cloudflare — a git push does NOT
-deploy). **Tests:** `npm test` — **276 green** (29 Aug).
+deploy). **Tests:** `npm test` — **303 green** (29 Aug).
 
 ---
 
@@ -168,11 +168,39 @@ clock on them", not silently add a minute each.
 3. **Day templates** (slots with a budget) — the presets, once 1 exists.
 4. **Slot editing** — swap, drop, add. The "make it yours" half.
 
-### And nothing is deployed
+### Pushed and deployed, 29 Aug
 
-24 commits ahead of `origin`, nothing pushed, nothing built to the worker. The live URL is
-still running the build from before 29 Aug. `npm run deploy` is a direct upload — a git push
-does not deploy (see §The one lesson that cost the most).
+Thirty commits on `origin/protocol-app-v0.2`, and the live URL is serving build
+**`20260829T2212Z-b2b6192`** (version `4158bd47`). Verified on the deployed URL in a browser
+that had never seen the app: the disclaimer gate fires, and the shipped catalogue is 383
+items, 136 anatomy nodes, 6 referral sites, with zero items still carrying `kind` or
+`category`.
+
+`wrangler` auth is an OAuth token in `~/.config/.wrangler` — it will expire, and
+`npm run deploy` is a direct upload, so a git push still does not deploy.
+
+### Start here next session
+
+The home screen, in the order in §Where the home screen stands. The short version:
+
+1. **Presets carry their own authored minutes.** "Floor — about 7 minutes" is a design
+   statement about a preset somebody built, not a sum over items. This is what unblocks the
+   idea without waiting on ~80 duration decisions.
+2. **Collapse the tiles** — Right now · the rest of today · Browse · a thin row. Needs
+   nothing new; Browse already exists as the faceted library. This is the visible win and
+   the thing Kevin asked for first, on 29 Aug, before the session went into taxonomy.
+3. **Day templates** — slots with a budget. A slot can already SAY what it wants, because
+   every item carries `effect`, `target`, `equipment`, `context` and `pattern`.
+4. **Slot editing** — swap, drop, add. The "make it yours" half.
+
+**One line waiting to be adopted:** `viewHome` calls `lengthOf`. `lengthForYou(items,
+history)` exists and is tested — it tells a block in a person's own recorded times where
+they have them and reports how many were theirs. It belongs in step 2, where the copy can
+say which kind of number it is showing.
+
+**And the honest gate on all of it:** `Working_Record_v1.md` §1 still reads **0 loops**.
+Phase 1's done-when is Kevin's real daily use running on this build, and it has not happened
+yet. Everything above is easier to judge after a few days of using the thing.
 
 ---
 
