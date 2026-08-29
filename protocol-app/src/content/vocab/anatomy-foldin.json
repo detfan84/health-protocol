@@ -47,9 +47,12 @@
     },
     {
       "from": "ankle stability",
-      "notAnatomy": true,
-      "why": "An outcome of control work at the ankle. Tag `ankle` plus `effect: control`.",
-      "items": 1
+      "items": 1,
+      "to": [
+        "ankle"
+      ],
+      "review": true,
+      "why": "The ankle is the place; the stability is a capacity. Tag `ankle` and carry the quality in `effect: control`. One item (Pistol Squat), so a node of its own would not earn its place (§3)."
     },
     {
       "from": "ankles",
@@ -67,9 +70,10 @@
     },
     {
       "from": "anti-rotation",
-      "notAnatomy": true,
-      "why": "A demand a movement places, not a place it acts. Closest home is the `effect` facet.",
-      "items": 1
+      "items": 1,
+      "to": [
+        "trunk-bracing"
+      ]
     },
     {
       "from": "back",
@@ -94,9 +98,12 @@
     },
     {
       "from": "cervical movement sense",
-      "notAnatomy": true,
-      "why": "Proprioception at the neck — a capacity, measured rather than targeted.",
-      "items": 1
+      "items": 1,
+      "to": [
+        "neck"
+      ],
+      "review": true,
+      "why": "Neck proprioception. Tagged to `neck` so the item is findable at all — it has no other anatomy — with the capacity half belonging to a measurement rather than to the graph."
     },
     {
       "from": "cervical paraspinals",
@@ -115,10 +122,8 @@
     {
       "from": "core",
       "to": [
-        "deep-core"
+        "trunk-bracing"
       ],
-      "review": true,
-      "why": "The catalogue uses \"core\" for both the deep canister and the abdominal wall. Read as deep-core; some items may mean `abdomen`.",
       "items": 36
     },
     {
@@ -140,8 +145,6 @@
       "to": [
         "deep-hip-rotators"
       ],
-      "review": true,
-      "why": "Kept at the group, not narrowed to `piriformis` — the parenthetical names the best-known member, it does not restrict the target.",
       "items": 1
     },
     {
@@ -203,7 +206,7 @@
     {
       "from": "full body",
       "notAnatomy": true,
-      "why": "The absence of a target. Drop it; an untagged item already means this.",
+      "why": "Whole-body conditioning — Jump Rope Tabata, Turkish Get-Up, Mace Flow, Shadowbox Round, none of which carries another muscle tag. Not an anatomy target: it belongs in `effect: condition`, and these four items are the evidence that `condition` should survive TAXONOMY.md §11.1.",
       "items": 4
     },
     {
@@ -437,7 +440,7 @@
     {
       "from": "posture",
       "notAnatomy": true,
-      "why": "A quality the whole graph serves. Belongs to the awareness curriculum, not to a node.",
+      "why": "A quality the whole graph serves, and the one item carrying it (Wall Slide) already tags upper back and shoulders. Belongs to the awareness curriculum, not to a node.",
       "items": 1
     },
     {
@@ -635,10 +638,8 @@
     {
       "from": "traps",
       "to": [
-        "upper-trapezius"
+        "trapezius"
       ],
-      "review": true,
-      "why": "Read as upper traps, which is what the source items describe. An item meaning the whole muscle needs `mid-lower-trapezius` as well.",
       "items": 1
     },
     {

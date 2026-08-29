@@ -362,3 +362,32 @@ test('the shipped graph answers Kevin\'s three queries', async () => {
   assert.ok(of('hip abductors').includes('glute-med-min'), 'hip abductors reaches what abducts');
   assert.ok(rollUp('glute-med-min', nodes).includes('glutes'), 'and both fall under glutes');
 });
+
+test('an action can be the honest reading of a word that looks anatomical', async () => {
+  // "core" on a farmer's carry, a mace 360 or a boxing strike is trunk bracing,
+  // not a muscle — and the catalogue proves it: the items that mean the
+  // abdominal wall say `abs` or `obliques`, and the Pallof press says both
+  // "core" and "anti-rotation". So the word belongs to the action, and reaching
+  // the canister muscles is what expanding an action is for.
+  const nodes = validateAnatomy(await readJson(ANATOMY), 'anatomy.json');
+  const kids = childIndex(nodes);
+  const find = (q) => [...nodes.values()].find((n) => [n.name, ...(n.also ?? [])].some((x) => String(x).toLowerCase() === q));
+
+  assert.equal(find('core').id, 'trunk-bracing', '"core" resolves to the action');
+  const reached = expand('trunk-bracing', nodes, kids);
+  for (const m of ['transverse-abdominis', 'multifidus', 'diaphragm', 'pelvic-floor']) {
+    assert.ok(reached.includes(m), `a search for core must still reach ${m}`);
+  }
+  assert.ok(rollUp('trunk-bracing', nodes).includes('trunk'), 'and it lives at the trunk');
+});
+
+test('the fold-in has no unreviewed row carrying real weight', async () => {
+  // A judgment call on 36 item tags is a decision; a judgment call on one is a
+  // note. This pins the difference, so a heavy row cannot sit in the worklist
+  // unnoticed the way `core` and `glutes` did.
+  const nodes = validateAnatomy(await readJson(ANATOMY));
+  const library = await readJson(LIBRARY);
+  const entries = validateFoldin(await readJson(FOLDIN), nodes, library.items);
+  const heavy = entries.filter((e) => (e.review || e.notAnatomy) && (e.items ?? 0) > 4);
+  assert.deepEqual(heavy.map((e) => e.from), [], 'an unresolved row with more than four item tags needs a decision, not a flag');
+});

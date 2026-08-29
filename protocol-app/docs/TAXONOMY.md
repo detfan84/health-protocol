@@ -220,37 +220,72 @@ as a silo, and considerably more work.
 
 ### 3.1 What is seeded, 29 Aug
 
-`src/content/vocab/anatomy.json` — **134 nodes**: 6 regions, 22 areas, 3 groups, 5 joints, 78
-structures, 13 actions, 7 systems. The 21 `regions` values already tagged on 78 items are all present as nodes, so nothing
+`src/content/vocab/anatomy.json` — **136 nodes**: 6 regions, 22 areas, 4 groups, 5 joints, 78
+structures, 14 actions, 7 systems. The 21 `regions` values already tagged on 78 items are all present as nodes, so nothing
 existing is invalidated; they gain parents and aliases and keep working.
 
 `src/content/vocab/anatomy-foldin.json` — the 94 catalogue strings mapped onto it. **A worklist,
-not a migration: nothing reads it.** 84 map cleanly. Five need a human, and each says why:
+not a migration: nothing reads it.** 88 map cleanly. Four need a human, none carrying more than one
+item tag:
 
 | String | Proposed | Item tags | The call |
 |---|---|---|---|
-| `core` | deep-core | 36 | The catalogue uses it for both the canister and the abdominal wall |
-| `traps` | upper-trapezius | 1 | What the source items describe, but not the whole muscle |
 | `tibialis` | tibialis-anterior | 1 | Unqualified; posterior is a real and different target |
 | `outer thigh` | it-band, tfl | 1 | The band, the muscle that tensions it, or both |
-| `deep hip rotators (piriformis group)` | deep-hip-rotators | 1 | The parenthetical names the best-known member, it does not narrow the target |
+| `ankle stability` | ankle | 1 | The ankle is the place; the stability belongs in `effect: control` |
+| `cervical movement sense` | neck | 1 | Tagged so the item is findable; the capacity half is a measurement |
 
-**Six review rows closed by adding depth rather than by deciding.** `glutes` was the biggest —
+### 3.2 `core` was not an ambiguous string
+
+The heaviest review row read *"the catalogue uses it for both the canister and the abdominal
+wall."* Reading the 36 items says otherwise, and the earlier note was wrong.
+
+All 36 are exercises — kettlebell swings, mace 360s, carries, planks, boxing strikes, Bird Dog,
+Pallof Press — and in every one of them **"core" means holding the trunk still while force passes
+through it.** A function, not a structure. Three things in the data settle it:
+
+- Items that mean the abdominal wall already say so: Dragon Flag carries `abs`, Woodchop and
+  Suitcase Carry and Mace Grave Digger carry `obliques`. `core` is added *on top* of those.
+- `ex-pallof-press` carries `core` **and** `anti-rotation` — the item pairs them itself.
+- **No release or bodywork item uses `core` at all.** The canister content uses `deep core`.
+
+So `core` and `anti-rotation` both resolve to a new action, `trunk-bracing`, produced by the
+transverse abdominis, obliques, multifidus, diaphragm, pelvic floor, erectors and rectus. Searching
+"core" reaches all of them — which is why the word belongs to the action rather than to the
+`deep-core` area node, and the checker made that choice explicit by refusing to let both claim it.
+
+`traps` closed the same way `glutes` did: a missing `trapezius` group node, with upper and
+mid/lower beneath it. And `deep hip rotators (piriformis group)` stopped needing a decision once
+the group had children — the mapping now demonstrably returns piriformis by expansion.
+
+**Two rows were never anatomy and stay that way.** `posture` (1 tag — Wall Slide, which already
+tags upper back and shoulders) belongs to the awareness curriculum. `full body` (4 tags — Jump Rope
+Tabata, Turkish Get-Up, Mace Flow, Shadowbox Round, none carrying any other muscle tag) belongs in
+`effect: condition` — and those four items are the evidence that `condition` should survive the
+open question in §11.1.
+
+**The limit worth naming.** Expansion runs one way: an action reaches the muscles that produce it,
+and a muscle does not reach the actions it produces. So a search for *the canister* does not return
+the Pallof Press. Chaining the other direction over-broadens fast — asking for the glute max would
+drag in hip extension and from there the hamstrings — so if this matters, the fix is a single-hop
+muscle-to-action lookup, not transitive expansion.
+
+**Eight review rows closed by adding depth rather than by deciding.** `glutes` was the biggest —
 41 item tags read as the big glute alone — and it stopped being a judgment call once the group
 node existed to hold both. `hip abductors`, `grip` and the three rotation strings stopped being
 judgment calls once actions were nodes: they now land exactly, on the thing they always named.
 That is the general lesson, and it is worth more than the six rows: **a review row is often a
 missing node rather than an ambiguous string.**
 
-Five were never anatomy and are recorded rather than dropped, because a vocabulary that deletes
-what it cannot classify teaches nothing about why it could not: `posture` · `full body` (4 tags) ·
-`anti-rotation` · `ankle stability` · `cervical movement sense`. Each carries a note
-saying where it should go instead — mostly the `effect` facet, a self-test, or nowhere.
+Two rows were never anatomy and are recorded rather than dropped, because a vocabulary that
+deletes what it cannot classify teaches nothing about why it could not. Both are covered in §3.2.
 
-**Two alias collisions were caught by the checker during authoring**, which is the argument for
+**Three alias collisions were caught by the checker during authoring**, which is the argument for
 having written it: *"between the shoulder blades"* claimed by both `upper-back` and `rhomboids`,
-and *"calf"* by both `lower-leg` and `calves`. Neither is a tidiness problem — it is a search that
-silently returns one of two right answers.
+*"calf"* by both `lower-leg` and `calves`, and *"core"* by both `deep-core` and `trunk-bracing`.
+None of them is a tidiness problem — each is a search that silently returns one of two right
+answers. The third was the review row itself, surfacing as a collision the moment the graph could
+hold both readings.
 
 Scale, honestly: the seed covers what the catalogue references today and stops there. Growing it
 is the largest content-authoring job in the project, and the ten review rows need a human eye

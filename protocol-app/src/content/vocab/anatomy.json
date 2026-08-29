@@ -188,8 +188,9 @@
       ],
       "also": [
         "the canister",
-        "core"
-      ]
+        "the deep core"
+      ],
+      "note": "The word \"core\" belongs to `trunk-bracing`, because that is what all 36 items carrying it mean and because searching it expands down to these muscles anyway. This node is the place; the action is what people are usually asking for."
     },
     {
       "id": "pelvis",
@@ -441,13 +442,10 @@
       "name": "Upper trapezius",
       "kind": "structure",
       "parents": [
-        "neck",
-        "shoulder-girdle",
-        "upper-back"
+        "trapezius"
       ],
       "also": [
         "upper traps",
-        "traps",
         "the shoulder shrug muscle"
       ]
     },
@@ -456,8 +454,7 @@
       "name": "Mid and lower trapezius",
       "kind": "structure",
       "parents": [
-        "shoulder-girdle",
-        "upper-back"
+        "trapezius"
       ],
       "also": [
         "mid traps",
@@ -1539,6 +1536,44 @@
       "producedBy": [
         "forearm-flexors",
         "thenar"
+      ]
+    },
+    {
+      "id": "trunk-bracing",
+      "name": "Trunk bracing",
+      "kind": "action",
+      "parents": [
+        "trunk"
+      ],
+      "also": [
+        "core",
+        "bracing",
+        "anti-rotation",
+        "anti-extension",
+        "keeping the middle solid"
+      ],
+      "producedBy": [
+        "transverse-abdominis",
+        "obliques",
+        "multifidus",
+        "diaphragm",
+        "pelvic-floor",
+        "spinal-erectors",
+        "rectus-abdominis"
+      ],
+      "note": "What the catalogue means by \"core\" on a carry, a swing, a mace 360 or a strike: holding the trunk still while force passes through it. A function, not a structure — which is why the items that mean the abdominal wall say `abs` or `obliques` instead, and often say both."
+    },
+    {
+      "id": "trapezius",
+      "name": "Trapezius",
+      "kind": "group",
+      "parents": [
+        "neck",
+        "shoulder-girdle",
+        "upper-back"
+      ],
+      "also": [
+        "traps"
       ]
     }
   ]
