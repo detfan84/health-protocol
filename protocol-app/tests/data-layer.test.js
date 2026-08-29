@@ -10,7 +10,7 @@ import {
   mergeFragmentIntoProtocol,
 } from '../src/lib/protocolFile.js';
 import { openDb, put, getAll, exportAll, wipe, importMerge } from '../src/lib/db.js';
-import { FILE_FORMAT, STORES } from '../src/lib/schema.js';
+import { FILE_FORMAT, STORES, SCHEMA_VERSION } from '../src/lib/schema.js';
 
 /* ------------------------------ helpers ----------------------------- */
 
@@ -410,4 +410,88 @@ test('import: a protocol file aimed at the backup importer gets a helpful redire
   });
   assert.equal(res.ok, false);
   assert.match(res.errors[0].hint, /Protocols screen/);
+});
+
+/** One protocol file wrapping one item — the shortest thing the validator takes. */
+function protocolFile(item) {
+  return {
+    format: 'protocol-app/v1',
+    kind: 'protocol',
+    schemaVersion: SCHEMA_VERSION,
+    protocol: { id: 'p', name: 'P', active: true, phases: [], blocks: [{ id: 'b', name: 'B', order: 0, items: [item] }] },
+  };
+}
+
+/* ------------------------- the facets, schema 3 ------------------------- */
+// docs/TAXONOMY.md §9.3. These used to die at the door: viewLibrary translated
+// a handful of fields on the way into a day and the validator had no slot for
+// the rest, so what an item WAS stopped being known the moment it was yours.
+
+test('an item carries its facets through validation', () => {
+  const r = validateFile(JSON.stringify(protocolFile({
+    id: 'i1', name: '90/90 Hip Switch',
+    type: 'practice', technique: 'tech-contract-relax', performedBy: 'self', tradition: 'physio',
+    effect: ['mobilise'], tissue: ['muscle', 'fascia', 'nerve'],
+    anatomy: ['hip', 'hip-external-rotation'], context: ['floor'],
+    equipment: ['none'], demands: ['room'],
+  })));
+  assert.equal(r.ok, true);
+  const item = r.value.protocol.blocks[0].items[0];
+  assert.equal(item.type, 'practice');
+  assert.equal(item.technique, 'tech-contract-relax');
+  assert.deepEqual(item.tissue, ['muscle', 'fascia', 'nerve']);
+  assert.deepEqual(item.anatomy, ['hip', 'hip-external-rotation']);
+  assert.deepEqual(item.demands, ['room']);
+});
+
+test('an unrecognised facet value is kept, because somebody wrote it on purpose', () => {
+  // D40: a vocabulary is data. A validator that decides which values are
+  // legitimate is a validator writing content policy — the same reasoning that
+  // already governs carefulAudience. check-vocab polices vocabulary; this
+  // file polices shape.
+  const r = validateFile(JSON.stringify(protocolFile({
+    id: 'i1', name: 'Dry needling', effect: ['release'], technique: 'tech-needling',
+    tissue: ['muscle', 'fascia', 'nerve'], anatomy: ['some-node-nobody-has-authored-yet'],
+  })));
+  assert.equal(r.ok, true);
+  assert.deepEqual(r.value.protocol.blocks[0].items[0].anatomy, ['some-node-nobody-has-authored-yet']);
+});
+
+test('absent facets stay absent — an untagged item is not an item tagged with nothing', () => {
+  const r = validateFile(JSON.stringify(protocolFile({ id: 'i1', name: 'Walk' })));
+  const item = r.value.protocol.blocks[0].items[0];
+  for (const k of ['type', 'effect', 'tissue', 'anatomy', 'context', 'equipment', 'demands', 'performedBy']) {
+    assert.ok(!(k in item), `${k} should be absent, not empty`);
+  }
+});
+
+test('a facet handed a single value instead of a list is reported, not silently kept', () => {
+  const r = validateFile(JSON.stringify(protocolFile({ id: 'i1', name: 'Walk', effect: 'release' })));
+  assert.ok(!('effect' in r.value.protocol.blocks[0].items[0]));
+  assert.ok(r.warnings.some((w) => w.path.endsWith('.effect')), 'the person is told it was ignored');
+});
+
+test('duplicates within one facet collapse', () => {
+  const r = validateFile(JSON.stringify(protocolFile({
+    id: 'i1', name: 'Walk', anatomy: ['hip', 'hip', ' hip '],
+  })));
+  assert.deepEqual(r.value.protocol.blocks[0].items[0].anatomy, ['hip']);
+});
+
+test('a file from a newer app is imported with a warning, not silently thinned', () => {
+  // Until schema 3 this number was read, stored, and never looked at, so a
+  // newer file imported clean and whatever this version had no slot for went
+  // with it. Carrying on with less while looking fine is what D24 forbids.
+  const r = validateFile(JSON.stringify({ ...protocolFile({ id: 'i1', name: 'Walk' }), schemaVersion: 99 }));
+  assert.equal(r.ok, true, 'most of a newer file is ordinary and must still import');
+  assert.ok(r.warnings.some((w) => w.path === 'schemaVersion' && /newer version/.test(w.message)));
+});
+
+test('a file from this version or older says nothing about versions', () => {
+  for (const v of [SCHEMA_VERSION, 1, undefined]) {
+    const f = protocolFile({ id: 'i1', name: 'Walk' });
+    if (v === undefined) delete f.schemaVersion; else f.schemaVersion = v;
+    const r = validateFile(JSON.stringify(f));
+    assert.ok(!r.warnings.some((w) => w.path === 'schemaVersion'), `version ${v} should not warn`);
+  }
 });

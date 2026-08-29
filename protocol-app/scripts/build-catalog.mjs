@@ -37,6 +37,8 @@ const CONTENT = resolve(APP, 'src/content');
 export const LEGACY = resolve(CONTENT, 'imported-legacy.json');
 export const AUTHORED = resolve(CONTENT, 'authored');
 export const OUT = resolve(CONTENT, 'library.json');
+export const ANATOMY_FILE = resolve(CONTENT, 'vocab/anatomy.json');
+export const FOLDIN_FILE = resolve(CONTENT, 'vocab/anatomy-foldin.json');
 
 const rel = (p) => relative(APP, p).replace(/\\/g, '/');
 
@@ -184,8 +186,23 @@ export function mergeCatalog(sources) {
     sources: sources.map((s) => ({ file: s.file, items: s.items.length })),
     items,
   };
-  catalog.version = createHash('sha256').update(JSON.stringify(catalog.items)).digest('hex').slice(0, 12);
+  catalog.version = versionOf(catalog.items);
   return catalog;
+}
+
+/**
+ * The catalogue's version: a hash of the items as shipped.
+ *
+ * Exported and re-applied because anything that CHANGES the items after the
+ * merge has to move it. The anatomy fold-in did not, for one build: the hash
+ * was taken inside mergeCatalog, the fold-in ran afterwards in main(), and the
+ * file went out with 289 newly tagged items under the version string of the
+ * untagged catalogue. A version that does not move when the content does is a
+ * cache key pointing at the wrong content — the same class of failure as the
+ * seedVersion that never changed and stopped shipped content reaching anybody.
+ */
+export function versionOf(items) {
+  return createHash('sha256').update(JSON.stringify(items)).digest('hex').slice(0, 12);
 }
 
 /** Every source that makes up the shipped catalogue, in order. */
@@ -207,12 +224,75 @@ export async function collectSources({ legacy = LEGACY, authored = AUTHORED } = 
   return sources;
 }
 
+/**
+ * Apply the anatomy fold-in (docs/TAXONOMY.md §3.1): the catalogue's free-text
+ * `muscles` and `regions` become `anatomy`, a list of node ids.
+ *
+ * Three rules, and the middle one is the point.
+ *
+ *   - `muscles` and `regions` are KEPT. This is a translation, not a
+ *     replacement: the strings are what the source actually said, the ids are
+ *     what we think it meant, and until a person has read the rows we do not
+ *     throw away the evidence. When the ids are trusted the strings can go, in
+ *     a commit that says so.
+ *   - A string with no worklist row STOPS THE BUILD. Authoring a new muscle
+ *     name is easy and silent; a catalogue that quietly carried it untranslated
+ *     would drift straight back to the 94-strings problem this replaces (D24).
+ *   - `notAnatomy` rows contribute nothing, on purpose. `posture` and
+ *     `full body` are not places, and inventing a node for them so the numbers
+ *     look tidy is how a vocabulary starts lying.
+ */
+export function applyFoldin(items, foldin, nodes) {
+  const map = new Map();
+  for (const e of foldin.entries ?? []) map.set(e.from, e);
+  const missing = new Set();
+  const usedReview = new Map();
+
+  const out = items.map((item) => {
+    const strings = [...(item.muscles ?? []), ...(item.regions ?? [])];
+    if (!strings.length) return item;
+    const ids = new Set();
+    for (const s of strings) {
+      if (nodes.has(s)) { ids.add(s); continue; } // a `regions` value is already a node id
+      const e = map.get(s);
+      if (!e) { missing.add(s); continue; }
+      if (e.notAnatomy) continue;
+      if (e.review) usedReview.set(s, (usedReview.get(s) ?? 0) + 1);
+      for (const id of e.to ?? []) ids.add(id);
+    }
+    return ids.size ? { ...item, anatomy: [...ids].sort() } : item;
+  });
+
+  if (missing.size) {
+    throw new Error(
+      `these muscle or region names have no row in anatomy-foldin.json:\n    ${[...missing].join('\n    ')}\n` +
+      '  Add a row (with "to", or "notAnatomy" and a reason) before the catalogue can be built.',
+    );
+  }
+  return { items: out, usedReview };
+}
+
 /* ------------------------------ the command ------------------------------ */
 
 async function main() {
   let catalog;
   try {
     catalog = mergeCatalog(await collectSources());
+  } catch (err) {
+    console.error(`\nbuild-catalog: ${err.message}`);
+    console.error('\nNothing was written. src/content/library.json is unchanged.\n');
+    process.exit(1);
+  }
+
+  // The fold-in runs over the merged shelf, so an authored file cannot invent
+  // a muscle name without the build saying so.
+  let usedReview;
+  try {
+    const nodes = new Map(JSON.parse(await readFile(ANATOMY_FILE, 'utf8')).nodes.map((n) => [n.id, n]));
+    const applied = applyFoldin(catalog.items, JSON.parse(await readFile(FOLDIN_FILE, 'utf8')), nodes);
+    catalog.items = applied.items;
+    catalog.version = versionOf(catalog.items);
+    usedReview = applied.usedReview;
   } catch (err) {
     console.error(`\nbuild-catalog: ${err.message}`);
     console.error('\nNothing was written. src/content/library.json is unchanged.\n');
@@ -229,6 +309,12 @@ async function main() {
   );
   for (const s of catalog.sources) console.log(`  ${s.file}: ${s.items}`);
   console.log(`muscles: ${new Set(catalog.items.flatMap((i) => i.muscles ?? [])).size} · equipment: ${new Set(catalog.items.map((i) => i.equipment).filter(Boolean)).size}`);
+  const tagged = catalog.items.filter((i) => i.anatomy?.length).length;
+  console.log(`anatomy: ${tagged}/${catalog.items.length} items carry node ids (muscles and regions kept alongside).`);
+  if (usedReview.size) {
+    console.log('  applied from rows still flagged for review — each is a proposal, not a decision:');
+    for (const [s, n] of [...usedReview].sort((a, b) => b[1] - a[1])) console.log(`    "${s}" on ${n} item${n === 1 ? '' : 's'}`);
+  }
   console.log(`wrote src/content/library.json (${(JSON.stringify(catalog).length / 1024).toFixed(0)} KB), version ${catalog.version}`);
 }
 

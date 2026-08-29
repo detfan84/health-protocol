@@ -12,7 +12,7 @@
 import { legacyGlassesToMl } from './units.js';
 
 export const DB_NAME = 'protocol-app';
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
 
 // Published file format identifier — shared by backups, gallery/module
 // fragments, and AI-produced imports (the deep-dive and lab doors).
@@ -65,6 +65,32 @@ export const MIGRATIONS = [
       };
     },
   },
+  {
+    // Items may carry the facets (docs/TAXONOMY.md): what kind of record it is,
+    // what it does, what tissue and what anatomy it acts on, how it is done,
+    // what it needs, who performs it, where it came from.
+    //
+    // **Nothing stored is transformed, and that is the correct behaviour.** An
+    // item saved before this rung has no facets — not empty ones, not defaults.
+    // Absence means nobody has said, which is a different fact from "none", and
+    // the three-state rule (D24) makes it the app's job to keep them apart. A
+    // rung that helpfully wrote `effect: []` onto nine hundred old items would
+    // be inventing an answer on their behalf.
+    //
+    // So why a rung at all, when IndexedDB stores whatever shape it is handed
+    // and `tier` and `carefulAudience` were both added without one? Because in
+    // this codebase SCHEMA_VERSION is one number doing two jobs: the database
+    // version AND the `schemaVersion` stamped into every exported file. The
+    // file format's MEANING changed here — a v3 backup can carry facets a v2
+    // app would silently drop on import — so the number has to move, and moving
+    // it moves the database version with it. The ladder is append-only, so the
+    // rung is recorded even though its work is nil.
+    //
+    // The other half of that argument is in protocolFile.js, which until now
+    // read `schemaVersion` and never once looked at it.
+    to: 3,
+    run() {},
+  },
 ];
 
 /* ------------------------------------------------------------------ *
@@ -82,6 +108,25 @@ export const MIGRATIONS = [
  *       target?: { sets?, reps?, seconds? },        // what the plan asks for
  *       fields?: { tool?, release?, load?, notice?, careful? },  // K3
  *       photos?: [ { set, caption?, approx? } ],   // two frames per set
+ *
+ *       // The facets (schema 3, docs/TAXONOMY.md §2). Values are ids from
+ *       // src/content/vocab/*.json — data, never enums in code (D40), so the
+ *       // validator checks the SHAPE and never the vocabulary.
+ *       type?: 'practice' | 'measurement' | 'teaching' | 'intake' | 'record',
+ *       effect?: [],        // release, load, calm…      — the ledger's words
+ *       tissue?: [],        // muscle, fascia, nerve…    — multi, on purpose
+ *       anatomy?: [],       // node ids from anatomy.json
+ *       technique?: string, // how it is done
+ *       context?: [],       // floor, bed, chair, desk…
+ *       equipment?: [],     // ball, band, kettlebell…
+ *       demands?: [],       // what it needs available (§6)
+ *       performedBy?: 'self' | 'practitioner',
+ *       tradition?: string,
+ *
+ *       // NOTE the field is `anatomy`, not `target`. TAXONOMY.md calls the
+ *       // facet "target", and `target` on an item has meant sets/reps/seconds
+ *       // since PLAN §4.2. Two different questions cannot share one key on the
+ *       // same object, and the older meaning keeps the name.
  *     } ]
  *   } ]
  *   createdAt, updatedAt

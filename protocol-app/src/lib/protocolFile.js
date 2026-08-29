@@ -202,6 +202,42 @@ function fixItem(raw, path, ctx) {
   } else if (raw.activeLevel != null) {
     ctx.warn(path + '.activeLevel', `"${raw.activeLevel}" is not a rung number — ignored, so this item has no chosen rung.`);
   }
+  // The facets (schema 3, docs/TAXONOMY.md §2). What kind of record this is,
+  // what it does, what tissue and anatomy it acts on, how it is done, what it
+  // needs, who performs it, where it came from.
+  //
+  // These used to be dropped. `viewLibrary` translated a catalogue item on the
+  // way into a day and this validator had no slot for the rest, so `category`,
+  // `kind`, `role`, `regions`, `muscles`, `equipment`, `context`, `swapGroup`,
+  // `loadAfter` and `nerves` all died at the door — and the 119 items in the
+  // shipped day protocols carry none of them. A composer reading that day would
+  // be dealing from a deck with no suits.
+  //
+  // The values are NOT checked against the vocabularies, deliberately. D40 says
+  // a vocabulary is data, and `carefulAudience` already set the precedent: a
+  // validator that decides which values are legitimate is a validator writing
+  // content policy. Shape is this file's business; vocabulary is
+  // `scripts/check-vocab.mjs` and the content build. An unrecognised facet
+  // value is carried, because somebody wrote it on purpose.
+  //
+  // The anatomy facet is stored as `anatomy`, not `target`: TAXONOMY.md names
+  // the facet "target", and `target` has meant sets/reps/seconds here since
+  // PLAN §4.2. The older meaning keeps the key.
+  for (const k of ['type', 'technique', 'performedBy', 'tradition']) {
+    if (raw[k] == null) continue;
+    const v = asTrimmed(String(raw[k]));
+    if (v) item[k] = v;
+    else ctx.warn(`${path}.${k}`, `Empty — ignored, so this item says nothing about ${k}.`);
+  }
+  for (const k of ['effect', 'tissue', 'anatomy', 'context', 'equipment', 'demands']) {
+    if (raw[k] == null) continue;
+    if (!Array.isArray(raw[k])) {
+      ctx.warn(`${path}.${k}`, `Expected a list — ignored. An item can have more than one, which is why it is a list even when there is one.`);
+      continue;
+    }
+    const values = [...new Set(raw[k].map((v) => asTrimmed(String(v))).filter(Boolean))];
+    if (values.length) item[k] = values;
+  }
   // Cadence travels with the plan: "3× a week" is part of what the protocol
   // says to do, so a protocol shared with somebody else carries it. What does
   // NOT travel is anything personal about doing it — a pause lives in the
@@ -370,10 +406,27 @@ export function validateFile(input) {
     return { ok: false, errors: ctx.errors, warnings: ctx.warnings };
   }
 
+  // A file written by a NEWER app than this one. Until schema 3 this number
+  // was read, stored, and never once looked at — so a newer file imported
+  // silently and whatever this version has no slot for vanished with it. That
+  // is the exact failure D24 exists to forbid: carrying on with less, and
+  // looking fine while doing it.
+  //
+  // It is a warning and not an error on purpose. Most of a newer file is
+  // ordinary and imports correctly; refusing the whole thing would lose more
+  // than it saves. The person is told what to expect instead.
+  const fileVersion = asNumber(raw.schemaVersion);
+  if (fileVersion !== undefined && Number.isFinite(fileVersion) && fileVersion > SCHEMA_VERSION) {
+    ctx.warn(
+      'schemaVersion',
+      `This file was written by a newer version of the app (format ${fileVersion}; this one reads ${SCHEMA_VERSION}). Everything this version understands is imported — anything newer is not, and will not appear.`,
+    );
+  }
+
   const out = {
     format: FILE_FORMAT,
     kind,
-    schemaVersion: asNumber(raw.schemaVersion) ?? SCHEMA_VERSION,
+    schemaVersion: fileVersion ?? SCHEMA_VERSION,
     exportedAt: asTrimmed(raw.exportedAt) || nowIso(),
   };
 

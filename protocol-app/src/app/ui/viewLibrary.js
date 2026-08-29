@@ -200,6 +200,25 @@ export async function viewLibrary({ reload } = {}) {
           // confident wrong number tells them not to look.
           ...(item.target ? { target: item.target } : {}),
           ...(item.carefulAudience ? { carefulAudience: item.carefulAudience } : {}),
+          // The facets travel now (schema 3, docs/TAXONOMY.md §9.3). They used
+          // to stop here: this function translated a handful of fields and the
+          // validator had no slot for the rest, so what an item WAS — what it
+          // does, what it acts on, where, with what — was known in the library
+          // and unknown the moment it became yours.
+          //
+          // Absent stays absent, one field at a time. An item the catalogue has
+          // not tagged arrives untagged rather than arriving with empty lists,
+          // because "nobody has said" and "none" are different facts (D24).
+          ...Object.fromEntries(
+            ['type', 'technique', 'performedBy', 'tradition']
+              .filter((k) => item[k])
+              .map((k) => [k, item[k]]),
+          ),
+          ...Object.fromEntries(
+            ['effect', 'tissue', 'anatomy', 'context', 'equipment', 'demands']
+              .filter((k) => Array.isArray(item[k]) && item[k].length)
+              .map((k) => [k, [...item[k]]]),
+          ),
           ...(item.tier ? { tier: item.tier } : {}),
           ...(item.everyNDays ? { cadence: { kind: 'everyNDays', n: item.everyNDays } } : {}),
           ...(level ? { activeLevel: level.level } : {}),

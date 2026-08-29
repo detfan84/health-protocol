@@ -495,22 +495,76 @@ decision, which is how `entry-points` — a UI position — ended up as a peer o
 
 1. **Vocabulary files** (§10 rules) — pure data, consumed by nothing at first, therefore safe to
    land before any of the below is settled. *Started 29 Aug.*
-2. **Schema extension (D15)** so a day item can hold facets at all. **Gated:** `GAPS.md` §4.3 —
-   the migration ladder is append-only and needs Kevin's line before a rung is added.
-3. **Stop dropping facets on add-to-day.** `viewLibrary.js` discards `category`, `kind`, `role`,
+2. **Schema extension (D15)** so a day item can hold facets at all. *Done 29 Aug — Kevin's line
+   given, `SCHEMA_VERSION` 2 → 3. See §9.1.*
+3. **Stop dropping facets on add-to-day.** *Done 29 Aug.* `viewLibrary.js` discards `category`, `kind`, `role`,
    `regions`, `muscles`, `equipment`, `context`, `swapGroup`, `loadAfter` and `nerves`; the
    validator has no slot for any of them. The 119 items in the shipped day protocols carry **zero**
    facets — their entire field set is `id, name, dose, why, tracking, target, fields, cadence,
    photos`. Whatever taxonomy wins, the composer would otherwise deal from a deck with no suits,
    and `loadAfter` (67 items — law 1 already written down as data) does not survive contact with
    the day.
-4. **Anatomy graph** + fold-in of the 94 strings (§3). *Seeded 29 Aug — 101 nodes and a 94-row
-   worklist, §3.1. Applying the worklist waits on step 2, and on ten review rows.*
+4. **Anatomy graph** + fold-in of the 94 strings (§3). *Seeded and applied 29 Aug — 136 nodes,
+   and 289 of 376 catalogue items now carry node ids, §3.1.*
 5. **Wire the tests** (§5).
 6. **Referral map** (§4).
 7. **Faceted browse and search** (§8).
 
 Steps 1 and 4 are content work and need no ruling. Step 2 is the only gate.
+
+### 9.1 What the schema rung actually did
+
+`SCHEMA_VERSION` 2 → 3, and **the rung transforms nothing**. That is the correct behaviour: an
+item saved before it has no facets — not empty ones, not defaults. Absence means nobody has said,
+which is a different fact from "none", and D24 makes keeping them apart the app's job. A rung that
+helpfully wrote `effect: []` onto every old item would be inventing an answer on their behalf.
+
+So why a rung at all, when IndexedDB stores whatever shape it is handed, and `tier` and
+`carefulAudience` were both added without one? Because `SCHEMA_VERSION` is one number doing two
+jobs here: the database version **and** the `schemaVersion` stamped into every exported file. The
+file format's meaning changed — a v3 backup can carry facets a v2 app would drop — so the number
+had to move, and moving it moves the database version with it. The ladder is append-only, so the
+rung is recorded with its work stated as nil.
+
+The other half of that argument was a real gap: **`schemaVersion` was written into every export
+and never once read.** A file from a newer app imported silently and whatever this version had no
+slot for went with it — carrying on with less while looking fine, which is what D24 forbids by
+name. `validateFile` now warns, and still imports: most of a newer file is ordinary, and refusing
+the whole thing would lose more than it saves.
+
+Three shapes travel now, and one name changed:
+
+- **Single-valued:** `type` · `technique` · `performedBy` · `tradition`
+- **Lists:** `effect` · `tissue` · `anatomy` · `context` · `equipment` · `demands`
+- **The anatomy facet is stored as `anatomy`, not `target`.** This document calls the facet
+  "target"; `target` on an item has meant sets/reps/seconds since PLAN §4.2. Two questions cannot
+  share one key on one object, and the older meaning keeps the name.
+
+**Values are not checked against the vocabularies, deliberately.** D40 says a vocabulary is data,
+and `carefulAudience` set the precedent: a validator deciding which values are legitimate is a
+validator writing content policy. Shape is `protocolFile.js`; vocabulary is `check-vocab` and the
+content build. An unrecognised facet value is carried, because somebody wrote it on purpose.
+
+### 9.2 The fold-in, applied
+
+`npm run catalog` now translates `muscles` and `regions` into `anatomy` node ids:
+**289 of 376 items carry them.** `st-ninety_ninety` is the case worth looking at — four overlapping
+source strings (`hip internal/external rotation`, `hips`, `hip internal rotation`,
+`hip external rotation`) become three ids (`hip`, `hip-external-rotation`, `hip-internal-rotation`).
+
+Three rules, and the middle one is the point:
+
+- **The source strings are kept.** A translation, not a replacement: the strings are what the
+  source said, the ids are what we think it meant, and the evidence stays until a person has read
+  the rows. When the ids are trusted the strings can go, in a commit that says so.
+- **A string with no worklist row stops the build.** Authoring a new muscle name is easy and
+  silent; a catalogue that quietly carried one untranslated would drift straight back to the
+  94-strings problem this replaces.
+- **`notAnatomy` rows contribute nothing.** Inventing a node for `posture` so the numbers look
+  tidy is how a vocabulary starts lying.
+
+The four still-flagged rows were applied as proposals and the build prints each one by name — one
+item apiece.
 
 ---
 

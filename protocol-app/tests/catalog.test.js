@@ -14,7 +14,7 @@ import { readFile, writeFile, mkdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 
-import { mergeCatalog, readSource, collectSources } from '../scripts/build-catalog.mjs';
+import { mergeCatalog, readSource, collectSources, applyFoldin, versionOf } from '../scripts/build-catalog.mjs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 
@@ -155,7 +155,15 @@ test('the frozen import says where it came from and has not been edited', async 
 });
 
 test('the shipped catalogue is exactly its sources, and the authored file is in it', async () => {
+  // The version is taken AFTER the anatomy fold-in, because the fold-in is part
+  // of what ships. Hashing the merge alone left library.json carrying the
+  // version string of the untagged catalogue for one build — a cache key
+  // pointing at content that no longer existed.
+  const nodes = new Map(JSON.parse(await readFile(url('../src/content/vocab/anatomy.json'), 'utf8')).nodes.map((n) => [n.id, n]));
+  const foldin = JSON.parse(await readFile(url('../src/content/vocab/anatomy-foldin.json'), 'utf8'));
   const built = mergeCatalog(await collectSources());
+  built.items = applyFoldin(built.items, foldin, nodes).items;
+  built.version = versionOf(built.items);
   const shipped = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
 
   assert.equal(shipped.version, built.version, 'library.json is up to date — run `npm run catalog`');
@@ -170,6 +178,39 @@ test('the shipped catalogue is exactly its sources, and the authored file is in 
   assert.ok(laser, 'the PT module landed in the catalogue');
   assert.equal(laser.levels.length, 3, 'and kept its three rungs');
   assert.equal(laser.levels[0].name, 'Hand-held', 'starting at the regressed rung the clinic actually used');
+
+  // The fold-in ran, and the messiest string in the catalogue came out clean.
+  const ninety = shipped.items.find((i) => i.id === 'st-ninety_ninety');
+  assert.deepEqual(ninety.muscles, ['hip internal/external rotation', 'hips', 'hip internal rotation', 'hip external rotation'],
+    'the source strings are kept — this is a translation, not a replacement');
+  assert.deepEqual(ninety.anatomy, ['hip', 'hip-external-rotation', 'hip-internal-rotation'],
+    'and the ids beside them say what it meant');
+});
+
+test('a muscle name with no fold-in row stops the build rather than shipping untranslated', () => {
+  // Authoring a new muscle name is easy and silent. A catalogue that carried it
+  // untranslated would drift straight back to the ninety-four-strings problem
+  // the graph replaces, so it fails loudly instead (D24).
+  const nodes = new Map([['hip', { id: 'hip' }]]);
+  const foldin = { entries: [{ from: 'hips', to: ['hip'] }] };
+  assert.throws(
+    () => applyFoldin([item('a', 'A', { muscles: ['hips', 'the bit that clicks'] })], foldin, nodes),
+    /the bit that clicks/,
+  );
+});
+
+test('a notAnatomy row contributes nothing rather than inventing a node', () => {
+  const nodes = new Map([['upper-back', { id: 'upper-back' }]]);
+  const foldin = { entries: [{ from: 'posture', notAnatomy: true, why: 'a quality' }, { from: 'upper back', to: ['upper-back'] }] };
+  const { items } = applyFoldin([item('a', 'A', { muscles: ['posture', 'upper back'] })], foldin, nodes);
+  assert.deepEqual(items[0].anatomy, ['upper-back']);
+});
+
+test('an item with nothing to translate is left exactly as it was', () => {
+  const nodes = new Map([['hip', { id: 'hip' }]]);
+  const only = item('a', 'A');
+  const { items } = applyFoldin([only], { entries: [] }, nodes);
+  assert.equal(items[0], only, 'not even copied — untouched');
 });
 
 test('merge: an audience tag left inside fields stops the build rather than shipping inert', () => {
