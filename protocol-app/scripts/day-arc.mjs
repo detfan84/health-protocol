@@ -19,21 +19,38 @@
 //   never schedules inside somebody's coffee; it schedules alongside it.
 //
 //   Which is why this block is NOT called "while the kettle boils" any more
-//   (Kevin, 29 Aug). It was for one commit, and that was the law being stated
-//   in this comment and broken seventy lines below it: the kettle is one
-//   person's ritual, and naming the block after it hands every other reader
-//   somebody else's morning. It also shrank the principle to a single moment.
-//   The point is bigger than the rise block — a seated hold, something while
-//   the dishes are being done, a balance drill in front of the television,
-//   anything ordinary turned into a rep. That layer is FRAMEWORK part 4 and it
-//   is not built; the block name is not the place to smuggle it in. The block
-//   states the principle, the example lives in `tool` where a person can read
-//   past it, and the ritual stays theirs.
+//   (Kevin, 29 Aug). The kettle is one person's ritual, and naming the block
+//   after it hands every other reader somebody else's morning.
+//
+//   The replacement, "While you're already up", lasted a day and was wrong for
+//   a quieter reason (Kevin, same day): "some things are while you are seated
+//   or lying down." A name that presumes you are standing rules out most of
+//   the layer it is supposed to hold. So the name states the principle and
+//   presumes no posture, and the example lives in `tool` where a person can
+//   read past it.
+//
+//   And with the name came the shape. This block has NO WINDOW: a thing you do
+//   whenever you are already doing something else cannot be scheduled for
+//   07:00–10:00 without becoming a different thing. Kevin saw the trap in the
+//   same breath — "that one will perpetually be front and center unless they
+//   have done 3 per day already so that's not right either" — so every item in
+//   it is `timesPerDay: 3`. Three passes through the block and it stops asking
+//   for the rest of the day. That cadence kind exists as of 29 Aug and this is
+//   what it was built for.
+//
+//   Still honest about what has NOT happened: all three items here are done on
+//   your feet. The name can now hold a seated hold or something done lying
+//   down; the content does not have one yet. That is FRAMEWORK part 4 and it
+//   is a content job, not a rename.
 //
 // The wake block follows the unwind-the-night principle: the morning bias
 // reverses whatever position the body held for hours. Sleep position is not
 // asked yet (D30 onboarding), so the shipped set is the one that suits the
 // most common posture and says so.
+
+// Three passes a day, and then it stops asking. Named because it is the whole
+// difference between an opportunity and an obligation.
+const SNACK = { kind: 'timesPerDay', n: 3 };
 
 export function dayArcProtocol(now) {
   const floor = (id, name, seconds, why, fields) => ({
@@ -49,7 +66,7 @@ export function dayArcProtocol(now) {
   return {
     id: 'seed-day-arc',
     name: 'The day arc',
-    notes: 'Four anchors: before you get up, while you are already up and doing something else, before bed, and in bed. Each one has a sixty-second version that counts — miss the long one and the floor is still the whole thing.',
+    notes: 'Four anchors: before you get up, woven into whatever you are already doing, before bed, and in bed. Each one has a sixty-second version that counts — miss the long one and the floor is still the whole thing. The woven one has no time on it and asks three times a day; when you have had your three it goes quiet.',
     active: true,
     phases: [],
     blocks: [
@@ -98,23 +115,26 @@ export function dayArcProtocol(now) {
       },
       {
         id: 'arc-rise',
-        name: 'While you’re already up',
-        start: '07:00',
-        end: '10:00',
+        name: 'Woven into what you’re already doing',
+        // No start, no end, on purpose — see the header note.
         order: 1,
         items: [
-          floor('arc-rise-fold', 'Forward fold, hanging', 60,
-            'The floor version. One minute while something else is happening.',
-            {
-              tool: 'Whatever you already do first — coffee brewing, the shower warming up.',
-              release: 'Feet hip-width, knees soft — never locked back. Fold and hang. Let the head go. Sway a little if it helps.',
-              notice: 'The hamstrings stop arguing after about thirty seconds. That is the point where it starts working.',
-              careful: 'Soft knees, always. Locking them to reach further is the exact thing this is undoing.',
-            }),
+          {
+            ...floor('arc-rise-fold', 'Forward fold, hanging', 60,
+              'The floor version. One minute while something else is happening.',
+              {
+                tool: 'Whatever you are already doing and can stand up in — the kettle, the shower warming, a call you do not have to look at.',
+                release: 'Feet hip-width, knees soft — never locked back. Fold and hang. Let the head go. Sway a little if it helps.',
+                notice: 'The hamstrings stop arguing after about thirty seconds. That is the point where it starts working.',
+                careful: 'Soft knees, always. Locking them to reach further is the exact thing this is undoing.',
+              }),
+            cadence: SNACK,
+          },
           {
             id: 'arc-rise-hips',
             name: 'Hip circles',
             dose: '30 sec each way',
+            cadence: SNACK,
             why: 'The hips have not moved through their own range in eight hours.',
             tracking: 'duration',
             amount: { seconds: 60 },
@@ -127,6 +147,7 @@ export function dayArcProtocol(now) {
             id: 'arc-rise-horse',
             name: 'Horse stance, rocks and shifts',
             dose: '60–90 sec',
+            cadence: SNACK,
             why: 'Wakes up the deep hip and pelvic-floor work that standing all day never asks for.',
             tracking: 'duration',
             amount: { seconds: 75 },

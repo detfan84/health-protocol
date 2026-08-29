@@ -6,7 +6,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
 import {
-  cadenceOf, cadenceLabel, weekStart, daysBetween, addDays, dueToday,
+  cadenceOf, cadenceLabel, weekStart, daysBetween, addDays, dueToday, timesDone,
 } from '../src/lib/cadence.js';
 import { makePause, unavailableReason, makeSupply } from '../src/app/trackerOps.js';
 import { buildToday } from '../src/app/todayModel.js';
@@ -210,8 +210,116 @@ test('the day arc ships as anchors, and every anchor has a sixty-second floor', 
     assert.ok(/floor version/i.test(first.why ?? ''), `${b.name}: the floor says it is the floor`);
   }
 
-  // Anchors are stable and daily by design (law 4) — no cadence thinning here.
+  // Anchors are stable and daily by design (law 4). The rule is that no anchor
+  // may SKIP A DAY — `timesPerWeek`, `everyNDays` and `asNeeded` all thin the
+  // rhythm and are banned here. `timesPerDay` does the opposite: it is the same
+  // every single day and merely says how many goes that day holds, which is
+  // what stops the opportunity block asking forever (29 Aug).
   const arcItems = arc.blocks.flatMap((b) => b.items);
-  assert.equal(arcItems.some((i) => i.cadence), false, 'anchors are the same every day on purpose');
+  const thinning = arcItems
+    .filter((i) => i.cadence && i.cadence.kind !== 'timesPerDay')
+    .map((i) => `${i.id}:${i.cadence.kind}`);
+  assert.deepEqual(thinning, [], 'anchors are the same every day on purpose');
+
+  // And the one that repeats says how many times, or it asks forever.
+  const woven = arc.blocks.find((b) => /woven into/i.test(b.name));
+  assert.ok(woven, `the opportunity anchor must ship — blocks are ${JSON.stringify(names)}`);
+  assert.equal(woven.start, undefined, 'a thing you do whenever cannot carry a start time');
+  for (const it of woven.items) {
+    assert.equal(it.cadence?.kind, 'timesPerDay', `${it.id} has no daily cap, so it would never stop asking`);
+    assert.ok(it.cadence.n >= 1);
+  }
   assert.ok(arcItems.every((i) => i.fields?.release), 'every anchor item says how to do it');
+});
+
+/* --------------------------- three goes a day -------------------------- */
+//
+// Kevin, 29 Aug, on the block that rides along with whatever you are already
+// doing: "that one will perpetually be front and center unless they have done
+// 3 per day already so that's not right either." A thing with no window cannot
+// be switched off by the clock, and a single daily tick cannot count it.
+
+test('a three-a-day item counts up, then stops asking', async () => {
+  const { toggleCheck } = await import('../src/app/trackerOps.js');
+  const item = { id: 'snack', name: 'Forward fold', cadence: { kind: 'timesPerDay', n: 3 } };
+  const today = '2026-08-29';
+  let day = { date: today, checks: {}, food: [], updatedAt: 'x' };
+  const stillDue = () => dueToday(item, today, { [today]: day });
+
+  assert.equal(stillDue().due, true, 'nothing done yet');
+  assert.equal(stillDue().doneToday, 0);
+
+  for (const expected of [1, 2]) {
+    day = toggleCheck(day, item.id, {}, 3);
+    assert.equal(stillDue().doneToday, expected);
+    assert.equal(stillDue().due, true, `${expected} of 3 is not three`);
+  }
+
+  day = toggleCheck(day, item.id, {}, 3);
+  assert.equal(stillDue().doneToday, 3);
+  assert.equal(stillDue().due, false, 'three is three — it stops asking');
+  assert.equal(stillDue().reason, 'day-target-met');
+
+  // A fourth tap wraps to nothing rather than counting past the target: the
+  // way back is to keep tapping, which is at most three taps and needs no
+  // second control.
+  day = toggleCheck(day, item.id, {}, 3);
+  assert.equal(day.checks[item.id], undefined);
+  assert.equal(stillDue().due, true);
+
+  // And tomorrow is a fresh day — the count does not carry.
+  assert.equal(dueToday(item, '2026-08-30', { [today]: day }).doneToday, 0);
+});
+
+test('a plain item is untouched by any of this', async () => {
+  const { toggleCheck } = await import('../src/app/trackerOps.js');
+  const day0 = { date: 'd', checks: {}, food: [], updatedAt: 'x' };
+  const on = toggleCheck(day0, 'plain', { at: 't' });
+  assert.equal(on.checks.plain.at, 't');
+  assert.equal(on.checks.plain.ats, undefined, 'nothing to list when there is one of it');
+  assert.equal(toggleCheck(on, 'plain').checks.plain, undefined, 'still a toggle');
+});
+
+test('a record written before repeats existed counts as one go, not none', () => {
+  assert.equal(timesDone({ at: '2026-08-01T07:00:00Z' }), 1, 'a check that exists means somebody tapped');
+  assert.equal(timesDone(undefined), 0);
+  assert.equal(timesDone({ at: 'x', ats: ['a', 'b'] }), 2);
+});
+
+test('a repeatable item done twice puts both doses back when it is cleared', async () => {
+  const { applyCheckToggle } = await import('../src/app/trackerOps.js');
+  const item = { id: 'mag', name: 'Magnesium', cadence: { kind: 'timesPerDay', n: 2 } };
+  const supply0 = { count: 10, unitsPerDose: 1, unitName: 'capsule' };
+
+  let { day, supply } = applyCheckToggle({ day: { date: 'd', checks: {}, food: [] }, item, supply: supply0 });
+  assert.equal(supply.count, 9, 'one dose out');
+  ({ day, supply } = applyCheckToggle({ day, item, supply }));
+  assert.equal(supply.count, 8, 'two doses out');
+
+  // Cleared: the bottle gets both back, not one.
+  ({ day, supply } = applyCheckToggle({ day, item, supply }));
+  assert.equal(day.checks[item.id], undefined);
+  assert.equal(supply.count, 10, 'a tick against a bottle that never went back up is a record that lies');
+});
+
+test('a timed block says when it ends, or it swallows the rest of the day', async () => {
+  // todayModel runs a block with no `end` until the NEXT timed block starts.
+  // "Morning flow, 07:00, no end" therefore owned the Now card until the
+  // evening, and before that it had collapsed to a zero-length window because
+  // another block happened to start at 07:00 too. Both readings were accidents
+  // of what else was scheduled. A block that belongs to a part of the day says
+  // which part.
+  const { readFile } = await import('node:fs/promises');
+  const text = await readFile(new URL('../src/content/starter.json', import.meta.url), 'utf8');
+  const file = JSON.parse(text);
+
+  const openEnded = [];
+  for (const p of file.data.protocols) {
+    for (const b of p.blocks) {
+      // The last block of the night is the one honest exception: "in bed,
+      // winding down" ends when you are asleep, not at a time anybody types.
+      if (b.start && !b.end && b.start < '22:00') openEnded.push(`${p.id}/${b.id} at ${b.start}`);
+    }
+  }
+  assert.deepEqual(openEnded, [], 'these run until whatever is scheduled next, which is not a decision anybody made');
 });

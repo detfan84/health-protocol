@@ -47,6 +47,7 @@ import { icon } from './icons.js';
 import { buildToday } from '../todayModel.js';
 import { localDateKey, displayTime, timeFormatOf } from '../../lib/core.js';
 import { lengthForYou, lengthTextForYou } from '../../lib/durations.js';
+import { cadenceOf, timesOn } from '../../lib/cadence.js';
 
 /**
  * How a protocol presents itself on the menu. Seeded protocols get a look;
@@ -179,6 +180,19 @@ export async function viewHome({ open, startSession, now = new Date() }) {
   const shape = dayShape(today.groups);
   const startOf = (b) => () => startSession(b.protocolId, b.blockId);
 
+  // A block with no window whose items are asked for several times a day: the
+  // opportunity layer. Found by SHAPE rather than by id, so a plan somebody
+  // builds themselves gets the same treatment as the shipped one.
+  const opportunity = shape.anytime.find((b) => b.items.some((it) => cadenceOf(it).kind === 'timesPerDay'));
+  const opportunityTarget = opportunity
+    ? Math.max(...opportunity.items.map((it) => cadenceOf(it).n ?? 1))
+    : 0;
+  // The least-done item is where the block as a whole has got to: two of the
+  // three done twice and one done once is one full pass, not two.
+  const opportunityDone = opportunity
+    ? Math.min(...opportunity.items.map((it) => timesOn(day, it.id)))
+    : 0;
+
   if (shape.now.length) {
     const b = shape.now[0];
     root.append(
@@ -199,6 +213,29 @@ export async function viewHome({ open, startSession, now = new Date() }) {
         ),
       ),
     );
+  } else if (opportunity) {
+    // The clock has nothing, but the plan does: a block with no window whose
+    // items are asked for several times a day is the ONE thing that is always
+    // legitimately "now". Offering it is not the app choosing for somebody —
+    // choosing is what a plan is, and this is what theirs says to do whenever.
+    //
+    // Kevin, 29 Aug, naming the trap in the same breath as the idea: "that one
+    // will perpetually be front and center unless they have done 3 per day
+    // already so that's not right either." So it carries its own count, and
+    // when the count is met every item in it reads as done, the block leaves
+    // the open groups, and this branch stops firing for the rest of the day.
+    const b = opportunity;
+    root.append(
+      h('section', {},
+        h('h2.section-title', {}, 'Now'),
+        h('div.card.now-card', {},
+          h('h3.now-name', {}, b.name),
+          h('p.now-sub', {}, `${opportunityDone} of ${opportunityTarget} today · ${lengthLabel(b, history)}`),
+          h('button.btn.primary.now-start', { onclick: startOf(b) },
+            opportunityDone ? 'Another go' : 'Start'),
+        ),
+      ),
+    );
   } else {
     const next = shape.later[0];
     root.append(
@@ -208,11 +245,11 @@ export async function viewHome({ open, startSession, now = new Date() }) {
           h('h3.now-name', {}, next && next.start
             ? `Nothing until ${displayTime(next.start, fmt)}`
             : 'Nothing on the clock'),
-          // Deliberately no button. The obvious move is to offer one of the
-          // anytime blocks here, and the app would then be choosing for
-          // somebody — "nothing here judges what you pick" is the library's
-          // rule and it does not stop applying because there is a gap in the
-          // clock. It says what is true and the Anytime fold is right below.
+          // Deliberately no button. Offering an ARBITRARY anytime block here
+          // would be the app choosing for somebody — "nothing here judges what
+          // you pick" is the library's rule and it does not stop applying
+          // because there is a gap in the clock. The opportunity block above is
+          // the one exception, and only because the plan itself says "whenever".
           h('p.now-sub.no-gap', {}, shape.anytime.length
             ? `${countItems(shape.anytime)} things you can do any time today.`
             : 'Nothing is asking for you right now.'),
@@ -254,7 +291,8 @@ export async function viewHome({ open, startSession, now = new Date() }) {
   };
 
   const later = shape.later;
-  const anytime = shape.anytime;
+  // Not listed twice: when it is the Now card it is not also a folded line.
+  const anytime = shape.now.length ? shape.anytime : shape.anytime.filter((b) => b !== opportunity);
   const done = today.groups.done;
 
   if (later.length || anytime.length || done.length) {

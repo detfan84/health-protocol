@@ -112,12 +112,21 @@ const bodyBlocks = SECTIONS.map((section, order) => ({
 // because a routine you actually do beats a longer one you skip. The others
 // are one edit away in the same file.
 
-function flowBlock(routine, { id, name, start, minutes }) {
+// `end` is not optional here, and the 29 Aug home screen is why. A block with
+// a start and no end runs until the NEXT timed block begins (todayModel), so
+// "Morning flow, 07:00, no end" was open until the evening — which put it
+// front and centre on the Now card at two in the afternoon. It had been
+// hiding behind an accident: another block also started at 07:00, so the
+// morning flow's window collapsed to nothing and it read as missed instead.
+// Both readings were wrong, and neither was written down anywhere. A block
+// that belongs to a part of the day says when that part ends.
+function flowBlock(routine, { id, name, start, end, minutes }) {
   const list = routine?.durations?.[minutes] ?? [];
   return {
     id,
     name,
     start,
+    end,
     order: 0,
     items: list.map((step, i) => {
       // The old helper hands over { key, name, duration, note, details… } —
@@ -145,10 +154,10 @@ function flowBlock(routine, { id, name, start, minutes }) {
 }
 
 const morning = flowBlock(STRETCHING_ROUTINES.morning, {
-  id: 'flow-morning', name: 'Morning flow', start: '07:00', minutes: 10,
+  id: 'flow-morning', name: 'Morning flow', start: '07:00', end: '11:00', minutes: 10,
 });
 const evening = flowBlock(STRETCHING_ROUTINES.evening, {
-  id: 'flow-evening', name: 'Evening wind-down', start: '21:00', minutes: 10,
+  id: 'flow-evening', name: 'Evening wind-down', start: '21:00', end: '23:59', minutes: 10,
 });
 evening.order = 1;
 

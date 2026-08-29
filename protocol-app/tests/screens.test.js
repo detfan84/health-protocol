@@ -1276,3 +1276,78 @@ test('the session clock only counts while it is running', async () => {
   const day = await store.loadDay(localDateKey());
   assert.equal(day.log?.a1?.took, undefined, 'browsing is not a time');
 });
+
+// Kevin, 29 Aug: "that one will perpetually be front and center unless they
+// have done 3 per day already so that's not right either."
+//
+// The block that rides along with whatever you are already doing has no window,
+// so nothing on the clock can retire it. Three passes does.
+test('the whenever block is offered when the clock is empty, and goes quiet after three', async () => {
+  const { viewHome } = await import('../src/app/ui/viewHome.js');
+  const { localDateKey } = await import('../src/lib/core.js');
+  const { toggleCheck } = await import('../src/app/trackerOps.js');
+  store._resetForTests();
+  await store.ready({ name: 'screens-8d' });
+
+  const snack = { kind: 'timesPerDay', n: 3 };
+  await store.saveProtocol({
+    id: 'seed-day-arc', name: 'The day arc', active: true, phases: [],
+    blocks: [
+      { id: 'arc-rise', name: 'Woven into what you’re already doing', order: 0, items: [
+        { id: 'r1', name: 'Forward fold, hanging', cadence: snack },
+        { id: 'r2', name: 'Hip circles', cadence: snack },
+      ] },
+      { id: 'arc-bed', name: 'In bed, winding down', start: '22:00', order: 1,
+        items: [{ id: 'b1', name: 'Foot swings' }] },
+    ],
+    createdAt: 'x', updatedAt: 'x',
+  });
+
+  // Mid-afternoon: nothing is on the clock, so the whenever block is what Now
+  // is for. It is not the app picking something — it is the plan saying so.
+  const noon = new Date();
+  noon.setHours(14, 0, 0, 0);
+  const started = [];
+  const drawHome = async () => {
+    draw(await viewHome({ open: () => {}, startSession: (p, b) => started.push(b), now: noon }));
+    await settled();
+    return document.querySelector('main');
+  };
+
+  let main = await drawHome();
+  let card = main.querySelector('.now-card');
+  assert.match(card.querySelector('.now-name').textContent, /Woven into/);
+  assert.match(card.querySelector('.now-sub').textContent, /0 of 3 today/);
+  card.querySelector('button.btn.primary').dispatchEvent(new Event('click'));
+  assert.deepEqual(started, ['arc-rise'], 'and it starts that block');
+
+  // It is offered in ONE place — a card and a folded line for the same block is
+  // the wall of obligation coming back in through the side door.
+  const folds = [...main.querySelectorAll('details.day-fold')].map((d) => d.querySelector('summary').textContent);
+  assert.equal(folds.some((f) => /^Anytime/.test(f)), false, 'not listed twice');
+
+  // Two passes: still asking, and the count says where you are.
+  const date = localDateKey();
+  for (const pass of [1, 2]) {
+    let day = await store.loadDay(date);
+    for (const id of ['r1', 'r2']) day = toggleCheck(day, id, {}, 3);
+    await store.saveDay(day);
+    main = await drawHome();
+    assert.match(main.querySelector('.now-sub').textContent, new RegExp(`${pass} of 3 today`));
+    assert.match(main.querySelector('.now-card').textContent, /Another go/);
+  }
+
+  // The third pass retires it for the day. Now says what is true and offers
+  // nothing, because there is nothing the plan asks for.
+  let day = await store.loadDay(date);
+  for (const id of ['r1', 'r2']) day = toggleCheck(day, id, {}, 3);
+  await store.saveDay(day);
+  main = await drawHome();
+  assert.doesNotMatch(main.querySelector('.now-card').textContent, /Woven into/,
+    'three is three — it stops being front and centre');
+  assert.equal(main.querySelector('.now-card button'), null, 'and nothing is offered in its place');
+  // Gone from the day, not gone from the record.
+  const done = [...main.querySelectorAll('details.day-fold')]
+    .find((d) => /^Done today/.test(d.querySelector('summary').textContent));
+  assert.ok(done, 'what you did is still reachable');
+});

@@ -23,7 +23,7 @@ import {
   applyCheckToggle, setCheckUnits,
 } from '../trackerOps.js';
 import { unitsOf, stepMl, volumeUnitLabel, displayVolume, parseVolume, weightUnitLabel, displayWeight, parseWeight, unitsForItem, cleanByEquipment } from '../../lib/units.js';
-import { cadenceOf, cadenceLabel, addDays, dueToday } from '../../lib/cadence.js';
+import { cadenceOf, cadenceLabel, addDays, dueToday, timesOn } from '../../lib/cadence.js';
 import { seriesFor, summarise, sparkPath, summaryText } from '../../lib/readings.js';
 import { paceOf, paceText } from '../../lib/durations.js';
 import { guarded } from './announcer.js';
@@ -495,7 +495,7 @@ function trainingBlock(item, day, { units: globalUnits, byEquipment, writeKey, o
   return host;
 }
 
-function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, cadence, weekly, writeKey = localDateKey, units = 'imperial', byEquipment, lastTime, history } = {}) {
+function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, cadence, weekly, times, writeKey = localDateKey, units = 'imperial', byEquipment, lastTime, history } = {}) {
   const pressed = Boolean(day.checks[item.id]);
   const btn = h(
     'button.check',
@@ -624,6 +624,7 @@ function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, 
         // reference (law 5, and canon 3.8's erosion across surfaces).
         item.tier === 'exploratory' ? h('span.chip.cadence', {}, 'Exploratory') : null,
         cadence ? h('span.chip.cadence', {}, cadence) : null,
+        times ? h('span.chip.cadence', {}, times) : null,
         weekly ? h('span.chip.cadence', {}, weekly) : null,
       ),
       why ? h('span.why', {}, why) : null,
@@ -854,6 +855,7 @@ export async function viewToday({ reload, stamp, date: viewing, startSession, mo
         unavailable: unavailableReason(it.id, { pause: state.pauses[it.id], supply: state.supplies[it.id] }),
         cadence: cadenceChip(it),
         weekly: weeklyChip(it),
+        times: timesChip(it),
       })),
     );
   }
@@ -905,6 +907,23 @@ export async function viewToday({ reload, stamp, date: viewing, startSession, mo
     const due = dueToday(item, date, state.history);
     if (!Number.isFinite(due.doneThisWeek) || !Number.isFinite(due.target)) return null;
     return `${due.doneThisWeek} of ${due.target} this week`;
+  }
+
+  /**
+   * "1 of 3 today" — and this one is NOT opt-in, unlike the weekly count.
+   *
+   * The weekly number is a target reflected back at somebody, which is why R17
+   * makes it a choice. This is the state of a control. A three-a-day item that
+   * showed nothing after a tap would look broken: the row does not leave the
+   * screen, the tick does not fill, and the only way to know whether the tap
+   * landed is to remember. Law 2 bans meters that score the person; a counter
+   * that says which of three taps you are on is the row telling you what it
+   * just did.
+   */
+  function timesChip(item) {
+    const c = cadenceOf(item);
+    if (c.kind !== 'timesPerDay') return null;
+    return `${timesOn(day, item.id)} of ${c.n} today`;
   }
 
   /** R16: stop asking, or start again. Both are one write and a re-sort. */

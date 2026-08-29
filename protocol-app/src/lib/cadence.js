@@ -8,23 +8,51 @@
 //
 // The shapes (PLAN §4.1):
 //   { kind: 'daily' }                     — the default; absent means this
+//   { kind: 'timesPerDay', n }            — n separate goes in ONE day (29 Aug)
 //   { kind: 'timesPerWeek', n }           — any n days in the week count (K1)
 //   { kind: 'everyNDays', n }             — every other day, weekly, …
 //   { kind: 'asNeeded' }                  — present, never due, never overdue
 //
+// `timesPerDay` is the one the opportunity layer needed. Kevin, 29 Aug, on a
+// block meant to ride along with whatever you are already doing: "that one
+// will perpetually be front and center unless they have done 3 per day
+// already so that's not right either." A thing you do several times a day has
+// no window, so a schedule cannot switch it off and a single daily tick cannot
+// count it — the only thing that stops it asking is having done it enough
+// times today.
+//
 // Nothing here scores anybody. "Due" answers one question — should this be on
 // today's screen — and a target that is already met simply stops asking.
 
-export const CADENCE_KINDS = ['daily', 'timesPerWeek', 'everyNDays', 'asNeeded'];
+export const CADENCE_KINDS = ['daily', 'timesPerDay', 'timesPerWeek', 'everyNDays', 'asNeeded'];
+
+/**
+ * How many times an item was done on a day.
+ *
+ * A check has always been one record, and `ats` is the list of moments behind
+ * it. Absent means the record predates repeats — which is exactly one go, not
+ * none, because a record that exists means somebody tapped it. Deriving the
+ * count from the list rather than storing both keeps one source of truth.
+ */
+export function timesDone(check) {
+  if (!check) return 0;
+  return Array.isArray(check.ats) && check.ats.length ? check.ats.length : 1;
+}
+
+/** How many times this item was done on a given day record. */
+export function timesOn(dayRecord, itemId) {
+  return timesDone(dayRecord?.checks?.[itemId]);
+}
 
 /** The cadence an item actually has. Absent, junk or unknown → daily. */
 export function cadenceOf(item) {
   const c = item?.cadence;
   if (!c || !CADENCE_KINDS.includes(c.kind)) return { kind: 'daily' };
-  if (c.kind === 'timesPerWeek' || c.kind === 'everyNDays') {
+  if (c.kind === 'timesPerDay' || c.kind === 'timesPerWeek' || c.kind === 'everyNDays') {
     const n = Number(c.n);
     if (!Number.isInteger(n) || n < 1) return { kind: 'daily' }; // a broken n is not a schedule
-    return { kind: c.kind, n: Math.min(n, c.kind === 'timesPerWeek' ? 7 : 365) };
+    const cap = c.kind === 'timesPerWeek' ? 7 : c.kind === 'timesPerDay' ? 24 : 365;
+    return { kind: c.kind, n: Math.min(n, cap) };
   }
   return { kind: c.kind };
 }
@@ -35,6 +63,7 @@ export function cadenceLabel(cadence) {
   if (c.kind === 'daily') return 'Every day';
   if (c.kind === 'asNeeded') return 'When needed';
   if (c.kind === 'everyNDays') return c.n === 1 ? 'Every day' : c.n === 2 ? 'Every other day' : `Every ${c.n} days`;
+  if (c.kind === 'timesPerDay') return c.n === 1 ? 'Once a day' : `${c.n}× a day`;
   return c.n === 7 ? 'Every day' : `${c.n}× a week`;
 }
 
@@ -83,6 +112,20 @@ export function dueToday(item, today, history = {}) {
   }
   if (c.kind === 'daily') {
     return { due: true, reason: 'daily', cadence: c };
+  }
+  if (c.kind === 'timesPerDay') {
+    // Unlike the weekly target, a met daily target is DONE rather than still
+    // on screen: the whole point is that it stops asking once you have had
+    // your three, and there is no later in the day for it to come back from.
+    const done = timesOn(history[today], item.id);
+    const due = done < c.n;
+    return {
+      due,
+      reason: due ? 'day-target-open' : 'day-target-met',
+      doneToday: done,
+      target: c.n,
+      cadence: c,
+    };
   }
   if (c.kind === 'timesPerWeek') {
     const start = weekStart(today);

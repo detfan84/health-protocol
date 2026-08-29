@@ -17,7 +17,7 @@
 // (Automatic advancing by phase length is the next foundation item on the
 // roadmap, not this session; the stored startedAt is what it will need.)
 
-import { dueToday, daysBetween, addDays } from '../lib/cadence.js';
+import { dueToday, daysBetween, addDays, cadenceOf, timesOn } from '../lib/cadence.js';
 import { dateKeyFromIso } from '../lib/core.js';
 import { unavailableReason } from './trackerOps.js';
 
@@ -233,7 +233,15 @@ export function buildToday({
   }
 
   const ordered = [...timed, ...untimed];
-  const checked = (it) => Boolean(day?.checks?.[it.id]);
+  // "Done" for a repeatable item is having had your three, not having tapped
+  // once. Without this a 3×-a-day thing would leave the screen on the first
+  // tap and never ask again, which is the opposite failure to the one
+  // timesPerDay exists to fix.
+  const checked = (it) => {
+    const c = cadenceOf(it);
+    if (c.kind === 'timesPerDay') return timesOn(day, it.id) >= c.n;
+    return Boolean(day?.checks?.[it.id]);
+  };
   const part = (block, items) => ({ ...block, items });
   const groups = { now: [], missed: [], anytime: [], later: [], done: [], unavailable: [], asNeeded: [] };
 

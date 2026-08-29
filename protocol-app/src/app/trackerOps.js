@@ -14,6 +14,7 @@
 // counts survive export → wipe → import like everything else.
 
 import { newId, nowIso } from '../lib/core.js';
+import { cadenceOf, timesDone } from '../lib/cadence.js';
 import { legacyGlassesToMl } from '../lib/units.js';
 
 function clone(x) {
@@ -73,11 +74,21 @@ export function normalizeDay(day, date) {
  * `snapshot` may be a plain ISO string, which is the older call shape and still
  * means "just the moment".
  */
-export function toggleCheck(day, itemId, snapshot = {}) {
+export function toggleCheck(day, itemId, snapshot = {}, target = 1) {
   const s = typeof snapshot === 'string' ? { at: snapshot } : (snapshot ?? {});
   const d = clone(day);
-  if (d.checks[itemId]) {
+  const existing = d.checks[itemId];
+  const already = timesDone(existing);
+
+  // A repeatable item counts up and then wraps to nothing. One tap does one
+  // thing, the same tap in the same place, and the way back is to keep going
+  // rather than to hunt for a second control — which on a three-a-day item is
+  // at most three taps and needs no new affordance. A plain item still has a
+  // target of one, so this is the old behaviour exactly.
+  if (existing && already >= Math.max(1, target)) {
     delete d.checks[itemId];
+  } else if (existing) {
+    d.checks[itemId] = { ...existing, ats: [...atsOf(existing), s.at ?? nowIso()] };
   } else {
     const rec = { at: s.at ?? nowIso() };
     // Every field optional, and absent means "not configured" rather than
@@ -86,10 +97,19 @@ export function toggleCheck(day, itemId, snapshot = {}) {
     if (s.dose) rec.dose = String(s.dose);
     if (Number.isFinite(s.units)) rec.units = s.units;
     if (s.unitName) rec.unitName = String(s.unitName);
+    // The list is only written where repeats are possible: a once-a-day item
+    // has nothing to list, and `at` already says when.
+    if (target > 1) rec.ats = [rec.at];
     d.checks[itemId] = rec;
   }
   d.updatedAt = nowIso();
   return d;
+}
+
+/** Every moment behind a check, oldest first — one is still a list of one. */
+function atsOf(check) {
+  if (Array.isArray(check?.ats) && check.ats.length) return check.ats;
+  return check?.at ? [check.at] : [];
 }
 
 /* ------------------------------ supply dose --------------------------- */
@@ -133,11 +153,16 @@ function moveCount(supply, delta) {
  * editable line after the tap is where somebody says what they really took.
  */
 export function applyCheckToggle({ day, item, supply, at = nowIso() } = {}) {
+  const cadence = cadenceOf(item);
+  const target = cadence.kind === 'timesPerDay' ? cadence.n : 1;
   const existing = day.checks?.[item.id];
+  const already = timesDone(existing);
 
-  if (existing) {
-    const next = toggleCheck(day, item.id);
-    const back = Number.isFinite(existing.units) ? existing.units : 0;
+  // Wrapping back to nothing returns everything the day took — a three-a-day
+  // supplement that has been tapped twice puts two doses back, not one.
+  if (existing && already >= target) {
+    const next = toggleCheck(day, item.id, {}, target);
+    const back = Number.isFinite(existing.units) ? existing.units * already : 0;
     return { day: next, supply: moveCount(supply, back) };
   }
 
@@ -148,7 +173,7 @@ export function applyCheckToggle({ day, item, supply, at = nowIso() } = {}) {
     snapshot.unitName = supply.unitName;
   }
   return {
-    day: toggleCheck(day, item.id, snapshot),
+    day: toggleCheck(day, item.id, snapshot, target),
     supply: perDose === null ? undefined : moveCount(supply, -snapshot.units),
   };
 }

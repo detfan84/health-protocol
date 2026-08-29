@@ -23,6 +23,7 @@ import { guarded } from './announcer.js';
 import { localDateKey } from '../../lib/core.js';
 import { applyCheckToggle, addSet, updateSet, trainingLog, setTook } from '../trackerOps.js';
 import { unitsOf, weightUnitLabel, displayWeight, parseWeight, unitsForItem, cleanByEquipment } from '../../lib/units.js';
+import { cadenceOf, timesOn } from '../../lib/cadence.js';
 
 const FIELD_ORDER = [
   ['release', 'Do this'],
@@ -124,12 +125,16 @@ export async function viewSession({ protocolId, blockId, done }) {
   root.append(stage);
 
   function markDone(item, then) {
+    const c = cadenceOf(item);
+    const target = c.kind === 'timesPerDay' ? c.n : 1;
     guarded(
-      // Passing an item marks it done ONCE — running the same block twice must
-      // not take a second dose out of the bottle. The supply moves with the
-      // tick, in one transaction (decision 22).
+      // Passing an item marks it done once — running the same block twice must
+      // not take a second dose out of the bottle. "Once" means once per go a
+      // thing is actually asked for, so a three-a-day item counts up to three
+      // and then stops. The supply moves with the tick, in one transaction
+      // (decision 22).
       () => store.mutateDayWithSupply(localDateKey(), item.id, ({ day: fresh, supply }) =>
-        (fresh.checks[item.id] ? { day: fresh } : applyCheckToggle({ day: fresh, item, supply }))),
+        (timesOn(fresh, item.id) >= target ? { day: fresh } : applyCheckToggle({ day: fresh, item, supply }))),
       {
         what: `The check-off for ${item.name}`,
         onOk: (next) => { Object.assign(day, next); then?.(); },
@@ -179,7 +184,9 @@ export async function viewSession({ protocolId, blockId, done }) {
     const item = items[index];
     const seconds = item.amount?.seconds;
     const isTimed = item.tracking === 'duration' && Number.isFinite(seconds);
-    const alreadyDone = Boolean(day.checks[item.id]);
+    const itemCadence = cadenceOf(item);
+    const dayTarget = itemCadence.kind === 'timesPerDay' ? itemCadence.n : 1;
+    const alreadyDone = timesOn(day, item.id) >= dayTarget;
 
     /* ------------------------------- header ------------------------------ */
     stage.append(
