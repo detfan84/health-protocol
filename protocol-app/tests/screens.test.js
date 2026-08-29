@@ -397,12 +397,16 @@ test('sets and reps are recorded, shown back, and survive an un-tick', async () 
   assert.ok(day.checks['ex-squat'], 'logging work marks the work done');
 
   // Type real numbers into it.
+  // Selected by label rather than by position. Indexing broke the moment a
+  // per-set `seconds` field was added between them, which is what positional
+  // selectors do.
   const inputs = [...document.querySelectorAll('.set-row input')];
-  inputs[0].value = '12';
-  inputs[0].dispatchEvent(new Event('change'));
+  const field = (rx) => inputs.find((i) => rx.test(i.getAttribute('aria-label') ?? ''));
+  field(/^Reps in set 1/).value = '12';
+  field(/^Reps in set 1/).dispatchEvent(new Event('change'));
   await settled(10);
-  inputs[1].value = '95';
-  inputs[1].dispatchEvent(new Event('change'));
+  field(/^Weight in set 1/).value = '95';
+  field(/^Weight in set 1/).dispatchEvent(new Event('change'));
   await settled(10);
 
   day = await store.loadDay(today);
@@ -1051,4 +1055,69 @@ test('kind and category are gone from every shipped item', async () => {
   assert.deepEqual(lib.items.find((i) => i.id === 'ex-pallof-press').pattern, ['brace']);
   assert.deepEqual(lib.items.find((i) => i.id === 'ex-woodchop').pattern, ['rotate'],
     'and the substring rule that found a "hop" inside "Woodchop" was corrected by hand');
+});
+
+test('a set can be timed rather than counted, and the number survives', async () => {
+  // Kevin, 29 Aug: "some of the sets weren't reps but a timed duration — 30
+  // seconds, 60 seconds, 90 seconds." `cleanSet` has kept a per-set `seconds`
+  // since the training log was built, and nothing had ever offered it.
+  store._resetForTests();
+  await store.ready({ name: 'screens-timed-sets' });
+  await store.saveProtocol({
+    id: 'p-t', name: 'Training', active: true, phases: [],
+    blocks: [{ id: 'b', name: 'Work', order: 0, items: [
+      { id: 'ex-plank', name: 'Plank', tracking: 'sets', amount: { sets: 3, seconds: 45 } },
+    ] }],
+    createdAt: 'x', updatedAt: 'x',
+  });
+
+  draw(await viewToday({}));
+  await settled();
+  for (const card of document.querySelectorAll('details')) card.open = true;
+  await settled();
+  [...document.querySelectorAll('button')].find((b) => /Log a set/.test(b.textContent)).dispatchEvent(new Event('click'));
+  await settled();
+
+  const inputs = [...document.querySelectorAll('.set-row input')];
+  const sec = inputs.find((i) => /^Seconds in set 1/.test(i.getAttribute('aria-label') ?? ''));
+  assert.ok(sec, `no per-set seconds field — got ${JSON.stringify(inputs.map((i) => i.getAttribute('aria-label')))}`);
+  sec.value = '45';
+  sec.dispatchEvent(new Event('change'));
+  await settled();
+
+  const { localDateKey } = await import('../src/lib/core.js');
+  const day = await store.loadDay(localDateKey());
+  assert.equal(day.log['ex-plank'].sets[0].seconds, 45);
+  // Reps and seconds are alternatives, not a pair. Neither invents the other.
+  assert.equal(day.log['ex-plank'].sets[0].reps, undefined);
+});
+
+test('the session clock only counts while it is running', async () => {
+  // Kevin, 29 Aug: "there has to be a way to know if you are just browsing
+  // through the cards and not exercising… it shouldn't automatically record if
+  // just skipping through, it should have a pause."
+  store._resetForTests();
+  await store.ready({ name: 'screens-session-clock' });
+  await store.saveProtocol({
+    id: 'p-s', name: 'Block', active: true, phases: [],
+    blocks: [{ id: 'b', name: 'Work', order: 0, items: [
+      { id: 'a1', name: 'Front of hip' }, { id: 'a2', name: 'Hamstrings' },
+    ] }],
+    createdAt: 'x', updatedAt: 'x',
+  });
+  const { viewSession } = await import('../src/app/ui/viewSession.js');
+  draw(await viewSession({ protocolId: 'p-s', blockId: 'b', done: () => {} }));
+  await settled();
+
+  const go = [...document.querySelectorAll('button')].find((b) => /^Start$/.test(b.textContent));
+  assert.ok(go, 'every card offers a clock, not only the timed ones');
+  assert.match(document.body.textContent, /reading a card is not doing it/);
+
+  // Skip straight past without starting it: nothing is recorded, because
+  // nothing happened.
+  [...document.querySelectorAll('button')].find((b) => /Done —/.test(b.textContent)).dispatchEvent(new Event('click'));
+  await settled();
+  const { localDateKey } = await import('../src/lib/core.js');
+  const day = await store.loadDay(localDateKey());
+  assert.equal(day.log?.a1?.took, undefined, 'browsing is not a time');
 });

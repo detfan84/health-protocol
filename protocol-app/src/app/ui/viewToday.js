@@ -430,6 +430,26 @@ function trainingBlock(item, day, { units, writeKey, onLogged, lastTime, history
                   `Set ${i + 1} of ${item.name}`);
               },
             })),
+          // A set is not always reps. Kevin, 29 Aug: "some of the sets weren't
+          // reps but a timed duration — 30 seconds, 60 seconds, 90 seconds."
+          // `cleanSet` has kept a per-set `seconds` since the training log was
+          // built and nothing has ever offered it, so a timed set had to be
+          // written down as a rep count or not at all.
+          h('div', {},
+            h('label', {}, `Set ${i + 1} · sec`),
+            h('input', {
+              type: 'number', min: '0', inputmode: 'numeric',
+              value: Number.isFinite(set.seconds) ? String(set.seconds) : '',
+              placeholder: '—',
+              'aria-label': `Seconds in set ${i + 1} of ${item.name}`,
+              onchange: (e) => {
+                const n = Number(e.target.value);
+                write(
+                  (fresh) => updateSet(fresh, item.id, i, { seconds: Number.isFinite(n) && n > 0 ? n : undefined }),
+                  `Set ${i + 1} of ${item.name}`,
+                );
+              },
+            })),
           h('div', {},
             h('label', {}, `Weight (${wLabel})`),
             h('input', {

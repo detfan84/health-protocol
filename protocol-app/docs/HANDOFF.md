@@ -232,10 +232,25 @@ exactly what their pace is, and for some things, they might get quicker over tim
 same as `seconds`, a duration-tracked dose. A plank held for forty-five seconds and a
 body-work card that took you four minutes are different numbers.
 
-**Two ways it arrives, and they are not the same claim.** The session runner measures the
-gap between putting a card on screen and being told to move on (`source: 'session'`) — real,
-and it also counts reading the card and answering the door. A typed number is somebody
-saying (`source: 'typed'`), and it always wins: the runner never overwrites it.
+**Two ways it arrives, and they are not the same claim.** A typed number is somebody saying
+(`source: 'typed'`) and it always wins. The other is the session's own clock — **explicit,
+and it does not run by itself.**
+
+The first version measured the gap between putting a card on screen and being told to move
+on, which counted reading, deciding and walking away, and could not tell any of those from
+the movement. Kevin, same day: *"there has to be a way to know if you are just browsing
+through the cards and not exercising, or if someone takes a break to grab a drink or go to
+the bathroom or take a phone call… it shouldn't automatically record if just skipping
+through, it should have a pause, and a way to correct the final time."*
+
+So every card in the runner carries **Start / Pause / Resume**, and time accrues only while
+it runs. Flick through ten cards without starting one and **nothing is recorded**, which is
+the right answer because nothing happened. Take a call and the clock waits. A duration item's
+countdown drives the same total, so a timed hold counts as work without a second button. The
+card says it out loud: *"Only counts while it is running. Leave it alone and nothing is
+recorded — reading a card is not doing it."*
+
+Correcting it is the typed field on Today, which always wins over the clock.
 
 **A measurement the instrument cannot make is not recorded.** Over an hour from the runner
 is dropped — somebody who left the app open did not spend two hours on one release, and
@@ -258,3 +273,17 @@ day it is actually being used.**
 Not wired into the home screen yet. `lengthForYou` exists and is tested; `viewHome` still
 calls `lengthOf`. That is a one-line change and belongs with the home-screen work, where the
 copy can say which kind of number it is showing.
+
+### Timed sets (29 Aug)
+
+Kevin: *"some of the sets weren't reps but a timed duration — 30 seconds, 60 seconds, 90
+seconds."*
+
+`cleanSet` in `trackerOps.js` has kept a per-set `seconds` since the training log was built,
+and **nothing had ever offered it** — so a timed set had to be written down as a rep count
+or not at all. Both the Today card and the session runner now show `reps · sec · weight`,
+with reps and seconds as alternatives rather than a pair: neither invents the other.
+
+One test-writing note that cost a green suite: `tests/screens.test.js` selected set inputs by
+**position** (`inputs[0]`, `inputs[1]`), so adding a field between them broke it. They select
+by `aria-label` now, which is what the rest of the suite does.

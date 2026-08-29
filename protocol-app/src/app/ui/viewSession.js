@@ -59,12 +59,36 @@ export async function viewSession({ protocolId, blockId, done }) {
   let index = 0;
   let timer = null;
   let remaining = 0;
-  // When the current card was put on screen. The runner can measure how long a
-  // person spent on it, which is a real number and an imperfect one: it counts
-  // reading the card and answering the door as well as doing the thing. It is
-  // recorded as `source: 'session'`, never over a typed value, and not at all
-  // when it is implausible — see setTook.
-  let shownAt = null;
+  /* -------------------------- the working clock -------------------------- *
+   *
+   * Kevin, 29 Aug: "there has to be a way to know if you are just browsing
+   * through the cards and not exercising, or if someone takes a break to grab a
+   * drink or go to the bathroom or take a phone call."
+   *
+   * So the clock is explicit and it does not run by itself. Time accrues only
+   * between a Start and a Pause. Flick through ten cards without starting one
+   * and nothing is recorded at all — which is the right answer, because
+   * nothing happened. Take a call and the clock waits.
+   *
+   * This replaces measuring the gap between showing a card and being told to
+   * move on. That number counted reading, deciding and walking away, and it had
+   * no way to tell any of those from the movement.
+   */
+  let ran = 0;            // milliseconds accrued on the current card
+  let runningSince = null;
+  const isRunning = () => runningSince !== null;
+
+  function startRun() {
+    if (runningSince === null) runningSince = Date.now();
+  }
+  function pauseRun() {
+    if (runningSince === null) return;
+    ran += Date.now() - runningSince;
+    runningSince = null;
+  }
+  function ranSeconds() {
+    return Math.round((ran + (runningSince === null ? 0 : Date.now() - runningSince)) / 1000);
+  }
   let wakeLock = null;
 
   // A guided session is the one screen where the phone must not sleep in your
@@ -78,9 +102,15 @@ export async function viewSession({ protocolId, blockId, done }) {
   }
   holdScreen();
 
+  // Anything a card started that has to be stopped when the card goes away.
+  // A stopwatch left ticking behind a dead screen is a battery leak and a
+  // number nobody meant.
+  let timers = [];
   function stopTimer() {
     if (timer) clearInterval(timer);
     timer = null;
+    for (const off of timers) off();
+    timers = [];
   }
 
   function leave() {
@@ -108,17 +138,19 @@ export async function viewSession({ protocolId, blockId, done }) {
   }
 
   function recordElapsed() {
-    if (shownAt == null) return;
-    const seconds = Math.round((Date.now() - shownAt) / 1000);
-    shownAt = null;
+    pauseRun();
+    const seconds = Math.round(ran / 1000);
+    ran = 0;
     const item = items[index];
-    if (!item || seconds < 3) return; // a card flicked past is not a time
+    // No clock started means nothing to say. Browsing is not a time.
+    if (!item || seconds < 1) return;
     store.mutateDay(date, (fresh) => setTook(fresh, item.id, seconds, { source: 'session' }))
       .catch(() => {}); // a pace nobody asked for must never interrupt a session
   }
 
   function advance() {
     stopTimer();
+    pauseRun();
     recordElapsed();
     if (index >= items.length - 1) return finish();
     index += 1;
@@ -141,7 +173,8 @@ export async function viewSession({ protocolId, blockId, done }) {
 
   function render() {
     clear(stage);
-    shownAt = Date.now();
+    ran = 0;
+    runningSince = null;
     const item = items[index];
     const seconds = item.amount?.seconds;
     const isTimed = item.tracking === 'duration' && Number.isFinite(seconds);
@@ -220,11 +253,42 @@ export async function viewSession({ protocolId, blockId, done }) {
 
       const setLabel = () => { startBtn.textContent = timer ? 'Pause' : (remaining === seconds ? 'Start' : 'Resume'); };
       startBtn.addEventListener('click', () => {
-        if (timer) { stopTimer(); } else { timer = setInterval(tick, 1000); }
+        if (timer) { stopTimer(); pauseRun(); } else { timer = setInterval(tick, 1000); startRun(); }
         setLabel();
       });
       setLabel();
       stage.append(h('div.session-timer', {}, clock, startBtn));
+    }
+
+    /* ---------------------- the clock, for everything else ---------------- */
+    // A countdown already has Start and Pause, and its running time feeds the
+    // same total. Everything else gets a plain stopwatch: it is the only thing
+    // that separates doing this from reading about it.
+    if (!isTimed) {
+      const clock = h('div.session-clock', { 'aria-live': 'off' }, format(0));
+      const goBtn = h('button.btn.session-go', {});
+      let ticker = null;
+
+      const paint = () => {
+        clock.textContent = format(ranSeconds());
+        goBtn.textContent = isRunning() ? 'Pause' : (ranSeconds() ? 'Resume' : 'Start');
+      };
+      goBtn.addEventListener('click', () => {
+        if (isRunning()) {
+          pauseRun();
+          clearInterval(ticker); ticker = null;
+        } else {
+          startRun();
+          ticker = setInterval(paint, 1000);
+        }
+        paint();
+      });
+      paint();
+      stage.append(
+        h('div.session-timer', {}, clock, goBtn),
+        h('p.why', {}, 'Only counts while it is running. Leave it alone and nothing is recorded — reading a card is not doing it.'),
+      );
+      timers.push(() => { if (ticker) clearInterval(ticker); });
     }
 
     /* ------------------------------- sets --------------------------------- */
@@ -240,6 +304,13 @@ export async function viewSession({ protocolId, blockId, done }) {
               value: Number.isFinite(set.reps) ? String(set.reps) : '',
               'aria-label': `Reps in set ${i + 1}`,
               onchange: (e) => write((fresh) => updateSet(fresh, item.id, i, { reps: Number(e.target.value) || undefined })),
+            })),
+            h('div', {}, h('label', {}, `Set ${i + 1} · sec`), h('input', {
+              type: 'number', min: '0', inputmode: 'numeric',
+              value: Number.isFinite(set.seconds) ? String(set.seconds) : '',
+              placeholder: '—',
+              'aria-label': `Seconds in set ${i + 1} of ${item.name}`,
+              onchange: (e) => write((fresh) => updateSet(fresh, item.id, i, { seconds: Number(e.target.value) || undefined })),
             })),
             h('div', {}, h('label', {}, `Weight (${wLabel})`), h('input', {
               type: 'number', min: '0', step: '0.5', inputmode: 'decimal',
