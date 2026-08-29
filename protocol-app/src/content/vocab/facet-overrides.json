@@ -1,0 +1,278 @@
+{
+  "format": "protocol-app/facet-overrides-v1",
+  "version": 1,
+  "note": "Per-item effect calls that the derivation in scripts/facet-tags.mjs cannot make from `role` and `category` (TAXONOMY §2.3). Data rather than code because these are judgments, and a judgment nobody can read is a judgment nobody can correct. Every override names either a `rule` defined below or its own `why`.",
+  "rules": [
+    {
+      "id": "static-hold",
+      "why": "The `mobility` shelf holds two different things and effect is the field that must tell them apart. A position taken to an end range and held lengthens tissue; it does not move a joint through its range. Twenty-three items, and the ledger would have counted every one of them as mobility work."
+    },
+    {
+      "id": "through-range",
+      "why": "The other half of the same shelf: CARs, cat-cow, hip switches, windmills — a joint driven through its own range rather than a tissue held at the end of one."
+    }
+  ],
+  "overrides": [
+    {
+      "id": "ex-banded-hip-flexor-stretch",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-bretzel",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-butterfly",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-childs_pose",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-cobra",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-couch_stretch",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "ex-couch-stretch",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-chest_doorway",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-downward_dog",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "ex-figure-4-stretch",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-frog",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-neck_stretch",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-pigeon",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-seated_forward_fold",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-forward_fold",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-standing_hamstring",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-standing_quad",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-figure_four",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-hamstring_strap",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-calf_wall",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-spinal_twist_supine",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-deep_squat",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-lateral_lunge",
+      "effect": [
+        "lengthen"
+      ],
+      "rule": "static-hold"
+    },
+    {
+      "id": "st-ninety_ninety",
+      "effect": [
+        "mobilise"
+      ],
+      "rule": "through-range"
+    },
+    {
+      "id": "st-ankle_cars",
+      "effect": [
+        "mobilise"
+      ],
+      "rule": "through-range"
+    },
+    {
+      "id": "st-hip_cars",
+      "effect": [
+        "mobilise"
+      ],
+      "rule": "through-range"
+    },
+    {
+      "id": "st-shoulder_cars",
+      "effect": [
+        "mobilise"
+      ],
+      "rule": "through-range"
+    },
+    {
+      "id": "st-cat_cow",
+      "effect": [
+        "mobilise"
+      ],
+      "rule": "through-range"
+    },
+    {
+      "id": "ex-banded-ankle-dorsiflexion",
+      "effect": [
+        "mobilise"
+      ],
+      "rule": "through-range"
+    },
+    {
+      "id": "ex-banded-shoulder-dislocate",
+      "effect": [
+        "mobilise"
+      ],
+      "rule": "through-range"
+    },
+    {
+      "id": "st-thoracic_rotation",
+      "effect": [
+        "mobilise"
+      ],
+      "rule": "through-range"
+    },
+    {
+      "id": "st-scorpion",
+      "effect": [
+        "mobilise"
+      ],
+      "rule": "through-range"
+    },
+    {
+      "id": "st-worlds_greatest",
+      "effect": [
+        "mobilise"
+      ],
+      "rule": "through-range"
+    },
+    {
+      "id": "st-wall_slide",
+      "effect": [
+        "mobilise"
+      ],
+      "rule": "through-range"
+    },
+    {
+      "id": "st-thread_needle",
+      "effect": [
+        "mobilise",
+        "lengthen"
+      ],
+      "why": "Rotates through range and then holds at the end of it. Genuinely both, and the only item in the shelf that is."
+    },
+    {
+      "id": "st-legs_up_wall",
+      "effect": [
+        "calm",
+        "circulate"
+      ],
+      "why": "Filed under mobility and it stretches nothing. It is the restorative position at the end of the evening flow: downregulation, and drainage out of the legs."
+    },
+    {
+      "id": "ex-banded-shoulder-external-rotation",
+      "effect": [
+        "activate"
+      ],
+      "why": "A band makes this the standard rotator-cuff activation drill, not a mobility one. The shelf it sits on is wrong about it."
+    }
+  ]
+}

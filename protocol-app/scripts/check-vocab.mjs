@@ -27,6 +27,7 @@ export const LIBRARY = resolve(APP, 'src/content/library.json');
 export const OPPORTUNITIES = resolve(APP, 'src/content/vocab/opportunities.json');
 export const ANATOMY = resolve(APP, 'src/content/vocab/anatomy.json');
 export const FOLDIN = resolve(APP, 'src/content/vocab/anatomy-foldin.json');
+export const OVERRIDES = resolve(APP, 'src/content/vocab/facet-overrides.json');
 
 const rel = (p) => relative(APP, p).replace(/\\/g, '/');
 
@@ -69,6 +70,7 @@ export function validateVocab(vocab, label = 'facets.json') {
     if (!facet.id) say(`${at}: every facet needs an id.`);
     if (!facet.name) say(`${at}: needs a display name.`);
     if (!facet.question) say(`${at}: needs the one question it answers — see TAXONOMY.md §2.`);
+    if (facet.requiredFor && !Array.isArray(facet.requiredFor)) say(`${at}: "requiredFor" must be a list of type ids.`);
     for (const flag of ['required', 'multi', 'closed']) {
       if (typeof facet[flag] !== 'boolean') say(`${at}: "${flag}" must be true or false, not ${JSON.stringify(facet[flag])}.`);
     }
@@ -297,6 +299,35 @@ export function validateFoldin(file, nodes, items, label = 'anatomy-foldin.json'
   return entries;
 }
 
+/**
+ * The per-item effect overrides (TAXONOMY §2.3). These are judgments, so the
+ * one thing worth enforcing is that each can be read back: every override
+ * names a rule defined in the same file, or gives its own reason. An override
+ * with neither is somebody's opinion with the argument left out.
+ */
+export function validateOverrides(file, effectFacet, label = 'facet-overrides.json') {
+  const problems = [];
+  const known = new Set(effectFacet?.values.map((v) => v.id) ?? []);
+  const rules = new Set((file?.rules ?? []).map((r) => r.id));
+  for (const r of file?.rules ?? []) {
+    if (!r.why) problems.push(`rule "${r.id}": a rule without a reason explains nothing.`);
+  }
+  const seen = new Set();
+  for (const o of file?.overrides ?? []) {
+    const at = `override "${o.id ?? '(no id)'}"`;
+    if (!o.id) problems.push(`${at}: needs an item id.`);
+    if (seen.has(o.id)) problems.push(`${at}: duplicated.`);
+    seen.add(o.id);
+    if (!Array.isArray(o.effect) || !o.effect.length) problems.push(`${at}: needs an effect list.`);
+    for (const e of o.effect ?? []) if (!known.has(e)) problems.push(`${at}: "${e}" is not an effect.`);
+    if (!o.why && !rules.has(o.rule)) {
+      problems.push(`${at}: names no rule and gives no reason — one of the two, or the call cannot be argued with.`);
+    }
+  }
+  if (problems.length) throw new Error(`${label} has ${problems.length} problem${problems.length === 1 ? '' : 's'}:\n  - ${problems.join('\n  - ')}`);
+  return file.overrides;
+}
+
 /** What an opportunity leaves free — the complement used to match items. */
 export function fits(itemDemands = [], opportunity) {
   const taken = new Set(opportunity.occupies ?? []);
@@ -345,6 +376,7 @@ async function main() {
   let moments;
   let anatomy;
   let foldin;
+  let overrides;
   try {
     const vocab = await readJson(VOCAB);
     facets = validateVocab(vocab, rel(VOCAB));
@@ -352,6 +384,7 @@ async function main() {
     library = await readJson(LIBRARY);
     anatomy = validateAnatomy(await readJson(ANATOMY), rel(ANATOMY));
     foldin = validateFoldin(await readJson(FOLDIN), anatomy, library.items, rel(FOLDIN));
+    overrides = validateOverrides(await readJson(OVERRIDES), facets.get('effect'), rel(OVERRIDES));
   } catch (err) {
     console.error(`\ncheck-vocab: ${err.message}\n`);
     process.exit(1);
@@ -399,6 +432,7 @@ async function main() {
   for (const e of review) console.log(`  review   ${`"${e.from}"`.padEnd(40)} → ${e.to.join(', ')}  (${tags(e)} item tag${tags(e) === 1 ? '' : 's'})`);
   for (const e of notAnatomy) console.log(`  no home  ${`"${e.from}"`.padEnd(40)} ${tags(e)} item tag${tags(e) === 1 ? '' : 's'}`);
   console.log('  Nothing applies this yet — it is a worklist (TAXONOMY.md §9.4).');
+  console.log(`\neffect overrides: ${overrides.length} per-item calls, all with a rule or a reason.`);
 
   console.log('\nSpec: docs/TAXONOMY.md. The anatomy graph is seeded, not finished: a node earns its place when something can target it distinctly (§3).\n');
 }

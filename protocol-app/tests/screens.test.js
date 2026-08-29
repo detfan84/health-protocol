@@ -427,11 +427,22 @@ test('the library is comprehensive, merged, and every item can be picked up', as
   // curated day for one person (Kevin, 23 Aug).
   assert.ok(lib.items.length >= 250, `the library should be comprehensive, got ${lib.items.length}`);
 
-  const kinds = {};
-  for (const it of lib.items) kinds[it.kind] = (kinds[it.kind] ?? 0) + 1;
-  for (const kind of ['exercise', 'stretch', 'bodywork', 'practice', 'selftest']) {
-    assert.ok(kinds[kind] >= 10, `${kind}: only ${kinds[kind] ?? 0} — a filter with nothing behind it is worse than no filter`);
+  // Every browse chip has something behind it. This used to check `kind`, the
+  // five files of the 2025 app; it checks `effect` now, which is what the shelf
+  // is sliced by (TAXONOMY §8) and what a person can answer about themselves.
+  const effects = {};
+  for (const it of lib.items) for (const e of it.effect ?? []) effects[e] = (effects[e] ?? 0) + 1;
+  for (const e of ['release', 'lengthen', 'mobilise', 'load', 'activate', 'control', 'calm', 'circulate', 'condition']) {
+    assert.ok(effects[e] >= 5, `${e}: only ${effects[e] ?? 0} — a filter with nothing behind it is worse than no filter`);
   }
+  const types = {};
+  for (const it of lib.items) types[it.type] = (types[it.type] ?? 0) + 1;
+  assert.ok(types.measurement >= 10 && types.teaching >= 10 && types.practice >= 250, JSON.stringify(types));
+
+  // `mobility` was one shelf holding two different effects, and the ledger
+  // would have counted every static stretch as movement through range.
+  assert.ok(effects.lengthen >= 25 && effects.mobilise >= 20,
+    'the mobility shelf is split by what the items actually do, not by where they were filed');
 
   // Merged, not discarded: a name that exists in two source files keeps what
   // both knew, and does not vanish from its own category.
@@ -439,7 +450,7 @@ test('the library is comprehensive, merged, and every item can be picked up', as
   assert.equal(new Set(names).size, names.length, 'the same movement must not appear twice');
   const dog = lib.items.find((i) => /downward dog/i.test(i.name));
   assert.ok(dog, 'a stretch that also exists in the exercise library survives as itself');
-  assert.equal(dog.kind, 'stretch');
+  assert.deepEqual(dog.effect, ['lengthen'], 'and is filed by what it does, not by the file it came from');
   assert.ok(dog.fields?.release, 'and keeps its how-to');
 
   // Everything a person can pick has enough to act on.
@@ -459,7 +470,9 @@ test('the library is comprehensive, merged, and every item can be picked up', as
   const mute = [];
   for (const it of lib.items) {
     assert.ok(it.id && it.name, 'every item is identifiable');
-    assert.ok(it.kind, `${it.name} has no kind`);
+    assert.ok(it.type, `${it.name} has no type`);
+    assert.ok(it.kind === undefined, `${it.name} still carries "kind" — it was retired with schema 3`);
+    if (it.type === 'practice') assert.ok(it.effect?.length, `${it.name} is a practice that does nothing`);
     const ownWhy = it.why && whyCounts.get(it.why) === 1 ? it.why : null;
     if (!(it.fields?.release || it.levels?.length || ownWhy)) mute.push(`${it.id} "${it.name}"`);
   }

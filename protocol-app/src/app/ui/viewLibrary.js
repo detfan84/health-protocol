@@ -19,13 +19,40 @@ import * as store from '../store.js';
 import { guarded } from './announcer.js';
 import { newId, nowIso } from '../../lib/core.js';
 
-const KINDS = [
-  ['exercise', 'Strength & movement'],
-  ['stretch', 'Stretches'],
-  ['bodywork', 'Body work'],
-  ['practice', 'Daily practices'],
-  ['selftest', 'Measure yourself'],
+// The shelf you browse by is EFFECT — what a thing does to you — because it is
+// the facet a person can answer about themselves: tight, weak, wired
+// (TAXONOMY §8). This used to be `kind`, which sorted by which file of the 2025
+// app an item arrived in, so "Strength & movement" and "Stretches" held the
+// same work depending on its provenance.
+//
+// Plain words, not the ids. `mobilise` is the ledger's vocabulary; "move it
+// through its range" is what somebody is actually looking for.
+const EFFECTS = [
+  ['release', 'Release something tight'],
+  ['lengthen', 'Lengthen it'],
+  ['mobilise', 'Move it through its range'],
+  ['load', 'Load it'],
+  ['activate', 'Wake it up'],
+  ['control', 'Balance and control'],
+  ['calm', 'Settle down'],
+  ['circulate', 'Move fluid'],
+  ['condition', 'Build capacity'],
 ];
+// The other slice: what KIND of record it is. Practices are the default and
+// need no chip; these two are what a person asks for by name.
+const TYPES = [
+  ['measurement', 'Measure yourself'],
+  ['teaching', 'Read about it'],
+];
+const EFFECT_LABELS = Object.fromEntries(EFFECTS);
+const EQUIPMENT_LABELS = {
+  none: 'Nothing', ball: 'Ball', roller: 'Foam roller', band: 'Resistance band',
+  strap: 'Strap or towel', mat: 'Mat', wall: 'A wall', doorway: 'A doorway',
+  chair: 'A chair or bench', step: 'A step', dumbbell: 'Dumbbell',
+  kettlebell: 'Kettlebell', mace: 'Steel mace', rope: 'Jump rope',
+  'pullup-bar': 'Pull-up bar', 'balance-board': 'Balance board',
+  'acupressure-mat': 'Acupressure mat',
+};
 
 const FIELD_LABELS = {
   tool: 'You need',
@@ -88,9 +115,12 @@ export async function viewLibrary({ reload } = {}) {
   /* ------------------------------ filters ------------------------------ */
 
   const muscles = [...new Set(library.items.flatMap((i) => i.muscles ?? []))].sort();
-  const equipment = [...new Set(library.items.map((i) => i.equipment).filter(Boolean))]
-    .filter((e) => e.length < 24) // body-work "tools" are sentences; keep the list usable
-    .sort();
+  // `equipment` is the facet now: a list of ids from the vocabulary, not the
+  // free-text field it was derived from. That field held two things at once —
+  // 263 enum-ish values and 71 sentences written for a reader — and the sentence
+  // half was being offered as a dropdown option nobody could pick usefully. The
+  // prose stays where it belongs, in fields.tool.
+  const equipment = [...new Set(library.items.flatMap((i) => i.equipment ?? []))].sort();
 
   const search = h('input', {
     type: 'search',
@@ -108,9 +138,19 @@ export async function viewLibrary({ reload } = {}) {
     clear(filters);
     filters.append(
       h('div.chip-row', {},
-        chip('Everything', !state.kind, () => { state.kind = null; render(); }),
-        KINDS.map(([value, label]) =>
-          chip(label, state.kind === value, () => { state.kind = state.kind === value ? null : value; render(); })),
+        chip('Everything', !state.effect && !state.type, () => { state.effect = null; state.type = null; render(); }),
+        EFFECTS.map(([value, label]) =>
+          chip(label, state.effect === value, () => {
+            state.effect = state.effect === value ? null : value;
+            state.type = null;
+            render();
+          })),
+        TYPES.map(([value, label]) =>
+          chip(label, state.type === value, () => {
+            state.type = state.type === value ? null : value;
+            state.effect = null;
+            render();
+          })),
       ),
       h('div.field-row', { style: 'margin-top:var(--sp-2)' },
         h('div', {},
@@ -131,7 +171,7 @@ export async function viewLibrary({ reload } = {}) {
             onchange: (e) => { state.equipment = e.target.value || null; render(); },
           },
             [h('option', { value: '' }, 'Any')].concat(
-              equipment.map((m) => h('option', { value: m, selected: state.equipment === m }, m.replace(/_/g, ' '))),
+              equipment.map((m) => h('option', { value: m, selected: state.equipment === m }, EQUIPMENT_LABELS[m] ?? m.replace(/-/g, ' '))),
             ),
           ),
         ),
@@ -250,12 +290,16 @@ export async function viewLibrary({ reload } = {}) {
   /* ------------------------------ results ------------------------------ */
 
   function matches(item) {
-    if (state.kind && item.kind !== state.kind) return false;
+    if (state.effect && !(item.effect ?? []).includes(state.effect)) return false;
+    if (state.type && item.type !== state.type) return false;
     if (state.muscle && !(item.muscles ?? []).includes(state.muscle)) return false;
-    if (state.equipment && item.equipment !== state.equipment) return false;
+    if (state.equipment && !(item.equipment ?? []).includes(state.equipment)) return false;
     if (!state.q) return true;
     const hay = [
-      item.name, item.category, item.categoryName, item.equipment,
+      item.name, item.category, item.categoryName,
+      (item.equipment ?? []).join(' '),
+      item.type, (item.effect ?? []).map((e) => `${e} ${EFFECT_LABELS[e] ?? ''}`).join(' '),
+      (item.target ?? []).join(' '), item.technique, item.tradition,
       (item.muscles ?? []).join(' '), item.why,
       item.tier, evidenceOf(item.evidence).grade, evidenceOf(item.evidence).basis,
       item.dose, item.sourceNote,
@@ -266,7 +310,12 @@ export async function viewLibrary({ reload } = {}) {
   }
 
   function card(item) {
-    const kindLabel = KINDS.find(([k]) => k === item.kind)?.[1] ?? item.kind;
+    // What the card says it is: what it does, in the words above. A teaching
+    // card or a self-test says so instead, because neither does anything to
+    // the body and an empty effect on them is the truth, not a gap.
+    const doesLabel = item.type === 'practice'
+      ? (item.effect ?? []).map((e) => EFFECT_LABELS[e] ?? e).join(' · ')
+      : (TYPES.find(([t]) => t === item.type)?.[1] ?? item.type);
     // Which rung goes into the day. Defaults to the first, which is the
     // gentlest — a ladder's bottom rung is a real answer, not a failure state.
     let chosenLevel = item.levels?.[0]?.level;
@@ -282,9 +331,8 @@ export async function viewLibrary({ reload } = {}) {
         h('span.why', {},
           [
             TIER_LABELS[item.tier] ?? item.tier,
-            kindLabel,
-            item.categoryName ?? item.category,
-            item.equipment?.replace(/_/g, ' '),
+            doesLabel,
+            (item.equipment ?? []).join(', ').replace(/_/g, ' ') || null,
           ].filter(Boolean).join(' · '),
         ),
       ),
@@ -324,7 +372,7 @@ export async function viewLibrary({ reload } = {}) {
         : null,
       item.levels?.length
         ? h('div', { style: 'margin-top:var(--sp-3)' },
-            h('span.field-label', {}, item.kind === 'stretch' ? 'How hard' : 'Where to start'),
+            h('span.field-label', {}, (item.effect ?? []).includes('lengthen') ? 'How hard' : 'Where to start'),
             h('div', {}, item.levels.map((l) =>
               h('p.why', {}, `${l.level}. ${l.name}${l.note ? ` — ${l.note}` : ''}`))),
           )

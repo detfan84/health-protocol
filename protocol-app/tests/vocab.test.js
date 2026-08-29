@@ -135,9 +135,12 @@ test('a facet nothing is tagged with yet reads as untagged, not as zero coverage
 test('the vocabulary the app ships is valid', async () => {
   const byId = validateVocab(await readJson(VOCAB), 'src/content/vocab/facets.json');
   assert.ok(byId.size >= 9);
-  for (const required of ['type', 'effect']) {
-    assert.equal(byId.get(required).required, true, `${required} is a required facet`);
-  }
+  assert.equal(byId.get('type').required, true, 'type is required on everything');
+  // effect is required where it means something. A teaching card and a
+  // self-test do nothing to the body, so an empty effect on them is the truth
+  // rather than a gap.
+  assert.deepEqual(byId.get('effect').requiredFor, ['practice']);
+  assert.equal(byId.get('effect').required, false);
   for (const closed of ['type', 'effect', 'tissue']) {
     assert.equal(byId.get(closed).closed, true, `${closed} is a closed vocabulary`);
   }

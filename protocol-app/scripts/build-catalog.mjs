@@ -25,6 +25,7 @@
 // failure paths can be tested rather than demonstrated once and trusted.
 
 import { readFile, writeFile, readdir } from 'node:fs/promises';
+import { tagAll } from './facet-tags.mjs';
 import { existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { dirname, resolve, relative } from 'node:path';
@@ -39,6 +40,7 @@ export const AUTHORED = resolve(CONTENT, 'authored');
 export const OUT = resolve(CONTENT, 'library.json');
 export const ANATOMY_FILE = resolve(CONTENT, 'vocab/anatomy.json');
 export const FOLDIN_FILE = resolve(CONTENT, 'vocab/anatomy-foldin.json');
+export const OVERRIDES_FILE = resolve(CONTENT, 'vocab/facet-overrides.json');
 
 const rel = (p) => relative(APP, p).replace(/\\/g, '/');
 
@@ -302,7 +304,7 @@ async function main() {
   try {
     const nodes = new Map(JSON.parse(await readFile(ANATOMY_FILE, 'utf8')).nodes.map((n) => [n.id, n]));
     const applied = applyFoldin(catalog.items, JSON.parse(await readFile(FOLDIN_FILE, 'utf8')), nodes);
-    catalog.items = applied.items;
+    catalog.items = tagAll(applied.items, JSON.parse(await readFile(OVERRIDES_FILE, 'utf8')));
     catalog.version = versionOf(catalog.items);
     usedReview = applied.usedReview;
   } catch (err) {
@@ -313,12 +315,17 @@ async function main() {
 
   await writeFile(OUT, `${JSON.stringify(catalog)}\n`);
 
-  const byKind = {};
-  for (const it of catalog.items) byKind[it.kind] = (byKind[it.kind] ?? 0) + 1;
+  const byType = {};
+  const byEffect = {};
+  for (const it of catalog.items) {
+    byType[it.type] = (byType[it.type] ?? 0) + 1;
+    for (const e of it.effect ?? []) byEffect[e] = (byEffect[e] ?? 0) + 1;
+  }
   console.log(
     `catalog: ${catalog.items.length} items from ${catalog.sources.length} source${catalog.sources.length === 1 ? '' : 's'} —`,
-    Object.entries(byKind).map(([k, n]) => `${n} ${k}`).join(', '),
+    Object.entries(byType).map(([k, n]) => `${n} ${k}`).join(', '),
   );
+  console.log(`effect: ${Object.entries(byEffect).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k} ${n}`).join(' · ')}`);
   for (const s of catalog.sources) console.log(`  ${s.file}: ${s.items}`);
   console.log(`muscles: ${new Set(catalog.items.flatMap((i) => i.muscles ?? [])).size} · equipment: ${new Set(catalog.items.map((i) => i.equipment).filter(Boolean)).size}`);
   const tagged = catalog.items.filter((i) => i.target?.length).length;

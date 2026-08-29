@@ -15,6 +15,7 @@ import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 
 import { mergeCatalog, readSource, collectSources, applyFoldin, versionOf } from '../scripts/build-catalog.mjs';
+import { tagAll, typeOf, effectOf } from '../scripts/facet-tags.mjs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 
@@ -162,7 +163,8 @@ test('the shipped catalogue is exactly its sources, and the authored file is in 
   const nodes = new Map(JSON.parse(await readFile(url('../src/content/vocab/anatomy.json'), 'utf8')).nodes.map((n) => [n.id, n]));
   const foldin = JSON.parse(await readFile(url('../src/content/vocab/anatomy-foldin.json'), 'utf8'));
   const built = mergeCatalog(await collectSources());
-  built.items = applyFoldin(built.items, foldin, nodes).items;
+  const overrides = JSON.parse(await readFile(url('../src/content/vocab/facet-overrides.json'), 'utf8'));
+  built.items = tagAll(applyFoldin(built.items, foldin, nodes).items, overrides);
   built.version = versionOf(built.items);
   const shipped = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
 
@@ -338,4 +340,69 @@ test('the facet on an item is a list, and passes through untouched', () => {
   const nodes = new Map([['neck', { id: 'neck' }]]);
   const { items } = applyFoldin([item('a', 'A', { target: ['neck'] })], { entries: [] }, nodes);
   assert.deepEqual(items[0].target, ['neck']);
+});
+
+/* ------------------------- type and effect, derived ---------------------- */
+// TAXONOMY §1: `category` answered seven questions and `kind` answered which
+// file of the 2025 app an item came from. These derive the two facets that
+// replace them, so 376 items get tagged from what they already say rather than
+// from a week of hand-tagging and a week's worth of mistakes.
+
+test('role beats category, because role was authored per item', () => {
+  // The eleven activate/release items are the loading halves of release-and-load
+  // pairs. Their shelf says release; their role says activate; the role is what
+  // the item does.
+  assert.deepEqual(effectOf({ role: 'activate', category: 'release' }), ['activate']);
+  assert.deepEqual(effectOf({ role: 'release', category: 'entry-points' }), ['release']);
+  assert.deepEqual(effectOf({ category: 'kettlebell' }), ['load'], 'and category answers when role is silent');
+});
+
+test('a category with no mapping stops the build rather than being guessed at', () => {
+  assert.throws(
+    () => tagAll([{ id: 'x', name: 'X', category: 'somebody-added-a-shelf' }]),
+    /no effect mapping/,
+  );
+});
+
+test('an awareness cue is teaching only when it is not a drill', () => {
+  // The six eye drills carrying this role are timed; the ten explainers are
+  // ticked. The item says which by how it is tracked, so no list is needed.
+  assert.equal(typeOf({ role: 'awareness-cue', tracking: 'check' }), 'teaching');
+  assert.equal(typeOf({ role: 'awareness-cue', tracking: 'duration' }), 'practice');
+  assert.equal(typeOf({ role: 'technique-guide', tracking: 'duration' }), 'teaching');
+  assert.equal(typeOf({ kind: 'selftest' }), 'measurement');
+});
+
+test('teaching and measurement carry no effect, because they do nothing to you', () => {
+  assert.deepEqual(effectOf({ kind: 'selftest', category: 'measure' }), []);
+  const [card] = tagAll([{ id: 'g', name: 'G', role: 'technique-guide', category: 'release', tracking: 'check' }]);
+  assert.equal(card.type, 'teaching');
+  assert.ok(!('effect' in card), 'absent, not empty');
+});
+
+test('kind is dropped and what it really said is kept', () => {
+  const [kb] = tagAll([{ id: 'k', name: 'KB Swing', kind: 'exercise', category: 'kettlebell' }]);
+  assert.ok(!('kind' in kb), 'the provenance field retires with schema 3');
+  assert.deepEqual(kb.equipment, ['kettlebell'], 'and the equipment it was standing in for is a facet now');
+  const [mt] = tagAll([{ id: 'm', name: 'Jab', kind: 'exercise', category: 'martial_arts' }]);
+  assert.equal(mt.tradition, 'martial-arts', 'as is the tradition');
+});
+
+test('an override for an item that is not in the catalogue stops the build', () => {
+  // A rename or a deletion nobody followed through sits there being wrong
+  // silently. Every other file in this build fails loudly; so does this one.
+  assert.throws(
+    () => tagAll([{ id: 'a', name: 'A', category: 'mobility' }], { overrides: [{ id: 'gone', effect: ['load'] }] }),
+    /not in the catalogue/,
+  );
+});
+
+test('the shipped overrides split the mobility shelf by what the items do', async () => {
+  const lib = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
+  const held = lib.items.find((i) => i.id === 'st-pigeon');
+  const moved = lib.items.find((i) => i.id === 'st-hip_cars');
+  const neither = lib.items.find((i) => i.id === 'st-legs_up_wall');
+  assert.deepEqual(held.effect, ['lengthen'], 'a position held at end range lengthens');
+  assert.deepEqual(moved.effect, ['mobilise'], 'a joint driven through its range does not');
+  assert.deepEqual(neither.effect, ['calm', 'circulate'], 'and one of them was never a stretch at all');
 });

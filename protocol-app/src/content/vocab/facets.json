@@ -42,10 +42,10 @@
       "id": "effect",
       "name": "What it does",
       "question": "What does it do to the body?",
-      "required": true,
+      "required": false,
       "multi": true,
       "closed": true,
-      "note": "The coverage ledger counts in this vocabulary and the pairing law spends it, so every value here is a column in the ledger. The most expensive facet to change later — see TAXONOMY.md §11.1, still open.",
+      "note": "Required on a practice and meaningless without one: a teaching card and a self-test do nothing to the body, so an empty effect on them is the truth rather than a gap. The coverage ledger counts in this vocabulary and the pairing law spends it, so every value here is a column in the ledger. The most expensive facet to change later — see TAXONOMY.md §11.1, still open.",
       "values": [
         {
           "id": "release",
@@ -124,6 +124,9 @@
           ],
           "note": "Provisional — TAXONOMY.md §11.1 asks whether this is in v1 at all."
         }
+      ],
+      "requiredFor": [
+        "practice"
       ]
     },
     {

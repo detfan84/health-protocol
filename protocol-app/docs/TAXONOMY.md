@@ -619,13 +619,70 @@ What it costs to do properly, all of which happened here:
 
 | Field | Why it is still here | What it waits on |
 |---|---|---|
-| `kind` | provenance from the 2025 files (T7 says retire) | items carrying `type` |
-| `category` | seven questions in one field (§1) | items carrying `effect` |
+| ~~`kind`~~ | ~~provenance from the 2025 files~~ | **retired 29 Aug — §10.2** |
+| `category` | push/pull/legs is a movement pattern and no facet holds one | a `pattern` facet |
 | `muscles`, `regions` | evidence for the fold-in (§9.2) | the four review rows |
 | `everyNDays` | pre-dates `cadence` | nothing — a small sweep |
 
 None of them keeps its name because it is old. Each keeps it until the thing that replaces it can
 carry the information, which is a different argument and has an end.
+
+---
+
+## 10.2 · Tagging the catalogue, and why only one of the two retired
+
+All 376 items now carry `type` and, where they are practices, `effect`.
+
+```
+338 practice · 13 measurement · 25 teaching
+load 135 · release 81 · condition 37 · lengthen 32 · mobilise 24
+  · calm 17 · activate 15 · control 11 · circulate 9
+```
+
+**Derived, not hand-tagged**, from two sources in order of trust. `role` is already an effect on
+118 items and it wins, because it was authored per item rather than inherited from a shelf — the
+eleven `activate / release` items are the loading halves of release-and-load pairs, and their role
+is right where their shelf is wrong. `category` answers for the rest, one reading per value, and a
+value with no mapping **stops the build** rather than being guessed at.
+
+`type` needs no list at all. A self-test is a measurement; a technique guide is teaching; an
+awareness cue is teaching *when it is not a drill*, and the item says which by how it is tracked —
+the six eye drills carrying that role are timed, the ten explainers are ticked.
+
+**`effect` is now required only on a practice.** A teaching card and a self-test do nothing to the
+body, so an empty effect on them is the truth rather than a gap.
+
+### The 37 calls the derivation could not make
+
+`mobility` was one shelf holding two effects, and every static stretch on it would have been
+counted by the ledger as movement through range. `src/content/vocab/facet-overrides.json` splits
+it — 23 held positions to `lengthen`, 11 driven through range to `mobilise`, and three that needed
+their own reason. *Legs Up the Wall* is the one worth reading: filed under mobility, it stretches
+nothing, and it is `calm` + `circulate` — the restorative position at the end of the evening flow.
+
+The overrides are data, not code, because they are judgments and a judgment nobody can read is one
+nobody can correct. `check-vocab` enforces the only rule that matters: every override names a rule
+defined in the file or gives its own reason.
+
+### Why `kind` retired and `category` did not
+
+**`kind` carried nothing else.** bodywork · stretch · exercise · practice · selftest was the five
+source files of the 2025 app; `type` answers the only real question in it, and the rest was
+provenance. Dropped, and the two things it was standing in for kept: `kettlebell`, `mace` and
+`jump_rope` became `equipment`; `martial_arts` and `athletic` became `tradition`.
+
+**`category` still carries something nothing else can.** `push` (26), `pull` (22) and `legs` (29)
+are a movement pattern — one of the seven questions §1 named — and no facet holds one yet. Under
+§10.1 a legacy field keeps its name until its replacement can carry the information, and for those
+77 items this one still does. It retires when a `pattern` facet exists, and not before.
+
+### The browse screen slices by effect now
+
+`viewLibrary` filtered by `kind`, so "Strength & movement" and "Stretches" held the same work
+depending on which file it arrived in. The chips are effects in plain words — *release something
+tight · lengthen it · move it through its range · load it · wake it up* — with `measurement` and
+`teaching` as the two type slices a person asks for by name. This is §8 in code: the shelf is a
+view over one facet, and the default facet is the one somebody can answer about themselves.
 
 ---
 
@@ -644,7 +701,10 @@ carry the information, which is a different argument and has an end.
    the body ones. Adding pelvis · spine · arms · neck · breath · stance is what makes stacking
    computable — and it is worth checking whether one field should hold both kinds, or whether
    "what the room takes" and "what the body takes" are two questions wearing one name.
-6. **`role` today** — 118 items carry a `role` that mixes effect (`activate`, `release`, `stretch`,
+6. **A `pattern` facet** — push, pull, hinge, squat, carry, lunge, rotate. The last thing holding
+   `category` open (§10.2), and worth deciding whether a training-split concept belongs in a
+   catalogue at all or only in the routines that use it.
+7. **`role` today** — 118 items carry a `role` that mixes effect (`activate`, `release`, `stretch`,
    `balance`, `nerve-glide`) with type (`technique-guide`, `awareness-cue`). It splits across
    facets 1 and 2 and then retires. Deliberate or a rename?
 
@@ -681,6 +741,8 @@ stale by 118.
 - **T6 — vocabularies are versioned data with append-only ids** (§10), so the model can change
   without a migration.
 - **T7 — `kind` retires.** It is provenance, and it already disagrees with itself.
+- **T9 — `kind` retires, `category` waits for `pattern`.** A legacy field keeps its name only while
+  it carries information nothing else can (§10.1, §10.2).
 - **T8 — a held position is an opportunity.** Stacking is §6.3's match with the base supplied by
   the catalogue rather than the day, so it needs body resources in `demands` (§6.5) and no new
   subsystem. The `stack` relation is derived, never authored per pair (§6.6).
