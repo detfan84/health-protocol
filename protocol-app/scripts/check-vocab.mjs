@@ -25,6 +25,8 @@ const APP = resolve(here, '..');
 export const VOCAB = resolve(APP, 'src/content/vocab/facets.json');
 export const LIBRARY = resolve(APP, 'src/content/library.json');
 export const OPPORTUNITIES = resolve(APP, 'src/content/vocab/opportunities.json');
+export const ANATOMY = resolve(APP, 'src/content/vocab/anatomy.json');
+export const FOLDIN = resolve(APP, 'src/content/vocab/anatomy-foldin.json');
 
 const rel = (p) => relative(APP, p).replace(/\\/g, '/');
 
@@ -150,6 +152,103 @@ export function validateOpportunities(file, demands, label = 'opportunities.json
   return file.opportunities;
 }
 
+/**
+ * The anatomy graph (TAXONOMY.md §3). Multi-parent by design, so the checks are
+ * a graph's checks rather than a tree's: parents must resolve, and no node may
+ * reach itself. A cycle would make roll-up loop forever, and roll-up is the
+ * whole reason the graph exists — tag `glute-med-min`, find it under `hip`.
+ *
+ * Aliases are checked for collisions across the whole graph, not within a node.
+ * Two structures answering to "calf" is not a tidiness problem: it is a search
+ * that quietly returns one of them.
+ */
+export function validateAnatomy(file, label = 'anatomy.json') {
+  const problems = [];
+  if (!Array.isArray(file?.nodes) || file.nodes.length === 0) throw new Error(`${label}: no nodes.`);
+
+  const byId = new Map();
+  for (const node of file.nodes) {
+    const at = `node "${node.id ?? '(no id)'}"`;
+    if (!node.id) problems.push(`${at}: needs an id.`);
+    if (!node.name) problems.push(`${at}: needs a display name.`);
+    if (!node.kind) problems.push(`${at}: needs a kind (region, area, structure, joint, system).`);
+    if (byId.has(node.id)) problems.push(`${at}: duplicated.`);
+    byId.set(node.id, node);
+  }
+  for (const node of file.nodes) {
+    for (const parent of node.parents ?? []) {
+      if (!byId.has(parent)) problems.push(`node "${node.id}": parent "${parent}" does not exist.`);
+    }
+  }
+
+  // No node may reach itself through its parents.
+  const seen = new Map();
+  const walk = (id, trail) => {
+    if (trail.includes(id)) { problems.push(`cycle in the graph: ${[...trail, id].join(' → ')}.`); return; }
+    if (seen.get(id)) return;
+    for (const p of byId.get(id)?.parents ?? []) walk(p, [...trail, id]);
+    seen.set(id, true);
+  };
+  for (const node of file.nodes) walk(node.id, []);
+
+  const aliases = new Map();
+  for (const node of file.nodes) {
+    for (const a of [node.name, ...(node.also ?? [])]) {
+      const key = String(a).toLowerCase();
+      if (aliases.has(key) && aliases.get(key) !== node.id) {
+        problems.push(`"${a}" is a name or alias of both "${aliases.get(key)}" and "${node.id}" — a search for it can only find one.`);
+      }
+      aliases.set(key, node.id);
+    }
+  }
+
+  if (problems.length) throw new Error(`${label} has ${problems.length} problem${problems.length === 1 ? '' : 's'}:\n  - ${problems.join('\n  - ')}`);
+  return byId;
+}
+
+/** Every node a tag implies, itself included — what makes a query for "hip" find a glute. */
+export function rollUp(id, nodes) {
+  const out = new Set();
+  const walk = (n) => {
+    if (!n || out.has(n)) return;
+    out.add(n);
+    for (const p of nodes.get(n)?.parents ?? []) walk(p);
+  };
+  walk(id);
+  return [...out];
+}
+
+/**
+ * The fold-in worklist: the catalogue's free-text muscle strings mapped onto
+ * the graph. Checked, not applied — nothing reads it yet. What it must not do
+ * is point at a node that does not exist, or quietly stop covering the
+ * catalogue when somebody authors a new string.
+ */
+export function validateFoldin(file, nodes, items, label = 'anatomy-foldin.json') {
+  const problems = [];
+  const entries = file?.entries;
+  if (!Array.isArray(entries) || entries.length === 0) throw new Error(`${label}: no entries.`);
+
+  const mapped = new Set();
+  for (const e of entries) {
+    if (!e.from) { problems.push('an entry has no "from" string.'); continue; }
+    mapped.add(e.from);
+    if (e.notAnatomy) {
+      if (!e.why) problems.push(`"${e.from}" is marked notAnatomy with no reason — the reason is the useful half.`);
+      continue;
+    }
+    if (!Array.isArray(e.to) || e.to.length === 0) { problems.push(`"${e.from}": needs a "to" list, or notAnatomy.`); continue; }
+    for (const t of e.to) if (!nodes.has(t)) problems.push(`"${e.from}" maps to "${t}", which is not a node.`);
+    if (e.review && !e.why) problems.push(`"${e.from}" is flagged for review with no reason — a reviewer needs to know what the call was.`);
+  }
+
+  const inUse = new Set(items.flatMap((i) => i.muscles ?? []));
+  for (const s of inUse) if (!mapped.has(s)) problems.push(`the catalogue uses "${s}" and the worklist does not mention it.`);
+
+  if (problems.length) throw new Error(`${label} has ${problems.length} problem${problems.length === 1 ? '' : 's'}:\n  - ${problems.join('\n  - ')}`);
+  return entries;
+}
+
 /** What an opportunity leaves free — the complement used to match items. */
 export function fits(itemDemands = [], opportunity) {
   const taken = new Set(opportunity.occupies ?? []);
@@ -196,11 +295,15 @@ async function main() {
   let facets;
   let library;
   let moments;
+  let anatomy;
+  let foldin;
   try {
     const vocab = await readJson(VOCAB);
     facets = validateVocab(vocab, rel(VOCAB));
     moments = validateOpportunities(await readJson(OPPORTUNITIES), facets.get('demands'), rel(OPPORTUNITIES));
     library = await readJson(LIBRARY);
+    anatomy = validateAnatomy(await readJson(ANATOMY), rel(ANATOMY));
+    foldin = validateFoldin(await readJson(FOLDIN), anatomy, library.items, rel(FOLDIN));
   } catch (err) {
     console.error(`\ncheck-vocab: ${err.message}\n`);
     process.exit(1);
@@ -229,7 +332,20 @@ async function main() {
   }
   console.log('  (no item declares `demands` yet — TAXONOMY.md §9.3 has to land first.)');
 
-  console.log('\nSpec: docs/TAXONOMY.md. Anatomy (facet "target") is a separate file and is not built yet — §9.4.\n');
+  const kinds = {};
+  for (const n of anatomy.values()) kinds[n.kind] = (kinds[n.kind] ?? 0) + 1;
+  console.log(`\nanatomy: ${anatomy.size} nodes — ${Object.entries(kinds).map(([k, v]) => `${v} ${k}`).join(', ')}.`);
+
+  const clean = foldin.filter((e) => e.to && !e.review).length;
+  const review = foldin.filter((e) => e.review);
+  const notAnatomy = foldin.filter((e) => e.notAnatomy);
+  const tags = (e) => e.items ?? 0;
+  console.log(`fold-in: ${foldin.length} catalogue strings — ${clean} map cleanly, ${review.length} need a human, ${notAnatomy.length} were never anatomy.`);
+  for (const e of review) console.log(`  review   ${`"${e.from}"`.padEnd(40)} → ${e.to.join(', ')}  (${tags(e)} item tag${tags(e) === 1 ? '' : 's'})`);
+  for (const e of notAnatomy) console.log(`  no home  ${`"${e.from}"`.padEnd(40)} ${tags(e)} item tag${tags(e) === 1 ? '' : 's'}`);
+  console.log('  Nothing applies this yet — it is a worklist (TAXONOMY.md §9.4).');
+
+  console.log('\nSpec: docs/TAXONOMY.md. The anatomy graph is seeded, not finished: a node earns its place when something can target it distinctly (§3).\n');
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) await main();

@@ -13,7 +13,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { validateVocab, validateOpportunities, fits, coverage, readJson, VOCAB, LIBRARY, OPPORTUNITIES } from '../scripts/check-vocab.mjs';
+import { validateVocab, validateOpportunities, validateAnatomy, validateFoldin, rollUp, fits, coverage, readJson, VOCAB, LIBRARY, OPPORTUNITIES, ANATOMY, FOLDIN } from '../scripts/check-vocab.mjs';
 
 const facet = (id, values, extra = {}) => ({
   id,
@@ -208,4 +208,86 @@ test('the shipped moments are valid, and the hand ordering holds across all of t
   for (const o of list) {
     if (o.occupies.includes('one-hand')) assert.ok(o.occupies.includes('hands'), `${o.id} blocks one-handed work without blocking two-handed work`);
   }
+});
+
+/* ---------------------------- the anatomy graph -------------------------- */
+// TAXONOMY.md §3. A graph, not a tree — the upper trapezius belongs to the
+// neck, the shoulder girdle and the upper back at once — so these are a
+// graph's invariants: parents resolve, nothing reaches itself, and roll-up
+// terminates. Roll-up is the whole reason it exists: tag a glute, find it
+// under "hip".
+
+const graph = (nodes) => ({ format: 'protocol-app/anatomy-v1', version: 1, nodes });
+const node = (id, parents = [], also = []) => ({ id, name: id, kind: 'structure', parents, also });
+
+test('a parent that does not exist is refused', () => {
+  assert.throws(() => validateAnatomy(graph([node('glute-max', ['hip'])])), /parent "hip" does not exist/);
+});
+
+test('a cycle is refused — roll-up would never terminate', () => {
+  assert.throws(
+    () => validateAnatomy(graph([node('a', ['b']), node('b', ['a'])])),
+    /cycle in the graph/,
+  );
+});
+
+test('two nodes cannot answer to the same alias', () => {
+  assert.throws(
+    () => validateAnatomy(graph([node('lower-leg', [], ['calf']), node('calves', [], ['calf'])])),
+    /a search for it can only find one/,
+  );
+});
+
+test('a node may have several parents, because the body does not branch tidily', () => {
+  const nodes = validateAnatomy(graph([node('neck'), node('shoulder-girdle'), node('upper-back'),
+    node('upper-trapezius', ['neck', 'shoulder-girdle', 'upper-back'])]));
+  assert.deepEqual(rollUp('upper-trapezius', nodes).sort(), ['neck', 'shoulder-girdle', 'upper-back', 'upper-trapezius']);
+});
+
+test('roll-up is what makes tagging at honest precision safe', () => {
+  const nodes = validateAnatomy(graph([node('hip-pelvis'), node('hip', ['hip-pelvis']), node('glute-med-min', ['hip'])]));
+  assert.ok(rollUp('glute-med-min', nodes).includes('hip'), 'a search for hip must find a glute');
+  assert.deepEqual(rollUp('hip-pelvis', nodes), ['hip-pelvis'], 'and must not drag the whole body along');
+});
+
+/* ----------------------------- the fold-in ------------------------------ */
+
+test('the worklist cannot point at a node that does not exist', () => {
+  const nodes = validateAnatomy(graph([node('hip')]));
+  assert.throws(
+    () => validateFoldin({ entries: [{ from: 'glutes', to: ['glute-max'] }] }, nodes, []),
+    /is not a node/,
+  );
+});
+
+test('a judgment call must say what the call was', () => {
+  const nodes = validateAnatomy(graph([node('hip')]));
+  assert.throws(
+    () => validateFoldin({ entries: [{ from: 'glutes', to: ['hip'], review: true }] }, nodes, []),
+    /a reviewer needs to know what the call was/,
+  );
+});
+
+test('"not anatomy" must say why — the reason is the useful half', () => {
+  const nodes = validateAnatomy(graph([node('hip')]));
+  assert.throws(
+    () => validateFoldin({ entries: [{ from: 'posture', notAnatomy: true }] }, nodes, []),
+    /the reason is the useful half/,
+  );
+});
+
+test('a string the catalogue uses and the worklist has never heard of is refused', () => {
+  const nodes = validateAnatomy(graph([node('hip')]));
+  assert.throws(
+    () => validateFoldin({ entries: [{ from: 'hips', to: ['hip'] }] }, nodes, [{ muscles: ['knees'] }]),
+    /the catalogue uses "knees" and the worklist does not mention it/,
+  );
+});
+
+test('the shipped graph and worklist are valid, and the worklist still covers the catalogue', async () => {
+  const nodes = validateAnatomy(await readJson(ANATOMY), 'anatomy.json');
+  const library = await readJson(LIBRARY);
+  const entries = validateFoldin(await readJson(FOLDIN), nodes, library.items, 'anatomy-foldin.json');
+  assert.ok(nodes.size >= 100);
+  assert.equal(entries.length, new Set(library.items.flatMap((i) => i.muscles ?? [])).size);
 });

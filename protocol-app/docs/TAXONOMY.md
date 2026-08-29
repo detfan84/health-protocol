@@ -195,9 +195,40 @@ catalogue can target it distinctly. If no item, test or referral edge can tell t
 apart, they are one node until something can. An anatomy textbook nobody can act on is as useless
 as a silo, and considerably more work.
 
-Scale, honestly: this is the largest content-authoring job in the project — weeks, not an
-afternoon — and folding the 94 existing strings in needs a human eye per row.
-`deep hip rotators (piriformis group)` versus `piriformis` is a judgment call, not a string match.
+### 3.1 What is seeded, 29 Aug
+
+`src/content/vocab/anatomy.json` — **101 nodes**: 6 regions, 22 areas, 5 joints, 61 structures,
+7 systems. The 21 `regions` values already tagged on 78 items are all present as nodes, so nothing
+existing is invalidated; they gain parents and aliases and keep working.
+
+`src/content/vocab/anatomy-foldin.json` — the 94 catalogue strings mapped onto it. **A worklist,
+not a migration: nothing reads it.** 78 map cleanly. Ten need a human, and each says why:
+
+| String | Proposed | Item tags | The call |
+|---|---|---|---|
+| `glutes` | glute-max | 41 | Read as the big glute; items meaning the whole group need both |
+| `core` | deep-core | 36 | The catalogue uses it for both the canister and the abdominal wall |
+| `hip abductors` | glute-med-min | 3 | A movement named as a muscle; TFL abducts too |
+| `traps` | upper-trapezius | 1 | What the source items describe, but not the whole muscle |
+| `tibialis` | tibialis-anterior | 1 | Unqualified; posterior is a real and different target |
+| `outer thigh` | it-band, tfl | 1 | The band, the muscle that tensions it, or both |
+| `hip internal rotation` | glute-med-min, adductors | 1 | A movement; the internal rotators are not one tidy group |
+| *(and three more of the same kind)* | | | |
+
+Six were never anatomy and are recorded rather than dropped, because a vocabulary that deletes
+what it cannot classify teaches nothing about why it could not: `posture` · `full body` (4 tags) ·
+`grip` · `anti-rotation` · `ankle stability` · `cervical movement sense`. Each carries a note
+saying where it should go instead — mostly the `effect` facet, a self-test, or nowhere.
+
+**Two alias collisions were caught by the checker during authoring**, which is the argument for
+having written it: *"between the shoulder blades"* claimed by both `upper-back` and `rhomboids`,
+and *"calf"* by both `lower-leg` and `calves`. Neither is a tidiness problem — it is a search that
+silently returns one of two right answers.
+
+Scale, honestly: the seed covers what the catalogue references today and stops there. Growing it
+is the largest content-authoring job in the project, and the ten review rows need a human eye
+each. `deep hip rotators (piriformis group)` versus `piriformis` is a judgment call, not a string
+match.
 
 ---
 
@@ -411,7 +442,8 @@ decision, which is how `entry-points` — a UI position — ended up as a peer o
    photos`. Whatever taxonomy wins, the composer would otherwise deal from a deck with no suits,
    and `loadAfter` (67 items — law 1 already written down as data) does not survive contact with
    the day.
-4. **Anatomy graph** + fold-in of the 94 strings (§3).
+4. **Anatomy graph** + fold-in of the 94 strings (§3). *Seeded 29 Aug — 101 nodes and a 94-row
+   worklist, §3.1. Applying the worklist waits on step 2, and on ten review rows.*
 5. **Wire the tests** (§5).
 6. **Referral map** (§4).
 7. **Faceted browse and search** (§8).

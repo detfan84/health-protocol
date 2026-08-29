@@ -1,0 +1,1120 @@
+{
+  "format": "protocol-app/anatomy-v1",
+  "version": 1,
+  "note": "The anatomy graph (TAXONOMY.md §3). Region → area → structure, with parents, so an item tags at the precision it honestly has and a query rolls up: tag `glute-med-min` and a search for `hip` still finds it. Multi-parent on purpose — the upper trapezius belongs to the neck, the shoulder girdle and the upper back, and forcing one parent is the mistake a tree makes. Every node carries plain-language aliases because the average user types \"butt\", not \"gluteus medius\". Ids are append-only. SEEDED, NOT FINISHED: this covers what the 376-item catalogue actually references and stops there, per §3's guard — a node earns its existence when something can target it distinctly.",
+  "nodes": [
+    {
+      "id": "head-neck",
+      "name": "Head and neck",
+      "kind": "region"
+    },
+    {
+      "id": "trunk",
+      "name": "Trunk",
+      "kind": "region",
+      "also": [
+        "torso"
+      ]
+    },
+    {
+      "id": "shoulder-girdle",
+      "name": "Shoulder girdle",
+      "kind": "region",
+      "also": [
+        "shoulders"
+      ]
+    },
+    {
+      "id": "arm",
+      "name": "Arm",
+      "kind": "region",
+      "also": [
+        "arms"
+      ]
+    },
+    {
+      "id": "hip-pelvis",
+      "name": "Hip and pelvis",
+      "kind": "region"
+    },
+    {
+      "id": "leg",
+      "name": "Leg",
+      "kind": "region",
+      "also": [
+        "legs"
+      ]
+    },
+    {
+      "id": "head",
+      "name": "Head",
+      "kind": "area",
+      "parents": [
+        "head-neck"
+      ]
+    },
+    {
+      "id": "jaw",
+      "name": "Jaw",
+      "kind": "area",
+      "parents": [
+        "head-neck"
+      ],
+      "also": [
+        "TMJ",
+        "face"
+      ]
+    },
+    {
+      "id": "neck",
+      "name": "Neck",
+      "kind": "area",
+      "parents": [
+        "head-neck"
+      ]
+    },
+    {
+      "id": "spine",
+      "name": "Spine",
+      "kind": "area",
+      "parents": [
+        "trunk"
+      ],
+      "also": [
+        "back bone"
+      ]
+    },
+    {
+      "id": "cervical-spine",
+      "name": "Neck spine",
+      "kind": "area",
+      "parents": [
+        "spine",
+        "neck"
+      ]
+    },
+    {
+      "id": "thoracic-spine",
+      "name": "Mid back",
+      "kind": "area",
+      "parents": [
+        "spine"
+      ],
+      "also": [
+        "thoracic",
+        "upper spine"
+      ]
+    },
+    {
+      "id": "lumbar-spine",
+      "name": "Lower spine",
+      "kind": "area",
+      "parents": [
+        "spine"
+      ],
+      "also": [
+        "lumbar"
+      ]
+    },
+    {
+      "id": "back",
+      "name": "Back",
+      "kind": "area",
+      "parents": [
+        "trunk"
+      ]
+    },
+    {
+      "id": "upper-back",
+      "name": "Upper back",
+      "kind": "area",
+      "parents": [
+        "back"
+      ],
+      "also": [
+        "between the shoulders"
+      ]
+    },
+    {
+      "id": "low-back",
+      "name": "Lower back",
+      "kind": "area",
+      "parents": [
+        "back"
+      ],
+      "also": [
+        "lower back",
+        "small of the back"
+      ]
+    },
+    {
+      "id": "ribs",
+      "name": "Ribs",
+      "kind": "area",
+      "parents": [
+        "trunk"
+      ],
+      "also": [
+        "rib cage"
+      ]
+    },
+    {
+      "id": "chest",
+      "name": "Chest",
+      "kind": "area",
+      "parents": [
+        "trunk"
+      ]
+    },
+    {
+      "id": "abdomen",
+      "name": "Belly",
+      "kind": "area",
+      "parents": [
+        "trunk"
+      ],
+      "also": [
+        "abs",
+        "stomach",
+        "abdomen"
+      ]
+    },
+    {
+      "id": "deep-core",
+      "name": "Deep core",
+      "kind": "area",
+      "parents": [
+        "trunk"
+      ],
+      "also": [
+        "the canister",
+        "core"
+      ]
+    },
+    {
+      "id": "pelvis",
+      "name": "Pelvis",
+      "kind": "area",
+      "parents": [
+        "hip-pelvis"
+      ]
+    },
+    {
+      "id": "hip",
+      "name": "Hip",
+      "kind": "area",
+      "parents": [
+        "hip-pelvis"
+      ],
+      "also": [
+        "hips"
+      ]
+    },
+    {
+      "id": "thigh",
+      "name": "Thigh",
+      "kind": "area",
+      "parents": [
+        "leg"
+      ]
+    },
+    {
+      "id": "lower-leg",
+      "name": "Lower leg",
+      "kind": "area",
+      "parents": [
+        "leg"
+      ],
+      "also": [
+        "shin"
+      ]
+    },
+    {
+      "id": "foot",
+      "name": "Foot",
+      "kind": "area",
+      "parents": [
+        "leg"
+      ],
+      "also": [
+        "feet"
+      ]
+    },
+    {
+      "id": "upper-arm",
+      "name": "Upper arm",
+      "kind": "area",
+      "parents": [
+        "arm"
+      ]
+    },
+    {
+      "id": "forearm",
+      "name": "Forearm",
+      "kind": "area",
+      "parents": [
+        "arm"
+      ],
+      "also": [
+        "forearms"
+      ]
+    },
+    {
+      "id": "hand",
+      "name": "Hand",
+      "kind": "area",
+      "parents": [
+        "arm"
+      ],
+      "also": [
+        "hands"
+      ]
+    },
+    {
+      "id": "ankle",
+      "name": "Ankle",
+      "kind": "joint",
+      "parents": [
+        "lower-leg",
+        "foot"
+      ],
+      "also": [
+        "ankles"
+      ],
+      "tissue": "joint"
+    },
+    {
+      "id": "knee",
+      "name": "Knee",
+      "kind": "joint",
+      "parents": [
+        "leg"
+      ],
+      "also": [
+        "knees"
+      ],
+      "tissue": "joint"
+    },
+    {
+      "id": "shoulder-joint",
+      "name": "Shoulder joint",
+      "kind": "joint",
+      "parents": [
+        "shoulder-girdle"
+      ],
+      "tissue": "joint"
+    },
+    {
+      "id": "wrist",
+      "name": "Wrist",
+      "kind": "joint",
+      "parents": [
+        "forearm",
+        "hand"
+      ],
+      "also": [
+        "wrists"
+      ],
+      "tissue": "joint"
+    },
+    {
+      "id": "elbow",
+      "name": "Elbow",
+      "kind": "joint",
+      "parents": [
+        "arm"
+      ],
+      "also": [
+        "elbows"
+      ],
+      "tissue": "joint"
+    },
+    {
+      "id": "masseter",
+      "name": "Masseter",
+      "kind": "structure",
+      "parents": [
+        "jaw"
+      ],
+      "also": [
+        "the chewing muscle",
+        "cheek"
+      ]
+    },
+    {
+      "id": "temporalis",
+      "name": "Temporalis",
+      "kind": "structure",
+      "parents": [
+        "jaw",
+        "head"
+      ],
+      "also": [
+        "the temple"
+      ]
+    },
+    {
+      "id": "suprahyoids",
+      "name": "Under the jaw",
+      "kind": "structure",
+      "parents": [
+        "jaw",
+        "neck"
+      ],
+      "also": [
+        "suprahyoids",
+        "floor of the mouth"
+      ]
+    },
+    {
+      "id": "scm",
+      "name": "Sternocleidomastoid",
+      "kind": "structure",
+      "parents": [
+        "neck"
+      ],
+      "also": [
+        "SCM",
+        "the rope down the side of the neck"
+      ]
+    },
+    {
+      "id": "scalenes",
+      "name": "Scalenes",
+      "kind": "structure",
+      "parents": [
+        "neck"
+      ],
+      "also": [
+        "side of the neck"
+      ]
+    },
+    {
+      "id": "suboccipitals",
+      "name": "Suboccipitals",
+      "kind": "structure",
+      "parents": [
+        "neck",
+        "head"
+      ],
+      "also": [
+        "base of the skull"
+      ]
+    },
+    {
+      "id": "deep-neck-flexors",
+      "name": "Deep neck flexors",
+      "kind": "structure",
+      "parents": [
+        "neck"
+      ],
+      "also": [
+        "front of the neck, deep"
+      ]
+    },
+    {
+      "id": "cervical-paraspinals",
+      "name": "Neck paraspinals",
+      "kind": "structure",
+      "parents": [
+        "neck",
+        "cervical-spine"
+      ],
+      "also": [
+        "back of the neck"
+      ]
+    },
+    {
+      "id": "levator-scapulae",
+      "name": "Levator scapulae",
+      "kind": "structure",
+      "parents": [
+        "neck",
+        "shoulder-girdle"
+      ],
+      "also": [
+        "the corner of the neck and shoulder"
+      ]
+    },
+    {
+      "id": "upper-trapezius",
+      "name": "Upper trapezius",
+      "kind": "structure",
+      "parents": [
+        "neck",
+        "shoulder-girdle",
+        "upper-back"
+      ],
+      "also": [
+        "upper traps",
+        "traps",
+        "the shoulder shrug muscle"
+      ]
+    },
+    {
+      "id": "mid-lower-trapezius",
+      "name": "Mid and lower trapezius",
+      "kind": "structure",
+      "parents": [
+        "shoulder-girdle",
+        "upper-back"
+      ],
+      "also": [
+        "mid traps",
+        "lower traps"
+      ]
+    },
+    {
+      "id": "rhomboids",
+      "name": "Rhomboids",
+      "kind": "structure",
+      "parents": [
+        "shoulder-girdle",
+        "upper-back"
+      ],
+      "also": [
+        "between the shoulder blades"
+      ]
+    },
+    {
+      "id": "serratus-anterior",
+      "name": "Serratus anterior",
+      "kind": "structure",
+      "parents": [
+        "shoulder-girdle",
+        "ribs"
+      ],
+      "also": [
+        "the finger-like muscle over the ribs"
+      ]
+    },
+    {
+      "id": "rotator-cuff",
+      "name": "Rotator cuff",
+      "kind": "structure",
+      "parents": [
+        "shoulder-girdle",
+        "shoulder-joint"
+      ],
+      "also": [
+        "the cuff"
+      ]
+    },
+    {
+      "id": "deltoid",
+      "name": "Deltoid",
+      "kind": "structure",
+      "parents": [
+        "shoulder-girdle"
+      ],
+      "also": [
+        "deltoids",
+        "the shoulder cap"
+      ]
+    },
+    {
+      "id": "deltoid-anterior",
+      "name": "Front deltoid",
+      "kind": "structure",
+      "parents": [
+        "deltoid"
+      ],
+      "also": [
+        "anterior deltoids",
+        "front of the shoulder"
+      ]
+    },
+    {
+      "id": "deltoid-posterior",
+      "name": "Rear deltoid",
+      "kind": "structure",
+      "parents": [
+        "deltoid"
+      ],
+      "also": [
+        "rear delts",
+        "back of the shoulder"
+      ]
+    },
+    {
+      "id": "lats",
+      "name": "Latissimus dorsi",
+      "kind": "structure",
+      "parents": [
+        "shoulder-girdle",
+        "back"
+      ],
+      "also": [
+        "lats",
+        "the wing muscle",
+        "back of the armpit"
+      ]
+    },
+    {
+      "id": "pec-minor",
+      "name": "Pectoralis minor",
+      "kind": "structure",
+      "parents": [
+        "chest",
+        "shoulder-girdle"
+      ],
+      "also": [
+        "pec minor",
+        "under the collarbone"
+      ]
+    },
+    {
+      "id": "pec-major",
+      "name": "Pectoralis major",
+      "kind": "structure",
+      "parents": [
+        "chest"
+      ],
+      "also": [
+        "pecs",
+        "chest muscle"
+      ]
+    },
+    {
+      "id": "intercostals",
+      "name": "Intercostals",
+      "kind": "structure",
+      "parents": [
+        "ribs"
+      ],
+      "also": [
+        "between the ribs"
+      ]
+    },
+    {
+      "id": "diaphragm",
+      "name": "Diaphragm",
+      "kind": "structure",
+      "parents": [
+        "ribs",
+        "deep-core"
+      ],
+      "also": [
+        "the breathing muscle",
+        "under the rib margin"
+      ]
+    },
+    {
+      "id": "spinal-erectors",
+      "name": "Spinal erectors",
+      "kind": "structure",
+      "parents": [
+        "back",
+        "spine"
+      ],
+      "also": [
+        "erector spinae",
+        "spine extensors",
+        "the ropes either side of the spine"
+      ]
+    },
+    {
+      "id": "multifidus",
+      "name": "Multifidus",
+      "kind": "structure",
+      "parents": [
+        "spine",
+        "deep-core"
+      ],
+      "also": [
+        "deep spinal stabilizers",
+        "deep spinal stabilisers"
+      ]
+    },
+    {
+      "id": "quadratus-lumborum",
+      "name": "Quadratus lumborum",
+      "kind": "structure",
+      "parents": [
+        "low-back",
+        "deep-core"
+      ],
+      "also": [
+        "QL",
+        "the side of the lower back"
+      ]
+    },
+    {
+      "id": "thoracolumbar-fascia",
+      "name": "Thoracolumbar fascia",
+      "kind": "structure",
+      "parents": [
+        "low-back",
+        "back"
+      ],
+      "also": [
+        "TLF",
+        "the sheet across the lower back"
+      ],
+      "tissue": "fascia"
+    },
+    {
+      "id": "rectus-abdominis",
+      "name": "Rectus abdominis",
+      "kind": "structure",
+      "parents": [
+        "abdomen"
+      ],
+      "also": [
+        "the six-pack muscle"
+      ]
+    },
+    {
+      "id": "obliques",
+      "name": "Obliques",
+      "kind": "structure",
+      "parents": [
+        "abdomen"
+      ],
+      "also": [
+        "the sides of the waist"
+      ]
+    },
+    {
+      "id": "transverse-abdominis",
+      "name": "Transverse abdominis",
+      "kind": "structure",
+      "parents": [
+        "abdomen",
+        "deep-core"
+      ],
+      "also": [
+        "TVA",
+        "the deep corset"
+      ]
+    },
+    {
+      "id": "pelvic-floor",
+      "name": "Pelvic floor",
+      "kind": "structure",
+      "parents": [
+        "pelvis",
+        "deep-core"
+      ],
+      "also": [
+        "the floor of the canister"
+      ]
+    },
+    {
+      "id": "psoas",
+      "name": "Psoas",
+      "kind": "structure",
+      "parents": [
+        "deep-core",
+        "hip"
+      ],
+      "also": [
+        "the deep hip flexor"
+      ]
+    },
+    {
+      "id": "iliacus",
+      "name": "Iliacus",
+      "kind": "structure",
+      "parents": [
+        "hip",
+        "pelvis"
+      ],
+      "also": [
+        "inside the hip bone"
+      ]
+    },
+    {
+      "id": "hip-flexors",
+      "name": "Hip flexors",
+      "kind": "structure",
+      "parents": [
+        "hip"
+      ],
+      "also": [
+        "front of the hip"
+      ]
+    },
+    {
+      "id": "glute-max",
+      "name": "Gluteus maximus",
+      "kind": "structure",
+      "parents": [
+        "hip"
+      ],
+      "also": [
+        "glutes",
+        "butt",
+        "backside",
+        "the big glute"
+      ]
+    },
+    {
+      "id": "glute-med-min",
+      "name": "Gluteus medius and minimus",
+      "kind": "structure",
+      "parents": [
+        "hip"
+      ],
+      "also": [
+        "glute med",
+        "side of the hip",
+        "hip abductors"
+      ]
+    },
+    {
+      "id": "deep-hip-rotators",
+      "name": "Deep hip rotators",
+      "kind": "structure",
+      "parents": [
+        "hip"
+      ],
+      "also": [
+        "the six deep rotators",
+        "deep in the back of the hip"
+      ]
+    },
+    {
+      "id": "piriformis",
+      "name": "Piriformis",
+      "kind": "structure",
+      "parents": [
+        "deep-hip-rotators"
+      ]
+    },
+    {
+      "id": "tfl",
+      "name": "Tensor fasciae latae",
+      "kind": "structure",
+      "parents": [
+        "hip",
+        "thigh"
+      ],
+      "also": [
+        "TFL",
+        "the front corner of the hip"
+      ]
+    },
+    {
+      "id": "it-band",
+      "name": "Iliotibial band",
+      "kind": "structure",
+      "parents": [
+        "thigh",
+        "hip"
+      ],
+      "also": [
+        "IT band",
+        "outer thigh",
+        "side of the thigh"
+      ],
+      "tissue": "fascia"
+    },
+    {
+      "id": "adductors",
+      "name": "Adductors",
+      "kind": "structure",
+      "parents": [
+        "hip",
+        "thigh"
+      ],
+      "also": [
+        "groin",
+        "inner thigh"
+      ]
+    },
+    {
+      "id": "quadriceps",
+      "name": "Quadriceps",
+      "kind": "structure",
+      "parents": [
+        "thigh"
+      ],
+      "also": [
+        "quads",
+        "front of the thigh"
+      ]
+    },
+    {
+      "id": "hamstrings",
+      "name": "Hamstrings",
+      "kind": "structure",
+      "parents": [
+        "thigh"
+      ],
+      "also": [
+        "back of the thigh"
+      ]
+    },
+    {
+      "id": "calves",
+      "name": "Calves",
+      "kind": "structure",
+      "parents": [
+        "lower-leg"
+      ],
+      "also": [
+        "calf",
+        "back of the lower leg"
+      ]
+    },
+    {
+      "id": "gastrocnemius",
+      "name": "Gastrocnemius",
+      "kind": "structure",
+      "parents": [
+        "calves"
+      ],
+      "also": [
+        "the upper calf"
+      ]
+    },
+    {
+      "id": "soleus",
+      "name": "Soleus",
+      "kind": "structure",
+      "parents": [
+        "calves"
+      ],
+      "also": [
+        "the deep calf"
+      ]
+    },
+    {
+      "id": "achilles",
+      "name": "Achilles tendon",
+      "kind": "structure",
+      "parents": [
+        "lower-leg",
+        "ankle"
+      ],
+      "also": [
+        "achilles"
+      ],
+      "tissue": "tendon"
+    },
+    {
+      "id": "tibialis-anterior",
+      "name": "Tibialis anterior",
+      "kind": "structure",
+      "parents": [
+        "lower-leg"
+      ],
+      "also": [
+        "shin muscle"
+      ]
+    },
+    {
+      "id": "tibialis-posterior",
+      "name": "Tibialis posterior",
+      "kind": "structure",
+      "parents": [
+        "lower-leg"
+      ],
+      "also": [
+        "behind the shin bone"
+      ]
+    },
+    {
+      "id": "peroneals",
+      "name": "Peroneals",
+      "kind": "structure",
+      "parents": [
+        "lower-leg"
+      ],
+      "also": [
+        "outside of the lower leg"
+      ]
+    },
+    {
+      "id": "plantar-fascia",
+      "name": "Plantar fascia",
+      "kind": "structure",
+      "parents": [
+        "foot"
+      ],
+      "also": [
+        "the sole of the foot"
+      ],
+      "tissue": "fascia"
+    },
+    {
+      "id": "foot-intrinsics",
+      "name": "Foot intrinsics",
+      "kind": "structure",
+      "parents": [
+        "foot"
+      ],
+      "also": [
+        "the arch",
+        "small muscles of the foot"
+      ]
+    },
+    {
+      "id": "biceps",
+      "name": "Biceps",
+      "kind": "structure",
+      "parents": [
+        "upper-arm"
+      ]
+    },
+    {
+      "id": "triceps",
+      "name": "Triceps",
+      "kind": "structure",
+      "parents": [
+        "upper-arm"
+      ],
+      "also": [
+        "back of the upper arm"
+      ]
+    },
+    {
+      "id": "forearm-flexors",
+      "name": "Forearm flexors",
+      "kind": "structure",
+      "parents": [
+        "forearm"
+      ],
+      "also": [
+        "inside of the forearm"
+      ]
+    },
+    {
+      "id": "forearm-extensors",
+      "name": "Forearm extensors",
+      "kind": "structure",
+      "parents": [
+        "forearm"
+      ],
+      "also": [
+        "outside of the forearm",
+        "tennis elbow side"
+      ]
+    },
+    {
+      "id": "thenar",
+      "name": "Thumb pad",
+      "kind": "structure",
+      "parents": [
+        "hand"
+      ],
+      "also": [
+        "thenar",
+        "the web of the hand",
+        "hand intrinsics"
+      ]
+    },
+    {
+      "id": "nervous-system",
+      "name": "Nervous system",
+      "kind": "system"
+    },
+    {
+      "id": "vestibular",
+      "name": "Balance system",
+      "kind": "system",
+      "also": [
+        "vestibular",
+        "inner ear"
+      ]
+    },
+    {
+      "id": "oculomotor",
+      "name": "Eye movement",
+      "kind": "system",
+      "also": [
+        "oculomotor",
+        "the eyes"
+      ]
+    },
+    {
+      "id": "respiratory",
+      "name": "Breathing",
+      "kind": "system",
+      "also": [
+        "airway",
+        "lungs"
+      ]
+    },
+    {
+      "id": "lymphatic",
+      "name": "Lymph",
+      "kind": "system",
+      "also": [
+        "drainage"
+      ]
+    },
+    {
+      "id": "digestive",
+      "name": "Digestion",
+      "kind": "system",
+      "also": [
+        "gut"
+      ]
+    },
+    {
+      "id": "circulatory",
+      "name": "Circulation",
+      "kind": "system",
+      "also": [
+        "blood flow"
+      ]
+    },
+    {
+      "id": "sciatic-nerve",
+      "name": "Sciatic nerve",
+      "kind": "structure",
+      "parents": [
+        "nervous-system",
+        "hip",
+        "leg"
+      ],
+      "tissue": "nerve"
+    },
+    {
+      "id": "femoral-nerve",
+      "name": "Femoral nerve",
+      "kind": "structure",
+      "parents": [
+        "nervous-system",
+        "hip",
+        "thigh"
+      ],
+      "tissue": "nerve"
+    },
+    {
+      "id": "median-nerve",
+      "name": "Median nerve",
+      "kind": "structure",
+      "parents": [
+        "nervous-system",
+        "arm",
+        "hand"
+      ],
+      "tissue": "nerve"
+    },
+    {
+      "id": "ulnar-nerve",
+      "name": "Ulnar nerve",
+      "kind": "structure",
+      "parents": [
+        "nervous-system",
+        "arm",
+        "hand"
+      ],
+      "tissue": "nerve"
+    },
+    {
+      "id": "radial-nerve",
+      "name": "Radial nerve",
+      "kind": "structure",
+      "parents": [
+        "nervous-system",
+        "arm",
+        "forearm"
+      ],
+      "tissue": "nerve"
+    }
+  ]
+}

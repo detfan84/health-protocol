@@ -1,0 +1,683 @@
+{
+  "format": "protocol-app/anatomy-foldin-v1",
+  "version": 1,
+  "note": "The 94 free-text `muscles` strings in the catalogue, mapped onto anatomy.json (TAXONOMY.md §3). A WORKLIST FOR REVIEW, not a migration: nothing reads this file yet. Entries marked `review` are judgment calls, not string matches, and each one says why. Entries marked `notAnatomy` are values that were never anatomy and need a different home — recorded rather than silently dropped, because a vocabulary that deletes what it cannot classify teaches nothing about why it could not.",
+  "entries": [
+    {
+      "from": "IT band",
+      "to": [
+        "it-band"
+      ],
+      "items": 2
+    },
+    {
+      "from": "SCM",
+      "to": [
+        "scm"
+      ],
+      "items": 2
+    },
+    {
+      "from": "TFL",
+      "to": [
+        "tfl"
+      ],
+      "items": 1
+    },
+    {
+      "from": "abs",
+      "to": [
+        "abdomen"
+      ],
+      "items": 13
+    },
+    {
+      "from": "achilles",
+      "to": [
+        "achilles"
+      ],
+      "items": 1
+    },
+    {
+      "from": "adductors",
+      "to": [
+        "adductors"
+      ],
+      "items": 10
+    },
+    {
+      "from": "ankle stability",
+      "notAnatomy": true,
+      "why": "An outcome of control work at the ankle. Tag `ankle` plus `effect: control`.",
+      "items": 1
+    },
+    {
+      "from": "ankles",
+      "to": [
+        "ankle"
+      ],
+      "items": 8
+    },
+    {
+      "from": "anterior deltoids",
+      "to": [
+        "deltoid-anterior"
+      ],
+      "items": 2
+    },
+    {
+      "from": "anti-rotation",
+      "notAnatomy": true,
+      "why": "A demand a movement places, not a place it acts. Closest home is the `effect` facet.",
+      "items": 1
+    },
+    {
+      "from": "back",
+      "to": [
+        "back"
+      ],
+      "items": 7
+    },
+    {
+      "from": "biceps",
+      "to": [
+        "biceps"
+      ],
+      "items": 14
+    },
+    {
+      "from": "calves",
+      "to": [
+        "calves"
+      ],
+      "items": 25
+    },
+    {
+      "from": "cervical movement sense",
+      "notAnatomy": true,
+      "why": "Proprioception at the neck — a capacity, measured rather than targeted.",
+      "items": 1
+    },
+    {
+      "from": "cervical paraspinals",
+      "to": [
+        "cervical-paraspinals"
+      ],
+      "items": 3
+    },
+    {
+      "from": "chest",
+      "to": [
+        "chest"
+      ],
+      "items": 18
+    },
+    {
+      "from": "core",
+      "to": [
+        "deep-core"
+      ],
+      "review": true,
+      "why": "The catalogue uses \"core\" for both the deep canister and the abdominal wall. Read as deep-core; some items may mean `abdomen`.",
+      "items": 36
+    },
+    {
+      "from": "deep core",
+      "to": [
+        "deep-core"
+      ],
+      "items": 1
+    },
+    {
+      "from": "deep hip rotators",
+      "to": [
+        "deep-hip-rotators"
+      ],
+      "items": 4
+    },
+    {
+      "from": "deep hip rotators (piriformis group)",
+      "to": [
+        "deep-hip-rotators"
+      ],
+      "review": true,
+      "why": "Kept at the group, not narrowed to `piriformis` — the parenthetical names the best-known member, it does not restrict the target.",
+      "items": 1
+    },
+    {
+      "from": "deep neck flexors",
+      "to": [
+        "deep-neck-flexors"
+      ],
+      "items": 2
+    },
+    {
+      "from": "deep spinal stabilizers (multifidus)",
+      "to": [
+        "multifidus"
+      ],
+      "items": 4
+    },
+    {
+      "from": "deltoids",
+      "to": [
+        "deltoid"
+      ],
+      "items": 2
+    },
+    {
+      "from": "diaphragm",
+      "to": [
+        "diaphragm"
+      ],
+      "items": 3
+    },
+    {
+      "from": "foot intrinsics (arch)",
+      "to": [
+        "foot-intrinsics"
+      ],
+      "items": 6
+    },
+    {
+      "from": "forearm extensors",
+      "to": [
+        "forearm-extensors"
+      ],
+      "items": 2
+    },
+    {
+      "from": "forearm flexors",
+      "to": [
+        "forearm-flexors"
+      ],
+      "items": 2
+    },
+    {
+      "from": "forearms",
+      "to": [
+        "forearm"
+      ],
+      "items": 8
+    },
+    {
+      "from": "full body",
+      "notAnatomy": true,
+      "why": "The absence of a target. Drop it; an untagged item already means this.",
+      "items": 4
+    },
+    {
+      "from": "gastrocnemius",
+      "to": [
+        "gastrocnemius"
+      ],
+      "items": 2
+    },
+    {
+      "from": "glute med/min",
+      "to": [
+        "glute-med-min"
+      ],
+      "items": 3
+    },
+    {
+      "from": "glutes",
+      "to": [
+        "glute-max"
+      ],
+      "review": true,
+      "why": "Read as the big glute. Items meaning the whole group should be re-tagged with both `glute-max` and `glute-med-min`.",
+      "items": 41
+    },
+    {
+      "from": "gluteus maximus",
+      "to": [
+        "glute-max"
+      ],
+      "items": 1
+    },
+    {
+      "from": "grip",
+      "notAnatomy": true,
+      "why": "A capacity produced by the forearm flexors and hand. Tag those, or leave it to a self-test.",
+      "items": 1
+    },
+    {
+      "from": "groin",
+      "to": [
+        "adductors"
+      ],
+      "items": 4
+    },
+    {
+      "from": "hamstrings",
+      "to": [
+        "hamstrings"
+      ],
+      "items": 19
+    },
+    {
+      "from": "hand/thenar intrinsics",
+      "to": [
+        "thenar"
+      ],
+      "items": 3
+    },
+    {
+      "from": "hip abductors",
+      "to": [
+        "glute-med-min"
+      ],
+      "review": true,
+      "why": "A movement named as a muscle. The abductors are principally glute med/min; TFL also abducts.",
+      "items": 3
+    },
+    {
+      "from": "hip external rotation",
+      "to": [
+        "deep-hip-rotators"
+      ],
+      "review": true,
+      "why": "A movement, not a structure.",
+      "items": 1
+    },
+    {
+      "from": "hip flexors",
+      "to": [
+        "hip-flexors"
+      ],
+      "items": 24
+    },
+    {
+      "from": "hip internal rotation",
+      "to": [
+        "glute-med-min",
+        "adductors"
+      ],
+      "review": true,
+      "why": "A movement, not a structure. Internal rotators are not one tidy group.",
+      "items": 1
+    },
+    {
+      "from": "hip internal/external rotation",
+      "to": [
+        "deep-hip-rotators",
+        "glute-med-min"
+      ],
+      "review": true,
+      "why": "A movement, not a structure.",
+      "items": 1
+    },
+    {
+      "from": "hips",
+      "to": [
+        "hip"
+      ],
+      "items": 16
+    },
+    {
+      "from": "intercostals",
+      "to": [
+        "intercostals"
+      ],
+      "items": 1
+    },
+    {
+      "from": "lats",
+      "to": [
+        "lats"
+      ],
+      "items": 10
+    },
+    {
+      "from": "legs",
+      "to": [
+        "leg"
+      ],
+      "items": 1
+    },
+    {
+      "from": "levator scapulae",
+      "to": [
+        "levator-scapulae"
+      ],
+      "items": 2
+    },
+    {
+      "from": "lower back",
+      "to": [
+        "low-back"
+      ],
+      "items": 7
+    },
+    {
+      "from": "masseter",
+      "to": [
+        "masseter"
+      ],
+      "items": 5
+    },
+    {
+      "from": "mid/lower trapezius",
+      "to": [
+        "mid-lower-trapezius"
+      ],
+      "items": 3
+    },
+    {
+      "from": "neck",
+      "to": [
+        "neck"
+      ],
+      "items": 1
+    },
+    {
+      "from": "nervous system",
+      "to": [
+        "nervous-system"
+      ],
+      "items": 1
+    },
+    {
+      "from": "obliques",
+      "to": [
+        "obliques"
+      ],
+      "items": 16
+    },
+    {
+      "from": "oculomotor",
+      "to": [
+        "oculomotor"
+      ],
+      "items": 5
+    },
+    {
+      "from": "outer thigh",
+      "to": [
+        "it-band",
+        "tfl"
+      ],
+      "review": true,
+      "why": "Ambiguous in the source: the fascial band, the muscle that tensions it, or both.",
+      "items": 1
+    },
+    {
+      "from": "pec minor",
+      "to": [
+        "pec-minor"
+      ],
+      "items": 1
+    },
+    {
+      "from": "pecs",
+      "to": [
+        "pec-major"
+      ],
+      "items": 1
+    },
+    {
+      "from": "pelvic floor",
+      "to": [
+        "pelvic-floor"
+      ],
+      "items": 7
+    },
+    {
+      "from": "peroneals",
+      "to": [
+        "peroneals"
+      ],
+      "items": 2
+    },
+    {
+      "from": "piriformis",
+      "to": [
+        "piriformis"
+      ],
+      "items": 4
+    },
+    {
+      "from": "plantar fascia",
+      "to": [
+        "plantar-fascia"
+      ],
+      "items": 3
+    },
+    {
+      "from": "posture",
+      "notAnatomy": true,
+      "why": "A quality the whole graph serves. Belongs to the awareness curriculum, not to a node.",
+      "items": 1
+    },
+    {
+      "from": "psoas",
+      "to": [
+        "psoas"
+      ],
+      "items": 1
+    },
+    {
+      "from": "psoas/iliacus",
+      "to": [
+        "psoas",
+        "iliacus"
+      ],
+      "items": 4
+    },
+    {
+      "from": "quadratus lumborum",
+      "to": [
+        "quadratus-lumborum"
+      ],
+      "items": 2
+    },
+    {
+      "from": "quadriceps",
+      "to": [
+        "quadriceps"
+      ],
+      "items": 2
+    },
+    {
+      "from": "quads",
+      "to": [
+        "quadriceps"
+      ],
+      "items": 43
+    },
+    {
+      "from": "rear delts",
+      "to": [
+        "deltoid-posterior"
+      ],
+      "items": 3
+    },
+    {
+      "from": "rectus abdominis",
+      "to": [
+        "rectus-abdominis"
+      ],
+      "items": 1
+    },
+    {
+      "from": "rhomboids",
+      "to": [
+        "rhomboids"
+      ],
+      "items": 2
+    },
+    {
+      "from": "rotator cuff",
+      "to": [
+        "rotator-cuff"
+      ],
+      "items": 2
+    },
+    {
+      "from": "rotator cuff (group)",
+      "to": [
+        "rotator-cuff"
+      ],
+      "items": 4
+    },
+    {
+      "from": "scalenes",
+      "to": [
+        "scalenes"
+      ],
+      "items": 2
+    },
+    {
+      "from": "serratus anterior",
+      "to": [
+        "serratus-anterior"
+      ],
+      "items": 4
+    },
+    {
+      "from": "shoulders",
+      "to": [
+        "shoulder-girdle"
+      ],
+      "items": 47
+    },
+    {
+      "from": "soleus",
+      "to": [
+        "soleus"
+      ],
+      "items": 4
+    },
+    {
+      "from": "spinal erectors",
+      "to": [
+        "spinal-erectors"
+      ],
+      "items": 2
+    },
+    {
+      "from": "spine",
+      "to": [
+        "spine"
+      ],
+      "items": 3
+    },
+    {
+      "from": "spine extensors",
+      "to": [
+        "spinal-erectors"
+      ],
+      "items": 1
+    },
+    {
+      "from": "suboccipitals",
+      "to": [
+        "suboccipitals"
+      ],
+      "items": 2
+    },
+    {
+      "from": "suprahyoids",
+      "to": [
+        "suprahyoids"
+      ],
+      "items": 3
+    },
+    {
+      "from": "temporalis",
+      "to": [
+        "temporalis"
+      ],
+      "items": 5
+    },
+    {
+      "from": "thoracic",
+      "to": [
+        "thoracic-spine"
+      ],
+      "items": 3
+    },
+    {
+      "from": "thoracic spine",
+      "to": [
+        "thoracic-spine"
+      ],
+      "items": 6
+    },
+    {
+      "from": "thoracolumbar fascia",
+      "to": [
+        "thoracolumbar-fascia"
+      ],
+      "items": 2
+    },
+    {
+      "from": "tibialis",
+      "to": [
+        "tibialis-anterior"
+      ],
+      "review": true,
+      "why": "Unqualified. Anterior is the commoner target, but posterior is a real and different one — every item using this needs a look.",
+      "items": 1
+    },
+    {
+      "from": "tibialis anterior",
+      "to": [
+        "tibialis-anterior"
+      ],
+      "items": 4
+    },
+    {
+      "from": "tibialis posterior",
+      "to": [
+        "tibialis-posterior"
+      ],
+      "items": 2
+    },
+    {
+      "from": "transverse abdominis",
+      "to": [
+        "transverse-abdominis"
+      ],
+      "items": 2
+    },
+    {
+      "from": "traps",
+      "to": [
+        "upper-trapezius"
+      ],
+      "review": true,
+      "why": "Read as upper traps, which is what the source items describe. An item meaning the whole muscle needs `mid-lower-trapezius` as well.",
+      "items": 1
+    },
+    {
+      "from": "triceps",
+      "to": [
+        "triceps"
+      ],
+      "items": 15
+    },
+    {
+      "from": "upper back",
+      "to": [
+        "upper-back"
+      ],
+      "items": 3
+    },
+    {
+      "from": "upper trapezius",
+      "to": [
+        "upper-trapezius"
+      ],
+      "items": 4
+    },
+    {
+      "from": "upper traps",
+      "to": [
+        "upper-trapezius"
+      ],
+      "items": 1
+    }
+  ]
+}
