@@ -556,69 +556,106 @@ test('the library is comprehensive, merged, and every item can be picked up', as
 
 // Kevin, 29 Aug: "the day arc shouldn't be parked alongside the things that
 // are contained within it." The first menu answered "not one big list" with
-// sixteen tiles — five active protocols, six More destinations, five switched
-// off — which is the same list with borders on it, and it sat The day arc
-// beside the four areas it draws from. So the front door is now the day, one
-// door to the library, and the plans folded underneath.
-test('the front door is the day, not a grid of everything', async () => {
+// sixteen tiles. The second answered it with six equal rows under a card
+// saying "Nothing scheduled this minute" — 1259px of scroll, and the loudest
+// thing on the page was the word nothing.
+//
+// So the rule this pins is the hierarchy, not the layout: "what's up now in
+// the current time slot should be front and center… what didn't get done, but
+// the time has passed is still at the top of the list to circle back to, just
+// not drawing the same attention… what's to come can be on there, but again
+// smaller."
+test('the front door has one loud thing, and it is now', async () => {
   const { viewHome } = await import('../src/app/ui/viewHome.js');
   store._resetForTests();
   await store.ready({ name: 'screens-8' });
-  await store.saveProtocol(dayLongProtocol());
+  await store.saveProtocol({
+    id: 'seed-day-arc', name: 'The day arc', active: true, phases: [],
+    blocks: [
+      { id: 'gone', name: 'Before your feet touch the floor', start: '06:00', end: '08:00', order: 0,
+        items: [{ id: 'g1', name: 'Rock' }] },
+      { id: 'open', name: 'While you’re already up', start: '09:00', end: '11:00', order: 1,
+        items: [{ id: 'o1', name: 'Hip circles' }] },
+      { id: 'ahead', name: 'In bed, winding down', start: '22:00', order: 2,
+        items: [{ id: 'a1', name: 'Foot swings' }] },
+    ],
+    createdAt: 'x', updatedAt: 'x',
+  });
   await store.saveProtocol({
     id: 'seed-body-work', name: 'Body work', active: true, phases: [],
-    blocks: [{ id: 'bw-release', name: 'Release & load', order: 0, items: [
+    blocks: [{ id: 'bw', name: 'Release & load', order: 0, items: [
       { id: 'bw-hip', name: 'Front of hip' }, { id: 'bw-feet', name: 'Feet' }] }],
     createdAt: 'x', updatedAt: 'x',
   });
 
   const opened = [];
-  draw(await viewHome({ open: (o) => opened.push(o), startSession: (p, b) => opened.push({ p, b }) }));
+  const at10 = new Date();
+  at10.setHours(10, 0, 0, 0);
+  draw(await viewHome({ open: (o) => opened.push(o), startSession: (p, b) => opened.push({ p, b }), now: at10 }));
   await settled();
-
   const main = document.querySelector('main');
-  // The thing that made it unusable in the first place: every item in the app
-  // on one page.
-  assert.equal(main.querySelectorAll('.row').length, 0, 'no item rows on the front door');
-  assert.match(main.textContent, /Right now/, 'the first question is what to do now');
 
-  // The day, as blocks. dayLongProtocol runs 05:00–11:00 and body work is
-  // untimed, so whatever the clock says there is something still open.
-  assert.ok(main.querySelectorAll('.day-row').length >= 1, 'the rest of the day is on the front door');
-  const first = main.querySelector('.day-row');
-  first.dispatchEvent(new Event('click'));
+  // Now is the current block, by name, in the one card that carries a filled
+  // button. Not "nothing scheduled" while three blocks sit open underneath.
+  const nowCard = main.querySelector('.now-card');
+  assert.ok(nowCard, 'there is a now card');
+  assert.match(nowCard.querySelector('.now-name').textContent, /already up/);
+  assert.equal(main.querySelectorAll('button.btn.primary').length, 1,
+    'exactly one thing on the front door is the loud one');
+  nowCard.querySelector('button.btn.primary').dispatchEvent(new Event('click'));
   await settled();
-  assert.ok(opened.at(-1).b, 'a block on the front door starts that block');
+  assert.deepEqual(opened.at(-1), { p: 'seed-day-arc', b: 'open' });
 
-  // One door to everything else, not six.
-  const browse = [...main.querySelectorAll('button')].find((b) => /^Browse/.test(b.textContent));
-  assert.ok(browse, 'Browse is the door the More grid was six bad answers to');
-  browse.dispatchEvent(new Event('click'));
-  await settled();
-  assert.deepEqual(opened.at(-1), { tab: 'library' });
+  // The missed block is directly under it, plain, and still tappable.
+  const back = [...main.querySelectorAll('.quiet-row')].filter((r) => !r.closest('details'));
+  assert.equal(back.length, 1, 'circle back holds the one whose time has passed');
+  assert.match(back[0].textContent, /Before your feet touch the floor/);
+  assert.ok(nowCard.compareDocumentPosition(back[0]) & dom.window.Node.DOCUMENT_POSITION_FOLLOWING,
+    'circle back comes after now, never before it');
+  assert.equal(back[0].querySelector('button'), null, 'and it carries no button of its own');
 
-  // The plans are still one tap away — and folded, because a plan is where the
-  // day comes from rather than a peer of it.
-  const fold = main.querySelector('details.plans-fold');
-  assert.ok(fold, 'the plans have somewhere to be');
-  assert.equal(fold.open, false, 'and they are not the front door');
-  const bodyTile = [...fold.querySelectorAll('.tile')].find((t) => /Body work/.test(t.textContent));
-  assert.ok(bodyTile, 'each protocol is still an area you can open');
-  assert.match(bodyTile.textContent, /1 part/, 'a tile says how big the area is');
-  bodyTile.dispatchEvent(new Event('click'));
-  await settled();
-  assert.deepEqual(opened.at(-1), { area: 'seed-body-work' });
+  // Later and Anytime are one folded line each — present, not shouting.
+  const summaries = [...main.querySelectorAll('details.day-fold')].map((d) => ({
+    text: d.querySelector('summary').textContent, open: d.open,
+  }));
+  assert.ok(summaries.some((f) => /^Later/.test(f.text)), `no Later fold: ${JSON.stringify(summaries)}`);
+  assert.ok(summaries.some((f) => /^Anytime/.test(f.text)), 'no Anytime fold');
+  assert.deepEqual(summaries.map((f) => f.open), summaries.map(() => false), 'folds start closed');
 });
 
-// The test above uses two protocols and told me nothing. The shipped content
-// has eleven, and every body-work and support section is an UNTIMED block —
-// so the first cut of "the rest of today" drew nineteen rows on the real app
-// while the suite stayed green. That is the sixteen-tile problem again in a
-// different shape, and the handoff's own lesson: open what a person opens.
-//
-// So this one renders the front door on the CONTENT THAT SHIPS, and pins the
-// only property that matters — the front door does not grow with the
-// catalogue. Add fifty body-work cards and this number must not move.
+test('done leaves the day and stays reachable', async () => {
+  const { viewHome } = await import('../src/app/ui/viewHome.js');
+  store._resetForTests();
+  await store.ready({ name: 'screens-8c' });
+  await store.saveProtocol({
+    id: 'p', name: 'A plan', active: true, phases: [],
+    blocks: [{ id: 'b', name: 'A part', order: 0, items: [
+      { id: 'i1', name: 'Did this' }, { id: 'i2', name: 'Not this' }] }],
+    createdAt: 'x', updatedAt: 'x',
+  });
+  const { localDateKey } = await import('../src/lib/core.js');
+  await store.saveDay({ date: localDateKey(), checks: { i1: { at: 'x' } }, food: [], log: {}, updatedAt: 'x' });
+
+  draw(await viewHome({ open: () => {}, startSession: () => {} }));
+  await settled();
+  const main = document.querySelector('main');
+
+  const fold = [...main.querySelectorAll('details.day-fold')]
+    .find((d) => /^Done today/.test(d.querySelector('summary').textContent));
+  assert.ok(fold, 'done is reachable');
+  assert.equal(fold.open, false, 'and it is not in the way');
+  // Content law 2: it counts what is in a drawer. It never scores the person.
+  assert.doesNotMatch(fold.querySelector('summary').textContent, /%|\bof\b/);
+  // The thing that is done is not sitting in the open part of the day.
+  const open = [...main.querySelectorAll('.quiet-row, .now-name')].filter((el) => !el.closest('details'));
+  assert.equal(open.some((el) => /Did this/.test(el.textContent)), false);
+});
+
+// The two-protocol fixtures above told me nothing when it mattered. The shipped
+// content has eleven protocols and every body-work and support section is an
+// UNTIMED block, so the first cut of this screen drew nineteen rows on the real
+// app while the suite stayed green, and the second drew 1259px of scroll on an
+// 812px screen. So this one renders the front door on the CONTENT THAT SHIPS.
 test('the front door does not grow with the catalogue', async () => {
   const { readFile } = await import('node:fs/promises');
   const { viewHome } = await import('../src/app/ui/viewHome.js');
@@ -629,25 +666,26 @@ test('the front door does not grow with the catalogue', async () => {
   const out = await store.importFile(text);
   assert.equal(out.ok, true, `the shipped content must import: ${JSON.stringify(out.errors)}`);
 
-  draw(await viewHome({ open: () => {}, startSession: () => {} }));
-  await settled();
-  const main = document.querySelector('main');
+  // Both states the clock can be in, because they are different screens and
+  // only one of them happens to be true when the suite runs.
+  for (const [label, hour] of [['mid-morning', 9], ['mid-afternoon', 15]]) {
+    const when = new Date();
+    when.setHours(hour, 30, 0, 0);
+    draw(await viewHome({ open: () => {}, startSession: () => {}, now: when }));
+    await settled();
+    const main = document.querySelector('main');
 
-  // Everything a person can see without opening a fold.
-  const shown = [...main.querySelectorAll('.day-row, .tile')]
-    .filter((el) => !el.closest('details'));
-  assert.ok(
-    shown.length <= 8,
-    `${shown.length} things on the front door before anything is opened — that is a list again`,
-  );
+    // Everything a person can see without opening a fold.
+    const shown = [...main.querySelectorAll('.quiet-row, .day-row, .tile')]
+      .filter((el) => !el.closest('details'));
+    assert.ok(shown.length <= 6,
+      `${label}: ${shown.length} rows on the front door before anything is opened — that is a list again`);
 
-  // And the untimed half is where it went, rather than being dropped: the
-  // body-work sections are real parts of a person's day, folded, not deleted.
-  const fold = main.querySelector('details.anytime-fold');
-  assert.ok(fold, 'the untimed blocks have somewhere to be');
-  assert.equal(fold.open, false);
-  assert.ok(fold.querySelectorAll('.day-row').length >= 8, 'and all of them are in it');
-  assert.match(fold.querySelector('summary').textContent, /Anytime today — \d+ parts, \d+ things/);
+    // And the untimed half is folded rather than dropped: those sections are
+    // real parts of a person's day.
+    const folds = [...main.querySelectorAll('details.day-fold')].map((d) => d.querySelector('summary').textContent);
+    assert.ok(folds.some((f) => /^Anytime — \d+ parts, \d+ things/.test(f)), `${label}: ${JSON.stringify(folds)}`);
+  }
 });
 
 test('an area page holds one area, with its parts as sessions', async () => {

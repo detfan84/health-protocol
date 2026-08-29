@@ -238,8 +238,6 @@ section:first-of-type .section-title { margin-top: var(--sp-2); }
 .tile-sub { display: block; font-size: var(--fs-sm); color: var(--ink-muted); margin-top: 2px; }
 .icon { display: block; }
 
-.now-card { border-left: 3px solid var(--accent); }
-.now-card h3 { font-size: var(--fs-lg); margin-bottom: 2px; }
 
 /* A tile that is a whole row rather than a cell — used for Browse, which is
    the one door and should not read as one of six equal squares. */
@@ -250,34 +248,58 @@ section:first-of-type .section-title { margin-top: var(--sp-2); }
 .tile-wide .tile-icon { flex: none; }
 .tile-wide .tile-body { flex: 1 1 auto; min-width: 0; }
 
-/* The rest of today: blocks, not items. Each row is one tap and the whole row
-   is the target — a small "Start" at the end of a 44px strip is a miss
-   waiting to happen on a phone. */
-.day-list { display: flex; flex-direction: column; gap: var(--sp-2); }
-.day-row {
-  display: flex; align-items: center; gap: var(--sp-3);
-  width: 100%; min-height: var(--tap); padding: var(--sp-3);
-  text-align: left; border: 1px solid var(--line); border-radius: var(--radius);
-  background: var(--surface); color: var(--ink);
-  box-shadow: var(--shadow); cursor: pointer;
+/* ---------------------------- now, and quiet --------------------------- */
+/* One loud thing. The first cut gave Now, the six blocks under it and the
+   Browse tile the same weight, so the screen had no answer to "what do I do" —
+   it had a list and left the reading to the person. The type scale IS the
+   hierarchy here: Now is big, everything below it is one size and one colour
+   quieter, and nothing but Now gets a filled button. */
+.now-card {
+  border-left: 3px solid var(--accent);
+  padding: var(--sp-4);
 }
-.day-row:active { transform: translateY(1px); }
-.day-row-body { flex: 1 1 auto; min-width: 0; }
-.day-row-title { display: block; font-size: var(--fs-md); line-height: 1.25; }
-.day-row-from { color: var(--ink-muted); }
-.day-row-sub { display: block; font-size: var(--fs-sm); color: var(--ink-muted); margin-top: 2px; }
-.day-row-go { flex: none; font-size: var(--fs-sm); color: var(--accent); }
+.now-name { font-size: var(--fs-xl, 1.5rem); line-height: 1.2; margin-bottom: var(--sp-1); }
+.now-sub { font-size: var(--fs-sm); color: var(--ink-muted); margin-bottom: var(--sp-3); }
+.now-sub.no-gap { margin-bottom: 0; }
+.now-start { width: 100%; }
+/* Nothing on the clock is a fact, not a headline — same card, no accent. */
+.now-card.now-quiet { border-left-color: var(--line); }
+.now-card.now-quiet .now-name { font-size: var(--fs-lg); color: var(--ink-muted); }
+.now-also {
+  display: block; width: 100%; margin-top: var(--sp-2);
+  border: 0; background: none; padding: var(--sp-2) 0; cursor: pointer;
+  min-height: var(--tap); text-align: left;
+  font-size: var(--fs-sm); color: var(--ink-muted);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.now-also:hover { color: var(--ink); }
 
-/* The untimed half of the day, folded — Body work's eight sections and the
-   three support sections are all "anytime", and drawn flat they made the
-   front door nineteen rows long. Same idiom as details.group. */
-details.anytime-fold { margin: var(--sp-3) 0 0; }
-details.anytime-fold > summary {
+/* Everything that is not now: a plain row, no border, no button, no accent.
+   The whole row is the tap target — a small "Start" at the end of a strip is a
+   miss waiting to happen on a phone — it just does not advertise itself. */
+.quiet-list { display: flex; flex-direction: column; }
+.quiet-row {
+  display: flex; align-items: baseline; gap: var(--sp-3);
+  width: 100%; min-height: var(--tap); padding: var(--sp-2) 0;
+  text-align: left; border: 0; border-top: 1px solid var(--line);
+  background: none; color: var(--ink); cursor: pointer;
+}
+.quiet-list > .quiet-row:first-child { border-top: 0; }
+.quiet-row:hover .quiet-row-name { color: var(--accent); }
+.quiet-row-name { flex: 1 1 auto; min-width: 0; font-size: var(--fs-base); line-height: 1.3; }
+.quiet-row-sub { flex: none; font-size: var(--fs-sm); color: var(--ink-muted); }
+.tiny { font-size: var(--fs-sm); margin-bottom: var(--sp-2); }
+
+/* Later · Anytime · Done — one line each when closed, which is the point.
+   Closed, this whole region is three lines tall. */
+details.day-fold + details.day-fold { border-top: 1px solid var(--line); }
+details.day-fold > summary {
   cursor: pointer; min-height: var(--tap); line-height: var(--tap);
   font-size: var(--fs-sm); color: var(--ink-muted);
 }
-details.anytime-fold > summary:hover { color: var(--ink); }
-details.anytime-fold[open] > summary { margin-bottom: var(--sp-2); }
+details.day-fold > summary:hover { color: var(--ink); }
+details.day-fold[open] > summary { margin-bottom: var(--sp-1); }
+details.day-fold[open] { padding-bottom: var(--sp-2); }
 
 /* The thin row: three places that are not worth a tile each and were three of
    the six the "More" grid used to spend a screenful on. */

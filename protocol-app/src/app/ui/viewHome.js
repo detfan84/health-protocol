@@ -14,13 +14,26 @@
 // not a menu either; it is the same list with borders on it, and it made a
 // container look like a sibling of its contents.
 //
-// So the front door is now four things, in this order:
+// The first answer to THAT was six equal-weight rows under a card that said
+// "Nothing scheduled this minute" — 1259px of scroll on an 812px screen, with
+// the one piece of prime real estate saying nothing while six blocks sat open
+// underneath it. Kevin, 29 Aug: *"what's up now in the current time slot should
+// be front and center… what's completed should vanish (but still be
+// accessible)… what didn't get done, but the time has passed is still at the
+// top of the list to circle back to, just not drawing the same attention…
+// what's to come can be on there, but again smaller… not adding to the
+// overwhelming list that turns into a wall of obligation."*
 //
-//   1. Right now                → one card, with Start on it
-//   2. The rest of today        → what is still open, as places to go
-//   3. Browse                   → the one door the "More" row was six bad
-//                                 answers to (the faceted library, TAXONOMY §8)
-//   4. A thin row               → Everything today · Supply · Plans
+// So the front door has ONE loud thing and everything else in descending
+// quiet:
+//
+//   1. Now          → one big card. The largest thing on the screen.
+//   2. Circle back  → missed, plain rows, no buttons competing with Now
+//   3. Later        → one folded line, for working ahead
+//   4. Anytime      → one folded line
+//   5. Done         → one folded line; gone from view, still reachable
+//   6. Browse       → the one door the "More" row was six bad answers to
+//   7. A thin row   → Everything today · Supply · Plans
 //
 // The protocols themselves have not gone anywhere: they fold up at the bottom,
 // where a plan is a plan rather than a peer of the day it feeds. Every area
@@ -88,42 +101,47 @@ function tile({ title, sub, iconName, accent, onclick, wide = false }) {
 const lengthLabel = (block, history = {}) => lengthTextForYou(lengthForYou(block.items, history));
 
 /**
- * The rest of the day, split by whether the day actually asks for it yet.
+ * The day in four tiers, loudest first.
  *
- * → { scheduled, anytime }
+ * → { now, back, later, anytime }
  *
- * `scheduled` is what has a place in the day — still open from earlier, also
- * open now, coming up at eight — each labelled with WHY it is on screen. A
- * block whose window closed an hour ago and one that opens at ten are both
- * "not done", and reading them as the same thing is how a screen stops being
- * useful.
+ * The tiers are the design. Everything on this screen used to be the same
+ * size, which meant a person had to read all of it to find the one line that
+ * mattered — and when nothing was scheduled this minute, the loudest thing on
+ * the page was a sentence saying so.
  *
- * `anytime` is the other thirteen. This split is the whole lesson of the first
- * cut of this screen: with the real shipped content the front door drew
- * NINETEEN rows, because every body-work section and every support section is
- * an untimed block and therefore "the rest of today". That is not a day; it is
- * the library wearing a schedule, and it is the same failure as the sixteen
- * tiles it replaced. The suite was green throughout — the fixture had two
- * protocols. Open what a person opens.
+ *   `now`     the block whose window contains this minute. Front and centre.
+ *   `back`    missed: the time passed and it did not happen. At the top of
+ *             what follows, because circling back is a real thing people do —
+ *             but plain, because it is not what the clock is asking for.
+ *   `later`   coming up. Present so somebody can work ahead, folded so it does
+ *             not become a wall.
+ *   `anytime` the untimed pool. Thirteen body-work and support sections, which
+ *             drawn flat made the front door nineteen rows long.
  *
- * So the untimed blocks fold to one line, the way Today folds a large group,
- * and the day keeps its shape.
+ * Done is not here. It leaves the screen entirely (its own fold, further
+ * down) — a finished thing is not an obligation, and a list of them under a
+ * list of what is left reads as one longer list.
  *
- * "When needed" and "not asking right now" are deliberately absent from both:
- * they are answers to a question nobody asked this minute.
+ * "When needed" and "not asking right now" are absent from all of it: they are
+ * answers to a question nobody asked this minute.
  */
-function restOfToday(groups, fmt) {
-  const scheduled = [];
-  for (const b of groups.now.slice(1)) scheduled.push({ block: b, when: 'also open now' });
-  for (const b of groups.missed) scheduled.push({ block: b, when: 'still open from earlier' });
-  for (const b of groups.later) {
-    scheduled.push({ block: b, when: b.start ? `from ${displayTime(b.start, fmt)}` : 'later today' });
-  }
-  const anytime = groups.anytime.map((b) => ({ block: b, when: 'anytime today' }));
-  return { scheduled, anytime };
+function dayShape(groups) {
+  return {
+    now: groups.now,
+    back: groups.missed,
+    later: groups.later,
+    anytime: groups.anytime,
+  };
 }
 
-export async function viewHome({ open, startSession }) {
+/** How many things are inside a list of blocks. */
+const countItems = (blocks) => blocks.reduce((n, b) => n + b.items.length, 0);
+
+// `now` is injectable for one reason: this screen's whole job is deciding what
+// the clock is asking for, and a test that cannot set the clock can only ever
+// check the branch that happens to be true when it runs.
+export async function viewHome({ open, startSession, now = new Date() }) {
   const date = localDateKey();
   // The same reads Today makes, for the same reason: a cadence question
   // ("have I had my three this week?") answered without the week is answered
@@ -142,99 +160,131 @@ export async function viewHome({ open, startSession }) {
   // thing opening the front door should do. Today owns that write.
   const phaseSettings = await store.loadPhaseSettings(protocols);
   const fmt = timeFormatOf(await store.getSetting('ui.timeFormat'));
-  const today = buildToday({ protocols, phaseSettings, now: new Date(), day, history, pauses, supplies });
+  const today = buildToday({ protocols, phaseSettings, now, day, history, pauses, supplies });
 
   const root = h('div.home', {});
-  const hour = new Date().getHours();
+  const hour = now.getHours();
   const greeting = hour < 5 ? 'Late night' : hour < 12 ? 'Morning' : hour < 18 ? 'Afternoon' : 'Evening';
   root.append(
     h('div.home-head', {},
       h('h1', {}, greeting),
-      h('p.muted', {}, new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })),
+      h('p.muted', {}, now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })),
     ),
   );
 
-  /* ------------------------------ right now ----------------------------- */
-  // One card, and it is the reason to open the app at all.
-  const nowBlocks = today.groups.now;
-  if (nowBlocks.length) {
-    const b = nowBlocks[0];
+  /* --------------------------------- now --------------------------------- */
+  // The largest thing on the screen, and the only loud one. When the clock has
+  // something to say this is it; when it does not, this says THAT plainly and
+  // in one line rather than spending a card on the word "nothing".
+  const shape = dayShape(today.groups);
+  const startOf = (b) => () => startSession(b.protocolId, b.blockId);
+
+  if (shape.now.length) {
+    const b = shape.now[0];
     root.append(
       h('section', {},
-        h('h2.section-title', {}, 'Right now'),
+        h('h2.section-title', {}, 'Now'),
         h('div.card.now-card', {},
-          h('h3', {}, b.name),
-          h('p.muted', {}, `${b.items.length} left · ${lengthLabel(b, history)}`),
-          h('button.btn.primary', {
-            style: 'width:100%',
-            onclick: () => startSession(b.protocolId, b.blockId),
-          }, 'Start'),
+          h('h3.now-name', {}, b.name),
+          h('p.now-sub', {}, `${b.items.length} left · ${lengthLabel(b, history)}`),
+          h('button.btn.primary.now-start', { onclick: startOf(b) }, 'Start'),
+          // A second block genuinely open at the same minute is real (a
+          // 06:00–08:00 and a 07:00–09:00 overlap), but only one thing can be
+          // front and centre. The rest go quietly under it rather than
+          // competing for the same job.
+          shape.now.length > 1
+            ? h('button.now-also', { onclick: startOf(shape.now[1]) },
+                `Also open now: ${shape.now[1].name}`)
+            : null,
         ),
       ),
     );
   } else {
-    const nextUp = today.groups.later[0];
+    const next = shape.later[0];
     root.append(
       h('section', {},
-        h('h2.section-title', {}, 'Right now'),
-        h('div.card', {},
-          h('p.muted', {},
-            nextUp
-              ? `Nothing scheduled this minute. Next is ${nextUp.name}${nextUp.start ? ` at ${displayTime(nextUp.start, fmt)}` : ''}.`
-              : 'Nothing scheduled this minute. Pick anything below — it all counts.'),
+        h('h2.section-title', {}, 'Now'),
+        h('div.card.now-card.now-quiet', {},
+          h('h3.now-name', {}, next && next.start
+            ? `Nothing until ${displayTime(next.start, fmt)}`
+            : 'Nothing on the clock'),
+          // Deliberately no button. The obvious move is to offer one of the
+          // anytime blocks here, and the app would then be choosing for
+          // somebody — "nothing here judges what you pick" is the library's
+          // rule and it does not stop applying because there is a gap in the
+          // clock. It says what is true and the Anytime fold is right below.
+          h('p.now-sub.no-gap', {}, shape.anytime.length
+            ? `${countItems(shape.anytime)} things you can do any time today.`
+            : 'Nothing is asking for you right now.'),
         ),
       ),
     );
   }
 
-  /* --------------------------- the rest of today ------------------------- */
-  // What is left, as blocks rather than as protocols. This is the half of the
-  // old tile grid that was actually about today: a person wants "the evening
-  // wind-down, still open" and not "Body work, 8 parts, 41 things".
-  const { scheduled, anytime } = restOfToday(today.groups, fmt);
-  const dayRow = ({ block, when }) => h('button.day-row', {
-    onclick: () => startSession(block.protocolId, block.blockId),
-  },
-    h('span.day-row-body', {},
-      h('span.day-row-title', {},
-        block.name,
-        today.multipleActive ? h('span.day-row-from', {}, ` · ${block.protocolName}`) : null,
-      ),
-      h('span.day-row-sub', {}, `${when} · ${block.items.length} left · ${lengthLabel(block, history)}`),
-    ),
-    h('span.day-row-go', {}, 'Start'),
+  /* ----------------------------- circle back ----------------------------- */
+  // Missed. Kevin: "still at the top of the list to circle back to, just not
+  // drawing the same attention that the current timeframe should." So: first
+  // under Now, and plain — no card, no accent, no Start button. The whole row
+  // is still the tap target; it simply does not shout.
+  const quietRow = (b, trailing) => h('button.quiet-row', { onclick: startOf(b) },
+    h('span.quiet-row-name', {}, b.name),
+    h('span.quiet-row-sub', {}, trailing),
   );
 
-  if (scheduled.length || anytime.length) {
-    const section = h('section', {}, h('h2.section-title', {}, 'The rest of today'));
-    if (scheduled.length) {
-      const list = h('div.day-list', {});
-      for (const row of scheduled) list.append(dayRow(row));
-      section.append(list);
-    } else {
-      section.append(h('p.muted', {}, 'Nothing else is scheduled. What is below is yours to pick up whenever.'));
+  if (shape.back.length) {
+    const list = h('div.quiet-list', {});
+    for (const b of shape.back) {
+      list.append(quietRow(b, `${b.items.length} left · ${lengthLabel(b, history)}`));
     }
-
-    if (anytime.length) {
-      const things = anytime.reduce((n, r) => n + r.block.items.length, 0);
-      const list = h('div.day-list', {});
-      for (const row of anytime) list.append(dayRow(row));
-      section.append(
-        h('details.anytime-fold', {},
-          h('summary', {},
-            `Anytime today — ${anytime.length} ${anytime.length === 1 ? 'part' : 'parts'}, ${things} things`),
-          list,
-        ),
-      );
-    }
-    root.append(section);
-  } else if (nowBlocks.length) {
     root.append(
       h('section', {},
-        h('h2.section-title', {}, 'The rest of today'),
-        h('div.card', {}, h('p.muted', {}, 'Nothing else is open. Anything below is there when you want it.')),
+        h('h2.section-title', {}, 'Circle back'),
+        list,
       ),
     );
+  }
+
+  /* ------------------------- later · anytime · done ---------------------- */
+  // Three one-line folds. Everything a person might want and nothing they have
+  // to read: closed, this whole region is three lines tall.
+  const fold = (summary, blocks, trailing) => {
+    const list = h('div.quiet-list', {});
+    for (const b of blocks) list.append(quietRow(b, trailing(b)));
+    return h('details.day-fold', {}, h('summary', {}, summary), list);
+  };
+
+  const later = shape.later;
+  const anytime = shape.anytime;
+  const done = today.groups.done;
+
+  if (later.length || anytime.length || done.length) {
+    const section = h('section', {});
+    if (later.length) {
+      const next = later[0];
+      section.append(fold(
+        `Later — ${later.length === 1 ? 'one more' : `${later.length} more`}, next at ${next.start ? displayTime(next.start, fmt) : 'no set time'}`,
+        later,
+        (b) => `${b.start ? displayTime(b.start, fmt) : 'later'} · ${b.items.length} · ${lengthLabel(b, history)}`,
+      ));
+    }
+    if (anytime.length) {
+      section.append(fold(
+        `Anytime — ${anytime.length} ${anytime.length === 1 ? 'part' : 'parts'}, ${countItems(anytime)} things`,
+        anytime,
+        (b) => `${b.items.length} left · ${lengthLabel(b, history)}`,
+      ));
+    }
+    // Done vanishes from the day and stays reachable, which is the whole ask.
+    // No proportion, no meter, no "3 of 9" — content law 2. It counts what is
+    // in a drawer, the way Today's groups do.
+    if (done.length) {
+      section.append(fold(
+        `Done today — ${countItems(done)}`,
+        done,
+        (b) => `${b.items.length} done`,
+      ));
+    }
+    root.append(section);
   }
 
   /* -------------------------------- browse ------------------------------- */
@@ -249,7 +299,7 @@ export async function viewHome({ open, startSession }) {
       h('h2.section-title', {}, 'Anything else'),
       tile({
         title: 'Browse',
-        sub: 'Everything the app can teach — by what it does, where in the body, and what you need for it',
+        sub: 'By what it does, where in the body, what you need',
         iconName: 'library',
         accent: 'plum',
         wide: true,
@@ -322,4 +372,4 @@ export async function viewHome({ open, startSession }) {
   return root;
 }
 
-export { lookFor, lengthLabel, restOfToday };
+export { lookFor, lengthLabel, dayShape };
