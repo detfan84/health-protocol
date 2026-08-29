@@ -1,0 +1,509 @@
+{
+  "format": "protocol-app/vocab-v1",
+  "version": 1,
+  "note": "The facet vocabularies. Data, never enums in code (D40). Ids are append-only: a value that turns out wrong is superseded with `supersededBy`, never deleted and never re-used. Display names are free to change; ids are not. Spec: docs/TAXONOMY.md.",
+  "facets": [
+    {
+      "id": "type",
+      "name": "Kind of record",
+      "question": "What kind of record is this?",
+      "required": true,
+      "multi": false,
+      "closed": true,
+      "values": [
+        {
+          "id": "practice",
+          "name": "Practice",
+          "note": "You do it, it takes time, it can be checked off."
+        },
+        {
+          "id": "measurement",
+          "name": "Measurement",
+          "note": "Produces a number on a cadence. A tick box on a measurement is not a measurement."
+        },
+        {
+          "id": "teaching",
+          "name": "Teaching",
+          "note": "Connection cards, technique guides, awareness cues. Read, not done."
+        },
+        {
+          "id": "intake",
+          "name": "Intake",
+          "note": "Supplements, food rules, hydration. Taken rather than performed."
+        },
+        {
+          "id": "record",
+          "name": "Record",
+          "note": "Labs, progress photos, journal entries. Captured rather than performed."
+        }
+      ]
+    },
+    {
+      "id": "effect",
+      "name": "What it does",
+      "question": "What does it do to the body?",
+      "required": true,
+      "multi": true,
+      "closed": true,
+      "note": "The coverage ledger counts in this vocabulary and the pairing law spends it, so every value here is a column in the ledger. The most expensive facet to change later — see TAXONOMY.md §11.1, still open.",
+      "values": [
+        {
+          "id": "release",
+          "name": "Release",
+          "also": [
+            "let go",
+            "loosen"
+          ],
+          "note": "Lower resting tone or adhesion in a tissue."
+        },
+        {
+          "id": "lengthen",
+          "name": "Lengthen",
+          "also": [
+            "stretch"
+          ]
+        },
+        {
+          "id": "load",
+          "name": "Load",
+          "also": [
+            "strengthen",
+            "build"
+          ],
+          "note": "Load through a range. Law 1's other half."
+        },
+        {
+          "id": "activate",
+          "name": "Activate",
+          "also": [
+            "switch on",
+            "wake up"
+          ],
+          "note": "Find and fire something that is offline. Not the same as loading it."
+        },
+        {
+          "id": "mobilise",
+          "name": "Mobilise",
+          "also": [
+            "mobilize",
+            "move through range"
+          ]
+        },
+        {
+          "id": "calm",
+          "name": "Calm",
+          "also": [
+            "downregulate",
+            "settle"
+          ]
+        },
+        {
+          "id": "circulate",
+          "name": "Circulate",
+          "also": [
+            "drainage",
+            "flush"
+          ],
+          "note": "Blood, lymph, or both."
+        },
+        {
+          "id": "control",
+          "name": "Control",
+          "also": [
+            "balance",
+            "coordination",
+            "proprioception"
+          ]
+        },
+        {
+          "id": "condition",
+          "name": "Condition",
+          "also": [
+            "cardio",
+            "capacity"
+          ],
+          "note": "Provisional — TAXONOMY.md §11.1 asks whether this is in v1 at all."
+        }
+      ]
+    },
+    {
+      "id": "tissue",
+      "name": "What it acts on",
+      "question": "What is it acting on?",
+      "required": false,
+      "multi": true,
+      "closed": true,
+      "note": "Where muscle-versus-fascia lives — as a property, never as a sub-category of effect. Dry needling is one item with three tissues.",
+      "values": [
+        {
+          "id": "muscle",
+          "name": "Muscle"
+        },
+        {
+          "id": "fascia",
+          "name": "Fascia",
+          "also": [
+            "connective tissue"
+          ]
+        },
+        {
+          "id": "nerve",
+          "name": "Nerve"
+        },
+        {
+          "id": "joint",
+          "name": "Joint",
+          "also": [
+            "capsule"
+          ]
+        },
+        {
+          "id": "tendon",
+          "name": "Tendon",
+          "also": [
+            "ligament"
+          ]
+        },
+        {
+          "id": "lymph",
+          "name": "Lymph"
+        },
+        {
+          "id": "skin",
+          "name": "Skin"
+        }
+      ]
+    },
+    {
+      "id": "technique",
+      "name": "How it is done",
+      "question": "How is it done?",
+      "required": false,
+      "multi": false,
+      "closed": false,
+      "note": "Fourteen of these already ship on 77 items and render nowhere. Ids carry the tech- prefix they were authored with.",
+      "values": [
+        {
+          "id": "tech-sustained-pressure",
+          "name": "Sustained pressure"
+        },
+        {
+          "id": "tech-pin-and-move",
+          "name": "Pin and move"
+        },
+        {
+          "id": "tech-fold-and-hold",
+          "name": "Fold and hold"
+        },
+        {
+          "id": "tech-contract-relax",
+          "name": "Contract–relax"
+        },
+        {
+          "id": "tech-nerve-glide",
+          "name": "Nerve glide"
+        },
+        {
+          "id": "tech-breath-coupled",
+          "name": "Breath-coupled"
+        },
+        {
+          "id": "tech-positional-rest",
+          "name": "Positional rest"
+        },
+        {
+          "id": "tech-percussion",
+          "name": "Percussion"
+        },
+        {
+          "id": "tech-long-hold",
+          "name": "Long hold"
+        },
+        {
+          "id": "tech-scrape",
+          "name": "Scraping",
+          "also": [
+            "gua sha",
+            "IASTM"
+          ]
+        },
+        {
+          "id": "tech-decompression-cup",
+          "name": "Cupping"
+        },
+        {
+          "id": "tech-skin-glide",
+          "name": "Skin glide"
+        },
+        {
+          "id": "tech-broad-roll",
+          "name": "Broad roll"
+        },
+        {
+          "id": "tech-compression-floss",
+          "name": "Compression flossing"
+        },
+        {
+          "id": "tech-needling",
+          "name": "Dry needling",
+          "note": "Not yet in the catalogue. Seeded because it is the case that proved tissue had to be multi-valued: release acting on muscle, fascia and nerve at once."
+        }
+      ]
+    },
+    {
+      "id": "context",
+      "name": "Where you can do it",
+      "question": "Where can you do it?",
+      "required": false,
+      "multi": true,
+      "closed": false,
+      "note": "Already on 92 items with exactly these six values.",
+      "values": [
+        {
+          "id": "floor",
+          "name": "On the floor"
+        },
+        {
+          "id": "bed",
+          "name": "In bed"
+        },
+        {
+          "id": "chair",
+          "name": "In a chair"
+        },
+        {
+          "id": "standing",
+          "name": "Standing"
+        },
+        {
+          "id": "desk",
+          "name": "At a desk"
+        },
+        {
+          "id": "travel",
+          "name": "Travelling"
+        }
+      ]
+    },
+    {
+      "id": "equipment",
+      "name": "What you need",
+      "question": "What does it need?",
+      "required": false,
+      "multi": true,
+      "closed": false,
+      "note": "Open. Today's `equipment` field is two vocabularies in one: 263 items carry short enum-ish values (bodyweight 94, band 24, dumbbell 20) and 71 carry prose ('A wall, plus a rolled hand towel...'). The prose is instruction and belongs in fields.tool; this facet is the filterable part. Kettlebell, mace and jump rope arrive here from `category`.",
+      "values": [
+        {
+          "id": "none",
+          "name": "Nothing",
+          "also": [
+            "bodyweight"
+          ]
+        },
+        {
+          "id": "ball",
+          "name": "Ball",
+          "also": [
+            "lacrosse ball",
+            "massage ball"
+          ]
+        },
+        {
+          "id": "roller",
+          "name": "Foam roller"
+        },
+        {
+          "id": "band",
+          "name": "Resistance band"
+        },
+        {
+          "id": "strap",
+          "name": "Strap",
+          "also": [
+            "belt",
+            "towel"
+          ]
+        },
+        {
+          "id": "mat",
+          "name": "Mat"
+        },
+        {
+          "id": "wall",
+          "name": "A wall"
+        },
+        {
+          "id": "doorway",
+          "name": "A doorway"
+        },
+        {
+          "id": "chair",
+          "name": "A chair",
+          "also": [
+            "bench",
+            "table",
+            "desk"
+          ]
+        },
+        {
+          "id": "step",
+          "name": "A step"
+        },
+        {
+          "id": "dumbbell",
+          "name": "Dumbbell"
+        },
+        {
+          "id": "kettlebell",
+          "name": "Kettlebell"
+        },
+        {
+          "id": "mace",
+          "name": "Steel mace"
+        },
+        {
+          "id": "rope",
+          "name": "Jump rope"
+        },
+        {
+          "id": "pullup-bar",
+          "name": "Pull-up bar",
+          "also": [
+            "parallel bars"
+          ]
+        },
+        {
+          "id": "balance-board",
+          "name": "Balance board"
+        },
+        {
+          "id": "acupressure-mat",
+          "name": "Acupressure mat"
+        }
+      ]
+    },
+    {
+      "id": "demands",
+      "name": "What it occupies",
+      "question": "What does it need available?",
+      "required": false,
+      "multi": true,
+      "closed": true,
+      "note": "The item's half of the ordinary-moments match (TAXONOMY.md §6). An item's `demands` are what it needs available; an opportunity's `occupies` are what that moment makes UNAVAILABLE, drawn from this same vocabulary. An item fits when the two sets do not intersect. Closed, because opportunities.json is validated against it.",
+      "values": [
+        {
+          "id": "hands",
+          "name": "Both hands",
+          "note": "Needs two free hands. A moment that takes even one hand occupies this, which is why every moment occupying `one-hand` must occupy `hands` too — the checker refuses the other way round."
+        },
+        {
+          "id": "one-hand",
+          "name": "One free hand",
+          "note": "Needs one free hand. Only a moment that takes BOTH hands occupies this — brushing your teeth leaves a hand, so it blocks `hands` and not `one-hand`."
+        },
+        {
+          "id": "eyes",
+          "name": "Your eyes"
+        },
+        {
+          "id": "attention",
+          "name": "Your attention",
+          "note": "Cannot be done while holding a conversation or following something."
+        },
+        {
+          "id": "floor",
+          "name": "Getting down on the floor"
+        },
+        {
+          "id": "room",
+          "name": "Room to move"
+        },
+        {
+          "id": "quiet",
+          "name": "Quiet or privacy"
+        }
+      ]
+    },
+    {
+      "id": "performedBy",
+      "name": "Who does it",
+      "question": "Who performs it?",
+      "required": false,
+      "multi": false,
+      "closed": true,
+      "note": "Separates 'what can I do tonight' from 'what should I book'. Cupping, acupuncture and needling are currently indistinguishable in the data from a hamstring stretch.",
+      "values": [
+        {
+          "id": "self",
+          "name": "Yourself"
+        },
+        {
+          "id": "practitioner",
+          "name": "A practitioner"
+        }
+      ]
+    },
+    {
+      "id": "tradition",
+      "name": "Where it comes from",
+      "question": "What tradition is it from?",
+      "required": false,
+      "multi": false,
+      "closed": false,
+      "note": "A label, never a shelf — so anything from any school enters as `load` and still says where it came from. `martial_arts` and `athletic` arrive here from `category`.",
+      "values": [
+        {
+          "id": "martial-arts",
+          "name": "Martial arts"
+        },
+        {
+          "id": "athletic",
+          "name": "Athletic training"
+        },
+        {
+          "id": "yoga",
+          "name": "Yoga"
+        },
+        {
+          "id": "pilates",
+          "name": "Pilates"
+        },
+        {
+          "id": "physio",
+          "name": "Physiotherapy",
+          "also": [
+            "PT"
+          ]
+        },
+        {
+          "id": "qigong",
+          "name": "Qigong",
+          "also": [
+            "tai chi"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tier",
+      "name": "How well established",
+      "question": "How well established is it?",
+      "required": false,
+      "multi": false,
+      "closed": true,
+      "note": "Ships and renders today, on 118 items. Listed here so the vocabulary lives in one place, not to change it.",
+      "values": [
+        {
+          "id": "established",
+          "name": "Established"
+        },
+        {
+          "id": "exploratory",
+          "name": "Worth trying"
+        }
+      ]
+    }
+  ],
+  "supersessions": []
+}

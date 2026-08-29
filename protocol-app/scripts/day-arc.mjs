@@ -18,6 +18,18 @@
 //   The rise block attaches to a ritual you already have (law 7). The app
 //   never schedules inside somebody's coffee; it schedules alongside it.
 //
+//   Which is why this block is NOT called "while the kettle boils" any more
+//   (Kevin, 29 Aug). It was for one commit, and that was the law being stated
+//   in this comment and broken seventy lines below it: the kettle is one
+//   person's ritual, and naming the block after it hands every other reader
+//   somebody else's morning. It also shrank the principle to a single moment.
+//   The point is bigger than the rise block — a seated hold, something while
+//   the dishes are being done, a balance drill in front of the television,
+//   anything ordinary turned into a rep. That layer is FRAMEWORK part 4 and it
+//   is not built; the block name is not the place to smuggle it in. The block
+//   states the principle, the example lives in `tool` where a person can read
+//   past it, and the ritual stays theirs.
+//
 // The wake block follows the unwind-the-night principle: the morning bias
 // reverses whatever position the body held for hours. Sleep position is not
 // asked yet (D30 onboarding), so the shipped set is the one that suits the
@@ -37,7 +49,7 @@ export function dayArcProtocol(now) {
   return {
     id: 'seed-day-arc',
     name: 'The day arc',
-    notes: 'Four anchors: before you get up, while the kettle boils, before bed, and in bed. Each one has a sixty-second version that counts — miss the long one and the floor is still the whole thing.',
+    notes: 'Four anchors: before you get up, while you are already up and doing something else, before bed, and in bed. Each one has a sixty-second version that counts — miss the long one and the floor is still the whole thing.',
     active: true,
     phases: [],
     blocks: [
@@ -86,7 +98,7 @@ export function dayArcProtocol(now) {
       },
       {
         id: 'arc-rise',
-        name: 'While the kettle boils',
+        name: 'While you’re already up',
         start: '07:00',
         end: '10:00',
         order: 1,

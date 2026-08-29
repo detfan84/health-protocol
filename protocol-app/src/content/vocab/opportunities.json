@@ -1,0 +1,201 @@
+{
+  "format": "protocol-app/opportunities-v1",
+  "version": 1,
+  "note": "Ordinary moments already in a person's day (TAXONOMY.md §6). Each one declares what it OCCUPIES — what that moment makes unavailable — drawn from the `demands` facet in facets.json; an item fits when its demands and the moment's occupies do not intersect. Nothing here is scheduled — law 7: the app never schedules inside somebody's ritual, it offers what fits alongside it. Adding a moment is one row, and it matches the whole catalogue on arrival; no item is ever re-tagged.",
+  "opportunities": [
+    {
+      "id": "seated",
+      "name": "Sitting down",
+      "also": [
+        "at your desk",
+        "in a chair",
+        "at the table"
+      ],
+      "occupies": [
+        "room",
+        "floor"
+      ],
+      "context": [
+        "chair",
+        "desk"
+      ],
+      "typical": "minutes at a time, many times a day"
+    },
+    {
+      "id": "hand-wash",
+      "name": "Washing your hands",
+      "occupies": [
+        "hands",
+        "one-hand"
+      ],
+      "context": [
+        "standing"
+      ],
+      "typical": "20–30 seconds",
+      "note": "Short, and it happens many times a day. The shortest real opportunity there is — which makes it the best teacher of the principle."
+    },
+    {
+      "id": "dishes",
+      "name": "Doing the dishes",
+      "also": [
+        "at the sink",
+        "washing up"
+      ],
+      "occupies": [
+        "hands",
+        "one-hand",
+        "room",
+        "floor"
+      ],
+      "context": [
+        "standing"
+      ],
+      "typical": "5–15 minutes"
+    },
+    {
+      "id": "television",
+      "name": "Watching television",
+      "also": [
+        "on the sofa",
+        "watching something"
+      ],
+      "occupies": [
+        "eyes",
+        "attention"
+      ],
+      "context": [
+        "standing",
+        "floor",
+        "chair"
+      ],
+      "typical": "20 minutes and up",
+      "note": "The longest opportunity most people have, and the one that takes the least. Hands, room and floor are all free."
+    },
+    {
+      "id": "teeth",
+      "name": "Brushing your teeth",
+      "occupies": [
+        "hands",
+        "room",
+        "floor"
+      ],
+      "context": [
+        "standing"
+      ],
+      "typical": "2 minutes, twice a day",
+      "note": "One hand holds the brush; the other is free. So it blocks both-hands work and not one-handed work."
+    },
+    {
+      "id": "shower",
+      "name": "In the shower",
+      "occupies": [
+        "hands",
+        "room",
+        "floor"
+      ],
+      "context": [
+        "standing"
+      ],
+      "typical": "5–10 minutes",
+      "note": "Warm tissue. Better for range work than the same minutes anywhere else in the day."
+    },
+    {
+      "id": "kettle",
+      "name": "Waiting for the kettle",
+      "also": [
+        "coffee brewing",
+        "waiting for something to heat",
+        "food in the microwave"
+      ],
+      "occupies": [],
+      "context": [
+        "standing"
+      ],
+      "typical": "1–4 minutes",
+      "note": "Occupies nothing at all, which is why it was the founding example — and why naming a block after it hid the principle rather than teaching it (§6.1)."
+    },
+    {
+      "id": "phone-call",
+      "name": "On a phone call",
+      "occupies": [
+        "hands",
+        "attention",
+        "quiet"
+      ],
+      "context": [
+        "standing",
+        "chair",
+        "desk"
+      ],
+      "typical": "variable"
+    },
+    {
+      "id": "queue",
+      "name": "Waiting in a queue",
+      "also": [
+        "waiting for the bus",
+        "standing in line"
+      ],
+      "occupies": [
+        "room",
+        "floor",
+        "quiet"
+      ],
+      "context": [
+        "standing",
+        "travel"
+      ],
+      "typical": "a few minutes"
+    },
+    {
+      "id": "cooking",
+      "name": "Cooking",
+      "also": [
+        "standing at the stove"
+      ],
+      "occupies": [
+        "hands",
+        "eyes",
+        "room",
+        "floor"
+      ],
+      "context": [
+        "standing"
+      ],
+      "typical": "10–30 minutes"
+    },
+    {
+      "id": "passenger",
+      "name": "Travelling as a passenger",
+      "also": [
+        "on the train",
+        "in the car",
+        "flying"
+      ],
+      "occupies": [
+        "room",
+        "floor",
+        "quiet"
+      ],
+      "context": [
+        "chair",
+        "travel"
+      ],
+      "typical": "long"
+    },
+    {
+      "id": "laundry",
+      "name": "Folding laundry",
+      "occupies": [
+        "hands",
+        "one-hand",
+        "eyes"
+      ],
+      "context": [
+        "standing",
+        "floor"
+      ],
+      "typical": "5–15 minutes"
+    }
+  ]
+}

@@ -2,13 +2,13 @@
   "format": "protocol-app/v1",
   "kind": "backup",
   "schemaVersion": 2,
-  "exportedAt": "2026-08-29T00:10:24.255Z",
+  "exportedAt": "2026-08-29T15:28:30.323Z",
   "data": {
     "protocols": [
       {
         "id": "seed-day-arc",
         "name": "The day arc",
-        "notes": "Four anchors: before you get up, while the kettle boils, before bed, and in bed. Each one has a sixty-second version that counts — miss the long one and the floor is still the whole thing.",
+        "notes": "Four anchors: before you get up, while you are already up and doing something else, before bed, and in bed. Each one has a sixty-second version that counts — miss the long one and the floor is still the whole thing.",
         "active": true,
         "phases": [],
         "blocks": [
@@ -69,7 +69,7 @@
           },
           {
             "id": "arc-rise",
-            "name": "While the kettle boils",
+            "name": "While you’re already up",
             "start": "07:00",
             "end": "10:00",
             "order": 1,
@@ -200,8 +200,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T00:10:24.255Z",
-        "updatedAt": "2026-08-29T00:10:24.255Z"
+        "createdAt": "2026-08-29T15:28:30.323Z",
+        "updatedAt": "2026-08-29T15:28:30.323Z"
       },
       {
         "id": "seed-daily-flow",
@@ -535,8 +535,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T00:10:24.255Z",
-        "updatedAt": "2026-08-29T00:10:24.255Z"
+        "createdAt": "2026-08-29T15:28:30.323Z",
+        "updatedAt": "2026-08-29T15:28:30.323Z"
       },
       {
         "id": "seed-support",
@@ -683,8 +683,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T00:10:24.255Z",
-        "updatedAt": "2026-08-29T00:10:24.255Z"
+        "createdAt": "2026-08-29T15:28:30.323Z",
+        "updatedAt": "2026-08-29T15:28:30.323Z"
       },
       {
         "id": "seed-body-work",
@@ -1335,8 +1335,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T00:10:24.255Z",
-        "updatedAt": "2026-08-29T00:10:24.255Z"
+        "createdAt": "2026-08-29T15:28:30.323Z",
+        "updatedAt": "2026-08-29T15:28:30.323Z"
       },
       {
         "id": "seed-routine-full-body",
@@ -1473,8 +1473,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T00:10:24.255Z",
-        "updatedAt": "2026-08-29T00:10:24.255Z"
+        "createdAt": "2026-08-29T15:28:30.323Z",
+        "updatedAt": "2026-08-29T15:28:30.323Z"
       },
       {
         "id": "seed-routine-upper-body",
@@ -1611,8 +1611,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T00:10:24.255Z",
-        "updatedAt": "2026-08-29T00:10:24.255Z"
+        "createdAt": "2026-08-29T15:28:30.323Z",
+        "updatedAt": "2026-08-29T15:28:30.323Z"
       },
       {
         "id": "seed-routine-lower-body",
@@ -1749,8 +1749,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T00:10:24.255Z",
-        "updatedAt": "2026-08-29T00:10:24.255Z"
+        "createdAt": "2026-08-29T15:28:30.323Z",
+        "updatedAt": "2026-08-29T15:28:30.323Z"
       },
       {
         "id": "seed-routine-push-day",
@@ -1887,8 +1887,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T00:10:24.255Z",
-        "updatedAt": "2026-08-29T00:10:24.255Z"
+        "createdAt": "2026-08-29T15:28:30.323Z",
+        "updatedAt": "2026-08-29T15:28:30.323Z"
       },
       {
         "id": "seed-routine-pull-day",
@@ -2025,8 +2025,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T00:10:24.255Z",
-        "updatedAt": "2026-08-29T00:10:24.255Z"
+        "createdAt": "2026-08-29T15:28:30.323Z",
+        "updatedAt": "2026-08-29T15:28:30.323Z"
       },
       {
         "id": "seed-routine-mobility-flow",
@@ -2183,13 +2183,13 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T00:10:24.255Z",
-        "updatedAt": "2026-08-29T00:10:24.255Z"
+        "createdAt": "2026-08-29T15:28:30.323Z",
+        "updatedAt": "2026-08-29T15:28:30.323Z"
       }
     ],
     "days": [],
     "labs": [],
     "settings": []
   },
-  "seedVersion": "8e0ffda37817"
+  "seedVersion": "b1065e36c9d7"
 }
