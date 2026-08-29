@@ -1,0 +1,1015 @@
+{
+  "format": "protocol-app/authored-v1",
+  "category": "release",
+  "_meta": {
+    "file": "release-pelvic-floor-deep-core.json — draft v1, 28 Aug 2026",
+    "status": "DRAFT — Kevin's edit pass pending. Not ratified content.",
+    "scope": "Pelvic floor and deep core release — both named in the Content Build Tracker as regions with no release item at all. Covers pelvic floor, transverse abdominis, diaphragm, deep spinal stabilizers, psoas/iliacus, obliques and the abdominal wall.",
+    "law_4_framing": "Content law 4 governs this file hard. Pelvic floor and deep core are the part of the library where 'treatment for X' is most tempting and least appropriate — pelvic pain, incontinence, prolapse and pelvic floor dysfunction are clinical conditions with real assessment behind them, and this app has no way to know which one a person has or whether their floor is overactive or underactive. Every item here teaches what a working system looks like and how to notice your own; none claims to treat anything. The route-to-clinician language is deliberately repeated rather than said once.",
+    "the_one_thing_the_app_cannot_know": "Whether a given person's pelvic floor is holding too much or too little. The instructions differ, and getting it backwards makes things worse. The opening card handles this explicitly and every item downstream assumes the person has read it.",
+    "no_internal_work": "Nothing in this file involves internal contact, and nothing ever will. That is clinician territory, exactly as inside-the-mouth jaw work is.",
+    "abdominal_pressure_note": "Several items apply pressure to the abdomen. The shared careful text names the situations where that is not appropriate. This is one of the places where a general audience genuinely needs a warning rather than a population-gated one, so it sits in fields.careful (universal), not populationCareful.",
+    "load_partners": "Three activation items are included (ids beginning 'load-'). The deep core has no activation content in the library, so law 1's links would point at nothing. Same flag as the neck file: arguably belongs in strength and activation. Kevin's call.",
+    "vocabulary_note": "Uses census entries: pelvic floor · transverse abdominis · diaphragm · deep spinal stabilizers (multifidus) · obliques · rectus abdominis · psoas/iliacus · adductors. No additions proposed.",
+    "landed": "2026-08-28, release library session 1."
+  },
+  "items": [
+    {
+      "id": "pelvic-floor-what-it-is",
+      "name": "The pelvic floor — and why 'just do kegels' is often the wrong advice",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "awareness-cue",
+      "why": "Read this before anything else in this section. There are two opposite problems here and the same advice makes one of them worse.",
+      "regions": [
+        "pelvis",
+        "deep-core"
+      ],
+      "muscles": [
+        "pelvic floor"
+      ],
+      "context": [
+        "chair",
+        "bed",
+        "floor"
+      ],
+      "technique": "tech-breath-coupled",
+      "fields": {
+        "tool": "Nothing. Reading and noticing.",
+        "release": "A hammock of muscle slung across the base of your pelvis, front to back and side to side. It closes what needs closing, supports what sits above it, and — the part almost nobody is told — it moves with every breath. Breathe in, the diaphragm drops and the floor drops with it. Breathe out, both come back up. It is not a static shelf; it is the bottom of a moving container.\n\n**Two opposite problems.** A floor can be *underactive* — not producing enough, not holding when you cough or lift. Or it can be *overactive* — holding constantly, never fully releasing, tired from never being off. Both can cause leaking. Both can cause a heavy or aching feeling. The symptoms overlap enough that you cannot reliably tell them apart from the outside, and the standard advice — squeeze more — helps the first and makes the second worse.\n\nThis is why the release section comes before any strengthening in this library, and why the honest recommendation for anyone with actual symptoms is a pelvic floor physiotherapist, who can assess which one you have instead of guessing.",
+        "notice": "Whether you can feel anything move down there when you breathe. Lie down, breathe slowly into your belly, and see whether anything at the base of the pelvis responds. Many people feel nothing at first — that is information, not failure. Notice too whether you are clenching right now, reading this. A lot of people are.",
+        "careful": "If you have leaking, pelvic pain, pain with sex, a feeling of heaviness or bulging, difficulty emptying, or symptoms after childbirth or surgery — those are reasons to see a pelvic floor physiotherapist, not reasons to work harder from an app. This section is not a substitute for that assessment and does not claim to be.",
+        "load": "Nothing to load yet. Read first."
+      },
+      "populationCareful": "Hypermobile: pelvic floor symptoms are more common with hypermobility, and both directions occur — connective tissue that gives more easily can mean less passive support, and muscles that compensate by gripping constantly. That combination is exactly the one where guessing goes wrong, so the case for an assessment rather than self-direction is stronger for you, not weaker.",
+      "carefulAudience": "hypermobile",
+      "dose": "n/a",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Read it, and notice whether anything moves with your breath",
+          "note": "That single observation is the whole first rung."
+        }
+      ],
+      "loadAfter": [],
+      "swapGroup": null,
+      "evidence": {
+        "family": "breath-coupled",
+        "grade": "The anatomy and the breath relationship are established. The two-problems framing reflects current clinical practice.",
+        "basis": "Coordinated movement between the diaphragm and pelvic floor with breathing is well described. That overactive and underactive pelvic floors both exist, present with overlapping symptoms, and call for different management is standard clinical understanding, with treatment algorithms placing relaxation-focused work first for the high-tone presentation. Nothing here is a claim about any individual's floor."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-pelvic-floor-breath-drop",
+      "name": "Letting the floor drop on the out-breath",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "duration",
+      "tier": "established",
+      "role": "release",
+      "sides": false,
+      "why": "The entry point for the whole region. You cannot reach this muscle with a ball, so breath is the tool — and it turns out to be the more effective one anyway, because the floor already moves with breathing whether you attend to it or not.",
+      "equipment": "None; a cushion under the knees helps",
+      "regions": [
+        "pelvis",
+        "deep-core"
+      ],
+      "muscles": [
+        "pelvic floor",
+        "diaphragm"
+      ],
+      "context": [
+        "floor",
+        "bed",
+        "chair"
+      ],
+      "technique": "tech-breath-coupled",
+      "fields": {
+        "tool": "Breath, and a position where nothing has to hold you up.",
+        "release": "Lie on your back with knees bent, or on your side, or sit well supported. Breathe in slowly through the nose and let the belly and the lower ribs widen sideways — not a big breath, a wide one. As you breathe in, imagine the base of the pelvis softening and dropping very slightly, like a hammock taking weight. On the out-breath, let it return without pushing it anywhere. Then repeat, and let each in-breath find a little more give.\n\nThe common mistake is trying. This is a letting-go instruction, and effort is the opposite of the thing.",
+        "notice": "Whether there is any sense of movement at all. Whether your belly moves but nothing lower does — that disconnect is very common and it is the thing this item is aimed at. Whether you grip somewhere else instead: buttocks, inner thighs, jaw, or the top of the shoulders. Almost everyone grips somewhere.",
+        "careful": "No bearing down and no pushing. If you feel pressure downwards or a bulging sensation, you have gone from releasing to straining — stop, and if that happens repeatedly, take it to a pelvic floor physiotherapist. Lightheadedness means the breaths are too big; make them smaller.",
+        "load": "A gentle lift and a full release, which is the activation item in this file. Down-training alone is half the job; a floor that can let go also needs to be able to produce."
+      },
+      "populationCareful": "Orthostatic: lying is the friendliest position and slow deep breathing can provoke symptoms in some people — smaller breaths, and come up in stages. PEM/pacing: about as low-exertion as this library gets, and available on almost any day. Hypermobile: see the opening card — the case for a real assessment is stronger for you.",
+      "carefulAudience": "orthostatic, hypermobile, PEM/pacing",
+      "dose": "[undetermined] — breath counts and session lengths in the down-training literature vary by clinic and are not standardised.",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Just breathe wide",
+          "note": "Belly and lower ribs widening. Do not chase the pelvic floor at all yet."
+        },
+        {
+          "level": 2,
+          "name": "Add the drop",
+          "note": "Attention on the base of the pelvis softening as you breathe in."
+        },
+        {
+          "level": 3,
+          "name": "In a lengthening position",
+          "note": "The same breathing inside one of the supported positions below, which gives the floor more room to give."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-pelvic-floor-lift-and-release",
+          "name": "A lift, and a full let-go",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "pelvic-floor-release",
+      "evidence": {
+        "inheritsFrom": "tech-breath-coupled"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-pelvic-floor-supported-positions",
+      "name": "Positions that give the floor room",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "duration",
+      "tier": "established",
+      "role": "release",
+      "sides": false,
+      "why": "Some positions open the base of the pelvis and some close it. If you are trying to let a floor go, doing it in a position that has already shortened everything around it is working uphill.",
+      "equipment": "Cushions, a wall, a strap or towel",
+      "regions": [
+        "pelvis",
+        "deep-core"
+      ],
+      "muscles": [
+        "pelvic floor",
+        "adductors",
+        "deep hip rotators"
+      ],
+      "context": [
+        "floor",
+        "bed"
+      ],
+      "technique": "tech-long-hold",
+      "fields": {
+        "tool": "As many cushions as it takes. If you are holding yourself in the position, it is the wrong position or not enough props.",
+        "release": "Three positions, all with the breath work from the previous item running underneath. **Knees wide, soles together, lying on your back** — cushions under each outer thigh so the legs are not hanging. **Knees drawn toward the armpits, lying on your back** — hold behind the thighs or use a strap; the low back stays down. **A supported squat** — heels down, holding a doorframe or with your back against a wall and a rolled towel under the heels, only as deep as is comfortable.\n\nIn any of them, settle, then breathe wide and let the base of the pelvis go on each in-breath. Stay for minutes rather than seconds.",
+        "notice": "Which position gives most. Whether the inner thighs let go or grip. Whether the low back has to arch to make a position work, which means it is too much position for today.",
+        "careful": "Mild positions, fully propped. Nothing at the end of range. Come out of the squat slowly and hold something. If any position produces downward pressure, a bulging feeling, or pain, come out of it.",
+        "load": "The lift-and-release item, and hip work — a floor sits between two hips, and hips that cannot support it leave it doing their job."
+      },
+      "populationCareful": "Hypermobile: these are all positions where a lax hip will happily go far past where the muscle work stops. Use fewer degrees and more cushions, and treat 'how far the position goes' as irrelevant — the breathing inside it is the item. Orthostatic: the squat means getting up and down; skip it or use the lying versions. Legs-elevated variants are usually well tolerated. PEM/pacing: the lying versions cost almost nothing.",
+      "carefulAudience": "hypermobile, orthostatic, PEM/pacing",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Knees wide, fully propped",
+          "note": "The gentlest, and enough on its own for many people."
+        },
+        {
+          "level": 2,
+          "name": "Knees toward the armpits",
+          "note": "More opening at the back of the floor."
+        },
+        {
+          "level": 3,
+          "name": "Supported squat",
+          "note": "Most opening, most demand on the ankles and knees. Support required."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-pelvic-floor-lift-and-release",
+          "name": "A lift, and a full let-go",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "pelvic-floor-release",
+      "evidence": {
+        "inheritsFrom": "tech-long-hold"
+      },
+      "sourceNote": "App content, not clinician-prescribed. The three positions are standard relaxation postures used in pelvic floor down-training programmes; described here from anatomy in the app's own words."
+    },
+    {
+      "id": "release-sit-bone-external",
+      "name": "Around the sitting bones — external only",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "The pelvic floor attaches to bone you can actually find and sit on. This is as close as external work gets, and for many people it is the first time anything in the area has responded to direct contact.",
+      "equipment": "A soft ball and a firm chair",
+      "regions": [
+        "pelvis"
+      ],
+      "muscles": [
+        "pelvic floor",
+        "deep hip rotators"
+      ],
+      "context": [
+        "chair"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "A soft or air-filled ball on a firm chair. Not a hard ball — this area does not want one.",
+        "release": "Sit on a firm chair and find your sitting bones by rocking side to side; they are the two bony points taking your weight. Place a soft ball just to the inside of one of them and sit onto it gently, taking weight through your feet and hands so you control the pressure. Hold. Then let the breath work run underneath — breathe wide, and let the area soften into the ball on each in-breath.",
+        "notice": "Whether one side is tenderer. Whether the area softens under the contact or stays braced. Whether you are holding your breath, which is almost universal the first few times.",
+        "careful": "Just inside the sitting bone and no further forward — this item stays on the muscle beside the bone and does not go near anything else. Soft ball, light weight, short. Numbness, pins and needles, or shooting sensation into the leg means come off immediately: a large nerve passes through this region. If you have haemorrhoids, tailbone pain, recent pelvic surgery, or any pelvic pain condition, skip this and take it to a pelvic floor physiotherapist instead.",
+        "load": "Hip work — glutes and deep rotators — plus the lift-and-release item."
+      },
+      "populationCareful": "Hypermobile: bruising risk, soft ball only, and less weight than feels productive. Orthostatic: sitting item, no floor transfer required, which makes it one of the easier ones in this file for you.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Find the sitting bones",
+          "note": "Rocking to locate them, no ball. Knowing where they are is genuinely useful on its own."
+        },
+        {
+          "level": 2,
+          "name": "Soft ball, light weight",
+          "note": "Minimal pressure, breathing underneath."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-pelvic-floor-lift-and-release",
+          "name": "A lift, and a full let-go",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "pelvic-floor-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-inner-thigh-attachment",
+      "name": "The inner thigh where it meets the pelvis",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "The inner thigh muscles attach to the front of the pelvis right beside the pelvic floor's own front attachments. They are frequently tight in people who grip through the pelvis, and they are reachable, which the floor is not.",
+      "equipment": "A ball, or a rolled towel; a bolster or cushions",
+      "regions": [
+        "pelvis",
+        "hip"
+      ],
+      "muscles": [
+        "adductors"
+      ],
+      "context": [
+        "floor",
+        "chair"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "A ball under the inner thigh while lying face-down with that leg out to the side on a bolster, or seated with the ball between your inner thigh and the chair.",
+        "release": "Lying face down with one leg out to the side, knee bent, thigh supported on a cushion, place the ball under the inner thigh. Work slowly from just above the knee up toward the pelvis, stopping where it bites. Stop well short of the very top — the last stretch toward the groin has vessels and nerves in it and is not a self-treatment area. The seated version: ball between the inner thigh and the chair seat, pressing gently inward.",
+        "notice": "How far up the tenderness runs. Whether both sides match. Whether the inner thigh is one of the places you grip when you are stressed — for a lot of people it is, and they have never noticed.",
+        "careful": "Stay on the muscle of the thigh and stop before the crease of the groin. Pins and needles or shooting sensation down the leg means come off. Not over visible veins.",
+        "load": "Something that asks the inner thigh to work at length — a squeeze against a cushion, or a wide-stance movement — and the hip work that stops the adductors substituting for glutes."
+      },
+      "populationCareful": "Hypermobile: the face-down position takes the hip toward the end of its range; support the thigh well and keep the angle modest. Orthostatic: use the seated version.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Seated, gentle",
+          "note": "Ball between inner thigh and chair. Fully under your control."
+        },
+        {
+          "level": 2,
+          "name": "Face down over a bolster",
+          "note": "More access, more pressure available."
+        },
+        {
+          "level": 3,
+          "name": "Add the knee bending",
+          "note": "Hold the ball in place and slowly bend and straighten the knee. Pin-and-move."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": null,
+          "name": "Inner-thigh squeeze on a cushion, and wide-stance hip work",
+          "resolveAgainst": "imported-legacy",
+          "note": "Match against the existing strength items at S5; author if absent."
+        }
+      ],
+      "swapGroup": "adductor-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-around-the-tailbone",
+      "name": "Around the tailbone",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": false,
+      "why": "The back edge of the pelvic floor attaches near the tailbone, and so do muscles running up into the low back. It is a place that gets sore from sitting and that almost nobody addresses.",
+      "equipment": "A soft ball or a folded towel",
+      "regions": [
+        "pelvis",
+        "low-back"
+      ],
+      "muscles": [
+        "pelvic floor",
+        "deep spinal stabilizers (multifidus)"
+      ],
+      "context": [
+        "floor",
+        "chair"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "A soft ball, or a folded towel if a ball is too much.",
+        "release": "Lying on your back with knees bent, place a soft ball just to one side of the tailbone — beside it, on the muscle, never on the bone itself. Let your weight settle gently. Breathe. Then the other side. Alternatively, seated on a firm chair, place a folded towel just to one side of the tailbone and lean slightly into it.",
+        "notice": "Whether the two sides feel different. Whether this area is tender in a way you had not realised — very common in people who sit a lot or who tuck the pelvis under habitually.",
+        "careful": "Beside the tailbone, never on it. If you have had a tailbone injury, tailbone pain, or pain sitting, this item is not for you and belongs with a clinician. Soft ball, light pressure, short.",
+        "load": "Pelvic tilting through a full comfortable range, and glute work — a tucked-under pelvis is usually the reason this area is loaded in the first place."
+      },
+      "populationCareful": "Hypermobile: bruising over bony areas happens readily; soft ball and light pressure only. Orthostatic: the seated version avoids floor transfers entirely.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Seated, folded towel",
+          "note": "The gentlest version, and enough for most people."
+        },
+        {
+          "level": 2,
+          "name": "Lying, soft ball",
+          "note": "Slightly more pressure, one side at a time."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": null,
+          "name": "Pelvic tilts through full range",
+          "resolveAgainst": "imported-legacy",
+          "note": "The existing rise-block hip rocks may cover this. Match at S5."
+        }
+      ],
+      "swapGroup": "pelvic-floor-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-diaphragm-unfinished-exhale",
+      "name": "The exhale you never finish",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "duration",
+      "tier": "established",
+      "role": "release",
+      "sides": false,
+      "why": "Most people who breathe badly are not failing to breathe in — they are failing to breathe out. A diaphragm that never returns to its resting dome position never gets a rest, and everything above and below it compensates. This is release by breathing, not by pressing.",
+      "equipment": "None",
+      "regions": [
+        "ribs",
+        "deep-core"
+      ],
+      "muscles": [
+        "diaphragm",
+        "intercostals",
+        "obliques"
+      ],
+      "context": [
+        "floor",
+        "bed",
+        "chair",
+        "desk",
+        "travel"
+      ],
+      "technique": "tech-breath-coupled",
+      "fields": {
+        "tool": "Breath. Hands on the lower ribs to feel what is happening.",
+        "release": "Lie on your back with knees bent, hands on the sides of your lower ribs. Breathe out — and then keep going, gently, past where you would normally stop, letting the ribs draw down and in. Not forcing, not squeezing hard: just continuing. Pause for a moment at the bottom without gasping. Then let the in-breath come by itself, and let it widen the ribs sideways under your hands rather than lifting your chest.\n\nThe long out-breath is the release. The in-breath just has to be allowed.",
+        "notice": "Whether your ribs actually come down at the end of the out-breath or stay lifted. Whether the in-breath comes in sideways or upwards. Whether your shoulders rise — if they do, the neck is doing the breathing, which is what the scalene item elsewhere in this library is about.",
+        "careful": "Do not force the exhale hard or hold your breath at the bottom. Lightheadedness means it is too much — smaller and slower. If you have a respiratory condition, keep this comfortable and take breathing work to your clinician.",
+        "load": "The deep abdominal connection item — the muscles that manage the pressure inside the container the diaphragm sits on top of."
+      },
+      "populationCareful": "Orthostatic: some people find slow deep breathing provokes lightheadedness. Lying down, smaller breaths, stop if it builds. PEM/pacing: very low cost.",
+      "carefulAudience": "orthostatic, PEM/pacing",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Hands on ribs, just notice",
+          "note": "Where does the breath go? No changing anything yet."
+        },
+        {
+          "level": 2,
+          "name": "Extend the exhale",
+          "note": "Gently continue past the usual stopping point."
+        },
+        {
+          "level": 3,
+          "name": "Side-lying and seated",
+          "note": "Same thing in positions where gravity loads the ribs differently. Seated is the one that transfers to your day."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-deep-abdominal-connection",
+          "name": "Finding the deep abdominal layer",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "diaphragm-release",
+      "evidence": {
+        "inheritsFrom": "tech-breath-coupled"
+      },
+      "sourceNote": "App content, not clinician-prescribed. Distinct from the imported 'Under the rib margin' card, which is manual work on the rib margin; this is the breath-side approach to the same structure."
+    },
+    {
+      "id": "release-psoas-constructive-rest",
+      "name": "Letting the deep hip flexor go — without touching it",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "duration",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": false,
+      "why": "The deepest hip flexor runs from the lumbar spine through the pelvis to the top of the thigh. Reaching it manually means pressing through the abdomen, which is a genuinely poor idea for most people. This position removes its job entirely and waits, which costs nothing and risks nothing.",
+      "equipment": "Floor and a wall or chair; a small cushion",
+      "regions": [
+        "hip",
+        "low-back",
+        "deep-core"
+      ],
+      "muscles": [
+        "psoas/iliacus"
+      ],
+      "context": [
+        "floor",
+        "bed"
+      ],
+      "technique": "tech-positional-rest",
+      "fields": {
+        "tool": "The floor, and something to rest your lower legs on.",
+        "release": "Lie on your back with your lower legs resting on a chair seat, hips and knees at roughly right angles. Or lie with knees bent and feet flat, close to your seat, and let the knees lean gently against each other so nothing is held. Arms wherever they are comfortable. Then stop. Not stretching, not breathing in a special way, not scanning your body. Several minutes of the muscle having no job at all.",
+        "notice": "How long it takes before anything actually lets go. Often several minutes — much longer than most people ever wait. Whether one hip feels different from the other once things settle.",
+        "careful": "Nothing should go numb. If your low back is uncomfortable flat on the floor, put a small cushion under it or use the legs-on-a-chair version. Get up slowly.",
+        "load": "The hip flexors need to work at their short range afterward, not just be released — a slow knee lift while lying, or holding one knee up without the hands. That teaches the muscle it can produce rather than only tighten."
+      },
+      "populationCareful": "Orthostatic: legs-elevated is usually well tolerated and often actively welcome; come up in stages. PEM/pacing: genuinely close to free — this is a real protocol item on a day when nothing else is possible, not a rest day dressed up.",
+      "carefulAudience": "orthostatic, PEM/pacing",
+      "dose": "[undetermined] — traditions using this position suggest several minutes to twenty; nothing here is derived.",
+      "levels": [
+        {
+          "level": 1,
+          "name": "A few minutes",
+          "note": "Set up, stay, get up."
+        },
+        {
+          "level": 2,
+          "name": "Longer",
+          "note": "Time is the only variable that changes."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": null,
+          "name": "Slow knee lifts, lying",
+          "resolveAgainst": "imported-legacy",
+          "note": "Match against existing hip flexor strength content at S5."
+        }
+      ],
+      "swapGroup": "psoas-release",
+      "evidence": {
+        "inheritsFrom": "tech-positional-rest"
+      },
+      "sourceNote": "App content, not clinician-prescribed. Deliberately offered instead of deep abdominal pressure on this muscle, which this library does not teach."
+    },
+    {
+      "id": "release-hip-flexor-contract-relax",
+      "name": "Front of the hip — contract and let go",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "A different family applied to a region the library already has a pressure card for. Contract-relax reaches the deep hip flexor in a way a ball never will, and it builds control at the same time — which suits a hip that is tight because it is unstable rather than because it is short.",
+      "equipment": "A cushion for the back knee",
+      "regions": [
+        "hip"
+      ],
+      "muscles": [
+        "psoas/iliacus",
+        "quadriceps"
+      ],
+      "context": [
+        "floor",
+        "standing"
+      ],
+      "technique": "tech-contract-relax",
+      "fields": {
+        "tool": "A half-kneeling position, cushion under the back knee.",
+        "release": "Half kneeling, back knee down on a cushion, front foot flat. Tuck your tailbone under slightly — that is what actually puts the deep hip flexor on stretch, and without it you are just leaning forward. Shift your weight forward only until you feel the first honest sensation at the front of the back hip.\n\nNow gently press the back knee down into the floor, as if trying to drag it toward your front foot, without moving. Hold lightly. Then let go completely on an out-breath, keep the tailbone tucked, and shift a little further forward. Repeat.",
+        "notice": "Whether you can keep the tailbone tucked as you shift forward — most people lose it immediately, and once it is lost the position stops working. Whether the sensation is at the front of the hip or in the low back; low back means the tuck has gone.",
+        "careful": "Gentle contraction, not a maximal push. Cushion under the knee. If the front of the hip pinches rather than stretches, come back and reduce the range.",
+        "load": "The same muscle working at its short end — knee lifts, or holding a knee up unsupported."
+      },
+      "populationCareful": "Hypermobile: this is a good family for you because the contraction builds control in the range you open. Keep the shift small; the tuck matters far more than the distance. Orthostatic: kneeling and standing up again is a position change — use support to get up.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Find the tuck",
+          "note": "Half kneeling, tailbone tucked, no forward shift at all. Many people feel plenty here."
+        },
+        {
+          "level": 2,
+          "name": "Contract and release",
+          "note": "Add the gentle press and let-go, taking up slack afterward."
+        },
+        {
+          "level": 3,
+          "name": "Add the arm overhead",
+          "note": "Reach the arm on the back-leg side overhead and slightly across. Reaches the front of the trunk as well."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": null,
+          "name": "Slow knee lifts, lying or standing",
+          "resolveAgainst": "imported-legacy",
+          "note": "Match at S5."
+        }
+      ],
+      "swapGroup": "psoas-release",
+      "evidence": {
+        "inheritsFrom": "tech-contract-relax"
+      },
+      "sourceNote": "App content, not clinician-prescribed. Different technique family from the imported 'Front of hip' pressure card."
+    },
+    {
+      "id": "release-obliques-side-of-trunk",
+      "name": "The side of the trunk, between ribs and hip",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "The gap between the bottom rib and the top of the pelvis is spanned entirely by muscle. It gets short in anyone who sits leaning to one side, carries on one hip, or has been guarding a painful area — and it pulls the ribcage down toward the pelvis on that side, which is a breathing problem as much as a movement one.",
+      "equipment": "A foam roller or ball; a cushion",
+      "regions": [
+        "trunk",
+        "low-back"
+      ],
+      "muscles": [
+        "obliques",
+        "quadratus lumborum"
+      ],
+      "context": [
+        "floor"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "A foam roller or a ball, lying on your side.",
+        "release": "Lie on your side with the roller under the gap between your bottom rib and the top of your pelvis, propped on your forearm. Move slowly and cover the area rather than rolling back and forth. This is soft tissue over no bone — go lighter than you would on a thigh. Then take the pressure and breathe into the side under it: the ribs widening against the roller is the release.",
+        "notice": "How big the gap is on each side. Whether one side is shorter. Whether you can breathe into the side that is under pressure, or whether the breath refuses to go there.",
+        "careful": "This region has no bony protection over the kidney area, so lighter than elsewhere and never a hard ball driven in. Stop for any deep ache that is not muscular in character. Not immediately after eating.",
+        "load": "Side-lying work that asks these muscles to hold — and, more importantly, breathing into the side you just opened."
+      },
+      "populationCareful": "Hypermobile: light pressure, and be aware that side-lying propped on a forearm loads a shoulder that may not enjoy it — use a cushion under the ribs and less prop. Orthostatic: floor position, get up slowly.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Ball, light",
+          "note": "Small contact area, minimal weight."
+        },
+        {
+          "level": 2,
+          "name": "Roller with breathing",
+          "note": "Broader contact, breathing into the side under pressure."
+        },
+        {
+          "level": 3,
+          "name": "Add the reach",
+          "note": "Hold the pressure and reach the top arm overhead, lengthening the side. Pin-and-move."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-deep-abdominal-connection",
+          "name": "Finding the deep abdominal layer",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "lateral-trunk-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-abdominal-wall-glide",
+      "name": "The abdominal wall — gliding, not pressing",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": false,
+      "why": "The abdominal wall is where a great deal of protective bracing lives and where almost nobody looks, because deep abdominal pressure is a bad idea and so the whole region gets skipped. Gliding the surface layer sidesteps the problem entirely — nothing is pressed in.",
+      "equipment": "None",
+      "regions": [
+        "abdomen",
+        "deep-core"
+      ],
+      "muscles": [
+        "rectus abdominis",
+        "obliques"
+      ],
+      "context": [
+        "bed",
+        "floor",
+        "chair"
+      ],
+      "technique": "tech-skin-glide",
+      "fields": {
+        "tool": "Flat hands.",
+        "release": "Lying on your back with knees bent so the abdominal wall is slack. Place a flat hand on your belly and move the skin and the loose layer beneath it over what lies underneath — side to side, up and down — without sliding across the skin or pressing inward. Work across the whole area, including out to the sides and up under the rib margin. Where it does not want to move, stay there with a gentle sustained shift in that direction and breathe.",
+        "notice": "Where it moves easily and where it feels tethered, and whether that map is symmetrical. Whether your belly is braced — a lot of people hold their abdomen in continuously and have done for years without knowing.",
+        "careful": "Surface only. No deep pressure into the abdomen, and nothing that presses on a pulse you can feel — a strong pulsing sensation in the middle of the abdomen is a reason to leave the area alone and mention it to a doctor, not to explore it. Skip this item entirely if you are pregnant, have a hernia, have had recent abdominal surgery, or have active abdominal or bowel symptoms; and if you have a diagnosed abdominal condition, this is a question for your clinician rather than an app.",
+        "load": "The deep abdominal connection item — finding the layer underneath and learning to produce it on purpose."
+      },
+      "populationCareful": "Hypermobile: skin that stretches more than average changes what 'normal glide' feels like — compare your own sides, not a standard. PEM/pacing: near-zero exertion.",
+      "carefulAudience": "hypermobile, PEM/pacing",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Map it",
+          "note": "Explore and notice. No treatment goal."
+        },
+        {
+          "level": 2,
+          "name": "Stay where it resists",
+          "note": "Gentle sustained shift into the restricted direction, with breathing."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-deep-abdominal-connection",
+          "name": "Finding the deep abdominal layer",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "abdominal-release",
+      "evidence": {
+        "inheritsFrom": "tech-skin-glide"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-multifidus-beside-spine",
+      "name": "The small muscles right beside the spine",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "Deep to the long back muscles sit short ones spanning only a segment or two. They stabilise individual joints rather than moving the trunk, and they are a different target from the big ropes a foam roller reaches.",
+      "equipment": "A ball, or two balls in a sock",
+      "regions": [
+        "low-back",
+        "spine"
+      ],
+      "muscles": [
+        "deep spinal stabilizers (multifidus)",
+        "spinal erectors"
+      ],
+      "context": [
+        "floor",
+        "standing"
+      ],
+      "technique": "tech-pin-and-move",
+      "fields": {
+        "tool": "One ball, or two in a sock so the spine sits in the gap between them.",
+        "release": "Lying on your back, place the ball just beside the spine in the low back — in the groove between the bony bumps and the thick rope of muscle, not on the bumps and not out on the rope. Let your weight settle. Then, keeping the contact, do a very small pelvic tilt — flattening and arching the low back a fraction. The tissue moves under the ball. Work a few spots up and down.",
+        "notice": "That the tenderness is often at one specific level rather than spread out. Whether the small tilt is easy or whether your whole trunk has to move to produce it — a low back that can only move in one piece is the finding.",
+        "careful": "Beside the spine, never on the bony bumps. Light pressure — this is deep tissue and pressing hard reaches it no better. Numbness or shooting sensation into the leg means come off. Not over an area of unexplained pain or after a recent back injury without a clinician's word.",
+        "load": "Small, controlled back movements under your own power — segmental tilts and cat-cow-style movement, and the deep abdominal connection so front and back share the job."
+      },
+      "populationCareful": "Hypermobile: small movements only, and stop short of end range in either direction. A hypermobile low back does not need more range; it needs control of the range it has, which is what the load partner is for. Orthostatic: floor item; get up in stages.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Static ball",
+          "note": "Find it and hold, no movement."
+        },
+        {
+          "level": 2,
+          "name": "Add the small tilt",
+          "note": "Tissue moving under the contact."
+        },
+        {
+          "level": 3,
+          "name": "Standing against a wall",
+          "note": "Same targets, upright, pressure under your control. Easier on the neck and easier to get out of."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-deep-abdominal-connection",
+          "name": "Finding the deep abdominal layer",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "deep-back-release",
+      "evidence": {
+        "inheritsFrom": "tech-pin-and-move"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "connection-the-canister",
+      "name": "The canister — why the floor, the diaphragm and the deep belly are one system",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "awareness-cue",
+      "why": "The single idea that makes this whole section make sense. These are not three muscles that happen to be near each other — they are the top, bottom and sides of one pressurised container, and they only work as a set.",
+      "regions": [
+        "deep-core",
+        "pelvis",
+        "ribs"
+      ],
+      "muscles": [
+        "diaphragm",
+        "pelvic floor",
+        "transverse abdominis",
+        "deep spinal stabilizers (multifidus)"
+      ],
+      "context": [
+        "chair",
+        "bed",
+        "floor",
+        "desk",
+        "travel"
+      ],
+      "technique": "tech-breath-coupled",
+      "fields": {
+        "tool": "Nothing.",
+        "release": "Picture a container in your trunk. The diaphragm is the lid. The pelvic floor is the base. The deep abdominal layer wraps the front and sides, and small deep muscles line the back. Pressure inside that container is what lets your spine be stable without your back muscles gripping.\n\nBreathe in: the lid drops, the base drops, the sides widen. Breathe out: everything comes back up. That is what it looks like when it works.\n\nWhat it looks like when it doesn't: the lid barely moves, so the neck lifts the ribs instead. The base holds constantly instead of moving, or never produces at all. The sides are braced permanently so nothing widens. The back muscles take over the stabilising and are tight all day as a result.\n\nSo — a tight low back may be a breathing problem. A pelvic floor that will not let go may be a diaphragm problem. A neck that is always tight may be either. This is what counterforce means in one region: pressing on any one of these while the others keep shoving does not hold.",
+        "notice": "Put one hand on your lower ribs and one on your belly and just breathe. Which moves? Then notice whether anything at the base of the pelvis responds. Three parts, one system — find out how many of them are actually participating.",
+        "careful": "Nothing to be careful of. This is a reading item.",
+        "load": "Everything else in this section is the load for this idea."
+      },
+      "populationCareful": "",
+      "carefulAudience": "",
+      "dose": "n/a",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Read it and test yourself",
+          "note": "Two hands, one minute of breathing. Which parts move?"
+        }
+      ],
+      "loadAfter": [],
+      "swapGroup": null,
+      "evidence": {
+        "family": "breath-coupled",
+        "grade": "Established anatomy and coordinated function; the extent to which restoring the coordination fixes downstream symptoms is less settled.",
+        "basis": "That the diaphragm, pelvic floor, deep abdominal wall and deep spinal muscles act together in managing intra-abdominal pressure, and that they move in coordination with breathing, is well described. The stronger clinical claim — that retraining this coordination resolves a given person's back or pelvic symptoms — is a treatment claim this card does not make."
+      },
+      "sourceNote": "App content, not clinician-prescribed.",
+      "authoringNote": "Candidate for the connection-card series rather than the item catalogue — Kevin's call on placement."
+    },
+    {
+      "id": "load-pelvic-floor-lift-and-release",
+      "name": "A lift, and a full let-go",
+      "kind": "exercise",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "activate",
+      "sides": false,
+      "why": "The load partner for every pelvic floor item here. And note what it is called — the release is half of the exercise, not an afterthought. A muscle that can only contract is not strong; it is stuck.",
+      "equipment": "None",
+      "regions": [
+        "pelvis",
+        "deep-core"
+      ],
+      "muscles": [
+        "pelvic floor"
+      ],
+      "context": [
+        "floor",
+        "bed",
+        "chair"
+      ],
+      "technique": null,
+      "fields": {
+        "tool": "Nothing.",
+        "release": "Lying or sitting comfortably. Breathe out, and as you do, gently draw the base of your pelvis up and in — a lift, not a clench, and much smaller than most people produce on the first attempt. Then breathe in and let it go completely, all the way back down to where it started. The letting go should take at least as long as the lift and should feel like a real release, not just stopping.\n\nGentle effort. If your buttocks squeeze, your inner thighs grip, your belly hardens, or you hold your breath, the effort is too big — halve it.",
+        "notice": "Whether the release is as clear as the lift. Many people can lift and cannot fully let go, and finding that out is worth more than any number of repetitions. Whether anything else joins in.",
+        "careful": "No bearing down, ever. Gentle. If you have symptoms — leaking, pain, heaviness, difficulty emptying — get an assessment before building a programme around this, because the right instruction for you depends on which problem you have, and an app cannot tell.",
+        "load": "This is the load."
+      },
+      "populationCareful": "Hypermobile: pelvic floor symptoms are more common with hypermobility and both over- and under-activity occur. The case for a pelvic floor physiotherapist's assessment is stronger for you rather than weaker. Orthostatic: lying or supported sitting.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined] — this is precisely the parameter that should come from an assessment rather than from an app, because the right number depends on which problem you have.",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Find the release",
+          "note": "One small lift, one long full let-go. The let-go is the rung."
+        },
+        {
+          "level": 2,
+          "name": "Coordinate with the breath",
+          "note": "Lift on the out-breath, release on the in-breath, several times."
+        },
+        {
+          "level": 3,
+          "name": "In upright positions",
+          "note": "The same, sitting and then standing, where the floor actually has to work."
+        }
+      ],
+      "swapGroup": "pelvic-floor-activation",
+      "evidence": {
+        "family": null,
+        "grade": "Pelvic floor muscle training is established first-line care for several pelvic floor conditions; the relaxation half is supported by expert consensus and small series rather than large trials.",
+        "basis": "Pelvic floor muscle training is recommended as first-line management for pelvic floor dysfunction by international bodies. Down-training for the high-tone presentation rests on expert consensus and treatment algorithms plus pilot studies and clinical series. Also relevant and often not said: breathing-based approaches alone are not effective for strengthening the pelvic floor — which is why this item exists alongside the breath items rather than being replaced by them."
+      },
+      "sourceNote": "App content, not clinician-prescribed.",
+      "authoringNote": "Authored here as a load partner; may belong in the strength and activation file."
+    },
+    {
+      "id": "load-deep-abdominal-connection",
+      "name": "Finding the deep abdominal layer",
+      "kind": "exercise",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "activate",
+      "sides": false,
+      "why": "The load partner for the trunk and low-back release items. The deepest abdominal layer wraps around like a wide belt. It is not a six-pack muscle and it does not produce a crunch — it produces tension, and most people have never located it deliberately.",
+      "equipment": "None",
+      "regions": [
+        "deep-core",
+        "abdomen"
+      ],
+      "muscles": [
+        "transverse abdominis",
+        "deep spinal stabilizers (multifidus)"
+      ],
+      "context": [
+        "floor",
+        "bed",
+        "chair",
+        "standing"
+      ],
+      "technique": null,
+      "fields": {
+        "tool": "Your own fingertips as a monitor.",
+        "release": "Lying on your back, knees bent. Put fingertips just inside the front points of your pelvis, an inch in and down. Breathe out and gently draw the lower abdomen inward and slightly upward, as if narrowing your waist a fraction — a very small effort. Under your fingers you should feel a gentle tensioning, not a hard bulge and not the belly hollowing dramatically. Hold it while you breathe normally.\n\nBreathing normally while holding it is the whole point. If you can only produce it by holding your breath, you have produced something else.",
+        "notice": "Whether you can find it at all, and whether you can keep breathing while it is on. Whether you brace hard instead — that is the substitute pattern and it is very common. Whether your back flattens or your ribs flare.",
+        "careful": "Gentle. No sucking the belly in hard, no bearing down, no holding your breath. If your back or pelvis hurts doing this, stop and get it looked at.",
+        "load": "This is the load. Later rungs add limb movement while it stays on."
+      },
+      "populationCareful": "Hypermobile: this kind of deep, low-effort control work is more valuable for you than heavy trunk exercise, and progressing to limb movement while it holds is the part that transfers. Slower progression than the rungs suggest is normal, not a failure.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined] — hold time and repetitions are a clinician's number, not an app's.",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Find it",
+          "note": "Locate the gentle tension under your fingertips. That is the rung."
+        },
+        {
+          "level": 2,
+          "name": "Hold it and keep breathing",
+          "note": "The hard part, and the useful part."
+        },
+        {
+          "level": 3,
+          "name": "Hold it while a leg moves",
+          "note": "Keep the tension while slowly sliding one heel away and back. Losing it means back a rung."
+        },
+        {
+          "level": 4,
+          "name": "Standing and walking",
+          "note": "The same quiet tension upright. This is where it stops being an exercise and starts being how you are built."
+        }
+      ],
+      "swapGroup": "deep-core-activation",
+      "evidence": {
+        "family": null,
+        "grade": "Established as standard rehabilitation content; the claim that this specific muscle must be trained in isolation is contested.",
+        "basis": "Deep abdominal and multifidus training appears in trials of motor control exercise for low back pain, with results favouring motor control approaches over some passive modalities. What is genuinely contested is the stronger version of the story — that a specific isolated activation of one deep muscle is necessary, or that its timing explains back pain. This card teaches the skill of producing low-level trunk tension while breathing, which is useful regardless of how that debate settles, and does not make the stronger claim."
+      },
+      "sourceNote": "App content, not clinician-prescribed.",
+      "authoringNote": "Authored here as a load partner; may belong in the strength and activation file."
+    },
+    {
+      "id": "load-hip-flexor-short-range",
+      "name": "Hip flexors working at their short end",
+      "kind": "exercise",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "activate",
+      "sides": true,
+      "why": "The load partner for the hip flexor release items. A hip flexor that feels tight is often not short — it is working at the wrong length and never asked to produce force where it is shortest. Stretching it and walking away leaves the reason untouched.",
+      "equipment": "None",
+      "regions": [
+        "hip",
+        "deep-core"
+      ],
+      "muscles": [
+        "psoas/iliacus"
+      ],
+      "context": [
+        "floor",
+        "bed",
+        "chair",
+        "standing"
+      ],
+      "technique": null,
+      "fields": {
+        "tool": "Nothing.",
+        "release": "Lying on your back, knees bent. Lift one knee toward your chest as far as it will comfortably go using your own muscle, then take your hands away and hold it there without help. That is the short end, and holding it there is what the muscle has probably not been asked to do in years. Lower slowly. Then the other side.\n\nStanding version: bring one knee up to hip height and hold, standing tall, near something to hold onto.",
+        "notice": "Whether the knee drops as soon as you take your hands away. How much higher your hands can put it than your own muscle can. That gap is the finding, and closing it matters more than gaining stretch.",
+        "careful": "Slow and controlled. Any pinching at the front of the hip means lower the knee until it stops. Standing version near support.",
+        "load": "This is the load."
+      },
+      "populationCareful": "Hypermobile: your hands can take the joint much further than your muscle can hold, and that gap is bigger for you than for most people — which makes this item unusually valuable and makes chasing more range unusually pointless. Orthostatic: use the lying version, or stand near support.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Lying, hold at your own end range",
+          "note": "Hands away, hold. Short holds."
+        },
+        {
+          "level": 2,
+          "name": "Longer holds, both sides",
+          "note": "Time under load."
+        },
+        {
+          "level": 3,
+          "name": "Standing knee hold",
+          "note": "Upright, near support. Also a balance item, which is a bonus rather than an accident."
+        }
+      ],
+      "swapGroup": "hip-flexor-activation",
+      "evidence": {
+        "family": null,
+        "grade": "Established as standard rehabilitation content.",
+        "basis": "Active hip flexor work at inner range is routine in rehabilitation, and the general principle — that range gained passively is retained better when the muscle is loaded in the new range — is consistent with how range-of-motion training is understood. Specific doses are protocol-dependent and are not reproduced here."
+      },
+      "sourceNote": "App content, not clinician-prescribed.",
+      "authoringNote": "Authored here as a load partner; may belong in the strength and activation file."
+    }
+  ]
+}

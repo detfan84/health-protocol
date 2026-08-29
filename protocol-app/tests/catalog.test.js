@@ -222,3 +222,62 @@ test('the shipped catalogue gates its careful text on an audience, beside fields
     assert.equal(it.fields?.carefulAudience, undefined, `${it.id} still has the tag inside fields`);
   }
 });
+
+test('merge: a family-inherited evidence grade is followed, not left dangling', () => {
+  // The release library grades once per technique family and points items at it.
+  // A pointer is not a grade until something follows it — and an unfollowed one
+  // rendered as "not graded", which is a claim about the evidence rather than a
+  // gap in it. Law 5 inverted is worse than law 5 unenforced.
+  const catalog = mergeCatalog([
+    src('authored/release-techniques.json', [item('tech-x', 'A technique', {
+      role: 'technique-guide',
+      evidence: { family: 'fam-x', grade: 'Moderate, short-term.', basis: 'Reviews say so.' },
+    })]),
+    src('authored/release-arm.json', [item('rel-x', 'A release item', {
+      evidence: { inheritsFrom: 'tech-x' },
+    })]),
+  ]);
+  const inherited = catalog.items.find((i) => i.id === 'rel-x');
+  assert.equal(inherited.evidence.grade, 'Moderate, short-term.', 'the grade is on the item');
+  assert.equal(inherited.evidence.basis, 'Reviews say so.');
+  assert.equal(inherited.evidence.inheritsFrom, 'tech-x', 'and where it came from is still visible');
+});
+
+test('merge: an evidence grade inherited from nowhere stops the build', () => {
+  assert.throws(
+    () => mergeCatalog([src('authored/release-arm.json', [item('rel-y', 'Orphan', {
+      evidence: { inheritsFrom: 'tech-does-not-exist' },
+    })])]),
+    (err) => {
+      assert.match(err.message, /rel-y/);
+      assert.match(err.message, /tech-does-not-exist/);
+      assert.match(err.message, /not graded/, 'and says why a dangling one is worse than none');
+      return true;
+    },
+  );
+});
+
+test('every shipped item that claims an evidence block carries a real grade', async () => {
+  const shipped = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
+  const ungraded = shipped.items.filter((i) => i.evidence && !i.evidence.grade).map((i) => i.id);
+  assert.deepEqual(ungraded, [], 'an evidence block with no grade renders as a claim about the evidence');
+});
+
+test('every loadAfter id resolves, including across category files', async () => {
+  // Law 1 has no teeth if its links point at nothing. These are not read by any
+  // code yet — the composer is unbuilt — but a reference that is wrong now will
+  // still be wrong when something finally follows it.
+  const shipped = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
+  const byId = new Set(shipped.items.map((i) => i.id));
+  const broken = [];
+  let refs = 0;
+  for (const it of shipped.items) {
+    for (const la of it.loadAfter ?? []) {
+      if (la.id == null) continue;          // a deliberate hole, named not invented
+      refs += 1;
+      if (!byId.has(la.id)) broken.push(`${it.id} -> ${la.id}`);
+    }
+  }
+  assert.ok(refs > 20, `expected real load-after coverage, got ${refs} references`);
+  assert.deepEqual(broken, [], 'a load partner that does not exist is law 1 with nothing behind it');
+});

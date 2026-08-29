@@ -45,7 +45,7 @@
         "grade": "established as a clinical distinction; the overlap between the two is well documented",
         "basis": "Orthostatic and vestibular causes of dizziness are separated routinely in clinical assessment. In people with orthostatic intolerance, vestibular symptoms are common rather than rare — in one clinic series nearly all reported unsteadiness and roughly half reported vertigo, and a majority were offered vestibular rehabilitation. Which is why this card teaches both/and rather than either/or."
       },
-      "sourceNote": "App content, not from Kevin's PT.",
+      "sourceNote": "App content, not clinician-prescribed.",
       "carefulAudience": "orthostatic"
     },
     {
@@ -457,8 +457,9 @@
         "grade": "established direction, small trials",
         "basis": "Exercise programmes including balance and proprioceptive work in hypermobility syndromes improve balance, proprioception, strength and pain across a small set of trials, with no adverse effects reported. The trials are few and small; the direction is consistent."
       },
-      "sourceNote": "App content, not from Kevin's PT. Rungs 6 and 7 use equipment already owned.",
-      "carefulAudience": "hypermobile, orthostatic"
+      "sourceNote": "App content, not clinician-prescribed.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "authoringNote": "Rungs 6 and 7 use equipment already owned."
     },
     {
       "id": "gaze-stabilization",
@@ -502,8 +503,9 @@
         "grade": "established for vestibular hypofunction and persistent postural-perceptual dizziness; not studied in POTS specifically",
         "basis": "Gaze stabilization is a core component of standard vestibular rehabilitation and has a real trial base in those populations. No trial has tested it in orthostatic intolerance, where symptoms overlap but the mechanism differs."
       },
-      "sourceNote": "App content, not from Kevin's PT — worth asking him whether he wants this in the mix yet, since it is a step up in provocation from the head-still drills he started with.",
-      "carefulAudience": "orthostatic"
+      "sourceNote": "App content, not clinician-prescribed.",
+      "carefulAudience": "orthostatic",
+      "authoringNote": "worth asking him whether he wants this in the mix yet, since it is a step up in provocation from the head-still drills he started with."
     },
     {
       "id": "visual-motion-tolerance",
@@ -544,8 +546,9 @@
         "grade": "established as a component of vestibular rehabilitation for visually-provoked dizziness; not studied in POTS",
         "basis": "Habituation to visual motion is standard practice for persistent postural-perceptual dizziness, where over-reliance on vision is part of the picture. Whether it helps when the dizziness is orthostatic in origin is untested — which is why the card above it matters."
       },
-      "sourceNote": "App content, not from Kevin's PT — worth asking whether it fits his plan given the orthostatic findings.",
-      "carefulAudience": "orthostatic"
+      "sourceNote": "App content, not clinician-prescribed.",
+      "carefulAudience": "orthostatic",
+      "authoringNote": "worth asking whether it fits his plan given the orthostatic findings."
     },
     {
       "id": "plantar-sensory",
@@ -591,7 +594,8 @@
         "grade": "single small trial, promising and directly on-population",
         "basis": "A 2025 randomised trial in 65 young adults with generalized joint hypermobility tested a two-week home plantar sensory training programme against information alone, measuring touch, vibration, two-point discrimination, proprioception, strength and balance. One trial in an asymptomatic group is a starting point, not a settled finding — but it is unusually close to the population this module serves."
       },
-      "sourceNote": "App content, not from Kevin's PT — worth asking where he'd place it relative to the balance ladder."
+      "sourceNote": "App content, not clinician-prescribed.",
+      "authoringNote": "worth asking where he'd place it relative to the balance ladder."
     }
   ]
 }

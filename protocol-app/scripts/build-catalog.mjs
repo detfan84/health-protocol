@@ -143,6 +143,40 @@ export function mergeCatalog(sources) {
     }
   }
 
+  // Family-inherited evidence, dereferenced.
+  //
+  // The release library grades evidence once per technique family and has its
+  // items point at the family with `evidence.inheritsFrom`. That is the right
+  // shape — one auditable grade instead of forty invented ones — but a pointer
+  // is not a grade until something follows it, and nothing did: 48 items were
+  // about to render "Evidence: not graded" while a resolvable grade sat one hop
+  // away. Law 5 inverted by a dangling reference is worse than law 5 unenforced.
+  //
+  // So the pointer is followed here, at build time, and the shipped catalogue is
+  // self-describing. `inheritsFrom` stays on the item so the provenance of the
+  // grade is still visible and still auditable in one place.
+  const gradeSources = new Map(
+    items.filter((i) => i?.evidence?.grade && i.id).map((i) => [i.id, i.evidence]),
+  );
+  for (const item of items) {
+    const from = item?.evidence?.inheritsFrom;
+    if (!from) continue;
+    const source = gradeSources.get(from);
+    if (!source) {
+      throw new Error(
+        `item "${item.id}" inherits its evidence from "${from}", which has no grade to give.\n`
+        + '  Either the id is wrong or that item is missing an evidence.grade.\n'
+        + '  An unresolved grade renders as "not graded", which is a claim about the evidence rather than a gap in it.',
+      );
+    }
+    item.evidence = {
+      ...item.evidence,
+      grade: source.grade,
+      basis: source.basis,
+      ...(source.family ? { family: source.family } : {}),
+    };
+  }
+
   items.sort((a, b) => a.name.localeCompare(b.name));
 
   const catalog = {

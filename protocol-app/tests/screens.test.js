@@ -694,7 +694,8 @@ test('the library says who wrote an item, and what it asks for', async () => {
     const gaze = await find('holding a target while your head moves', /Holding a target/i);
     assert.ok(gaze, 'the authored drill is findable');
     assert.match(gaze.textContent, /Source/, 'provenance is labelled');
-    assert.match(gaze.textContent, /not from Kevin's PT/, 'and says which side of the line it is on');
+    assert.match(gaze.textContent, /not clinician-prescribed/, 'and says which side of the line it is on');
+    assert.equal(/Kevin/i.test(gaze.textContent), false, 'without naming whose app this grew out of');
 
     // And the ported dose shows, rather than sitting in the file unread — the
     // same failure this whole pass was about.

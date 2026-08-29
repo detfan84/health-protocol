@@ -1,0 +1,1258 @@
+{
+  "format": "protocol-app/authored-v1",
+  "category": "release",
+  "_meta": {
+    "file": "release-neck-jaw.json — draft v1, 28 Aug 2026",
+    "status": "DRAFT — Kevin's edit pass pending. Not ratified content.",
+    "scope": "Neck and jaw release beyond the base of the skull — named in the Content Build Tracker as a region with no release item at all. Covers upper trapezius, levator scapulae, scalenes, sternocleidomastoid, cervical paraspinals, the suboccipitals in approaches the existing base-of-skull card does not use, and the jaw beyond the fingertip pressure already authored in entry-points.json.",
+    "no_overlap_claim": "The imported legacy set contains one neck release card ('Base of skull'). Nothing here repeats it — the two suboccipital items below use different technique families (pin-and-move, fold-and-hold) and say so. entry-points.json already holds masseter and temporalis under sustained fingertip pressure; the jaw items here are a different family (contract-relax, breath-coupled down-training) or a different target (the floor of the mouth). CC: if a name collision halts the build, that is the guard working — report it.",
+    "safety_note": "This region contains the carotid artery, the jugular vein, the brachial plexus, the subclavian vessels, the vagus nerve and the thyroid, all within reach of a thumb. That is why this file opens with an anatomy card rather than a technique, and why several items describe where NOT to press in more detail than where to press. The anatomy card should sit first in the module.",
+    "load_partners": "Four activation items are included (ids beginning 'load-'). The neck has no activation content anywhere in the library, so law 1's load-after links would otherwise point at nothing. Including them here is a judgment call that borrows slightly from the strength/activation category — flagged for Kevin, easy to move to that file instead.",
+    "vocabulary_additions_proposed": "cervical paraspinals · suprahyoids (floor of the mouth). Neither is in the ~44-entry census. Per D40 the vocabulary is a census not a cap; introduced-on 2026-08-28 if accepted. Kevin's call at S1. The jaw lumping flag stays open — masseter and temporalis are kept separate here, consistent with entry-points.json.",
+    "blanks": "Hold times, rep counts and weekly frequencies are deliberately absent from the item cards. Where a family has a defensible range it is stated once in release-techniques.json with its provenance.",
+    "landed": "2026-08-28, release library session 1."
+  },
+  "items": [
+    {
+      "id": "neck-anatomy-what-not-to-press",
+      "name": "The neck — what's in there, and where not to press",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "awareness-cue",
+      "why": "Read this before any neck item. The neck is the one region in this library where pressing in the wrong place is not just unproductive — it is the reason the app teaches the map before the technique.",
+      "regions": [
+        "neck"
+      ],
+      "muscles": [],
+      "context": [
+        "chair",
+        "desk",
+        "bed",
+        "travel"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "Nothing. This one is reading and feeling.",
+        "release": "Three zones, and they behave completely differently.\n\n**The back — safe.** The column of muscle either side of the bony bumps down the middle of the back of your neck, and the ridge at the base of the skull. Firm muscle over bone. This is where nearly all safe neck release happens.\n\n**The top of the shoulder and the inner edge of the shoulder blade — safe.** Thick muscle, easy to reach, no vulnerable structures near the surface.\n\n**The front and the sides — largely off limits.** Find your windpipe at the front of your throat. Move your fingers a little to the side and you will feel a pulse: that is the carotid artery, and you never press it. Behind that runs the rope-like muscle from behind your ear to your collarbone. Behind that again, in the hollow above the collarbone, sit the nerves and vessels heading into your arm. Pressure in this whole area is a clinician's business, not an app's, with the two carefully described exceptions in this module.",
+        "notice": "Where your pulse is on each side, so you know exactly what you are avoiding. And what the back of your neck feels like compared with the front — most people have never deliberately touched either.",
+        "careful": "Never both sides of the front of the neck at once. Never press on a pulse. Never press the soft hollow above the collarbone hard. Stop immediately for dizziness, visual change, ringing in the ears, a taste change, numbness into the arm, or nausea — those are not release sensations, they are signals to come off and, if they persist, to be seen.",
+        "load": "Nothing to load — this is a map, not a technique."
+      },
+      "populationCareful": "Hypermobile: cervical instability is more common in hypermobile people and it changes this whole module. Symptoms during or after neck work — headache at the base of the skull, visual disturbance, a feeling of the head being heavy or unsupported, symptoms brought on by looking up — belong in a clinician's hands before you do more neck work, not in an app. Orthostatic: several of these positions involve head movement and getting up and down; symptoms provoked by head position rather than by standing are a different problem than orthostatic dizziness — see the vestibular module's first card.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "n/a",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Read it and find the landmarks on yourself",
+          "note": "Locate your own pulse, your own windpipe, your own bony ridge at the base of the skull. Then the rest of this module has somewhere to stand."
+        }
+      ],
+      "loadAfter": [],
+      "swapGroup": null,
+      "evidence": {
+        "family": "sustained-pressure",
+        "grade": "Anatomy, not an intervention.",
+        "basis": "The structures and their positions are standard anatomy, described here in the app's own words. Nothing here is a treatment claim."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-upper-trap-ball-wall",
+      "name": "Top of the shoulder — ball against a wall",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "The muscle that runs from the base of your skull out to the tip of your shoulder is the one that lifts when you are braced, cold, concentrating, or on a phone call. On most people it has been quietly on for years.",
+      "equipment": "A ball, and a wall or a doorframe",
+      "regions": [
+        "neck",
+        "shoulder-girdle"
+      ],
+      "muscles": [
+        "upper trapezius"
+      ],
+      "context": [
+        "standing",
+        "desk"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "A ball trapped between your body and a wall. Standing means you control the pressure by how much you lean, which is a finer dial than lying on it.",
+        "release": "Put the ball on the slope between your neck and the point of your shoulder, and lean back into the wall. Turn slightly so the ball is on the thick part of the muscle, not on the bony ridge of your shoulder blade. Lean in until you find something tender, then stop moving and let your shoulder drop. Letting the shoulder drop is most of the work — pressing into a muscle that is still holding itself up achieves very little.",
+        "notice": "Whether your shoulder was already up before you started. Whether the tenderness runs the whole length of the slope or sits in one or two spots. Compare sides — the side you carry a bag on is usually the loud one.",
+        "careful": "Stay on the muscle slope. Do not let the ball creep forward onto the hollow above the collarbone, where the nerves to the arm run — tingling or electricity into the arm means come off immediately and move the ball backwards.",
+        "load": "This muscle is usually not weak so much as always on. The pairing is not to load it harder — it is to teach the muscles underneath the shoulder blade to take the job back."
+      },
+      "populationCareful": "Hypermobile: a shoulder that hangs from a lax joint gives this muscle a genuine holding job, and switching it off without giving the job to something else just makes it hold harder next time. The load partner matters more here than almost anywhere in this library.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Light lean",
+          "note": "Barely leaning. Find where the muscle is before deciding how much pressure it wants."
+        },
+        {
+          "level": 2,
+          "name": "More lean, shoulder actively dropping",
+          "note": "Deeper pressure, and deliberately letting the shoulder fall away from the ear while you hold."
+        },
+        {
+          "level": 3,
+          "name": "Pressure while the arm moves",
+          "note": "Hold the lean and slowly raise and lower the arm on that side. See the pin-and-move guide."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-scap-setting",
+          "name": "Setting the shoulder blade down and back",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "upper-trap-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-upper-trap-pincer",
+      "name": "Top of the shoulder — squeezing it in your hand",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "The no-equipment, anywhere version. You can do it at a desk, in a car park, in a waiting room, without anyone noticing.",
+      "equipment": "Your opposite hand",
+      "regions": [
+        "neck",
+        "shoulder-girdle"
+      ],
+      "muscles": [
+        "upper trapezius"
+      ],
+      "context": [
+        "chair",
+        "desk",
+        "standing",
+        "travel"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "Your opposite hand, reaching across.",
+        "release": "Reach across and take the slope of muscle between your neck and shoulder in your whole hand — thumb behind, fingers in front, and squeeze the muscle between them rather than digging fingertips down into it. The muscle is a sheet you can pick up; grabbing the sheet is safer and more effective than poking through it. Squeeze and hold, then move along its length.",
+        "notice": "That it lifts away from what is underneath — which tells you where the muscle actually is. Where along the length it is thickest and most tender.",
+        "careful": "Squeeze the muscle you have lifted; do not drive fingertips down into the hollow above the collarbone. Your reaching arm gets tired — swap or rest rather than pressing harder to make up for it.",
+        "load": "As above: give the job to the muscles under and around the shoulder blade."
+      },
+      "populationCareful": "Hypermobile: a gentle squeeze does not need to become a pinch, and this area bruises. Also worth noticing — reaching across holds your own shoulder in an end-range position while you work, so keep the reaching arm supported if it is a joint that complains.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Whole-hand squeeze",
+          "note": "Broad, gentle, moving along the length."
+        },
+        {
+          "level": 2,
+          "name": "Squeeze and turn the head",
+          "note": "Hold the squeeze and slowly turn or tip your head away. Pin-and-move applied to a muscle you can hold in your hand."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-scap-setting",
+          "name": "Setting the shoulder blade down and back",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "upper-trap-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-upper-trap-contract-relax",
+      "name": "Top of the shoulder — contract and let go",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "No hands, no ball, and it builds a small amount of control on the way through — which is the version to reach for if your neck does not like being pressed.",
+      "equipment": "None",
+      "regions": [
+        "neck",
+        "shoulder-girdle"
+      ],
+      "muscles": [
+        "upper trapezius"
+      ],
+      "context": [
+        "chair",
+        "desk",
+        "standing",
+        "bed",
+        "travel"
+      ],
+      "technique": "tech-contract-relax",
+      "fields": {
+        "tool": "Your own muscle. Optionally a hand on your head, used as a rest, not a lever.",
+        "release": "Sit tall and let the shoulder on the working side drop. Tip your ear toward the opposite shoulder until you feel the first stretch down the side of your neck — the first stretch, not the biggest. Now gently shrug that shoulder up toward the ear against nothing but your own control, hold it lightly, then let it go completely on an out-breath and let the shoulder sink. Usually the tip goes a little further afterward. Repeat.",
+        "notice": "Whether the shoulder actually drops when you let go, or whether it stays up. A shoulder that will not come down when told to is the finding.",
+        "careful": "Do not pull your head down with your hand. This is a hypermobile-friendly item precisely because there is no external force on the neck, and adding one removes the reason it is here. Stop for any dizziness or visual change.",
+        "load": "Follow with the deep neck flexor nod — the front of the neck taking back the job of holding the head up."
+      },
+      "populationCareful": "Hypermobile: this is the neck release family with the best safety profile for you, because you never pull on the joint. Keep the head tip small; the goal is the release of the shrug, not the depth of the side bend.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Shrug and release",
+          "note": "Head barely tipped. Learn what dropping the shoulder actually feels like."
+        },
+        {
+          "level": 2,
+          "name": "Several rounds",
+          "note": "Take up whatever slack appears after each release."
+        },
+        {
+          "level": 3,
+          "name": "Add the opposite side",
+          "note": "After releasing, actively hold the head in the new position without any hand help."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-deep-neck-flexor-nod",
+          "name": "Chin nods — the front of the neck",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "upper-trap-release",
+      "evidence": {
+        "inheritsFrom": "tech-contract-relax"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-levator-scapulae-ball",
+      "name": "The corner where neck meets shoulder blade",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "A muscle running from the side of the neck down to the top inside corner of the shoulder blade. It is the classic 'knot' spot people reach for and rarely find, because they press the wrong end.",
+      "equipment": "A ball and a wall",
+      "regions": [
+        "neck",
+        "shoulder-girdle"
+      ],
+      "muscles": [
+        "levator scapulae"
+      ],
+      "context": [
+        "standing",
+        "floor"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "A ball against a wall, or lying on it on the floor if you tolerate that.",
+        "release": "Find the top inner corner of your shoulder blade — reach across your back, or feel for the bony corner about a hand's width out from your spine at the level of the top of your shoulder. The muscle attaches there. Put the ball just above and on that corner, lean back, and hunt for the tender point. Once you have it, reach the arm on that side across your body to slide the shoulder blade away from the ball, and hold.",
+        "notice": "Whether it refers up the side of the neck toward the ear. Whether looking down over that shoulder changes the sensation — that movement is what this muscle resists.",
+        "careful": "Muscle, not the bony edge of the shoulder blade or the spine. If the ball sits on bone you will feel it as a hard, flat ache rather than the tender-out-of-proportion feeling you want.",
+        "load": "Pair with lower trapezius work — this muscle overworks when the shoulder blade has nothing holding its lower half down."
+      },
+      "populationCareful": "Hypermobile: reaching across to move the shoulder blade puts your own shoulder at the far end of its range. Keep it small and supported.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Static ball against a wall",
+          "note": "Find it, hold it."
+        },
+        {
+          "level": 2,
+          "name": "Add the reach",
+          "note": "Hold the pressure and reach the arm across to slide the shoulder blade under it."
+        },
+        {
+          "level": 3,
+          "name": "Add a head turn",
+          "note": "Hold the pressure and turn to look down over the opposite shoulder, slowly."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-scap-setting",
+          "name": "Setting the shoulder blade down and back",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "levator-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-levator-corner-hold",
+      "name": "The corner stretch — nose to armpit",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "duration",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "The position that targets this particular muscle rather than the whole side of the neck. The direction is oddly specific, and that specificity is why it works when a general neck stretch does nothing.",
+      "equipment": "None; optionally something to hold the shoulder down",
+      "regions": [
+        "neck",
+        "shoulder-girdle"
+      ],
+      "muscles": [
+        "levator scapulae"
+      ],
+      "context": [
+        "chair",
+        "standing",
+        "desk",
+        "travel"
+      ],
+      "technique": "tech-long-hold",
+      "fields": {
+        "tool": "Nothing. Sitting on your own hand, or holding the edge of the chair, keeps the shoulder down so the stretch reaches the muscle instead of just lifting the shoulder.",
+        "release": "Sit tall, anchor the shoulder on the working side down. Turn your head about forty-five degrees away from that side, then look down toward your armpit — nose toward the opposite armpit. You should feel it in the back corner where neck meets shoulder, not down the front of the neck. Settle and wait.",
+        "notice": "Where you feel it. If it is at the front or side of the neck, the rotation is wrong — adjust the turn until it lands in the back corner. That hunting is the skill.",
+        "careful": "No hand pulling your head down. Should be a stretch, never a pull, and never anything sharp. Stop for dizziness, visual change or tingling into the arm.",
+        "load": "Follow with lower trapezius work and chin nods."
+      },
+      "populationCareful": "Hypermobile: a neck that already moves further than most does not need to be taken further. Use a smaller position and hold it with the shoulder anchor rather than the head angle. If holding this position leaves your neck feeling less supported afterward rather than easier, stop and raise it clinically.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Small, shoulder anchored",
+          "note": "Anchor first, position second. The anchor is what makes it work."
+        },
+        {
+          "level": 2,
+          "name": "Longer hold",
+          "note": "Same position, more time."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-scap-setting",
+          "name": "Setting the shoulder blade down and back",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "levator-release",
+      "evidence": {
+        "inheritsFrom": "tech-long-hold"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-cervical-paraspinals",
+      "name": "The columns beside the back of your neck",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "The two ropes of muscle either side of the bumps down the back of your neck do the actual work of holding your head up against gravity all day. If your head sits forward of your shoulders, they never get a break.",
+      "equipment": "Two balls in a sock, or your fingertips",
+      "regions": [
+        "neck"
+      ],
+      "muscles": [
+        "cervical paraspinals"
+      ],
+      "context": [
+        "floor",
+        "bed",
+        "chair",
+        "desk"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "Two balls tied into a sock so they sit either side of the spine with a gap in the middle — the gap is the point, because it keeps pressure off the bones. Or your own fingertips.",
+        "release": "Lying down, place the pair of balls so the bony bumps sit in the gap between them and the balls press the muscle either side. Let the weight of your head settle onto them. Work slowly down the neck, a spot at a time. Seated, use fingertips instead, pressing forward and slightly inward from behind.",
+        "notice": "How much of your head's weight these muscles were holding. Whether one side is thicker or tenderer. Whether the sensation changes when you tuck your chin slightly.",
+        "careful": "Either side of the bumps, never directly on them. The lower part of the neck near the base is thinner tissue — lighter there. Come off for any dizziness, visual change, or nausea.",
+        "load": "Chin nods. These muscles are overworked because the front of the neck is not sharing the load, and pressing them does not change that on its own."
+      },
+      "populationCareful": "Hypermobile: this is close to the region where cervical instability shows up. Gentle, short, and if head-supported work leaves your neck feeling worse or less stable rather than easier, that is a clinician's question, not a reason to press harder or longer. Orthostatic: lying down for this is fine; get up in stages.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Fingertips, seated",
+          "note": "Fully under your control, no floor, no equipment."
+        },
+        {
+          "level": 2,
+          "name": "Balls in a sock, lying",
+          "note": "Head weight does the pressing. Deeper, and easier on your hands."
+        },
+        {
+          "level": 3,
+          "name": "Add a slow chin tuck",
+          "note": "With the pressure on, tuck the chin gently and release. Pin-and-move for the neck."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-deep-neck-flexor-nod",
+          "name": "Chin nods — the front of the neck",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "posterior-neck-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-suboccipital-pin-and-nod",
+      "name": "Base of the skull — pressure while the head nods",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": false,
+      "why": "A different approach to a region the library already touches. The small deep muscles at the base of the skull do fine head-nodding adjustments; holding pressure while they do their own job is often more productive than pressing harder while they sit still.",
+      "equipment": "Two balls in a sock, or fingertips",
+      "regions": [
+        "neck"
+      ],
+      "muscles": [
+        "suboccipitals"
+      ],
+      "context": [
+        "floor",
+        "bed",
+        "chair"
+      ],
+      "technique": "tech-pin-and-move",
+      "fields": {
+        "tool": "Two balls in a sock, or your fingertips hooked up under the bony ridge.",
+        "release": "Lie down and place the balls just under the bony ridge at the back of your skull, either side of the middle. Let your head rest on them. Then make a very small nod — as if saying a tiny yes, moving the head on the neck rather than the neck on the shoulders. A centimetre of movement is plenty. Slowly, several times, keeping the contact.",
+        "notice": "How small the movement can be while still being felt. Whether it is easier to nod one direction than the other. Headache-like sensation spreading up the back of the head or toward the eye is the pattern traditionally described here — recorded as a claim, and your own experience is the better evidence.",
+        "careful": "Small nod, gentle pressure. This area sits close to the top of the neck joint, and the pressure should never feel like it is pushing the head forward on the neck. Dizziness, visual change, or nausea is a stop.",
+        "load": "Chin nods, unsupported, are the direct pair — the same movement, held, without anything under your head."
+      },
+      "populationCareful": "Hypermobile: this is the highest-caution spot in the neck for you. Upper cervical instability presents right here, and the symptoms — headache at the base of the skull, visual disturbance, a heavy or unsupported feeling in the head, symptoms on looking up — are worth knowing before you work here rather than after. Light pressure, small movement, and if any of those appear, stop and take it to a clinician.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Fingertips, seated, no movement",
+          "note": "Just contact and holding, so you learn where the ridge is."
+        },
+        {
+          "level": 2,
+          "name": "Lying, small nods",
+          "note": "Head weight as pressure, tiny nod added."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-deep-neck-flexor-nod",
+          "name": "Chin nods — the front of the neck",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "suboccipital-release",
+      "evidence": {
+        "inheritsFrom": "tech-pin-and-move"
+      },
+      "sourceNote": "App content, not clinician-prescribed. Deliberately a different technique family from the imported 'Base of skull' card, which is static pressure — this is the pin-and-move version."
+    },
+    {
+      "id": "release-suboccipital-fold-and-hold",
+      "name": "Base of the skull — the position of ease version",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "For a neck too irritable to be pressed at all — after a headache day, a flare, or anything that makes contact unwelcome. Instead of pressing, you shorten and support until the spot stops complaining.",
+      "equipment": "A folded towel or small cushion",
+      "regions": [
+        "neck"
+      ],
+      "muscles": [
+        "suboccipitals"
+      ],
+      "context": [
+        "floor",
+        "bed"
+      ],
+      "technique": "tech-fold-and-hold",
+      "fields": {
+        "tool": "A folded towel to prop the head, and one finger to monitor.",
+        "release": "Lying on your back, rest one fingertip lightly on the tender point under the ridge — light enough to feel it, not enough to press it. Then make very small changes to your head position: a slight tip, a slight turn, a slight nod one way or the other. You are looking for the position where the tenderness under the finger drops most. When you find it, prop the head there with the towel so you can hold it without any muscular effort, and wait. Come out of the position slowly, moving your head with your hand rather than with your neck muscles.",
+        "notice": "That the position of ease is often the opposite of the direction you expected — usually toward the tender side, not away from it. That it takes small adjustments, not big ones.",
+        "careful": "Nothing here should hurt at any point. If a position increases the tenderness, it is simply not the one — keep looking rather than pushing. Never a position you cannot come out of comfortably.",
+        "load": "Gentle and later. Something irritable enough to need this is not ready for loading in the same session — do chin nods the next day."
+      },
+      "populationCareful": "Hypermobile: because there is no stretch sensation to warn you, it is possible to settle into a position that is at the end of your neck's range without noticing. Prop generously and keep the position obviously small. PEM/pacing: near-zero exertion; one of the few neck items genuinely available on a bad day.",
+      "carefulAudience": "hypermobile, PEM/pacing",
+      "dose": "[undetermined] — see the fold-and-hold guide for the conventional hold time and why it carries no evidence weight.",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Find one position of ease",
+          "note": "One spot. Finding it is the whole rung."
+        },
+        {
+          "level": 2,
+          "name": "Refine it",
+          "note": "Small adjustments in several directions to find where tenderness drops furthest."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-deep-neck-flexor-nod",
+          "name": "Chin nods — the front of the neck",
+          "resolved": true,
+          "note": "Later session, not the same one."
+        }
+      ],
+      "swapGroup": "suboccipital-release",
+      "evidence": {
+        "inheritsFrom": "tech-fold-and-hold"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-scalenes-gentle",
+      "name": "The side of the neck — the careful one",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "The muscles running down the side of the neck to the first ribs lift the ribs with every breath. In anyone who breathes into their chest rather than their belly, they have been doing a job meant for the diaphragm — for years. Included because they matter, written carefully because of what runs between them.",
+      "equipment": "Fingertips only",
+      "regions": [
+        "neck"
+      ],
+      "muscles": [
+        "scalenes"
+      ],
+      "context": [
+        "chair",
+        "bed",
+        "desk"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "Flat fingertips. No ball, no tool, no thumb driving in. Nothing that concentrates force.",
+        "release": "First find the rope-like muscle that runs from behind your ear down to your collarbone — turn your head hard to one side and it stands out. The muscles this item targets sit just behind it. Place flat fingertips there, behind that rope and above the collarbone, with the lightest contact that lets you feel muscle. Then simply breathe: slow breaths in through the nose, letting the belly move, and on each out-breath let the area under your fingers soften. You are monitoring and inviting, not pressing.",
+        "notice": "Whether this area tightens when you breathe in. It should barely move during quiet breathing — if it lifts noticeably with every breath, your ribs are being pulled up by your neck, and the real fix is the diaphragm, not this muscle.",
+        "careful": "This is the most restricted item in the library. Flat fingertips only, one side at a time, feather pressure, short. Never press into the hollow above the collarbone. Any tingling, numbness, heaviness or coldness into the arm or hand means come off immediately — the nerves and vessels for the whole arm pass right here. Dizziness or visual change is also a stop. If you have symptoms into your arm or hand at all, this item is a clinician's territory and not yours.",
+        "load": "The pairing here is not strength — it is diaphragmatic breathing. This muscle stops overworking when something else does the breathing."
+      },
+      "populationCareful": "Hypermobile: a lax shoulder girdle that hangs low can crowd this space, and symptoms into the arm are more likely rather than less. If you get them, this item is out for you until a clinician has looked. Orthostatic: sit or lie for this one.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Contact and breathe",
+          "note": "Monitoring only, no pressure worth the name. This may be the only rung you ever need."
+        },
+        {
+          "level": 2,
+          "name": "Gentle sustained contact",
+          "note": "Slightly more, still flat fingertips, still short."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": null,
+          "name": "Diaphragmatic breathing — belly and lower ribs",
+          "resolveAgainst": "imported-legacy",
+          "note": "The library's existing 'Breathing' card family. Match at S5."
+        }
+      ],
+      "swapGroup": "anterior-neck-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed. Worth raising with a clinician before use if you have any arm or hand symptoms."
+    },
+    {
+      "id": "release-scm-pincer",
+      "name": "The rope down the front of the neck",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "The muscle from behind the ear to the collarbone turns your head and, in a forward-head posture, works constantly to keep your eyes level. It is a common source of headache-like sensation, dizziness and ear symptoms — and it is one of the few front-of-neck structures that can be worked safely, because you can lift it away from everything else.",
+      "equipment": "Thumb and finger",
+      "regions": [
+        "neck"
+      ],
+      "muscles": [
+        "SCM"
+      ],
+      "context": [
+        "chair",
+        "bed",
+        "desk"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "Thumb and index finger, pinching. Never a flat press.",
+        "release": "Turn your head away from the side you are working and the rope stands up clearly. Take it between finger and thumb and lift it away from the neck — it will come, and that lifting is what makes this safe, because everything you must avoid stays behind. Turn your head back to neutral so the muscle goes slack in your fingers. Then squeeze gently and hold, working slowly along its length from behind the ear down toward the collarbone.",
+        "notice": "Sensation into the forehead, behind the eye, into the ear or across the temple is what is traditionally described here — written as a claim. Whether one side is much thicker or tighter. Whether it is already standing out when your head is neutral, which it should not be.",
+        "careful": "One side only, ever, and only the muscle you have picked up between your fingers. If you cannot lift it clear, do not press. Never press flat into the front of the neck. Come off immediately for dizziness, nausea, visual change, ringing in the ears, or a racing heart. If you have carotid disease, a history of stroke or TIA, or have been told to avoid pressure on your neck, this item is not for you.",
+        "load": "Chin nods, and — more to the point — getting your head back over your shoulders during the day, which is what this muscle is compensating for."
+      },
+      "populationCareful": "Hypermobile: neck instability changes the picture here; if you have upper-neck symptoms, take this to a clinician instead. Orthostatic: pressure anywhere near the front of the neck deserves extra caution if your blood pressure is already unstable, and the sensory receptors that read blood pressure sit in this region. Sit or lie, keep it brief, stop for any lightheadedness. If you are unsure, this is a reasonable item to simply skip — the library has other doors.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Find it and lift it",
+          "note": "Locating and lifting the muscle, no squeeze. Learning the anatomy on yourself is a legitimate whole session here."
+        },
+        {
+          "level": 2,
+          "name": "Gentle squeeze along the length",
+          "note": "Light, slow, one side."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-deep-neck-flexor-nod",
+          "name": "Chin nods — the front of the neck",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "anterior-neck-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-neck-skin-glide",
+      "name": "The skin over the back of the neck",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": false,
+      "why": "The gentlest neck item there is. Nothing is pressed at all. For a neck that will not tolerate contact, or for a day when nothing else is available.",
+      "equipment": "None",
+      "regions": [
+        "neck"
+      ],
+      "muscles": [
+        "cervical paraspinals",
+        "upper trapezius"
+      ],
+      "context": [
+        "chair",
+        "bed",
+        "desk",
+        "travel"
+      ],
+      "technique": "tech-skin-glide",
+      "fields": {
+        "tool": "Your fingers.",
+        "release": "Reach behind your neck and pick up a fold of skin between fingers and thumb — just the skin and the loose layer under it, not the muscle. Lift it slightly and roll it slowly between your fingers, or place a flat hand and move the skin over what lies beneath without sliding across it. Work across the back of the neck and out over the top of the shoulders, noticing where it lifts easily and where it feels thick or stuck.",
+        "notice": "Where it moves and where it doesn't, and whether the two sides differ. Places that feel stuck are often nowhere near where you would have pressed. This is as much a map as a treatment.",
+        "careful": "No pinching hard, no dragging across dry skin. Back and sides only; not the front of the throat. Comfortable throughout.",
+        "load": "Move the neck normally afterward — a few slow turns and tips through your comfortable range."
+      },
+      "populationCareful": "Hypermobile: skin that stretches further than average is part of the picture, so compare one side of your own neck to the other rather than to any standard. Do not lift to the limit of what the skin will do. PEM/pacing: about as close to free as an item in this library gets.",
+      "carefulAudience": "hypermobile, PEM/pacing",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Map it",
+          "note": "Explore and notice. No treatment goal at this rung."
+        },
+        {
+          "level": 2,
+          "name": "Stay where it resists",
+          "note": "Gentle sustained shift into the direction that does not give."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-deep-neck-flexor-nod",
+          "name": "Chin nods — the front of the neck",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "posterior-neck-release",
+      "evidence": {
+        "inheritsFrom": "tech-skin-glide"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-jaw-contract-relax",
+      "name": "Jaw — bite gently, then let go",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": false,
+      "why": "The no-hands jaw item. Useful when the cheek is too sore to press, and useful in public, where pressing your own face is conspicuous and this is not.",
+      "equipment": "None",
+      "regions": [
+        "jaw"
+      ],
+      "muscles": [
+        "masseter",
+        "temporalis"
+      ],
+      "context": [
+        "chair",
+        "desk",
+        "standing",
+        "bed",
+        "travel"
+      ],
+      "technique": "tech-contract-relax",
+      "fields": {
+        "tool": "Your own jaw. Optionally a knuckle resting under the chin as a gentle resistance.",
+        "release": "Let your jaw hang so the teeth are slightly apart. Now clench very gently — a fraction of what you could do — hold briefly, then let go completely and let the jaw drop open a little further than it was. Feel the weight of your jaw hanging. Repeat a few times. Then a second version: rest a knuckle under your chin and try to open your mouth gently against it, hold, then release and let the jaw open freely.",
+        "notice": "Where your teeth sit when you are not thinking about it. They are meant to be slightly apart, with the tongue resting on the roof of the mouth and the lips closed. Most people discover their teeth are touching, and often that they are lightly clenched.",
+        "careful": "Gentle clench, never hard — a maximum bite is exactly what this is meant to undo. If your jaw clicks, locks, or shifts to one side when it opens, keep everything small and take it to a dentist or clinician. Do not do this with something between your teeth.",
+        "load": "The resting position itself is the load partner here, plus slow tracking — opening and closing while keeping the jaw travelling straight."
+      },
+      "populationCareful": "Hypermobile: jaw joints move further and click more often in hypermobile people, and jaw problems are common. Keep the opening well short of maximum, avoid wide yawning stretches, and treat locking or a jaw that shifts off line as a clinical question rather than something to work through.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Clench and let go",
+          "note": "Gentle. Learn what a released jaw feels like."
+        },
+        {
+          "level": 2,
+          "name": "Open against a knuckle",
+          "note": "Light resistance to opening, then release."
+        },
+        {
+          "level": 3,
+          "name": "Carry it into the day",
+          "note": "Set the resting position deliberately several times during the day. This is where the change actually happens."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-jaw-resting-tracking",
+          "name": "Jaw resting position and straight tracking",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "jaw-release",
+      "evidence": {
+        "inheritsFrom": "tech-contract-relax"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-jaw-breath-down-train",
+      "name": "Jaw, tongue and throat — letting the whole floor go",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "duration",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": false,
+      "why": "The jaw, the tongue, the floor of the mouth and the throat hold tension as a set, not individually, and they are wired into the same protective response as everything else that braces. Releasing them one muscle at a time misses how they behave.",
+      "equipment": "None",
+      "regions": [
+        "jaw",
+        "neck"
+      ],
+      "muscles": [
+        "masseter",
+        "temporalis",
+        "suprahyoids"
+      ],
+      "context": [
+        "chair",
+        "bed",
+        "floor",
+        "travel"
+      ],
+      "technique": "tech-breath-coupled",
+      "fields": {
+        "tool": "Breath and attention.",
+        "release": "Sitting or lying. Breathe in through your nose, letting the belly and lower ribs widen. On the way out, let go of four things in order: the teeth come apart, the tongue goes heavy and wide and rests on the roof of the mouth, the floor of the mouth under the chin goes soft, and the throat opens. Then breathe in again without re-gripping any of them. Several breaths.",
+        "notice": "Which of the four you cannot let go of. Almost everyone has one that resists. Notice too whether the soft area under your chin is tight — put a thumb lightly under there and feel whether it is firm; it should be soft when you are not swallowing or speaking.",
+        "careful": "If deliberate breathing makes you lightheaded, make the breaths smaller and shorter. Nothing forced, nothing held.",
+        "load": "Nose breathing during the day, tongue resting on the roof of the mouth, teeth apart. That is the load for this one — the position becomes the default rather than an exercise."
+      },
+      "populationCareful": "Orthostatic: do this seated or lying. Slow deep breathing makes lightheadedness worse in some people; shorten the breath rather than dropping the item.",
+      "carefulAudience": "orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Find which one resists",
+          "note": "Teeth, tongue, floor of mouth, throat. Identifying the sticky one is the rung."
+        },
+        {
+          "level": 2,
+          "name": "All four on each exhale",
+          "note": "Several consecutive breaths, releasing the whole set each time."
+        },
+        {
+          "level": 3,
+          "name": "Set it during the day",
+          "note": "The same release, briefly, at ordinary moments — at a red light, before a meeting, on hold."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-jaw-resting-tracking",
+          "name": "Jaw resting position and straight tracking",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "jaw-release",
+      "evidence": {
+        "inheritsFrom": "tech-breath-coupled"
+      },
+      "sourceNote": "App content, not clinician-prescribed. Overlaps deliberately with the existing tongue-posture and airway cards — this is the release-side entry into that material, not a replacement for it."
+    },
+    {
+      "id": "release-under-the-chin",
+      "name": "Under the chin — the floor of the mouth",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": false,
+      "why": "The soft area between your chin and the front of your throat holds a set of small muscles that work every time you swallow, speak, or hold your jaw shut against gravity. Nobody thinks of it as a muscle group, and in people with a forward head or a clenching habit it is often quietly rigid.",
+      "equipment": "Fingertips",
+      "regions": [
+        "jaw",
+        "neck"
+      ],
+      "muscles": [
+        "suprahyoids"
+      ],
+      "context": [
+        "chair",
+        "bed",
+        "desk"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "One or two fingertips, flat, from underneath.",
+        "release": "Tip your head back very slightly so the area is accessible. Place flat fingertips in the soft triangle between the point of your chin and the top of your throat, close under the jawbone rather than down toward the throat. Gentle upward-and-inward contact against the underside of the jaw. Hold, and let the tongue go heavy. Then swallow once and feel everything move under your fingers.",
+        "notice": "Whether it is soft or firm at rest. Whether the tongue is pressing down rather than resting up. How much movement a single swallow produces.",
+        "careful": "Stay tucked up under the jawbone. Do not press down or back into the throat itself, and never press hard enough to affect swallowing or breathing. Under the jaw are salivary glands and lymph nodes; if you find a firm lump that is tender and new, that is something to have looked at rather than something to release. One side at a time if you prefer.",
+        "load": "Tongue to the roof of the mouth and hold — the direct opposite action, and the one that most people cannot do for long."
+      },
+      "populationCareful": "Orthostatic: tipping the head back can be provocative; do this seated with support, and only a slight tip. Hypermobile: keep the head tip minimal — this area is accessible without extending the neck much at all.",
+      "carefulAudience": "orthostatic, hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Contact and notice",
+          "note": "Just feeling what is there at rest and during a swallow."
+        },
+        {
+          "level": 2,
+          "name": "Gentle sustained contact",
+          "note": "Light hold with the tongue deliberately heavy."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-jaw-resting-tracking",
+          "name": "Jaw resting position and straight tracking",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "jaw-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-temple-glide",
+      "name": "The temple and the side of the head — light gliding",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "A gentler alternative to pressing the temple, for people who get headaches and find that direct pressure there provokes rather than relieves. Same target, different family.",
+      "equipment": "None",
+      "regions": [
+        "jaw",
+        "head"
+      ],
+      "muscles": [
+        "temporalis"
+      ],
+      "context": [
+        "chair",
+        "bed",
+        "desk",
+        "travel"
+      ],
+      "technique": "tech-skin-glide",
+      "fields": {
+        "tool": "Flat fingers or a flat palm.",
+        "release": "Place a flat hand on the side of your head above and in front of the ear. Rather than pressing in, move the scalp itself over the bone underneath — small slow shifts forward and back, up and down. Then work outward across the whole fan-shaped area. Clench lightly once to feel where the muscle is, then unclench and continue.",
+        "notice": "Whether the scalp moves freely over the bone or feels tethered, and whether the two sides differ. Whether this is more or less provoking than direct pressure — that comparison is worth making deliberately once.",
+        "careful": "Light. If you get headaches, keep it short the first few times and notice what happens over the following hours rather than deciding immediately.",
+        "load": "Jaw resting position and slow tracking."
+      },
+      "populationCareful": "Hypermobile: nothing specific to this item beyond the general jaw cautions.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Gliding only",
+          "note": "No pressure into the tissue at all."
+        },
+        {
+          "level": 2,
+          "name": "Gliding plus gentle sustained contact",
+          "note": "Add a light hold where the scalp feels tethered."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-jaw-resting-tracking",
+          "name": "Jaw resting position and straight tracking",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "jaw-release",
+      "evidence": {
+        "inheritsFrom": "tech-skin-glide"
+      },
+      "sourceNote": "App content, not clinician-prescribed. Sibling to the fingertip-pressure temple item in the tender-point entry set, for people who don't tolerate that one."
+    },
+    {
+      "id": "load-deep-neck-flexor-nod",
+      "name": "Chin nods — the front of the neck",
+      "kind": "exercise",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "activate",
+      "sides": false,
+      "why": "The load partner for almost every neck release item in the library. The deep muscles at the front of your neck hold your head over your shoulders. When they are offline, the muscles at the back hold the head up by pulling — which is why the back of the neck is always tight and pressing it never fixes it.",
+      "equipment": "None; a folded towel helps",
+      "regions": [
+        "neck"
+      ],
+      "muscles": [
+        "deep neck flexors"
+      ],
+      "context": [
+        "floor",
+        "bed",
+        "chair",
+        "standing",
+        "desk"
+      ],
+      "technique": null,
+      "fields": {
+        "tool": "Nothing. A folded towel under the head if lying makes it easier to feel.",
+        "release": "Lying on your back, make a small nodding movement — as if starting to say yes, lengthening the back of your neck slightly. The head barely moves. Then hold. What you are looking for is the small deep effort at the front of the throat, not the rope-like muscles at the sides standing out. If those ropes pop up, you are using the wrong muscles — make the nod smaller until they stay quiet.",
+        "notice": "Whether you can find it at all. Whether the ropes at the sides of the neck take over. How quickly the effort fades — for most people the honest answer at the start is 'almost immediately', and that is the information, not a failure.",
+        "careful": "Small. This is not a neck crunch and the head does not lift off the surface at the early rungs. Stop for any dizziness or visual change.",
+        "load": "This is the load."
+      },
+      "populationCareful": "Hypermobile: this is one of the most valuable items in the neck module for you, because active support is what a lax neck needs and passive stretching is not. Keep it small, build the hold time slowly, and do not progress to lifting the head until the small version is genuinely easy and the side ropes stay quiet.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined] — hold time and repetitions are the natural place for a clinician's number. Ask for one.",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Lying, nod and hold",
+          "note": "Head stays down. Finding the movement is the rung."
+        },
+        {
+          "level": 2,
+          "name": "Lying, longer hold",
+          "note": "Same movement, held longer, side ropes staying quiet."
+        },
+        {
+          "level": 3,
+          "name": "Nod, then lift the head slightly",
+          "note": "Hold the nod and lift the head a small amount. Only once the nod itself is easy — losing the nod as the head lifts means back a rung."
+        },
+        {
+          "level": 4,
+          "name": "Sitting and standing",
+          "note": "The same small nod upright, against gravity in a different direction. This is the one that transfers to your day."
+        }
+      ],
+      "loadAfter": [],
+      "swapGroup": "deep-neck-activation",
+      "evidence": {
+        "family": null,
+        "grade": "Established as a standard rehabilitation approach for neck pain; specific protocols vary.",
+        "basis": "Deep cervical flexor training is standard content in neck-pain rehabilitation with a substantial trial literature behind the general approach. This card teaches the movement and deliberately leaves reps and hold times blank, because that is exactly the parameter a clinician should set for an individual neck."
+      },
+      "sourceNote": "App content, not clinician-prescribed.",
+      "authoringNote": "Authored here as a load partner because the library has no neck activation content — arguably belongs in the strength and activation file instead. Kevin's call."
+    },
+    {
+      "id": "load-scap-setting",
+      "name": "Setting the shoulder blade down and back",
+      "kind": "exercise",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "activate",
+      "sides": true,
+      "why": "The load partner for the upper trapezius and levator items. Those two muscles overwork because the lower half of the shoulder blade has nothing holding it down. Release them without addressing that and they are tight again by evening — which is the counterforce idea in its most visible form.",
+      "equipment": "None",
+      "regions": [
+        "shoulder-girdle"
+      ],
+      "muscles": [
+        "mid/lower trapezius",
+        "serratus anterior"
+      ],
+      "context": [
+        "chair",
+        "standing",
+        "floor",
+        "desk"
+      ],
+      "technique": null,
+      "fields": {
+        "tool": "Nothing.",
+        "release": "Sit or stand tall. Without shrugging, slide the shoulder blade gently down your back and slightly toward your spine — the feeling is your shoulder blade settling into a back pocket. Hold it there and breathe normally. The top of your shoulder should stay relaxed the whole time; if it lifts, you have recruited the muscle you were trying to give a rest.",
+        "notice": "Whether the top of the shoulder can stay quiet while the lower part works. For most people it cannot, at first — that is the finding and the reason to do this at all.",
+        "careful": "No forced squeezing of the shoulder blades together, no puffed chest. This is a small, quiet, low-effort position, and effort is usually the sign it has gone wrong.",
+        "load": "This is the load. Later rungs add arm movement and then resistance."
+      },
+      "populationCareful": "Hypermobile: your shoulder blade may sit further out or lower at rest than the standard picture, and 'down and back' can take you into a position that does not suit your anatomy. Aim for a position you can hold quietly, not a textbook one, and if your shoulder feels less stable in the position rather than more, that is worth asking a clinician about.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Find and hold",
+          "note": "Just the position, with the top of the shoulder staying quiet."
+        },
+        {
+          "level": 2,
+          "name": "Hold while the arm moves",
+          "note": "Keep the blade set and slowly raise and lower the arm. The blade holding while the arm moves is the actual skill."
+        },
+        {
+          "level": 3,
+          "name": "Against resistance",
+          "note": "The same, with a band or a light weight. Raise load only when rung 2 is quiet."
+        }
+      ],
+      "swapGroup": "scapular-activation",
+      "evidence": {
+        "family": null,
+        "grade": "Established as standard rehabilitation content; the specific 'correct' scapular position is contested.",
+        "basis": "Scapular control training is routine in shoulder and neck rehabilitation. What is not settled is that any one scapular resting position is correct or that deviation from it causes symptoms — the card therefore teaches a position you can hold quietly rather than a position you should have."
+      },
+      "sourceNote": "App content, not clinician-prescribed.",
+      "authoringNote": "Authored here as a load partner; may belong in the strength and activation file."
+    },
+    {
+      "id": "load-jaw-resting-tracking",
+      "name": "Jaw resting position and straight tracking",
+      "kind": "exercise",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "activate",
+      "sides": false,
+      "why": "The load partner for every jaw item. Releasing a jaw and then returning it to the same clenched default is a door you open every day and never walk through.",
+      "equipment": "A mirror helps",
+      "regions": [
+        "jaw"
+      ],
+      "muscles": [
+        "masseter",
+        "temporalis",
+        "suprahyoids"
+      ],
+      "context": [
+        "chair",
+        "standing",
+        "desk",
+        "travel"
+      ],
+      "technique": null,
+      "fields": {
+        "tool": "A mirror for the tracking part.",
+        "release": "Two pieces. **The resting position:** tongue resting broad on the roof of the mouth just behind the front teeth, teeth slightly apart, lips closed, breathing through the nose. Set it deliberately and notice how long it lasts before you drift. **Tracking:** in front of a mirror, open and close your mouth slowly, watching whether your chin travels straight down or veers to one side. If it veers, rest a fingertip lightly on the chin and use it as a reminder to keep the path straight — a guide, not a force.",
+        "notice": "How quickly the resting position is lost. Whether the jaw tracks straight, and whether it veers in the same direction each time. Where a click, if there is one, happens in the movement.",
+        "careful": "Never force the jaw straight and never open to maximum. Locking, a jaw that will not close, or pain with opening is a clinician's question. If tracking practice makes things worse, stop.",
+        "load": "This is the load."
+      },
+      "populationCareful": "Hypermobile: jaw joint problems are common with hypermobility, and wide opening is where they show up. Keep opening moderate, do not practise big yawns as a stretch, and treat repeated locking as a clinical issue.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Set the resting position",
+          "note": "Just finding it, several times a day."
+        },
+        {
+          "level": 2,
+          "name": "Add tracking in a mirror",
+          "note": "Slow open and close, watching the path."
+        },
+        {
+          "level": 3,
+          "name": "Hold it through a task",
+          "note": "Keep the resting position through something that normally makes you clench — driving, typing, a difficult conversation."
+        }
+      ],
+      "swapGroup": "jaw-activation",
+      "evidence": {
+        "family": null,
+        "grade": "Established as standard conservative jaw care; the specific resting-position instruction is convention.",
+        "basis": "Resting-position and controlled-opening advice is routine in conservative jaw management. The precise tongue position taught is a convention across clinical traditions rather than a trial-derived parameter, and is stated here as such."
+      },
+      "sourceNote": "App content, not clinician-prescribed.",
+      "authoringNote": "Authored here as a load partner; may belong in the strength and activation file."
+    },
+    {
+      "id": "load-neck-isometrics",
+      "name": "Neck isometrics — pushing without moving",
+      "kind": "exercise",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "activate",
+      "sides": true,
+      "why": "The load partner for the side and back of the neck. Nothing moves, so there is no range to lose control of — which makes it the safest way to ask a neck to get stronger.",
+      "equipment": "Your own hand, or a wall",
+      "regions": [
+        "neck"
+      ],
+      "muscles": [
+        "deep neck flexors",
+        "cervical paraspinals",
+        "SCM",
+        "scalenes"
+      ],
+      "context": [
+        "chair",
+        "standing",
+        "desk",
+        "bed",
+        "travel"
+      ],
+      "technique": null,
+      "fields": {
+        "tool": "A hand against your head, or your head against a wall with a folded towel between.",
+        "release": "Head in a neutral position, chin very slightly tucked. Press your head gently into your hand — forward, then backward, then each side — without letting the head move at all. Gentle effort, not maximum. Breathe throughout; holding your breath is the most common error here and it turns a quiet item into a strain.",
+        "notice": "Which direction is weakest. Whether you can keep the effort steady, or whether it comes in a surge and fades. Whether your jaw clenches as soon as your neck works — very common, and worth uncoupling.",
+        "careful": "Gentle. This is not a strength test and there is no benefit to maximum effort. Keep the head in neutral rather than at the end of any range. Stop for dizziness, visual change, or any symptom into the arms.",
+        "load": "This is the load."
+      },
+      "populationCareful": "Hypermobile: isometric work is the friendliest way to load a hypermobile neck, since the joint never travels. Start lighter and progress slower than the instructions suggest, and keep it strictly in neutral.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined] — hold time, number of directions, rounds. Another good thing to get a number for from a clinician.",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Light, two directions",
+          "note": "Forward and back, gentle, breathing."
+        },
+        {
+          "level": 2,
+          "name": "All four directions",
+          "note": "Add both sides."
+        },
+        {
+          "level": 3,
+          "name": "Longer holds",
+          "note": "Same gentle effort, more time. Time before force."
+        }
+      ],
+      "swapGroup": "deep-neck-activation",
+      "evidence": {
+        "family": null,
+        "grade": "Established as standard neck rehabilitation content.",
+        "basis": "Isometric neck strengthening is routine in neck-pain rehabilitation and in return-to-activity programmes. Doses vary by protocol and none is reproduced here."
+      },
+      "sourceNote": "App content, not clinician-prescribed.",
+      "authoringNote": "Authored here as a load partner; may belong in the strength and activation file."
+    }
+  ]
+}

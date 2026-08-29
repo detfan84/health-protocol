@@ -1,0 +1,834 @@
+{
+  "format": "protocol-app/authored-v1",
+  "category": "release",
+  "_meta": {
+    "file": "release-shoulder-arm.json — draft v1, 28 Aug 2026",
+    "status": "DRAFT — Kevin's edit pass pending. Not ratified content.",
+    "scope": "Shoulder girdle and arm release for census targets the library does not cover. The imported set has 'Chest & front of shoulder', 'Lat & back of armpit' and 'Mid & upper back' — three broad cards for a region with eight distinct census entries. This file covers rotator cuff (subscapularis, infraspinatus/teres group), rhomboids and mid trapezius separately from the broad mid-back card, serratus anterior, pec minor as distinct from pec major, deltoids, biceps and triceps.",
+    "rhomboid_lumping_flag": "D40 lists 'rhomboids (lumping question: merge with mid-traps?)' as one of three open provisional flags. This file keeps them separate and targets them differently — the rhomboid item works close to the spine at an upward angle, the mid-trap item works out along the blade. That is a vote for not lumping, on the grounds that the release instructions genuinely differ. Kevin's call at S1.",
+    "cuff_granularity_flag": "The census has 'rotator cuff (group)' as one entry. Three items here target different members of it with materially different instructions, so the ledger entry and the item granularity diverge — which FRAMEWORK already permits ('ledger granularity ≠ map granularity'). Flagged so it is a noticed divergence rather than a silent one.",
+    "load_partners": "Two activation items included, plus links to load-scap-setting in release-neck-jaw.json. Cross-file id references — CC: confirm the loader resolves loadAfter ids across files, or report that it doesn't.",
+    "vocabulary_additions_proposed": "subscapularis · infraspinatus/teres — as sub-entries under rotator cuff (group) if the ledger wants them, or not at all if the group entry is enough. Introduced-on 2026-08-28 if accepted.",
+    "landed": "2026-08-28, release library session 1."
+  },
+  "items": [
+    {
+      "id": "release-subscapularis-armpit",
+      "name": "Inside the armpit — the cuff muscle nobody reaches",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "One rotator cuff muscle sits on the front surface of the shoulder blade, between the blade and the ribs. You can only reach a sliver of it, from inside the armpit — and that sliver is often startlingly tender in anyone whose shoulders sit rounded forward.",
+      "equipment": "Fingers only",
+      "regions": [
+        "shoulder-girdle"
+      ],
+      "muscles": [
+        "rotator cuff (group)"
+      ],
+      "context": [
+        "chair",
+        "bed",
+        "desk",
+        "travel"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "The fingers of your opposite hand. No tool reaches here.",
+        "release": "Let the arm hang relaxed, or rest it on a table. Reach across with the other hand and find the back wall of your armpit — the thick fold you can pinch between fingers and thumb. Now slide your fingers just in front of that fold, toward the front of the shoulder blade, and press gently backward and outward against the flat surface you find there. Hold, and let the arm stay completely relaxed. Then move your fingers a little and repeat.\n\nThe arm being relaxed is not a detail. This muscle is under the blade and you cannot reach it through a shoulder that is holding itself up.",
+        "notice": "How tender it is compared with what you expected. Whether sensation spreads to the back of the shoulder or down the back of the arm. Whether reaching overhead feels different immediately afterward.",
+        "careful": "Gentle, and stay against the flat surface of the shoulder blade rather than poking into the middle of the armpit — nerves, vessels and lymph nodes sit in the hollow. Tingling into the arm or hand means come off immediately. If you find a firm tender lump that is new, that is something to have looked at rather than to release.",
+        "load": "External rotation — the opposite action — at a range you control. Release this without loading the other side of the joint and it will be back."
+      },
+      "populationCareful": "Hypermobile: shoulder instability is common with hypermobility and this muscle may be gripping for a reason. Release plus loading, never release alone, and if your shoulder subluxes or gives way, this belongs with a clinician before it belongs in a routine.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Find it, arm supported",
+          "note": "Locating the surface with the arm fully rested. Finding it is a legitimate whole session."
+        },
+        {
+          "level": 2,
+          "name": "Sustained contact",
+          "note": "Gentle hold, moving to a few spots along it."
+        },
+        {
+          "level": 3,
+          "name": "Add slow rotation",
+          "note": "Hold contact and slowly turn the palm up and down, letting the tissue move underneath. Pin-and-move."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-cuff-external-rotation",
+          "name": "Turning the arm out, under control",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "cuff-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-infraspinatus-ball-wall",
+      "name": "The back of the shoulder blade",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "The muscles covering the back of the shoulder blade below its ridge are the ones that stop your arm bone rolling forward. They are easy to reach, reliably tender, and often the reason for a deep ache that feels like it is inside the shoulder joint.",
+      "equipment": "A ball and a wall",
+      "regions": [
+        "shoulder-girdle"
+      ],
+      "muscles": [
+        "rotator cuff (group)"
+      ],
+      "context": [
+        "standing",
+        "floor"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "A ball against a wall — better than the floor here, because you can control pressure precisely and the angle is easier to find.",
+        "release": "Stand with your back to a wall and the ball on the flat area of your shoulder blade below its bony ridge — the plate of muscle between the ridge and the lower tip of the blade. Lean back and hunt for tender spots; there are usually two or three, and they are often nearer the outer edge than you expect. Once you find one, hold.",
+        "notice": "Sensation spreading down the outside of the arm or deep into the front of the shoulder is what is traditionally described here, and it is often why people think their problem is at the front. Whether the pattern matches an ache you already knew about.",
+        "careful": "On the flat muscle plate, not on the bony ridge or the edge of the blade. Come off for tingling into the arm.",
+        "load": "External rotation, and setting the shoulder blade."
+      },
+      "populationCareful": "Hypermobile: standing against a wall lets you control pressure far better than lying on the floor, which matters when tissue bruises easily.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Ball against a wall, static",
+          "note": "Find it, hold it."
+        },
+        {
+          "level": 2,
+          "name": "Add the arm reach",
+          "note": "Hold the ball and slowly reach the arm across your body and back. The tissue moves under the ball."
+        },
+        {
+          "level": 3,
+          "name": "On the floor",
+          "note": "More pressure available, less control. Only if the wall version has stopped producing."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-cuff-external-rotation",
+          "name": "Turning the arm out, under control",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "cuff-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-rhomboids-ball-wall",
+      "name": "Between the shoulder blade and the spine",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "The muscles running at an upward angle from the spine to the inner edge of the shoulder blade are the classic 'burning between the shoulder blades' spot for anyone at a keyboard. They are usually long and overworked rather than short — which changes what you do afterward.",
+      "equipment": "A ball and a wall",
+      "regions": [
+        "shoulder-girdle",
+        "upper-back"
+      ],
+      "muscles": [
+        "rhomboids"
+      ],
+      "context": [
+        "standing",
+        "floor"
+      ],
+      "technique": "tech-pin-and-move",
+      "fields": {
+        "tool": "A ball against a wall.",
+        "release": "The trick is getting the shoulder blade out of the way first. Reach the arm on the working side across your body and hold the opposite shoulder — that slides the blade outward and exposes the strip between its inner edge and the spine. Now place the ball in that strip, lean into the wall, and hunt. Once you find a spot, hold it, then slowly let the arm come back across and reach forward again while keeping the contact.",
+        "notice": "That the burning ache is usually not where the tenderness is. That it is often worse on your mouse side. Whether reaching across to expose the blade is itself difficult.",
+        "careful": "In the strip beside the spine, not on the bony bumps and not on the edge of the blade itself.",
+        "load": "This is the important part for this muscle. It is usually already long and tired from holding a rounded posture — stretching it further is the wrong direction. Load it: set the shoulder blade, and work on getting the chest to open at the front so the blade has somewhere to sit."
+      },
+      "populationCareful": "Hypermobile: reaching across pulls your own shoulder toward its end range; keep the reach moderate and supported. Also relevant — if this area burns constantly, the answer is usually more support at the front and more strength behind, not more release.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Static, blade slid out of the way",
+          "note": "Find and hold."
+        },
+        {
+          "level": 2,
+          "name": "Move the blade under the ball",
+          "note": "Reach across and back while keeping contact."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-scap-setting",
+          "name": "Setting the shoulder blade down and back",
+          "resolved": true,
+          "note": "Lives in release-neck-jaw.json — cross-file reference."
+        }
+      ],
+      "swapGroup": "interscapular-release",
+      "evidence": {
+        "inheritsFrom": "tech-pin-and-move"
+      },
+      "sourceNote": "App content, not clinician-prescribed. Deliberately distinct from the imported broad 'Mid & upper back' card: this one targets the strip beside the spine specifically and instructs a different setup."
+    },
+    {
+      "id": "release-mid-trap-outer",
+      "name": "Out along the shoulder blade",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "The middle band of the big back muscle runs horizontally out from the spine across the shoulder blade's ridge. Different angle, different job, different spot from the strip beside the spine — which is why it gets its own item rather than being lumped in.",
+      "equipment": "A ball and a wall, or a roller",
+      "regions": [
+        "shoulder-girdle",
+        "upper-back"
+      ],
+      "muscles": [
+        "mid/lower trapezius"
+      ],
+      "context": [
+        "standing",
+        "floor"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "A ball against a wall for spots, a foam roller across the upper back for the broad version.",
+        "release": "Ball version: place it out along the bony ridge of the shoulder blade and just above and below it, working outward from the spine toward the point of the shoulder. Roller version: lie with the roller across your upper back below the shoulder blades' ridges, hands supporting your head, and move slowly with pauses. Keep your ribs down rather than arching over the roller.",
+        "notice": "Whether you arch your low back to get over the roller — very common and it means the thoracic spine is not the thing moving. Whether the tenderness runs along the ridge or sits below it.",
+        "careful": "Not on the neck with the roller. Keep the roller below the level of the shoulders and support your head with your hands so the neck is not hanging. Don't roll the low back.",
+        "load": "Setting the shoulder blade, and holding it while the arm works."
+      },
+      "populationCareful": "Hypermobile: arching over a roller takes a mobile spine a long way; keep the ribs down and treat the roller as pressure, not as an extension stretch. Orthostatic: the wall version needs no floor transfer.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Ball against a wall",
+          "note": "Controlled pressure, upright."
+        },
+        {
+          "level": 2,
+          "name": "Roller, slow passes",
+          "note": "Broad coverage, ribs down."
+        },
+        {
+          "level": 3,
+          "name": "Roller with arm movement",
+          "note": "Hold a position and slowly bring the arms overhead and back."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-scap-setting",
+          "name": "Setting the shoulder blade down and back",
+          "resolved": true,
+          "note": "Cross-file reference to release-neck-jaw.json."
+        }
+      ],
+      "swapGroup": "interscapular-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-serratus-side-ribs",
+      "name": "The fingers of muscle along your side ribs",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "A muscle that runs from the inner edge of the shoulder blade, around the ribs, and attaches to the side of the ribcage in a row of finger-like slips. It holds the shoulder blade against your back — and it is also a breathing muscle, which is why it turns up in this library twice over.",
+      "equipment": "A ball, or your hand",
+      "regions": [
+        "shoulder-girdle",
+        "ribs"
+      ],
+      "muscles": [
+        "serratus anterior"
+      ],
+      "context": [
+        "floor",
+        "chair"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "A ball, side-lying, or just your opposite hand while seated.",
+        "release": "Lie on your side with the arm overhead, and place a ball on the side of your ribcage a few inches below the armpit, in the row where you can feel the slips of muscle running forward between the ribs. Roll slowly along the row and hold where it bites. Seated version: reach across with the opposite hand and press flat fingertips into the same area.\n\nThen breathe into the side under the pressure, so the ribs widen against it.",
+        "notice": "Whether the ribs move at all under your hand when you breathe. Whether one side is stiffer. Whether pushing your arm forward — reaching, not shrugging — is something you can produce cleanly.",
+        "careful": "On the ribs, not into the soft area below them. Light pressure — the ribs are close to the surface here. Not directly on the side of the breast tissue.",
+        "load": "Reaching — pushing the arm forward while keeping the blade wrapped around the ribs — and breathing wide into that side."
+      },
+      "populationCareful": "Hypermobile: a shoulder blade that wings away from the ribs is common with hypermobility, and this muscle is often part of the story. Release plus reaching work, not release alone.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Seated, fingertips",
+          "note": "Gentle, controlled, no floor."
+        },
+        {
+          "level": 2,
+          "name": "Side-lying with a ball",
+          "note": "More pressure, with breathing into the side."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-serratus-reach",
+          "name": "Reaching — the shoulder blade wrapping the ribs",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "serratus-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-pec-minor-under-collarbone",
+      "name": "Under the collarbone — the small chest muscle",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "Underneath the big chest muscle sits a small one running from the ribs up to a hook of bone on the front of the shoulder blade. When it is short it pulls the whole shoulder blade forward and down over the ribs — which is most of what a rounded shoulder actually is, and it is a different muscle from the one a chest stretch reaches.",
+      "equipment": "Fingertips, or a ball against a wall",
+      "regions": [
+        "shoulder-girdle",
+        "chest"
+      ],
+      "muscles": [
+        "pec minor"
+      ],
+      "context": [
+        "chair",
+        "standing",
+        "desk"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "Flat fingertips, or a ball against a doorframe.",
+        "release": "Find the bony point at the front of your shoulder, just below the outer end of the collarbone and slightly toward the armpit — a hard knob you can press. The muscle runs from there down and inward toward the ribs. Place flat fingertips just below and inside that knob, angled toward the ribs, and press gently while letting the shoulder drop back. Hold.",
+        "notice": "Whether your shoulder can drop back at all, or whether it sits forward and stays there. Whether it is tender on the side you sleep on or drive on.",
+        "careful": "Below and inside the bony point, angled toward the ribs, not up into the hollow above the collarbone where the nerves and vessels for the arm run. Tingling or numbness into the arm means come off immediately and reposition lower. Gentle.",
+        "load": "The muscles that pull the blade back and down — setting the blade — and time spent with the chest open rather than closed."
+      },
+      "populationCareful": "Hypermobile: this area is close to the space where nerves and vessels pass into the arm, and a low-hanging shoulder girdle crowds it further. Light and short, and any arm symptoms mean stop and ask a clinician.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Fingertips, shoulder dropping back",
+          "note": "Gentle contact, and the shoulder letting go is most of the effect."
+        },
+        {
+          "level": 2,
+          "name": "Add slow arm movement",
+          "note": "Hold contact and slowly raise the arm out to the side and back down."
+        },
+        {
+          "level": 3,
+          "name": "Ball against a doorframe",
+          "note": "More pressure, hands free. Same careful field."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-scap-setting",
+          "name": "Setting the shoulder blade down and back",
+          "resolved": true,
+          "note": "Cross-file reference to release-neck-jaw.json."
+        }
+      ],
+      "swapGroup": "anterior-shoulder-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed. Distinct target from the imported 'Chest & front of shoulder' card, which addresses the large chest muscle."
+    },
+    {
+      "id": "release-deltoid-three-parts",
+      "name": "The shoulder cap — all three parts of it",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "The muscle capping your shoulder has a front, a middle and a back, and they do opposite jobs. People roll the outside of the shoulder and miss two thirds of it — usually including the part that is actually complaining.",
+      "equipment": "A ball, or your opposite hand",
+      "regions": [
+        "shoulder-girdle",
+        "arm"
+      ],
+      "muscles": [
+        "deltoids"
+      ],
+      "context": [
+        "chair",
+        "standing",
+        "desk",
+        "travel"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "A ball against a wall, or squeeze it in your opposite hand.",
+        "release": "Three passes. **Front:** the part in front of the shoulder joint, below the outer collarbone. **Middle:** the outside cap, straight out from the joint. **Back:** the part behind the joint, easiest to reach by squeezing between fingers and thumb, or with a ball against a wall while you face away.\n\nOn each, find tenderness and hold. The back is the one most people have never touched and the one most likely to be tender in anyone who works at a desk.",
+        "notice": "Which of the three is loudest. Whether it matches the direction your arm struggles with — the front for reaching back, the back for reaching across.",
+        "careful": "Muscle, not the point of the shoulder joint itself. Come off for anything sharp or catching in the joint.",
+        "load": "Arm work in the direction the released part resists, at a range you control."
+      },
+      "populationCareful": "Hypermobile: if your shoulder slips or feels unstable, the shoulder cap may be doing stabilising work that the cuff underneath is not — release it and give the job back, or it will simply grip again.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Hand squeeze, all three parts",
+          "note": "No equipment, anywhere. Learn the three parts on yourself."
+        },
+        {
+          "level": 2,
+          "name": "Ball against a wall",
+          "note": "More pressure."
+        },
+        {
+          "level": 3,
+          "name": "Pressure while the arm moves",
+          "note": "Hold and move the arm through the range that part controls."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-cuff-external-rotation",
+          "name": "Turning the arm out, under control",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "deltoid-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-triceps-back-of-arm",
+      "name": "The back of the upper arm",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "One head of the muscle at the back of the upper arm crosses the shoulder as well as the elbow, which means a tight arm can limit reaching overhead — and almost nobody looks there when overhead range is the complaint.",
+      "equipment": "A ball against a wall, or your opposite hand",
+      "regions": [
+        "arm",
+        "shoulder-girdle"
+      ],
+      "muscles": [
+        "triceps"
+      ],
+      "context": [
+        "standing",
+        "chair",
+        "desk",
+        "travel"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "A ball against a wall with the arm raised, or squeeze the muscle in your opposite hand.",
+        "release": "Raise the arm and place a ball against a wall on the back of the upper arm, working from the elbow up toward the armpit. The part nearest the armpit is the one that crosses the shoulder and is usually the most useful. Hold where it bites. Hand version: squeeze the back of the arm between fingers and thumb, working up its length.",
+        "notice": "Whether the top end, near the armpit, is much more tender than the middle. Whether overhead reach changes afterward.",
+        "careful": "Muscle only. There is a groove on the inside of the upper arm where a nerve runs close to the surface — tingling into the ring and little fingers means come off and move outward.",
+        "load": "Overhead reach and hold, and pushing work at whatever range you own."
+      },
+      "populationCareful": "Hypermobile: overhead positions take a lax shoulder a long way. Keep the arm raise modest for the wall version, and use the hand-squeeze version if overhead is uncomfortable.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Hand squeeze",
+          "note": "No equipment, arm at your side."
+        },
+        {
+          "level": 2,
+          "name": "Ball against a wall",
+          "note": "Arm raised, more pressure, better access to the top end."
+        },
+        {
+          "level": 3,
+          "name": "Add the elbow bending",
+          "note": "Hold pressure and slowly bend and straighten the elbow."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": null,
+          "name": "Overhead reach and hold",
+          "resolveAgainst": "imported-legacy",
+          "note": "Match against existing overhead/pressing content at S5."
+        }
+      ],
+      "swapGroup": "arm-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-biceps-front-of-arm",
+      "name": "The front of the upper arm, and its tendon at the shoulder",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "The muscle at the front of the upper arm has a tendon that runs up into the shoulder joint through a groove in the bone. Front-of-shoulder ache is often attributed to the joint when the muscle below it is what has been working.",
+      "equipment": "Your opposite hand",
+      "regions": [
+        "arm",
+        "shoulder-girdle"
+      ],
+      "muscles": [
+        "biceps"
+      ],
+      "context": [
+        "chair",
+        "desk",
+        "standing",
+        "travel"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "Fingers and thumb. This is a squeeze, not a press.",
+        "release": "Rest the arm so it is completely relaxed — on a table, or hanging. Take the muscle at the front of the upper arm in your opposite hand and squeeze it gently between fingers and thumb, working from just above the elbow up toward the shoulder. Near the top, the muscle narrows into a tendon that runs in a groove at the front of the upper arm bone; that area is often tender, and there it wants light contact only.",
+        "notice": "How much the muscle can be lifted away from the bone when the arm is genuinely relaxed — and how little when it isn't. Whether the top end is tender.",
+        "careful": "Light near the tendon at the top. Do not dig into the inner crease of the elbow, where vessels and nerves run close to the surface. If the front of your shoulder is painful with activity rather than just tender to touch, that is a clinician's question.",
+        "load": "Elbow and shoulder work through a controlled range, and — because this muscle also turns the forearm — slow palm-up and palm-down turning against light resistance."
+      },
+      "populationCareful": "Hypermobile: front-of-shoulder pain in a hypermobile shoulder can come from the joint rather than the muscle, and pressing the muscle harder will not tell you which. If the shoulder slips or catches, get it assessed rather than treating it as a tight muscle.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Squeeze the belly",
+          "note": "Mid-arm only, arm fully relaxed."
+        },
+        {
+          "level": 2,
+          "name": "Work up toward the shoulder",
+          "note": "Lighter as you go up."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": null,
+          "name": "Elbow and forearm rotation under light load",
+          "resolveAgainst": "imported-legacy",
+          "note": "Match at S5."
+        }
+      ],
+      "swapGroup": "arm-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-shoulder-cup",
+      "name": "Suction on the back of the shoulder",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "A pressure-free option for a region that gets a lot of pressure. The back of the shoulder is broad, flat, easy to reach and one of the easiest places to try a cup, which makes it the sensible first experiment with that family.",
+      "equipment": "A soft silicone cup and a little oil or lotion",
+      "regions": [
+        "shoulder-girdle",
+        "upper-back"
+      ],
+      "muscles": [
+        "deltoids",
+        "rotator cuff (group)",
+        "mid/lower trapezius"
+      ],
+      "context": [
+        "chair",
+        "bed"
+      ],
+      "technique": "tech-decompression-cup",
+      "fields": {
+        "tool": "One soft silicone cup. Lotion or oil on the skin first.",
+        "release": "Oil the back of the shoulder and the area over the shoulder blade. Squeeze the cup, place it on the muscle, release so it grips — gently enough that you could pull it off easily. Then glide it slowly along the muscle rather than leaving it still: along the back of the shoulder, out across the blade, up toward the ridge. Slow passes. Take it off well before the skin darkens.",
+        "notice": "Whether the tissue feels different afterward compared with how it feels after ball work. That comparison is the reason to have both families available.",
+        "careful": "Gliding rather than static — static cups leave marks that last days. Never over broken skin, a mole, or a visible standing vein. Not on the front of the neck. If you bruise easily, expect marks and decide before you start whether that is acceptable.",
+        "load": "External rotation and setting the shoulder blade, same as the pressure items."
+      },
+      "populationCareful": "Hypermobile: fragile skin marks readily with this family. Gliding only, minimum suction, short. The trade-off is real — less pressure on the tissue, more risk of a visible mark — and it is your call to make knowingly.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Gliding, light suction",
+          "note": "Moving, gentlest setting. The default and often the only rung needed."
+        },
+        {
+          "level": 2,
+          "name": "Brief static",
+          "note": "Cup left in place briefly. Expect a mark."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-cuff-external-rotation",
+          "name": "Turning the arm out, under control",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "cuff-release",
+      "evidence": {
+        "inheritsFrom": "tech-decompression-cup"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-forearm-scrape",
+      "name": "Scraping the forearm",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "The forearm is flat, broad, easy to see, and takes a scraping tool better than almost anywhere. It is also the region where thumb-and-ball work runs out fastest, because the hand doing the work gets as tired as the arm receiving it.",
+      "equipment": "A smooth-edged tool or a spoon, and lotion",
+      "regions": [
+        "forearm",
+        "arm"
+      ],
+      "muscles": [
+        "forearm extensors",
+        "forearm flexors"
+      ],
+      "context": [
+        "chair",
+        "desk",
+        "travel"
+      ],
+      "technique": "tech-scrape",
+      "fields": {
+        "tool": "Any smooth blunt edge — a purpose-made tool, or the edge of a spoon. Lotion or oil first.",
+        "release": "Rest the forearm on a table, palm down. Draw the edge along the muscle from below the elbow toward the wrist at a shallow angle, with light pressure and short strokes, covering the whole outer forearm rather than digging one line. Then turn the arm over and do the palm side. Stop well before the skin is raw.",
+        "notice": "Places where the tool feels gritty or catches. That sensation is consistently reported and its cause is not established — treat it as somewhere to spend a bit more time, not as a diagnosis of what is under there.",
+        "careful": "Light. Redness is not the goal and more redness is not more result. Lotion always — dry scraping tears skin. Not over the bony ridge on the outside of the elbow, and not over the inner crease of the elbow or the wrist creases where vessels and nerves are close to the surface.",
+        "load": "Grip and release work, wrist movement in both directions against light resistance, and finger spreading."
+      },
+      "populationCareful": "Hypermobile: this family acts directly on skin, and yours may mark more easily than most. Very light, short, well lubricated, and stop at the first sign of marking. If you want the same region without the marking risk, the thumb and ball items in entry-points.json cover it.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Outer forearm, light",
+          "note": "One surface, minimum pressure."
+        },
+        {
+          "level": 2,
+          "name": "Both surfaces",
+          "note": "Palm side too, same pressure."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": null,
+          "name": "Wrist and grip work against light resistance",
+          "resolveAgainst": "imported-legacy",
+          "note": "Match at S5; entry-points.json also carries hand loading in prose."
+        }
+      ],
+      "swapGroup": "forearm-release",
+      "evidence": {
+        "inheritsFrom": "tech-scrape"
+      },
+      "sourceNote": "App content, not clinician-prescribed. Sibling to the forearm pressure items in the tender-point entry set — same target, different family, and a swap option when your hands are the thing that is tired."
+    },
+    {
+      "id": "load-cuff-external-rotation",
+      "name": "Turning the arm out, under control",
+      "kind": "exercise",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "activate",
+      "sides": true,
+      "why": "The load partner for every rotator cuff and shoulder item here. The muscles that turn the arm outward are the ones that keep the head of the arm bone centred, and they are almost universally the weaker side of the pair — because nothing in a normal day asks for them.",
+      "equipment": "None, or a light band; a rolled towel",
+      "regions": [
+        "shoulder-girdle"
+      ],
+      "muscles": [
+        "rotator cuff (group)"
+      ],
+      "context": [
+        "chair",
+        "standing",
+        "desk",
+        "floor"
+      ],
+      "technique": null,
+      "fields": {
+        "tool": "A rolled towel tucked between your elbow and your side, and optionally a light band.",
+        "release": "Elbow bent to a right angle and tucked against your side with the towel keeping it there. Keeping the elbow in contact, turn the forearm outward, away from your belly, as far as you can without the elbow drifting away from your body or your shoulder shrugging. Then slowly back. The towel is the honesty check — if it drops, something else took over.\n\nWith a band, the same movement against light resistance.",
+        "notice": "How small the range is when the elbow stays put. Whether the shoulder shrugs, which means the top of the shoulder has taken the job. Whether one side is much weaker.",
+        "careful": "Light resistance. This is a control exercise and heavy load defeats it. Any catching or pinching in the shoulder means reduce the range.",
+        "load": "This is the load."
+      },
+      "populationCareful": "Hypermobile: this is one of the highest-value items in the shoulder module for you. Active support is what a lax shoulder needs. Light, controlled, frequent, and progress by adding hold time and steadiness rather than resistance.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined] — reps, sets and resistance are a clinician's numbers. Worth asking for.",
+      "levels": [
+        {
+          "level": 1,
+          "name": "No resistance, towel at the elbow",
+          "note": "Just the movement, clean. Finding it without the shrug is the rung."
+        },
+        {
+          "level": 2,
+          "name": "Light band",
+          "note": "Same movement, light resistance, elbow still pinned."
+        },
+        {
+          "level": 3,
+          "name": "Arm away from the side",
+          "note": "Elbow raised out to the side, same rotation. Harder and closer to how you use the shoulder."
+        }
+      ],
+      "swapGroup": "cuff-activation",
+      "evidence": {
+        "family": null,
+        "grade": "Established as standard shoulder rehabilitation content.",
+        "basis": "Rotator cuff strengthening including external rotation is core content in shoulder rehabilitation with a large trial literature behind the general approach. Specific protocols vary and none is reproduced here."
+      },
+      "sourceNote": "App content, not clinician-prescribed.",
+      "authoringNote": "Authored here as a load partner; may belong in the strength and activation file."
+    },
+    {
+      "id": "load-serratus-reach",
+      "name": "Reaching — the shoulder blade wrapping the ribs",
+      "kind": "exercise",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "activate",
+      "sides": true,
+      "why": "The load partner for the serratus and rhomboid items, and the movement that most people have never separated out. Almost everyone can push. Far fewer can push and let the shoulder blade travel forward around the ribcage while they do it, which is what the movement actually requires.",
+      "equipment": "A wall, or the floor",
+      "regions": [
+        "shoulder-girdle",
+        "ribs"
+      ],
+      "muscles": [
+        "serratus anterior"
+      ],
+      "context": [
+        "standing",
+        "floor",
+        "desk"
+      ],
+      "technique": null,
+      "fields": {
+        "tool": "A wall to start with.",
+        "release": "Stand facing a wall, hands on it at chest height, arms straight. Without bending your elbows, push the wall away and let your upper back round slightly — your shoulder blades slide apart and forward around your ribs. Hold. Then let them come back together. Elbows stay straight the whole time; if they bend, it has turned into a push-up.\n\nOn hands and knees, the same movement: push the floor away without bending the elbows, letting the upper back round.",
+        "notice": "Whether the blades actually move or whether your whole trunk shifts instead. Whether the shoulders shrug up toward the ears — different muscle, wrong one.",
+        "careful": "Elbows straight, shoulders down. Small range at first. Any pinching in the front of the shoulder means reduce it.",
+        "load": "This is the load."
+      },
+      "populationCareful": "Hypermobile: a shoulder blade that wings away from the ribs is common with hypermobility, and this is the direct answer to it. Small range, frequent, and progress by control rather than by moving to harder positions.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Against a wall",
+          "note": "Least load. Learn the movement."
+        },
+        {
+          "level": 2,
+          "name": "On hands and knees",
+          "note": "More load, and the blade has to hold against gravity."
+        },
+        {
+          "level": 3,
+          "name": "In a plank position",
+          "note": "Full bodyweight. Only when rung 2 is clean and the shoulders stay down."
+        }
+      ],
+      "swapGroup": "scapular-activation",
+      "evidence": {
+        "family": null,
+        "grade": "Established as standard shoulder rehabilitation content.",
+        "basis": "Serratus anterior activation exercises are routine in shoulder rehabilitation, and this progression is a common one across programmes. Doses are protocol-dependent and are not reproduced here."
+      },
+      "sourceNote": "App content, not clinician-prescribed.",
+      "authoringNote": "Authored here as a load partner; may belong in the strength and activation file."
+    }
+  ]
+}

@@ -285,11 +285,13 @@ export async function viewLibrary({ reload } = {}) {
                 h('span', {}, item.fields[k]))),
           )
         : null,
-      item.evidence
+      // No grade, no Evidence line. Saying "not graded" is itself a claim about
+      // the evidence, and an absent grade is a gap, not a finding.
+      evidenceOf(item.evidence).grade
         ? h('div.fields', { style: 'margin-top:var(--sp-3)' },
             h('div.field-line', {},
               h('span.field-label', {}, 'Evidence'),
-              h('span', {}, evidenceOf(item.evidence).grade ?? 'not graded')),
+              h('span', {}, evidenceOf(item.evidence).grade)),
             evidenceOf(item.evidence).basis
               ? h('p.why', {}, evidenceOf(item.evidence).basis)
               : null,

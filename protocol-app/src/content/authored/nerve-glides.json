@@ -1,0 +1,896 @@
+{
+  "format": "protocol-app/authored-v1",
+  "category": "nerve",
+  "_meta": {
+    "file": "nerve-glides.json — draft v1, 28 Aug 2026",
+    "status": "DRAFT — Kevin's edit pass pending. Not ratified content.",
+    "scope": "The nerve-glide category, listed in strategy v0.5 §5 inside the 'Breath · range · airway · nerve · vagal' row with the criterion 'existing cards ported with doses tagged; siblings added wherever a swap group has one member — no swap group of one.' The library holds two legacy cards (nv-sciatic, nv-median). This file adds three orientation cards, one technique-family guide, and ten items, giving five nerve tracts a swap group of at least two: median, ulnar, radial, sciatic, femoral.",
+    "no_overlap_claim": "Nothing here repeats the two legacy cards. The legacy seated slump slider (nv-sciatic) and the legacy standing median glide (nv-median) become members of the sciatic-glide and median-glide swap groups; the new items are different positions, different ranges, or different contexts, and each says which legacy card it sits beside. CC: if a name collision halts the build, that is the guard working — report it.",
+    "why_this_category_is_different": "Every other category in this library rewards doing a bit more. This one does not. The legacy sciatic card already says it: this is the one family where overdoing it clearly makes things worse, and the failure mode is a nerve that stays irritated for days rather than a muscle that is sore for one. That is why this file opens with three orientation cards before any technique, why the get-evaluated card sits second, and why not one item carries a rep count.",
+    "tensioners_deliberately_not_shipped": "The family has two halves: sliders (the nerve is pulled at one end and released at the other, so it moves without net tension) and tensioners (both ends pulled at once, adding load to the nerve). Every item in this file is a slider. Tensioners are described in the technique guide and explicitly not offered as items, on the reasoning in the guide's evidence block. This is a judgment call, not a ruling — Kevin's to overturn.",
+    "load_partners": "All ten items carry a loadAfter, but the pairing means something different here than in the release files. A nerve glide does not leave a muscle needing load; it may leave range that the body will give back unless it is used. Eight point at existing authored activation items by id; two point at legacy content by name with id: null, for S5 to resolve.",
+    "new_values_proposed": "role: 'nerve-glide' (new role value — these are not release, not stretch, and not activate) · category 'nerve' with categoryName 'Nerve glides', matching the legacy toolkit category id · swapGroup names by nerve tract. CC reports loader rejections rather than stripping.",
+    "vocabulary_note": "This category targets nerve tracts, which are not muscles and are not in the ~44-entry muscle census. Named here: median · ulnar · radial · sciatic (with its tibial and common peroneal branches handled as levels, not separate items) · femoral. Whether nerve tracts become a second controlled target list beside muscles is an S1 question, not something this file decides. Left in a 'nerves' array rather than shoved into 'muscles'.",
+    "legacy_card_flag": "The legacy median card (nv-median) contains the phrase 'given the thoracic outlet picture' — person-specific framing sitting in what is meant to be general library content. Flagged for S1, not edited here; this file does not own that card.",
+    "blanks": "No item carries a rep count, set count, hold time or weekly frequency. What trial protocols used is stated once, with provenance, in the technique guide, alongside the reason this library is not adopting it. dose reads [undetermined] on every item and that is the honest state, not an oversight.",
+    "no_pass_bars": "The observation card asks for a before-and-after comparison and deliberately sets no threshold, no number, and no pass mark. A self-administered range comparison with n = 1 and no blinding cannot support one.",
+    "landed": "2026-08-28, nerve-glide session."
+  },
+  "items": [
+    {
+      "id": "nerve-glide-what-this-is",
+      "name": "Nerve glides — different tissue, different rules",
+      "kind": "bodywork",
+      "category": "nerve",
+      "categoryName": "Nerve glides",
+      "tracking": "check",
+      "tier": "established",
+      "role": "awareness-cue",
+      "why": "Read this before any item in this module. Everything else in this library rewards doing a little more than you did last time. This is the one category where that instinct is the problem.",
+      "regions": [
+        "arm",
+        "leg",
+        "neck",
+        "hip"
+      ],
+      "muscles": [],
+      "nerves": [],
+      "context": [
+        "chair",
+        "bed",
+        "desk",
+        "travel"
+      ],
+      "technique": "tech-nerve-glide",
+      "fields": {
+        "tool": "Nothing. This one is reading.",
+        "release": "A nerve is not a rope tied at both ends. It runs from your spine out to your fingers or your toes through a series of tunnels — between muscles, under bands of tissue, past joints — and every time you move, it has to slide a little inside those tunnels. Bend your elbow and the nerve on the inside of it has to accommodate; straighten your knee and the nerve down the back of your leg has to as well.\n\nA glide is built on that. You lengthen the nerve's path at one end of the body while shortening it at the other, at the same time, then reverse. Straighten the knee and tip the head back; bend the knee and drop the chin. The nerve moves, but it never gets pulled tight from both ends at once. That is the entire distinction between this and a stretch, and it is the reason none of these are held.\n\nThe pull you feel should MOVE as you go. That travelling sensation is the point. A pull that sits in one place and stays there is a muscle, and you are in the wrong module.",
+        "notice": "Where the sensation actually is, and whether it moves. And whether the arm or leg feels different for a few minutes afterwards — lighter, or clearer, or nothing at all. Nothing at all is a completely acceptable answer.",
+        "careful": "Never hold the end position. Never push into pins and needles, numbness, burning or electricity — those are not the sensation you are working toward, they are the sign you have gone past the useful range. If the drill reproduces your symptoms, make the movement smaller until it does not. If symptoms are still there an hour later, or worse the next day, that is too much, and less next time is the correction, not more. This is the one module where the honest instruction is that more is worse.",
+        "load": "Nothing to load — this is an explanation, not a technique."
+      },
+      "populationCareful": "Hypermobile: nerve symptoms in hypermobile people are frequently not a mechanical problem at all. Studies of hypermobile people with suspected nerve pain find small-fibre neuropathy in a large majority — a problem of the smallest nerve fibres in the skin, which no amount of gliding will move. Burning, patchy numbness, temperature that feels wrong, symptoms in both hands or both feet: that pattern belongs in a clinician's hands for a diagnosis, not in this module. Orthostatic: a controlled trial in healthy volunteers found that both halves of this technique family raised sympathetic nervous system markers during and after the session. In a body that already runs hot on the sympathetic side, that is worth knowing before you add these to an evening routine.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "n/a",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Read it, then find one nerve on yourself",
+          "note": "The map card next door tells you which nerve serves which part of your hand or leg. Finding one on your own body is what makes the rest of the module mean anything."
+        }
+      ],
+      "loadAfter": [],
+      "swapGroup": null,
+      "evidence": {
+        "family": "nerve-glide",
+        "grade": "Anatomy and an instruction, not an intervention.",
+        "basis": "That peripheral nerves slide within their surroundings during limb movement is standard anatomy and has been shown directly with ultrasound imaging. Nothing on this card is a treatment claim; the claims and their grade live on the technique guide."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "nerve-when-to-get-evaluated",
+      "name": "When this module is the wrong answer",
+      "kind": "bodywork",
+      "category": "nerve",
+      "categoryName": "Nerve glides",
+      "tracking": "check",
+      "tier": "established",
+      "role": "awareness-cue",
+      "why": "Some nerve symptoms are a signal to be examined, and gliding them is at best a delay. This card is here so the module has somewhere to send you, and it sits second on purpose.",
+      "regions": [
+        "arm",
+        "leg",
+        "neck",
+        "back"
+      ],
+      "muscles": [],
+      "nerves": [],
+      "context": [
+        "chair",
+        "bed",
+        "desk",
+        "travel"
+      ],
+      "technique": "tech-nerve-glide",
+      "fields": {
+        "tool": "Nothing.",
+        "release": "Stop and arrange to be seen, rather than working through this module, if any of these are true.\n\n**Weakness you can see, not just feel.** A foot that slaps or catches when you walk. A hand that drops things or cannot hold a grip. Weakness that is getting worse week on week.\n\n**Numbness through the saddle area, or any change in bladder or bowel control, alongside back or leg symptoms.** This one is not a wait-and-see. It is a same-day medical assessment.\n\n**Symptoms in both arms or both legs at once**, or symptoms that came on after a fall, a crash, or a blow to the head or neck.\n\n**Symptoms that wake you at night**, or that are steadily worse rather than varying with what you do.\n\n**Numbness or burning that is patchy, symmetrical, or in a glove-and-stocking pattern** rather than following one nerve's territory. That pattern points somewhere other than a compressed nerve, and it deserves a diagnosis rather than a drill.",
+        "notice": "Whether your symptoms actually follow one nerve's territory — the map card is next door — or whether they are more scattered than that. That distinction is most of what a clinician wants to hear from you.",
+        "careful": "Nothing on this card is a diagnosis and none of it is a checklist you can pass. It is a list of reasons to hand the question to someone who can examine you.",
+        "load": "n/a"
+      },
+      "populationCareful": "Hypermobile: add one to the list. Symptoms brought on by looking up, by holding your head in one position, or by neck movement — particularly with headache at the base of the skull, visual change, or a feeling of the head being heavy — belong with a clinician before any neck-involving drill, and every item in this module involves the neck. Orthostatic: dizziness on standing is a different problem from nerve symptoms; if the two are getting tangled, see the vestibular module's first card, which exists to separate them.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "n/a",
+      "levels": [],
+      "loadAfter": [],
+      "swapGroup": null,
+      "evidence": {
+        "family": "nerve-glide",
+        "grade": "Standard referral practice, not an intervention.",
+        "basis": "These are the presentations that conventionally prompt examination rather than self-management. Stated here as reasons to be seen, with no diagnostic claim attached to any of them."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "nerve-which-nerve-map",
+      "name": "Which nerve is which — a map you can use on yourself",
+      "kind": "bodywork",
+      "category": "nerve",
+      "categoryName": "Nerve glides",
+      "tracking": "check",
+      "tier": "established",
+      "role": "awareness-cue",
+      "why": "There is no point gliding the wrong nerve. Each of the five tracts in this module serves a different patch of skin, and where your symptoms sit is the cheapest clue available.",
+      "regions": [
+        "arm",
+        "leg"
+      ],
+      "muscles": [],
+      "nerves": [
+        "median",
+        "ulnar",
+        "radial",
+        "sciatic",
+        "femoral"
+      ],
+      "context": [
+        "chair",
+        "desk",
+        "bed",
+        "travel"
+      ],
+      "technique": "tech-nerve-glide",
+      "fields": {
+        "tool": "Your own hand, and your own leg.",
+        "release": "**In the arm, three tracts share the job.**\n\nThe one running down the middle of the forearm and into the palm serves the thumb, the index and middle fingers, and half the ring finger. It passes through the tunnel at the front of the wrist. Symptoms here are the classic ones — thumb-side fingers going numb at night, dropping things, a hand that feels swollen when it is not.\n\nThe one running behind the bony point on the inside of the elbow — the funny bone — serves the little finger and the outer half of the ring finger. Symptoms tend to appear when the elbow has been bent for a long time: on a phone, on a steering wheel, asleep with the arm curled.\n\nThe one wrapping around the back of the upper arm serves the back of the hand and the web of the thumb. It is the one to think about with symptoms across the back of the hand, or a wrist that feels weak lifting.\n\n**In the leg, two.**\n\nThe large tract down the back of the thigh serves the back of the leg, the calf, and most of the foot. Below the knee it divides — one branch running down the back of the calf into the sole, the other around the outside of the knee and down the front of the shin to the top of the foot.\n\nThe tract at the front of the hip serves the front of the thigh and, through a long branch, the inner side of the shin down toward the inner ankle.",
+        "notice": "Draw the edge of your own symptoms with a finger. Does the border follow one of these patches, or does it ignore them? A border that follows one patch points at one nerve. A border that ignores all of them points somewhere else, and the get-evaluated card covers that.",
+        "careful": "These territories overlap between people, and the textbook borders are tidier than real bodies. Use this to choose which item to try, never to conclude what is wrong with you.",
+        "load": "n/a"
+      },
+      "populationCareful": "Hypermobile: in hypermobile people symptoms often refuse to sit inside any one of these patches, and that is itself information — it makes a single compressed nerve less likely and a small-fibre problem more so, which is a clinician's question.",
+      "carefulAudience": "hypermobile",
+      "dose": "n/a",
+      "levels": [],
+      "loadAfter": [],
+      "swapGroup": null,
+      "evidence": {
+        "family": "nerve-glide",
+        "grade": "Standard anatomy, described in the app's own words.",
+        "basis": "Peripheral nerve sensory territories are textbook anatomy. Described here from anatomy rather than reproduced from any chart, with the overlap between people stated rather than hidden."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "tech-nerve-glide",
+      "name": "Nerve gliding — moving a nerve without pulling on it",
+      "kind": "bodywork",
+      "category": "nerve",
+      "categoryName": "Nerve glides",
+      "tracking": "check",
+      "tier": "established",
+      "role": "technique-guide",
+      "why": "The family guide for this module. Every item here inherits its evidence grade from this card, and every item's instructions assume you have read the two rules below.",
+      "equipment": "None for anything in this module.",
+      "regions": [
+        "arm",
+        "leg",
+        "neck"
+      ],
+      "context": [
+        "floor",
+        "chair",
+        "standing",
+        "bed",
+        "desk",
+        "travel"
+      ],
+      "fields": {
+        "tool": "Your own limb, and a chair or a bed for the supported versions.",
+        "release": "**The mechanic.** Two joints at opposite ends of the nerve's path move at the same time, in opposite directions. One end lengthens the path; the other shortens it by the same sort of amount. The nerve slides through its tunnels; the net tension on it barely changes. Reverse, and it slides back. That is one repetition, and it should take a couple of seconds each way — slow, smooth, continuous, no pause at either end.\n\n**The two rules.** Never hold the end position. Never work in a range that reproduces your symptoms.\n\n**The other half of this family, which this library does not offer.** The same drills can be run with both ends lengthening at once, which does put the nerve under tension. Those are called tensioners, and they are a legitimate clinical technique in the right hands. They are not in this module, for three reasons: the head-to-head trials do not agree on whether they beat sliders, the one clear signal is that they are the more provocative of the two, and the population this library is built for is exactly the one that overshoots end range without noticing. If a clinician who has examined you prescribes tensioners, do those instead of these; the app is not the better judge of your case.",
+        "notice": "Whether the sensation travels. A pull that moves along the limb as you go is the nerve. A pull that sits in one place is a muscle, and a muscle wants a different module.",
+        "careful": "Small range first, always — smaller than feels necessary. Stop the session, do not just ease off, if you get pins and needles, numbness, burning or an electric quality. Judge the dose by the next day, not by the session: symptoms that are still raised an hour later, or louder the following morning, mean the last session was too much. In this family the correction for a bad response is less, never more.",
+        "load": "Not load in the usual sense. If a glide gives you range — a straighter knee, an arm that reaches further — use that range in the next few minutes with something ordinary and unloaded, or the body will quietly take it back. Each item names what to use."
+      },
+      "populationCareful": "Hypermobile: two separate cautions. First, joints that travel further than most make it easy to reach a provocative position without feeling like you did anything, so the range that is small enough for you is smaller than the instructions imply. Second, and more important: nerve symptoms in hypermobile people are often small-fibre rather than mechanical — one hospital cohort of hypermobile people referred for suspected nerve pain found definite small-fibre neuropathy in well over half, on both testing and skin biopsy — and small-fibre symptoms do not respond to gliding a nerve trunk. Persistent burning or patchy numbness is a reason for a diagnosis, not for more repetitions. Orthostatic: a randomised controlled trial in 90 healthy volunteers measured a clear rise in sympathetic markers with both sliders and tensioners, sustained into the rest period afterwards, with the tensioner slightly higher. It was healthy people and a laboratory measure, not a symptom outcome, so it does not predict how you will feel — but if your system already leans sympathetic, put these earlier in the day and watch what follows. PEM: these are low in physical cost and can still be provocative to a sensitised nervous system; the pacing rule applies to the nervous system's response, not to the effort.",
+      "carefulAudience": "hypermobile, orthostatic, pem",
+      "dose": "[undetermined] for self-administered use, and left blank deliberately. For reference only, and not a recommendation: trial protocols in this family typically use sets of roughly ten to twenty repetitions, and at least one comparative sciatica protocol held the end position for five seconds [derived — a published slider-versus-tensioner sciatica protocol]. That end-position hold contradicts the first rule on this card; the trial was clinician-supervised in people with an established diagnosis, which is not this module's situation. The library's two legacy cards say ten repetitions, two sets — provenance for that number is [undetermined]; it is in the library, not derived from anything on file. A defensible number for self-administered use will come from real use, or not at all.",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Quarter range, one set, one side",
+          "note": "Learn what a travelling sensation feels like before you learn anything else. Then wait a day and see what happened."
+        },
+        {
+          "level": 2,
+          "name": "Half range, both sides",
+          "note": "Only once level 1 produced no next-day increase in symptoms."
+        },
+        {
+          "level": 3,
+          "name": "Comfortable range, and use the range afterwards",
+          "note": "Full available range still means the range that does not reproduce symptoms — that ceiling never lifts."
+        }
+      ],
+      "evidence": {
+        "family": "nerve-glide",
+        "grade": "Low to moderate, short-term, on limited-quality evidence — and the evidence is better for a clinician moving your limb than for you doing it at home. Strongest where symptoms travel down an arm from an irritated nerve in the neck; weakest, and in one good trial absent, as an add-on for mild carpal tunnel.",
+        "basis": "An umbrella review pooling earlier meta-analyses reported a moderate effect on pain and a large one on disability, while rating the underlying quality as limited; a published re-analysis in the same journal showed the disability finding did not survive removing primary studies that had been counted more than once across the pooled reviews. A 2025 systematic review and meta-analysis of nerve-related neck and arm pain covering 20 randomised trials and 953 people found the clinician-applied cervical lateral glide reduced pain against no treatment, and by a smaller margin against other physiotherapy. Carpal tunnel is the weak spot: a randomised trial in 80 people with mild carpal tunnel found gliding exercises added nothing to a wrist splint alone, and a review of four trials found benefit only where gliding was combined with conventional treatment rather than used on its own. Slider-versus-tensioner comparisons contradict each other on which is better. The mechanism usually offered — freeing a nerve that has become stuck, or dispersing fluid inside it — has support for the movement itself on ultrasound imaging, but remains a hypothesis about why symptoms change rather than a demonstrated explanation. In the library because the drills are cheap, self-administrable, and diagnostically informative in a way few things are; graded honestly because most of the trial base is not the situation the app is in."
+      },
+      "sourceNote": "App content, not clinician-prescribed. If you have had an examination, the examiner's instructions outrank this card."
+    },
+    {
+      "id": "nerve-median-desk",
+      "name": "Median glide — the desk version",
+      "kind": "bodywork",
+      "category": "nerve",
+      "categoryName": "Nerve glides",
+      "tracking": "check",
+      "tier": "established",
+      "role": "nerve-glide",
+      "sides": true,
+      "why": "The thumb-side nerve, done small enough to run at a desk without looking like anything. The library's existing median card takes the arm out to the side; this one keeps it in front of you, which is both more discreet and a much easier range to keep small.",
+      "equipment": "A desk or table",
+      "regions": [
+        "arm",
+        "neck"
+      ],
+      "muscles": [],
+      "nerves": [
+        "median"
+      ],
+      "context": [
+        "desk",
+        "chair",
+        "travel"
+      ],
+      "technique": "tech-nerve-glide",
+      "fields": {
+        "tool": "A flat surface to rest the forearm on, so the shoulder does nothing.",
+        "release": "Forearm resting on the desk, palm up, elbow bent to about a right angle. Fingers and thumb loosely curled.\n\nNow, together: open the hand and let the wrist drop back so the fingers point away from you, AND tip your head gently toward that arm. Then reverse, together: curl the fingers and thumb back in, let the wrist come to neutral, AND tip your head away from that arm.\n\nAbout two seconds each way. The elbow stays where it is; this is a wrist-and-neck drill and the small range is the whole reason it exists.",
+        "notice": "Whether the sensation runs from the palm up toward the elbow and moves as you go. Compare sides — most people find one side has a great deal more to say than the other.",
+        "careful": "Head tilt is a small tilt, not a stretch of the neck. If the fingers start tingling, you have gone past useful — reduce the wrist range first, and the head range second. Never hold either end.",
+        "load": "Use the hand for something ordinary straight afterwards — gripping a mug, typing a sentence — rather than letting it sit still."
+      },
+      "populationCareful": "Hypermobile: wrists that drop back a long way make it easy to reach a provocative wrist position with no sense of effort. Set your ceiling by what the fingers report, not by what the wrist can do. Orthostatic: none specific — this one is seated and small, which makes it the module's safest entry point.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Wrist only",
+          "note": "Leave the head out of it entirely until you know what the arm does on its own."
+        },
+        {
+          "level": 2,
+          "name": "Wrist and a small head tilt",
+          "note": "Add the neck, quarter range."
+        },
+        {
+          "level": 3,
+          "name": "Wrist, head, and the elbow opening a little",
+          "note": "Let the elbow straighten slightly as the wrist drops back. This is the largest version this card offers."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-scap-setting",
+          "name": "Setting the shoulder blade down and back",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "median-glide",
+      "evidence": {
+        "inheritsFrom": "tech-nerve-glide"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "nerve-median-supported-supine",
+      "name": "Median glide — lying down, arm supported",
+      "kind": "bodywork",
+      "category": "nerve",
+      "categoryName": "Nerve glides",
+      "tracking": "check",
+      "tier": "established",
+      "role": "nerve-glide",
+      "sides": true,
+      "why": "The smallest, least provocative version in the module. Lying down takes the shoulder, the neck and gravity out of the equation, which leaves only the movement you are actually trying to make.",
+      "equipment": "A bed or a floor",
+      "regions": [
+        "arm",
+        "neck"
+      ],
+      "muscles": [],
+      "nerves": [
+        "median"
+      ],
+      "context": [
+        "bed",
+        "floor"
+      ],
+      "technique": "tech-nerve-glide",
+      "fields": {
+        "tool": "The bed itself as the support. A pillow under the upper arm if the shoulder does not like resting flat.",
+        "release": "Lie on your back. Arm out from the body at about forty-five degrees, elbow bent, upper arm resting on the bed, palm facing the ceiling.\n\nTogether: straighten the elbow along the bed while the wrist drops back, AND turn your head away from that arm — a small turn. Then reverse together: bend the elbow, relax the wrist, turn the head back toward the arm.\n\nThe upper arm never leaves the bed. If it lifts, the range has got away from you.",
+        "notice": "How much less this takes than the upright versions. If the seated version has been giving you symptoms and this one does not, that is useful — it usually means the shoulder position, not the wrist, was the provocative part.",
+        "careful": "Stop if the hand tingles. Keep the arm low — the further the arm goes above shoulder height, the more provocative this whole family becomes, and lying down makes it easy not to notice that you have drifted upward.",
+        "load": "Squeeze and release a fist a few times before you get up, then use the hand normally."
+      },
+      "populationCareful": "Hypermobile: a shoulder that rests in more external rotation than most is already partway into the provocative position before you start — begin with the elbow bent further than the instructions suggest. Orthostatic: this is a lying-down item, so stand up in stages afterwards; the module is not the cause but the position is.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Elbow only",
+          "note": "Wrist stays neutral, head stays still."
+        },
+        {
+          "level": 2,
+          "name": "Elbow and wrist",
+          "note": "Add the wrist dropping back as the elbow straightens."
+        },
+        {
+          "level": 3,
+          "name": "Elbow, wrist and head",
+          "note": "The full version, still with the upper arm on the bed."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-scap-setting",
+          "name": "Setting the shoulder blade down and back",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "median-glide",
+      "evidence": {
+        "inheritsFrom": "tech-nerve-glide"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "nerve-ulnar-slider",
+      "name": "Ulnar glide — the little-finger side",
+      "kind": "bodywork",
+      "category": "nerve",
+      "categoryName": "Nerve glides",
+      "tracking": "check",
+      "tier": "established",
+      "role": "nerve-glide",
+      "sides": true,
+      "why": "The nerve behind the funny bone, which serves the little finger and half the ring finger. It is the one that complains after a long phone call, a night asleep with the arm curled, or a drive with the elbow on the door.",
+      "equipment": "None",
+      "regions": [
+        "arm",
+        "neck"
+      ],
+      "muscles": [],
+      "nerves": [
+        "ulnar"
+      ],
+      "context": [
+        "chair",
+        "standing",
+        "desk"
+      ],
+      "technique": "tech-nerve-glide",
+      "fields": {
+        "tool": "Nothing. Sitting or standing, whichever you can keep still in.",
+        "release": "Start with the arm down by your side, palm forward, wrist relaxed.\n\nTogether: bend the elbow and bring the hand up toward the side of your face, palm turning to face you, wrist bending so the fingers point back over your shoulder — AND tilt your head away from that hand. Then reverse together: lower the hand back down to your side, straighten the elbow, relax the wrist, AND bring your head back to centre or a little toward the arm.\n\nThe hand does not have to reach your face. Most people should stop well short of it.",
+        "notice": "A sensation along the inside of the forearm and into the little finger, moving as the elbow bends. This is the drill that most often reproduces something in people who have not thought about this nerve before, which is exactly why the first attempt should be a quarter of the range.",
+        "careful": "This is the most provocative arm item in the module, because bending the elbow loads this nerve more than any other single movement. Quarter range on the first attempt, one side, one short set — then judge by the next day. Any tingling into the little finger means stop, not ease off.",
+        "load": "Open and close the hand a few times, then grip something — a rail, a mug — for a few seconds. The nerve serves the small muscles of the hand, and using them is the point."
+      },
+      "populationCareful": "Hypermobile: elbows that hyperextend give this drill a much bigger range at the bottom of the movement than it is meant to have; stop short of straight rather than resting at your end range. Orthostatic: do it seated the first few times.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Elbow bending a quarter of the way, head still",
+          "note": "The starting version, and for many people the only one needed for a while."
+        },
+        {
+          "level": 2,
+          "name": "Elbow to halfway, small head tilt",
+          "note": "Add the neck once a day has passed with no increase in symptoms."
+        },
+        {
+          "level": 3,
+          "name": "Hand toward the face, head tilting away",
+          "note": "The full version. Still stops where symptoms would start."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": null,
+          "name": "Grip and hand work — legacy card, name to be resolved at S5",
+          "resolved": false
+        }
+      ],
+      "swapGroup": "ulnar-glide",
+      "evidence": {
+        "inheritsFrom": "tech-nerve-glide"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "nerve-ulnar-desk-small",
+      "name": "Ulnar glide — forearm on the desk",
+      "kind": "bodywork",
+      "category": "nerve",
+      "categoryName": "Nerve glides",
+      "tracking": "check",
+      "tier": "established",
+      "role": "nerve-glide",
+      "sides": true,
+      "why": "The same nerve with the elbow range taken out of it. This is the version for someone whose little finger goes numb at a keyboard and who cannot afford to provoke it during a working day.",
+      "equipment": "A desk or table",
+      "regions": [
+        "arm"
+      ],
+      "muscles": [],
+      "nerves": [
+        "ulnar"
+      ],
+      "context": [
+        "desk",
+        "chair",
+        "travel"
+      ],
+      "technique": "tech-nerve-glide",
+      "fields": {
+        "tool": "The desk, taking the whole weight of the forearm.",
+        "release": "Forearm flat on the desk, elbow bent, palm down.\n\nTogether: lift the hand at the wrist so the fingers come up and the little-finger edge of the hand leads, AND tilt your head away from that arm. Then reverse: let the hand settle, head back to centre.\n\nThe elbow angle does not change at all. That is the point of this version — the elbow is where this nerve gets provoked, and here it is parked.",
+        "notice": "Whether keeping the elbow still changes what you feel. If the desk version says nothing and the full version says a lot, the elbow is where your problem lives, and that is worth telling a clinician.",
+        "careful": "Small movements. If the little finger tingles, stop for the day. Do not compensate for the small range by doing more repetitions — that is the mistake this whole module warns about.",
+        "load": "Grip something for a few seconds, or press the fingertips into the desk one at a time."
+      },
+      "populationCareful": "Hypermobile: fingers that bend backward a long way will reach the end of the wrist movement without the nerve having moved much — lead with the edge of the hand rather than with the fingers.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Wrist only",
+          "note": "Head stays put."
+        },
+        {
+          "level": 2,
+          "name": "Wrist and head",
+          "note": "Add a small tilt away."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": null,
+          "name": "Grip and hand work — legacy card, name to be resolved at S5",
+          "resolved": false
+        }
+      ],
+      "swapGroup": "ulnar-glide",
+      "evidence": {
+        "inheritsFrom": "tech-nerve-glide"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "nerve-radial-slider",
+      "name": "Radial glide — the back of the hand",
+      "kind": "bodywork",
+      "category": "nerve",
+      "categoryName": "Nerve glides",
+      "tracking": "check",
+      "tier": "established",
+      "role": "nerve-glide",
+      "sides": true,
+      "why": "The third arm nerve, wrapping around the back of the upper arm to serve the back of the hand and the thumb web. It is the one people miss, and the one to think about when the back of the hand is the loud part.",
+      "equipment": "None",
+      "regions": [
+        "arm",
+        "neck",
+        "shoulder-girdle"
+      ],
+      "muscles": [],
+      "nerves": [
+        "radial"
+      ],
+      "context": [
+        "standing",
+        "chair"
+      ],
+      "technique": "tech-nerve-glide",
+      "fields": {
+        "tool": "Nothing.",
+        "release": "Arm down by your side, slightly behind the line of your body, palm facing backward.\n\nTogether: let the wrist and fingers curl down and in, thumb tucked, while the arm turns inward — AND tilt your head away from that arm. Then reverse together: open the hand, let the wrist come back to neutral, turn the arm out a little, AND bring the head back toward the arm.\n\nThe arm stays low the whole time. It does not lift, and it does not go far behind you.",
+        "notice": "A sensation across the back of the forearm and the back of the hand. It is often vaguer than the other two arm nerves — a heaviness rather than a line.",
+        "careful": "The shoulder is easy to cheat with here. If your shoulder is doing the work of moving the arm backward, the range is too big — bring the arm forward until the sensation comes from the hand and forearm instead. Never combine a big head tilt with the arm pulled back; that combination is the one people flare themselves with.",
+        "load": "Lift the back of the hand against your other hand's light resistance a few times, or press the back of the hand into a wall."
+      },
+      "populationCareful": "Hypermobile: shoulders that travel far backward will let this arm go somewhere the instructions never intended. Keep the upper arm alongside your body. Orthostatic: standing item — do it near a wall or seated first.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Hand and wrist only, arm alongside you",
+          "note": "No head, no arm rotation."
+        },
+        {
+          "level": 2,
+          "name": "Add the arm turning in",
+          "note": "Small rotation, arm still alongside."
+        },
+        {
+          "level": 3,
+          "name": "Add the head tilt",
+          "note": "The full version. The head is the last thing added, not the first."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-cuff-external-rotation",
+          "name": "Turning the arm out, under control",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "radial-glide",
+      "evidence": {
+        "inheritsFrom": "tech-nerve-glide"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "nerve-radial-seated-thigh",
+      "name": "Radial glide — hand resting on the thigh",
+      "kind": "bodywork",
+      "category": "nerve",
+      "categoryName": "Nerve glides",
+      "tracking": "check",
+      "tier": "established",
+      "role": "nerve-glide",
+      "sides": true,
+      "why": "The seated, supported version of the same nerve, with the shoulder given nothing to do. This is the one to use if the standing version keeps turning into a shoulder movement.",
+      "equipment": "A chair",
+      "regions": [
+        "arm"
+      ],
+      "muscles": [],
+      "nerves": [
+        "radial"
+      ],
+      "context": [
+        "chair",
+        "desk",
+        "travel"
+      ],
+      "technique": "tech-nerve-glide",
+      "fields": {
+        "tool": "Your own thigh as the shelf.",
+        "release": "Sitting. Rest the back of your hand on your thigh, palm up, elbow comfortably bent and the upper arm hanging at your side.\n\nTogether: curl the fingers and thumb in and let the wrist turn so the palm rolls away from you, AND tilt the head away from that arm — small. Then reverse: open the hand, roll the palm back up, head back to centre.\n\nThe forearm stays on the thigh throughout.",
+        "notice": "Whether the sensation is in the same place as the standing version. If the standing one gives you shoulder sensation and this one gives you forearm sensation, the standing one was too big.",
+        "careful": "Small head tilt only. Stop if the back of the hand goes numb or buzzes.",
+        "load": "Press the back of the hand down into the thigh for a couple of seconds, a few times."
+      },
+      "populationCareful": "Hypermobile: thumb joints that fold a long way will take the movement instead of the wrist — curl the whole hand as a unit rather than folding the thumb in first.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Hand only",
+          "note": "Head still."
+        },
+        {
+          "level": 2,
+          "name": "Hand and head",
+          "note": "Add a small tilt away."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-cuff-external-rotation",
+          "name": "Turning the arm out, under control",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "radial-glide",
+      "evidence": {
+        "inheritsFrom": "tech-nerve-glide"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "nerve-sciatic-supine",
+      "name": "Sciatic glide — lying on your back",
+      "kind": "bodywork",
+      "category": "nerve",
+      "categoryName": "Nerve glides",
+      "tracking": "check",
+      "tier": "established",
+      "role": "nerve-glide",
+      "sides": true,
+      "why": "The lying-down sibling of the library's seated slump glide. Your hands hold the thigh, which means you control the range with your arms instead of with your hamstring's opinion — much easier to keep small.",
+      "equipment": "A bed or a floor",
+      "regions": [
+        "leg",
+        "hip",
+        "back"
+      ],
+      "muscles": [],
+      "nerves": [
+        "sciatic"
+      ],
+      "context": [
+        "bed",
+        "floor"
+      ],
+      "technique": "tech-nerve-glide",
+      "fields": {
+        "tool": "Your own hands behind the thigh, and the floor or bed taking your back.",
+        "release": "Lie on your back, both knees bent. Bring one knee up toward your chest and hold behind that thigh with both hands, keeping the thigh still.\n\nTogether: straighten that knee toward the ceiling — as far as it goes without the sensation changing character — AND pull your toes up toward your shin. Then reverse together: bend the knee back down AND point the toes away.\n\nThe thigh does not move. Only the knee and the ankle. Two seconds each way.",
+        "notice": "A pull down the back of the thigh and calf that travels as the knee straightens. Compare with what a held hamstring stretch feels like — the difference between a moving sensation and a parked one is the thing this module is teaching you to feel.",
+        "careful": "Never straighten into the position and stay there. The moment you hold it, you have converted this into a stretch of an irritated nerve, which is the opposite of the intent. Shooting pain, tingling or numbness down the leg means the range is too big — bend the knee more, and if that does not fix it, stop.",
+        "load": "Roll to your side, get up, and do a few unloaded hip hinges or a short walk. Range that is not used goes back."
+      },
+      "populationCareful": "Hypermobile: knees that hyperextend can reach past straight without the nerve ever telling you, and the hamstring will not stop you either. Use the point where the sensation starts to travel as your ceiling, and never the point where the knee runs out of movement. Orthostatic: this is a lying-flat item and then a getting-up item — sit on the edge before standing. PEM: the leg items cost more than the arm items; one side per session is a reasonable start.",
+      "carefulAudience": "hypermobile, orthostatic, pem",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Knee only",
+          "note": "Ankle stays relaxed. Small range."
+        },
+        {
+          "level": 2,
+          "name": "Knee and ankle opposing",
+          "note": "Toes up as the knee straightens, toes down as it bends."
+        },
+        {
+          "level": 3,
+          "name": "Add the head",
+          "note": "Chin to chest as the knee bends, head back to the pillow as it straightens. This is the largest version and the one to arrive at last."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-glute-med-side-lying",
+          "name": "Side-lying leg raises — the side of the hip working",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "sciatic-glide",
+      "evidence": {
+        "inheritsFrom": "tech-nerve-glide"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "nerve-sciatic-standing-step",
+      "name": "Sciatic glide — standing, heel on a step",
+      "kind": "bodywork",
+      "category": "nerve",
+      "categoryName": "Nerve glides",
+      "tracking": "check",
+      "tier": "established",
+      "role": "nerve-glide",
+      "sides": true,
+      "why": "The version that fits into a day without lying down. It is also the hardest of the three to keep small, which is why it is last in the group rather than first.",
+      "equipment": "A step, a low chair, or a kerb; something to hold",
+      "regions": [
+        "leg",
+        "hip",
+        "back"
+      ],
+      "muscles": [],
+      "nerves": [
+        "sciatic"
+      ],
+      "context": [
+        "standing",
+        "travel"
+      ],
+      "technique": "tech-nerve-glide",
+      "fields": {
+        "tool": "A low step for the heel and a wall, rail or counter for the hand.",
+        "release": "Stand with one hand on something solid. Put the other heel on a low step in front of you, that knee slightly bent, toes up.\n\nTogether: hinge forward a little from the hip AND lift your chin, looking slightly up. Then reverse together: come upright AND drop your chin toward your chest.\n\nThe forward hinge is small — inches, not a bow. If your back is rounding a long way, it is too big.",
+        "notice": "The same travelling pull down the back of the leg, now with your body weight in the picture. If this version produces something the lying version does not, that is the standing position adding to it, not new information about the nerve.",
+        "careful": "Keep a hand on something the whole time. Keep the standing knee soft, never locked back. This is the one item in the module that combines a forward hinge with looking up, and if your neck objects to looking up, do not do this version at all — the lying one is there for exactly this reason.",
+        "load": "Walk for a minute or two straight afterwards. That is the whole load partner: use the leg in the range you just found."
+      },
+      "populationCareful": "Hypermobile: soft standing knee, always — a locked, hyperextended standing leg turns this into a joint at its end range holding your body weight. And if looking up brings on headache, visual change or dizziness, skip this version and raise it with a clinician. Orthostatic: standing plus a forward hinge plus looking up is a combination that can drop blood pressure; hand on support throughout, and do the lying version instead on a bad day. This is the module's least suitable item for anyone with orthostatic symptoms and it should not be anyone's first.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Hinge only, head still",
+          "note": "Small hinge, head neutral, hand on support."
+        },
+        {
+          "level": 2,
+          "name": "Hinge with the chin dropping and lifting",
+          "note": "Add the head, small range."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-glute-med-side-lying",
+          "name": "Side-lying leg raises — the side of the hip working",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "sciatic-glide",
+      "evidence": {
+        "inheritsFrom": "tech-nerve-glide"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "nerve-femoral-side-lying",
+      "name": "Front-of-thigh glide — side lying",
+      "kind": "bodywork",
+      "category": "nerve",
+      "categoryName": "Nerve glides",
+      "tracking": "check",
+      "tier": "established",
+      "role": "nerve-glide",
+      "sides": true,
+      "why": "The nerve at the front of the hip, serving the front of the thigh and the inner shin. The whole library talks about the back of the leg; this is the one that covers the front, and it is the one to think about when the front of the thigh is where the symptoms are.",
+      "equipment": "A bed or a floor",
+      "regions": [
+        "leg",
+        "hip"
+      ],
+      "muscles": [],
+      "nerves": [
+        "femoral"
+      ],
+      "context": [
+        "bed",
+        "floor"
+      ],
+      "technique": "tech-nerve-glide",
+      "fields": {
+        "tool": "The bed or floor, and a pillow between the knees if that is more comfortable.",
+        "release": "Lie on your side, bottom knee bent up for stability. Reach back and hold the top ankle or trouser leg, drawing that knee gently backward behind you — a small amount.\n\nTogether: draw the knee a little further back AND lift your chin, looking slightly up. Then reverse together: bring the knee forward AND drop your chin toward your chest.\n\nSmall at the hip. This nerve does not need much, and the front of the hip is easy to overdo.",
+        "notice": "A sensation down the front of the thigh, sometimes toward the inner side of the shin, that changes as your head moves. That last part is the giveaway — a muscle at the front of the thigh does not care what your head is doing.",
+        "careful": "Keep your back from arching to make room; if your low back is doing the work, the range is too big. Stop for any pins and needles or numbness at the front of the thigh. Never hold the end position.",
+        "load": "Roll onto your back and bring the knee up toward your chest against light resistance a few times, or stand and take a few slow steps."
+      },
+      "populationCareful": "Hypermobile: hips that extend a long way will let the knee travel back much further than intended, and the low back will happily arch to add to it — set the ceiling by sensation, not by available movement. Orthostatic: lying item; sit up in stages.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Knee only",
+          "note": "Head still, tiny range at the hip."
+        },
+        {
+          "level": 2,
+          "name": "Knee and head opposing",
+          "note": "Chin up as the knee draws back, chin down as it comes forward."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-hip-flexor-short-range",
+          "name": "Hip flexors working at their short end",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "femoral-glide",
+      "evidence": {
+        "inheritsFrom": "tech-nerve-glide"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "nerve-femoral-half-kneel",
+      "name": "Front-of-thigh glide — half kneeling",
+      "kind": "bodywork",
+      "category": "nerve",
+      "categoryName": "Nerve glides",
+      "tracking": "check",
+      "tier": "established",
+      "role": "nerve-glide",
+      "sides": true,
+      "why": "The upright sibling for the same nerve, for people who cannot get comfortably onto their side or who want it in a standing routine.",
+      "equipment": "A cushion for the knee; something to hold",
+      "regions": [
+        "leg",
+        "hip"
+      ],
+      "muscles": [],
+      "nerves": [
+        "femoral"
+      ],
+      "context": [
+        "floor",
+        "standing"
+      ],
+      "technique": "tech-nerve-glide",
+      "fields": {
+        "tool": "A folded towel or cushion under the kneeling knee, and a wall or chair for one hand.",
+        "release": "Half kneeling: one knee down on the cushion, the other foot flat in front of you, hand on a support.\n\nTogether: shift your weight forward a small amount so the front of the kneeling-side hip opens AND lift your chin. Then reverse together: shift back AND drop the chin toward your chest.\n\nInches of weight shift, not a lunge. The kneeling knee stays where it is.",
+        "notice": "The same front-of-thigh sensation, and whether it changes with the head. If the head makes no difference at all, you are stretching a hip flexor rather than gliding a nerve — which is fine, but it is a different module.",
+        "careful": "Do not let the low back arch to create the movement; the weight shift comes from the hips. Hand stays on the support. Stop for numbness or pins and needles at the front of the thigh.",
+        "load": "Stand up from the half-kneeling position without using your hands if you can, once or twice. That is the range being used."
+      },
+      "populationCareful": "Hypermobile: kneeling puts a lot on the front of the knee; a thicker cushion is not fussiness. And the low back will arch to give you the range your hip is not providing — if you cannot tell whether it is, use the side-lying version instead where the floor tells you. Orthostatic: getting down and up is the risky part, not the drill; take it in stages with a hand on support.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Weight shift only",
+          "note": "Head still."
+        },
+        {
+          "level": 2,
+          "name": "Weight shift and head",
+          "note": "Add the chin lifting and dropping."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-hip-flexor-short-range",
+          "name": "Hip flexors working at their short end",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "femoral-glide",
+      "evidence": {
+        "inheritsFrom": "tech-nerve-glide"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "nerve-observation-before-after",
+      "name": "The observation — was it the nerve or the muscle?",
+      "kind": "bodywork",
+      "category": "nerve",
+      "categoryName": "Nerve glides",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "awareness-cue",
+      "why": "The most useful thing this module gives you is not looser hamstrings. It is an answer to a question nothing else in the library can answer: when something will not let go, is it the muscle or the nerve?",
+      "regions": [
+        "leg",
+        "arm"
+      ],
+      "muscles": [],
+      "nerves": [],
+      "context": [
+        "floor",
+        "bed",
+        "chair"
+      ],
+      "technique": "tech-nerve-glide",
+      "fields": {
+        "tool": "Nothing but attention, before and after.",
+        "release": "Pick something you can repeat exactly — how far you can reach down your shin with a straight knee, or how far the arm goes before the pull starts. Note where it is. Do the glide for that limb, small. Note where it is again.\n\nThen ask two questions.\n\n**Did the sensation travel while you were doing it?** A moving pull is neural. A pull that stayed in one spot is muscular.\n\n**Did the range change more than stretching has been changing it?** If months of stretching a hamstring has moved nothing and one careful set of glides moves something, the restriction was probably never in the muscle.",
+        "notice": "Also notice the next day, which matters more than the moment. Nerve tissue that was pushed too hard tends to be louder the following morning; a muscle that was worked tends not to be.",
+        "careful": "There is no number here and no pass mark, deliberately. This is one person, testing themselves, unblinded, on something that varies with time of day, temperature and how the week has gone — that setup cannot support a threshold, and any threshold this card offered you would be invented. It is a comparison with yourself, worth repeating a few times before you believe it, and worth mentioning to a clinician either way.",
+        "load": "n/a"
+      },
+      "populationCareful": "Hypermobile: range measures are unreliable in hypermobile bodies from day to day, which makes a single before-and-after even weaker than usual. Look for a pattern across several attempts, never a single result.",
+      "carefulAudience": "hypermobile",
+      "dose": "n/a",
+      "levels": [],
+      "loadAfter": [],
+      "swapGroup": null,
+      "evidence": {
+        "family": "nerve-glide",
+        "grade": "Exploratory. A self-administered observation, not a validated test.",
+        "basis": "Clinicians do distinguish neural from musculoskeletal restriction using structured neurodynamic examination, which involves a trained examiner controlling the limb and interpreting the response. This card is not that, and does not claim to be. It is a structured way to notice something and take it to someone who can examine it. No threshold is offered because none would be defensible."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    }
+  ]
+}

@@ -1,0 +1,684 @@
+{
+  "format": "protocol-app/authored-v1",
+  "category": "release",
+  "_meta": {
+    "file": "release-techniques.json — draft v1, 28 Aug 2026",
+    "status": "DRAFT — Kevin's edit pass pending. Not ratified content.",
+    "scope": "The technique families themselves, written once and linked, per strategy v0.5 §7.1. Fourteen families. Every release item in the sibling files points at one of these by id and inherits its evidence grade; an item overrides the grade only where its own case genuinely differs.",
+    "why_this_file_exists": "Two reasons. First, so a person can learn ball work or contract-relax once instead of re-reading it on forty cards. Second, so evidence lives in one auditable place — one grade per family, graded once, rather than fifteen grades invented item by item.",
+    "families_new_to_the_library": "Six of these fourteen have no representation anywhere in the current 267 items: fold-and-hold (positional release), compression flossing, percussion, self-cupping, self-scraping, and skin gliding. They are here so the library has breadth of approach, not more reps of ball-and-roller. Three of the six (percussion, cupping, scraping) need equipment; each says so and each has a no-equipment sibling.",
+    "evidence_method": "Grades were searched this session (28 Aug 2026) and are stated at the level the literature actually supports, which for most of this material is 'short-term, mechanism uncertain.' Where a mechanism story is popular but unproven, the card says so — that is content law 5, not hedging. Nothing here is reproduced from a source; all descriptions are written from anatomy and mechanism in the app's own words.",
+    "dose_policy": "Doses live here, not on the item cards, and every one carries its provenance. Where no defensible number exists the field reads [undetermined] rather than a plausible-looking figure. Real use fills these in.",
+    "proposed_field_and_value_additions": "role: 'technique-guide' (new role value) · 'technique' (item → family link) · 'dose' with inline provenance · 'populationCareful' (the §9A gated tier, separate from fields.careful which is universal mechanics) · 'swapGroup' · 'context' · 'regions'. CC: if the loader rejects any of these, report the mismatch rather than dropping the field.",
+    "context_vocabulary_flag": "strategy v0.5 §5 refers to '6 contexts' but no enumeration exists in any document I can see. I have used: floor · chair · standing · bed · desk · travel. That is a proposal, not a ruling — Kevin's call at S1. [undetermined]",
+    "landed": "2026-08-28, release library session 1."
+  },
+  "items": [
+    {
+      "id": "tech-sustained-pressure",
+      "name": "Sustained pressure — ball, thumb, knuckle",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "technique-guide",
+      "why": "The workhorse. Most release items in this library are some version of this, so it is worth learning properly once.",
+      "equipment": "A ball, your thumb, a knuckle. Nothing motorised, nothing sharp.",
+      "context": [
+        "floor",
+        "chair",
+        "desk",
+        "standing",
+        "travel"
+      ],
+      "fields": {
+        "tool": "Firmness matters more than brand. A tennis ball is forgiving, a lacrosse ball is sharp, a soft inflatable ball is the gentlest option and the right starting point for most people who are new to this or who bruise easily.",
+        "release": "Sink in slowly until you meet something tender out of proportion to how hard you are pressing. That mismatch is the find — not the hardest pressure you can tolerate. Then hold still. Do not grind, do not rub, do not chase. Breathe out into it. Somewhere in the hold, the spot either softens under the contact or it doesn't; both are answers, and neither means push harder.",
+        "notice": "Whether the pressure eases while you hold it. Whether sensation spreads somewhere other than where you are pressing. Whether one side is worse than the other — that difference is usually your best single finding of the session.",
+        "careful": "Never into a pulse, the front of the throat, the front of the neck, the kidney area, or hard onto bone. Numbness, pins and needles, or an electric sensation means you are on a nerve — come off and move slightly. Bruising means it was too hard. Pressure that keeps climbing the longer you hold is a stop.",
+        "load": "Whatever you opened, use. A spot that eases is a door that closes again if you walk away from it."
+      },
+      "populationCareful": "Hypermobile: fragile tissue and easy bruising are part of the picture, and tolerance for pressure work is genuinely lower. Start softer than feels necessary and stay there for a few sessions before deciding what you can take. Guarding around a lax joint may be doing stabilising work — the answer is not less release, it is release always followed by loading, which is why every item here has a load partner. Orthostatic: floor work means getting down and up; do it slowly and have a hand available.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "Sustained holds in the trial literature commonly run around 60–90 seconds per site [derived — self-myofascial release trial protocols, e.g. a 2025 latent-trigger-point study using 90 s per muscle]. Number of sites per session, sessions per week: [undetermined].",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Soft ball, short holds",
+          "note": "A soft or inflatable ball, and a lighter contact than you think you need. Learning what 'tender out of proportion' feels like is the whole job at this rung."
+        },
+        {
+          "level": 2,
+          "name": "Firmer ball, longer holds",
+          "note": "Same technique, more depth. Move up only when rung 1 stopped producing bruises or next-day soreness."
+        },
+        {
+          "level": 3,
+          "name": "Pressure plus movement",
+          "note": "Hold the contact and move the joint the muscle crosses. This is the pin-and-move family — see that guide."
+        }
+      ],
+      "evidence": {
+        "family": "sustained-pressure",
+        "grade": "Moderate for short-term range of motion and tenderness; mechanism uncertain; durable structural change unsupported.",
+        "basis": "Self-myofascial release with balls and rollers reliably produces short-term range-of-motion gains without loss of muscle performance across several systematic reviews and an umbrella review. What it is doing is much less settled: current reading favours a neural effect — mechanoreceptor input raising stretch tolerance and lowering perceived tightness — rather than the tissue being physically remodelled by a ball. The popular 'breaking up adhesions' story is not what the evidence supports, and this library does not tell it."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "tech-broad-roll",
+      "name": "Rolling — foam roller and roller stick",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "duration",
+      "tier": "established",
+      "role": "technique-guide",
+      "why": "The broad-area version of sustained pressure. Covers a whole muscle rather than a spot, and it is the more sensible starting tool for large muscles.",
+      "equipment": "Foam roller, or a handheld roller stick",
+      "context": [
+        "floor",
+        "standing",
+        "travel"
+      ],
+      "fields": {
+        "tool": "A roller uses your bodyweight, so pressure is set by how much of you is on it. A roller stick uses your arms instead, which means you control the pressure precisely and never have to get on the floor — that is not a lesser option, it is a different one, and for anyone with orthostatic symptoms it is often the better one.",
+        "release": "Move slowly. Slower than feels productive. Cover the length of the muscle in unhurried passes, and when you find somewhere that bites, stop there and hold rather than rolling back and forth over it. Fast rolling is mostly sensation; slow rolling with pauses is where the change is.",
+        "notice": "Where along the length the muscle changes character — most muscles have one or two spots that are unlike the rest. Whether the tender area is where you assumed it would be. It usually isn't.",
+        "careful": "Roll muscle, not bone and not joints. Skip the back of the knee, the front of the neck, and the lower back's soft flank directly. If you feel it in the joint rather than the muscle, you have drifted off the target.",
+        "load": "Rolling opens range; if nothing then asks the muscle to work in that range, the range does not stay."
+      },
+      "populationCareful": "Hypermobile: bodyweight on a firm roller is a lot of pressure to control. A roller stick or a softer roller gives you a dial that a firm foam roller does not. Orthostatic: getting up and down from the floor repeatedly is its own load — a stick, standing against a wall, or a seated version avoids it entirely.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "Rolling durations in the literature vary widely and duration appears to matter more than the tool's texture [derived — comparative foam-roller studies on delayed-onset soreness]. Per-muscle time and weekly frequency: [undetermined].",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Roller stick or soft roller",
+          "note": "Pressure fully under your control, no floor required."
+        },
+        {
+          "level": 2,
+          "name": "Foam roller, partial weight",
+          "note": "On the floor with a hand or foot taking some of your weight."
+        },
+        {
+          "level": 3,
+          "name": "Foam roller, full weight, slow passes with holds",
+          "note": "Full bodyweight, slow, stopping where it bites."
+        }
+      ],
+      "evidence": {
+        "family": "broad-roll",
+        "grade": "Moderate for short-term range of motion and recovery; no evidence of lasting tissue change.",
+        "basis": "Systematic reviews and meta-analysis find rolling produces acute range-of-motion improvement without impairing strength, and shows some benefit for post-exercise soreness. Effects on measured tissue stiffness are small and short-lived, which again points at a nervous-system effect rather than a structural one."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "tech-pin-and-move",
+      "name": "Pin and move — hold the spot, move the joint",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "technique-guide",
+      "why": "The single highest-yield upgrade to ball work, and most people have never been shown it. You are not pressing harder — you are making the tissue slide underneath the pressure.",
+      "equipment": "Ball, thumb, or knuckle — the same tools as sustained pressure",
+      "context": [
+        "floor",
+        "chair",
+        "desk",
+        "standing"
+      ],
+      "fields": {
+        "tool": "Whatever you were already using for sustained pressure.",
+        "release": "Find the spot and hold it still. Then, without letting the contact drift, move the joint that muscle crosses through its range — slowly, a few times. The pressure stays put; the tissue moves under it. Bend and straighten, or rotate, depending on what the muscle does. Most people find this far more productive than adding pressure, and it is easier on the tissue.",
+        "notice": "Whether the tenderness changes through the range — it usually spikes at one point in the movement, and that point is more informative than the resting tenderness. Whether the muscle glides under your contact or drags.",
+        "careful": "The joint movement should be slow and within a range you own comfortably. If pinning makes the movement painful rather than just tender, ease the pressure before you shrink the movement. Never force the joint against the pin.",
+        "load": "This one pairs naturally: you are already moving the joint, so finish by moving it under load."
+      },
+      "populationCareful": "Hypermobile: keep the joint movement well inside your range and do not use the pin as leverage to push further. The point is tissue glide, not end-range. Somebody with lax joints can easily turn this into an end-range stretch without meaning to.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined] — no trial base for the self-administered version; repetitions of the joint movement are a judgment call, not a prescription.",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Small movement",
+          "note": "Pin the spot, move the joint through a short middle-range arc."
+        },
+        {
+          "level": 2,
+          "name": "Full available range",
+          "note": "Same, taking the joint through everything you comfortably own."
+        },
+        {
+          "level": 3,
+          "name": "Active, then loaded",
+          "note": "Move under the pin, then come off and do the same movement against resistance."
+        }
+      ],
+      "evidence": {
+        "family": "pin-and-move",
+        "grade": "Undetermined for the self-administered form; clinician-delivered versions have small trials against comparators.",
+        "basis": "Clinician-applied pin-and-stretch approaches have been compared against other manual techniques in small trials with mixed results. Nothing I found tests the self-administered version specifically. The rationale — that tissue moving under a fixed contact restores glide between layers — is a mechanism story, not a demonstrated finding, and is written here as such."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "tech-contract-relax",
+      "name": "Contract–relax — using the muscle to release itself",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "technique-guide",
+      "why": "No equipment, works almost anywhere, and it is the release family that most naturally satisfies the pairing law — you have already asked the muscle to work by the time you finish.",
+      "equipment": "None",
+      "context": [
+        "floor",
+        "chair",
+        "standing",
+        "bed",
+        "desk",
+        "travel"
+      ],
+      "fields": {
+        "tool": "Your own muscle, and something to push against — your hand, the floor, a doorframe.",
+        "release": "Take the muscle to the first point where you feel a stretch. Not the end of your range — the first honest sensation. Contract that same muscle gently against resistance without letting the position change, hold the contraction, then let go completely and breathe out. Usually you can then move a little further into the position. Repeat a few times. The contraction is submaximal — a gentle push, not a maximum effort.",
+        "notice": "Whether the new range appears after the release or whether nothing changes. Whether the contraction itself is easy to produce — a muscle you cannot voluntarily contract in a stretched position is telling you something useful, and it belongs to the strength side of the library, not this side.",
+        "careful": "Gentle contraction. Hard maximal contractions in a stretched position are where this technique causes strains. Never bounce out of the contraction into more range.",
+        "load": "Already halfway there. Finish by holding the end of the new range actively — no external support, the muscles doing the holding."
+      },
+      "populationCareful": "Hypermobile: this is one of the safer release families for you, because the contraction builds control in the range you are opening rather than just opening it. Do not use it to chase more range — most hypermobile people need less range and more control of what they have. Use the gained range as somewhere to get strong, not somewhere to go further.",
+      "carefulAudience": "hypermobile",
+      "dose": "Contractions in the 20–25% of maximum range are as effective as near-maximal ones [derived — post-isometric relaxation literature; a study comparing 20% and 60% contractions found no advantage to the harder effort]. Hold times and number of rounds: [undetermined].",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Gentle contract, then let go",
+          "note": "One round. Learn the feel of the release before adding rounds."
+        },
+        {
+          "level": 2,
+          "name": "Several rounds",
+          "note": "Repeat, taking up whatever slack appears each time."
+        },
+        {
+          "level": 3,
+          "name": "Contract the opposite side too",
+          "note": "After releasing, actively contract the muscle on the other side of the joint to hold the new position. Harder, and it makes the range yours."
+        }
+      ],
+      "evidence": {
+        "family": "contract-relax",
+        "grade": "Established for acute range of motion; no better than other stretching methods; mechanism is largely increased tolerance to stretch.",
+        "basis": "Meta-analysis across stretching types finds contract-relax, static and dynamic stretching all improve range of motion acutely and over training periods, with no significant difference between them. A 2025 meta-analysis of static stretching mechanisms across 65 studies found range gains track increased tolerance to the stretch far more than any change in muscle length or stiffness. So: it works, and it works by changing what you will allow, not by lengthening tissue."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "tech-long-hold",
+      "name": "Long holds — settling into a position and waiting",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "duration",
+      "tier": "established",
+      "role": "technique-guide",
+      "why": "The quietest family in the library. No tool, no effort, and it is the one most compatible with a low-capacity day.",
+      "equipment": "Props to support the position — cushions, a wall, a bolster",
+      "context": [
+        "floor",
+        "bed",
+        "chair"
+      ],
+      "fields": {
+        "tool": "Whatever holds you in the position so your muscles don't have to. If you are working to stay there, it is not a long hold.",
+        "release": "Find a position that puts a mild stretch on the target and set yourself up so gravity and props do the work. Stay for minutes rather than seconds. Breathe normally. The sensation typically rises, plateaus and then fades — that fade is the thing you came for, and rushing out before it means the hold did not happen.",
+        "notice": "Whether the sensation actually fades, or climbs. Climbing means too much position; back off and let it settle. Where you feel it — a stretch that has migrated into a joint rather than a muscle belly is a position problem, not a tolerance problem.",
+        "careful": "Never at the edge of your range — mild is the target, and the long duration is what makes it work, not the depth. Come out of long holds slowly; tissue that has been still is not ready for a sudden load.",
+        "load": "The most-skipped step in this family. After a long hold, move the joint actively through the new range under your own power a few times, or the position was a nap."
+      },
+      "populationCareful": "Hypermobile: this family carries the most risk of being unhelpful for you, because long passive holds at range are exactly what a lax joint does not need. Use a much smaller position than feels like a stretch, favour holds that support the joint rather than hang from it, and treat the loading step as non-optional. Orthostatic: lying positions are generally the friendliest here; come up slowly. PEM/pacing: this is often the family that still works on a bad day.",
+      "carefulAudience": "hypermobile, orthostatic, PEM/pacing",
+      "dose": "Hold durations for this style commonly run in minutes rather than seconds [practitioner convention — the long-hold traditions have no controlled dose literature]. Exact durations, and how many positions per session: [undetermined].",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Supported, brief",
+          "note": "Fully propped, short. Learn where the sensation settles."
+        },
+        {
+          "level": 2,
+          "name": "Supported, longer",
+          "note": "Same setup, more time. Time is the variable, not depth."
+        },
+        {
+          "level": 3,
+          "name": "Less support",
+          "note": "Take a prop away so the position asks slightly more. Not more range — less help."
+        }
+      ],
+      "evidence": {
+        "family": "long-hold",
+        "grade": "Established for range of motion; the change is mostly in stretch tolerance, not tissue length.",
+        "basis": "A 2025 systematic review with meta-regression covering 65 studies and over 1,500 adults found that range-of-motion improvements after static stretching track changes in tolerance to passive stretch, with much weaker association to measured stiffness or fascicle length. The practical reading: you are training your nervous system's willingness to go there, which is real and useful — and is a different claim from lengthening tissue."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "tech-fold-and-hold",
+      "name": "Fold and hold — releasing by shortening, not stretching",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "technique-guide",
+      "why": "The backwards one, and the reason it is in this library. Everything else here lengthens or presses. This shortens the muscle until the tender spot stops being tender, and waits there. For anything too irritable to press or stretch, it is often the only door left open.",
+      "equipment": "Pillows or cushions to hold the position",
+      "context": [
+        "floor",
+        "bed",
+        "chair"
+      ],
+      "fields": {
+        "tool": "Props. The whole technique depends on the position being effortless, so you will use more cushions than you expect.",
+        "release": "Find the tender spot and keep a light finger on it — light enough to monitor, not enough to treat. Then slowly move the body part around until the tenderness under your finger drops substantially. Usually that means folding toward the tender spot, shortening the muscle, and it often looks like a strange slumped position. Prop yourself so you can stay there without effort, and wait. Then come out of the position slowly and passively — you move yourself out; do not let the muscle contract its way out.",
+        "notice": "The tenderness under the finger is your instrument. You are hunting for the position where it drops most, and small adjustments matter more than big ones. Coming out slowly matters as much as going in.",
+        "careful": "This should never hurt. If a position increases the tenderness, it is the wrong position — keep looking. Do not hold positions that compress the front of the neck or that you cannot get out of without help.",
+        "load": "Gentle, and later than usual. Something irritable enough to need this family is not ready for immediate hard loading — move the joint through easy range first, and put real load on it on a later day."
+      },
+      "populationCareful": "Hypermobile: positions of ease can be deep positions, and a lax joint can end up at end-range without any stretch sensation to warn you. Prop the joint rather than letting it settle to its limit. PEM/pacing: this is a low-exertion family and one of the few genuinely available on a bad day.",
+      "carefulAudience": "hypermobile, PEM/pacing",
+      "dose": "The osteopathic tradition this comes from uses holds of roughly 90 seconds [practitioner convention — the figure is conventional in the technique's own literature and is not established by trials]. Number of positions per session: [undetermined].",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Find one position of ease",
+          "note": "One spot, one position, well propped. Finding it is the skill."
+        },
+        {
+          "level": 2,
+          "name": "Refine the position",
+          "note": "Small adjustments in several directions to find where tenderness drops furthest."
+        }
+      ],
+      "evidence": {
+        "family": "fold-and-hold",
+        "grade": "Very low certainty. Some effect on tender-point pain, mainly as an addition to other treatment; not supported as a standalone.",
+        "basis": "A meta-analysis of the technique's effect on tender-point palpation pain found a pooled benefit from low-quality studies. A 2025 systematic review and meta-analysis in low back pain graded the certainty as very low and found benefit when combined with other treatment but not as a standalone. It is in this library because it is gentle, it opens a door for irritable tissue that tolerates nothing else, and its risk profile is close to zero — not because the evidence is strong. Tier: exploratory."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "tech-breath-coupled",
+      "name": "Breath-coupled release — letting go on the exhale",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "technique-guide",
+      "why": "The family for muscles you cannot reach and cannot press — the pelvic floor, the diaphragm, the deep abdominal wall, the jaw at rest. It is also the family that most directly connects release work to the nervous system, which is the app's whole thesis.",
+      "equipment": "None",
+      "context": [
+        "floor",
+        "chair",
+        "bed",
+        "standing",
+        "desk",
+        "travel"
+      ],
+      "fields": {
+        "tool": "Your breath, and your attention.",
+        "release": "Set the position so the target is in a lengthened or unloaded shape. Breathe in through the nose, letting the belly and the lower ribs widen. Then breathe out slowly and completely, and on the way out, deliberately stop holding the target — let it drop, widen, or go soft. The exhale is the release; the inhale is the reset. Several breaths, unhurried. You are not doing the muscle a favour by trying harder — trying harder is the opposite of the instruction.",
+        "notice": "Whether you can find the muscle at all, and whether it responds to being asked to let go. Many people discover they have been holding something continuously and had no idea. That discovery is the item's real output.",
+        "careful": "If deliberate breathing makes you lightheaded, slow it down and shorten it — this is meant to be quieter than your normal breathing, not bigger. Nothing here should be forced or held.",
+        "load": "Down-training only opens the door. The paired work is learning to produce the muscle on purpose and time it with movement, which lives in the activation items."
+      },
+      "populationCareful": "Orthostatic: do these lying or sitting to begin with. Slow deep breathing can make lightheadedness worse in some people; if it does, shorten the breath rather than abandoning the item.",
+      "carefulAudience": "orthostatic",
+      "dose": "[undetermined] — breath counts and session lengths in the down-training literature vary by clinic and are not standardised.",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Find it",
+          "note": "Just locate the sensation of holding, and the sensation of letting go. That is the whole rung."
+        },
+        {
+          "level": 2,
+          "name": "Let go on every exhale",
+          "note": "Several consecutive breaths with a deliberate release each time."
+        },
+        {
+          "level": 3,
+          "name": "Carry it into a position",
+          "note": "The same release inside a stretch or a supported position that lengthens the target."
+        }
+      ],
+      "evidence": {
+        "family": "breath-coupled",
+        "grade": "Expert consensus and small clinical series for down-training overactive muscle; not established as a strengthening method.",
+        "basis": "For the high-tone pelvic floor specifically, expert consensus and treatment algorithms place relaxation-focused work — diaphragmatic breathing, paced exhale, graded desensitisation — as a first-line element, supported by pilot studies and clinical series rather than large trials. A separate and important finding: breathing-based approaches used alone are not effective for pelvic floor strengthening. Down-training and strengthening are different jobs and this family does the first one."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "tech-positional-rest",
+      "name": "Positional rest — letting gravity unload a region",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "duration",
+      "tier": "exploratory",
+      "role": "technique-guide",
+      "why": "The lowest-effort family in the library and the honest answer to 'I have nothing today.' You arrange the body so a region is asked to do nothing at all, and stay.",
+      "equipment": "Floor, a chair, cushions",
+      "context": [
+        "floor",
+        "bed",
+        "chair"
+      ],
+      "fields": {
+        "tool": "Furniture and gravity.",
+        "release": "Set the region up so it is fully supported and has no job — back on the floor with calves on a chair, or side-lying with the top arm propped. Then do nothing for several minutes. Not stretching, not breathing exercises, not scanning. The instruction is genuinely to stop.",
+        "notice": "How long it takes before anything actually lets go — often several minutes, which is longer than most people ever give it. Whether some part of you keeps switching back on. That part is worth knowing about.",
+        "careful": "Nothing should be numb or pins-and-needles when you get up. Change position if it is.",
+        "load": "Come out slowly and move the region deliberately before asking anything of it — tissue that has been fully unloaded for ten minutes is not ready to be strong."
+      },
+      "populationCareful": "Orthostatic: legs-elevated positions are usually well tolerated and often welcome; get up in stages. PEM/pacing: this is the family that is still available when nothing else is, and it is genuinely a rung of the protocol rather than a rest day.",
+      "carefulAudience": "orthostatic, PEM/pacing",
+      "dose": "[undetermined] — no controlled dose evidence exists for this. Traditions using it suggest several minutes to twenty; nothing here is derived.",
+      "levels": [
+        {
+          "level": 1,
+          "name": "A few minutes",
+          "note": "Set up, stay, get up. Short."
+        },
+        {
+          "level": 2,
+          "name": "Longer",
+          "note": "Extend the stay. Time is the only variable."
+        }
+      ],
+      "evidence": {
+        "family": "positional-rest",
+        "grade": "Undetermined. No trial base as a standalone intervention. Risk close to zero.",
+        "basis": "This family has not been tested as an intervention in its own right, so there is no grade to report and none is invented here. It is in the library because it is the only release approach that costs nothing in capacity, which matters in a population where capacity is the binding constraint. Judge it against your own experience, not against evidence that does not exist."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "tech-compression-floss",
+      "name": "Compression flossing — wrapping a limb, then moving it",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "technique-guide",
+      "why": "New to this library. A thick rubber band is wrapped firmly around a limb segment, you move the joint through range while it is on, then take it off. Widely used in sport, and the evidence has a specific and useful twist that the card below tells you about.",
+      "equipment": "A wide latex compression band (not a resistance band)",
+      "context": [
+        "floor",
+        "standing",
+        "chair"
+      ],
+      "fields": {
+        "tool": "A flat rubber floss band, several inches wide. A resistance band is not the same thing and should not be used for this.",
+        "release": "Wrap the limb segment with a firm overlapping spiral, working from the far end toward the body, tight enough to be clearly compressive but not so tight that the limb goes white or numb. Then move the joint actively and repeatedly through its range for a short time — the movement is the point. Unwrap. Move the joint again immediately afterward.",
+        "notice": "The range immediately after unwrapping versus before wrapping. And be honest with yourself about the comparison, because this technique produces a strong sensation that is easy to mistake for a result.",
+        "careful": "Short applications only. Take it off immediately for numbness, pins and needles, colour change, or pain that is not the compression itself. Never over a wound, a rash, a varicose vein, or an area with reduced sensation. Not over the front of the throat or the abdomen — this is a limb technique.",
+        "load": "The movement under the wrap already is loading, and it should continue after the wrap comes off."
+      },
+      "populationCareful": "Hypermobile: skin fragility and bruising make firm circumferential compression a poor first choice, and the range you gain is not the range you need. If you try it, wrap lighter and shorter than the sport instructions describe. Orthostatic: compression and rapid changes in limb blood flow are a bad combination with blood-pressure instability. Treat this as a family to raise with a clinician before using, not to experiment with.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "Applications in trials are short — around two minutes is typical [derived — flossing trial protocols and a perfusion study using a 2-minute application]. This library does not recommend longer.",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Ankle or wrist, light wrap, short",
+          "note": "Smallest segment, least compression, brief. Learn the sensation before anything else."
+        },
+        {
+          "level": 2,
+          "name": "Larger segment",
+          "note": "Calf or thigh, same short duration."
+        }
+      ],
+      "evidence": {
+        "family": "compression-floss",
+        "grade": "Grade B, and the finding cuts against the technique: range improves before-to-after, but not compared with doing the same movements without the band.",
+        "basis": "A systematic review and meta-analysis of compression flossing for ankle dorsiflexion found moderate improvement from before to after, and no effect compared with a control of the same range-of-motion activities alone — the authors' reading was that the gains came from the exercises, not the band. A separate perfusion study measured a marked drop in tissue oxygen during a two-minute application and did not confirm the rebound-blood-flow story the technique is usually sold with. It is in the library for breadth and because people ask about it; it is exploratory tier and the card says plainly what the trials found."
+      },
+      "sourceNote": "App content, not clinician-prescribed. Worth raising with a clinician before use if you have orthostatic symptoms."
+    },
+    {
+      "id": "tech-percussion",
+      "name": "Percussion — massage guns and vibration",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "duration",
+      "tier": "exploratory",
+      "role": "technique-guide",
+      "why": "New to this library. A device does the repetitive part so your hands don't have to, which for anyone with limited grip strength or limited energy is a real accessibility gain rather than a gadget.",
+      "equipment": "A percussive massage device",
+      "context": [
+        "chair",
+        "standing",
+        "bed",
+        "desk"
+      ],
+      "fields": {
+        "tool": "A handheld percussive device. The soft round head is the default; the pointed heads are for people who know exactly what they are aiming at, which is most of the way to not needing them.",
+        "release": "Keep it moving over the muscle belly rather than parking it in one place. Let the device's weight do the work — pressing it in adds nothing that matters and adds bruising that does. Short passes along the muscle. If it hurts rather than feeling strong, turn the speed down.",
+        "notice": "Whether the muscle actually feels different afterward or whether you just feel buzzed. That distinction is easy to lose with this tool and worth holding onto.",
+        "careful": "Muscle bellies only. Never on bone, joints, the front or sides of the neck, the throat, the abdomen, the spine itself, or anywhere with numbness, a recent injury, or unexplained swelling. Injuries have been reported from aggressive use — the risk here is not zero, and there is no agreed safety standard for these devices.",
+        "load": "Same as everything else: the range or ease you gain needs something asked of it afterward."
+      },
+      "populationCareful": "Hypermobile: easy bruising and fragile tissue argue for the lowest speed, the softest head, and short passes. Do not use it on or near a joint that subluxes. Orthostatic: sit for it. PEM/pacing: the device removes the effort of self-massage, which can make this the family that costs least on a low day — but the tissue is still receiving a real dose, so it is not free.",
+      "carefulAudience": "hypermobile, orthostatic, PEM/pacing",
+      "dose": "Trial applications range from about 30 seconds to several minutes per site [derived — the range reported across a 2023 systematic review of 13 studies]. No standard exists. Frequency: [undetermined].",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Low speed, soft head, short",
+          "note": "Large muscle, lowest setting, brief passes."
+        },
+        {
+          "level": 2,
+          "name": "Longer passes",
+          "note": "More time, same pressure — the device's weight, not yours."
+        }
+      ],
+      "evidence": {
+        "family": "percussion",
+        "grade": "Low to moderate, short-term. Comparable to static stretching for acute flexibility; repeated use reduces reported pain; no consensus safety standards.",
+        "basis": "A 2023 systematic review of thirteen studies found single applications associated with acute gains in flexibility and in some strength measures, and multiple applications with reduced musculoskeletal pain. A randomised comparison found percussion and static stretching produced similar acute hamstring flexibility gains. A 2025 critical appraisal noted the absence of agreed indications, precautions and contraindications for consumer devices, which is why this card carries a longer careful field than most."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "tech-decompression-cup",
+      "name": "Suction cups — pulling tissue up instead of pressing it down",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "technique-guide",
+      "why": "New to this library, and mechanically the opposite of everything else in it. Every other family compresses. This lifts. For anyone who cannot tolerate pressure — which includes a lot of people with fragile or irritable tissue — that reversal is the whole reason it is worth knowing about.",
+      "equipment": "Soft silicone cups (the squeeze kind, not fire cupping)",
+      "context": [
+        "floor",
+        "chair",
+        "bed"
+      ],
+      "fields": {
+        "tool": "Soft silicone cups you squeeze and place. No flame, no pump, nothing that stays on unattended.",
+        "release": "A little oil or lotion on the skin. Squeeze the cup, place it on a muscle belly, release so it grips. You can leave it still, or — usually better — glide it slowly along the muscle. Keep the suction gentle enough that you could pull it off easily. Short applications.",
+        "notice": "Whether the tissue underneath feels different afterward. Whether particular areas grip differently — some parts of a muscle will pull up readily and others hardly at all.",
+        "careful": "Static cups leave marks; gliding cups mostly don't, which is one good reason to prefer gliding. Never over broken skin, a mole, a vein you can see standing up, or an area that is numb. Not on the front of the neck or the abdomen. If you bruise easily, this family will mark you — decide in advance whether that is acceptable.",
+        "load": "Same law: the tissue you decompressed needs something asked of it."
+      },
+      "populationCareful": "Hypermobile: this family marks fragile skin readily and the marks can last. Gliding rather than static, minimum suction, short. On the other hand, it may be more tolerable than deep pressure — the trade is bruising risk against pressure tolerance, and that is your call to make knowingly.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined] — application times in the literature vary widely and no standard exists for self-applied silicone cups.",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Gliding, light suction",
+          "note": "Moving the cup along the muscle, gentlest setting. The default."
+        },
+        {
+          "level": 2,
+          "name": "Static, brief",
+          "note": "Cup left in place for a short time. Expect a mark."
+        }
+      ],
+      "evidence": {
+        "family": "decompression-cup",
+        "grade": "Limited. Some benefit for musculoskeletal pain and function, occasionally on par with standard care; mechanism plausible but unconfirmed.",
+        "basis": "Reviews of cupping for musculoskeletal complaints report reductions in pain and improvement in function, sometimes comparable to usual care. A pilot randomised trial compared cupping against heat plus foam rolling for hamstring flexibility. The mechanism claim — that negative pressure lifts and separates fascial layers — is anatomically plausible and has imaging support of an unclear clinical significance. Grade reflects small studies and high variability in how the technique is applied."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "tech-scrape",
+      "name": "Scraping — a smooth edge drawn across tissue",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "technique-guide",
+      "why": "New to this library. A blunt-edged tool is drawn across the skin over a muscle. It reaches broad, flat areas — shins, forearms, the outside of the hip — that balls handle badly, and it needs no grip strength.",
+      "equipment": "A smooth-edged tool: a purpose-made scraping tool, or the edge of a spoon",
+      "context": [
+        "chair",
+        "desk",
+        "standing"
+      ],
+      "fields": {
+        "tool": "Anything with a smooth blunt edge. Sharp edges have no place here, and neither does anything that could break.",
+        "release": "Lotion or oil on the skin first — dry scraping tears skin. Draw the edge across the tissue at a shallow angle with light-to-moderate pressure, in short strokes, following or crossing the direction of the muscle fibres. Cover the area rather than digging one line. Stop well before the skin is raw.",
+        "notice": "Areas that feel gritty or catch under the tool. That sensation is real and consistently reported, but what causes it is not established, and it is not a reading of scar tissue — treat it as a place to spend more time, not as a diagnosis.",
+        "careful": "Light pressure. This family reddens skin quickly and can bruise; redness is not the goal and more redness is not more result. Never over broken skin, a rash, a mole, or a bony ridge. Not over the front of the neck.",
+        "load": "Unchanged: use the area afterward."
+      },
+      "populationCareful": "Hypermobile: fragile skin, and this technique acts directly on skin. Very light, short, with lubricant, and stop at the first sign of marking. Of all the new families here this is the one most likely to leave a mark you did not want.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined] — stroke counts and treatment times vary by system with no established standard for self-application.",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Light, short, well lubricated",
+          "note": "Small area, minimum pressure."
+        },
+        {
+          "level": 2,
+          "name": "Larger area",
+          "note": "More coverage, same pressure."
+        }
+      ],
+      "evidence": {
+        "family": "scrape",
+        "grade": "Mixed. Roughly comparable to massage; less effective than skilled manual techniques for range; the mechanism story is presumed rather than shown.",
+        "basis": "Systematic review evidence places instrument-assisted soft tissue work similar to massage and flossing for range of motion, below specific manual techniques and joint mobilisation, and equal or better than most passive modalities for pain and function. The traditional explanation — that the tool detects and breaks down scar tissue and adhesions — is a presumption in the technique's own literature rather than a demonstrated finding, and this library does not repeat it as fact."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "tech-skin-glide",
+      "name": "Skin gliding — the layer above the muscle",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "technique-guide",
+      "why": "New to this library, and the gentlest thing in it. Nothing is pressed. You lift and shift the skin and the loose layer beneath it and notice where it moves freely and where it does not. Often the only tolerable option over a sensitive or painful area.",
+      "equipment": "None",
+      "context": [
+        "chair",
+        "bed",
+        "desk",
+        "travel"
+      ],
+      "fields": {
+        "tool": "Your fingers.",
+        "release": "Take a fold of skin between your fingers and thumb and lift it slightly away, or place a flat hand and move the skin over what is underneath without sliding across it. Explore an area systematically. Where it lifts and moves easily, move on; where it feels stuck or thick, stay a while with the gentlest sustained shift in the direction that resists.",
+        "notice": "The map of where it moves and where it doesn't. It is usually asymmetric, and often the stuck areas are places you would never have pressed. This is at least as much an assessment as a treatment.",
+        "careful": "No pinching hard, no dragging across dry skin. Should be comfortable throughout.",
+        "load": "Move the region normally afterward."
+      },
+      "populationCareful": "Hypermobile: skin that stretches unusually far is part of the picture, so what 'normal glide' feels like for you is your own baseline, not a textbook one. Compare left to right rather than against any standard. Do not lift to the limit of what the skin will do. PEM/pacing: near-zero exertion, and available on almost any day.",
+      "carefulAudience": "hypermobile, PEM/pacing",
+      "dose": "[undetermined] — no dose literature exists for the self-administered form.",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Map an area",
+          "note": "Explore and notice. No treatment goal at this rung."
+        },
+        {
+          "level": 2,
+          "name": "Stay where it resists",
+          "note": "Gentle sustained shift into the restricted direction."
+        }
+      ],
+      "evidence": {
+        "family": "skin-glide",
+        "grade": "Undetermined. Grouped with manual myofascial approaches in reviews; no separate trial base for the self-administered version.",
+        "basis": "Reviews of fascia-targeted manual work include superficial-layer techniques within the broader category but do not test them separately, and nothing I found evaluates self-applied skin gliding. So there is no grade, and none is invented. It earns a place on gentleness and information value, not on evidence."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "tech-heat-first",
+      "name": "Heat first — and when it makes things worse",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "technique-guide",
+      "why": "A modifier rather than a technique — it changes what any of the other families feel like. Included because 'apply heat first' is advice everybody has heard and almost nobody has been told the limits of.",
+      "equipment": "A heat pack, a shower, a bath",
+      "context": [
+        "bed",
+        "chair",
+        "floor"
+      ],
+      "fields": {
+        "tool": "Moist heat, a warm shower, or a warm room. Comfortable warmth, not hot.",
+        "release": "Warm the area for a few minutes, then do the release work while it is still warm. Everything tends to feel less guarded and more tolerable.",
+        "notice": "Whether heat actually helps you, or whether it makes you feel worse afterward. Both happen, and which one you are is worth knowing before you build a routine around it.",
+        "careful": "Comfortably warm, never hot enough to redden skin. Not on a numb area, and not on a fresh injury with swelling.",
+        "load": "Heat changes how the work feels; it does not replace the loading step."
+      },
+      "populationCareful": "Orthostatic: heat is one of the most reliable triggers for symptoms in people with blood-pressure instability — hot showers, hot baths and heat packs all count. If standing in a hot shower makes you grey out, heat before release work is not a neutral addition for you, and cool or neutral is the better default. PEM/pacing: heat exposure is itself a load for some people.",
+      "carefulAudience": "orthostatic, PEM/pacing",
+      "dose": "[undetermined] — this library does not have a derived warming time.",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Try it once, deliberately",
+          "note": "Same release item, one session with heat and one without, and compare honestly."
+        }
+      ],
+      "evidence": {
+        "family": "heat-first",
+        "grade": "Undetermined as a modifier to self-release specifically. Heat has its own small evidence base for musculoskeletal pain.",
+        "basis": "Heat before soft-tissue work is standard practice and appears as a comparator inside some trials rather than as a tested variable of its own, so its contribution has not been isolated. The orthostatic caution above is not from this literature — it is the well-described heat sensitivity in orthostatic intolerance, and it is why this card exists at all."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    }
+  ]
+}

@@ -1,0 +1,903 @@
+{
+  "format": "protocol-app/authored-v1",
+  "category": "release",
+  "_meta": {
+    "file": "release-hip-back-leg.json — draft v1, 28 Aug 2026",
+    "status": "DRAFT — Kevin's edit pass pending. Not ratified content.",
+    "scope": "The remaining census targets with no release item: glute med/min, deep hip rotators as distinct from the broad glute card, TFL and the IT band, quadratus lumborum, spinal erectors, thoracolumbar fascia, tibialis anterior, tibialis posterior, peroneals, and the soleus as distinct from the gastrocnemius. Two of the new technique families get their first real application here — flossing on a calf, percussion on a thigh — because those are the segments they were actually studied on.",
+    "provisional_flag_resolved_here": "D40 lists tibialis posterior as provisional. This file gives it its own item with instructions that genuinely differ from the gastrocnemius and soleus items — a vote for keeping it as its own census entry. Kevin's call at S1.",
+    "it_band_note": "The IT band item deliberately corrects a widespread mechanism story rather than repeating it. It is a fascia-only census target and the honest instruction is to work the muscles that tension it, not the band itself. Flagged because it will read as contrarian and it is intentional.",
+    "load_partners": "Two activation items included; several loadAfter links point at imported-legacy content by name with id null, for S5 to resolve. That is deliberate — inventing ids for items that may not exist would be worse than a named hole.",
+    "vocabulary_note": "Uses census entries throughout, including the three fascia-only targets (plantar fascia, IT band, thoracolumbar fascia). No additions proposed.",
+    "landed": "2026-08-28, release library session 1."
+  },
+  "items": [
+    {
+      "id": "release-glute-med-side-of-hip",
+      "name": "The side of the hip",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "The muscles on the side of the hip stop your pelvis dropping every time you stand on one leg — which is every step you take. They are a different target from the big muscle at the back of the hip, and they are reached from a different angle.",
+      "equipment": "A ball and a wall, or a foam roller",
+      "regions": [
+        "hip"
+      ],
+      "muscles": [
+        "glute med/min"
+      ],
+      "context": [
+        "standing",
+        "floor"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "A ball against a wall standing, or side-lying on a roller.",
+        "release": "Find the bony point on the side of your hip — the wide knob you can feel through the flesh. The muscles you want sit above and behind it, in the fan between that knob and the rim of the pelvis. Standing side-on to a wall, place a ball there and lean in. Hunt slowly through the fan; there are usually two or three distinct spots.",
+        "notice": "Sensation spreading down the outside of the thigh or into the low back is the pattern traditionally described here — worth noting because it means side-of-hip tenderness can present as a low back complaint. Whether it is worse on the side you stand on, or the side you sleep on.",
+        "careful": "On the muscle above and behind the bony knob, not on the knob itself — pressing directly on that point is uncomfortable and unproductive, and there is a fluid sac there that does not appreciate it. If pressing the point itself is sharply painful, that is worth mentioning to a clinician.",
+        "load": "Side-lying leg work and single-leg standing. This region is nearly always weak as well as tender, and releasing it without loading it just makes it a weaker tender region."
+      },
+      "populationCareful": "Hypermobile: standing against a wall gives you a pressure dial that side-lying on a roller does not, and this area bruises. Also, this muscle group is a major stabiliser of a hip that has less passive support than average — the load partner is doing more work for you than the release is.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Ball against a wall",
+          "note": "Standing, pressure fully controlled."
+        },
+        {
+          "level": 2,
+          "name": "Side-lying on a roller",
+          "note": "More pressure, harder to modulate."
+        },
+        {
+          "level": 3,
+          "name": "Add the leg movement",
+          "note": "Hold the ball and slowly swing the leg forward and back, letting the tissue move underneath."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-glute-med-side-lying",
+          "name": "Side-lying leg raises — the side of the hip working",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "lateral-hip-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed. Distinct target from the imported 'Glute & back of hip' card."
+    },
+    {
+      "id": "release-deep-hip-rotators-figure4",
+      "name": "Deep in the back of the hip — the figure-four position",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "Underneath the big buttock muscle sits a fan of small muscles running from the tailbone area out to the top of the thigh bone. They turn the leg outward and they sit right next to the big nerve that runs down the leg, which is why they get blamed for so much.",
+      "equipment": "A ball, and a chair or the floor",
+      "regions": [
+        "hip",
+        "pelvis"
+      ],
+      "muscles": [
+        "deep hip rotators (piriformis group)"
+      ],
+      "context": [
+        "chair",
+        "floor"
+      ],
+      "technique": "tech-pin-and-move",
+      "fields": {
+        "tool": "A ball, seated on a firm chair or lying on the floor.",
+        "release": "Sitting, cross the ankle of the working side over the opposite knee — the figure-four. That position puts the deep rotators on stretch and brings them nearer the surface. Now place a ball under that buttock, roughly midway between the tailbone and the bony knob at the side of the hip, and lean into it. Hunt for the tender point. Once you have it, slowly let the crossed knee rise and lower a few inches while keeping the contact.",
+        "notice": "Whether the crossed position itself is very restricted on one side. Whether the tenderness is deeper than the surface buttock work you may have done before — it should feel like a different layer.",
+        "careful": "This is the region the big leg nerve passes through. Tenderness is fine; shooting, electric or burning sensation down the back of the leg, or numbness, means come off immediately. Do not chase leg symptoms with more pressure — that is the one wrong move here, and persistent leg symptoms belong with a clinician.",
+        "load": "Outward rotation of the hip against resistance, and single-leg balance work — these muscles are also position sensors and they get quiet when they stop being used."
+      },
+      "populationCareful": "Hypermobile: the figure-four takes a mobile hip a long way. Keep the crossing modest and support the knee; the point is access to the muscle, not the depth of the position. Orthostatic: the seated version needs no floor transfer.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Seated figure-four, ball",
+          "note": "Controlled, no floor."
+        },
+        {
+          "level": 2,
+          "name": "Add the knee movement",
+          "note": "Tissue moving under the contact."
+        },
+        {
+          "level": 3,
+          "name": "On the floor",
+          "note": "More pressure available. Harder to get out of quickly."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": null,
+          "name": "Hip outward rotation against a band",
+          "resolveAgainst": "imported-legacy",
+          "note": "Match at S5; author if absent."
+        }
+      ],
+      "swapGroup": "deep-hip-release",
+      "evidence": {
+        "inheritsFrom": "tech-pin-and-move"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-tfl-and-it-band",
+      "name": "The front corner of the hip — and why rolling the IT band doesn't do what you were told",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "The thick band down the outside of the thigh is famously rolled and famously painful to roll. It is also a sheet of dense fibrous tissue anchored to bone at both ends. This item goes after the muscle that tensions it instead, which is a small one at the front corner of the hip that almost nobody has heard of.",
+      "equipment": "A ball and a wall, or a roller",
+      "regions": [
+        "hip",
+        "thigh"
+      ],
+      "muscles": [
+        "TFL",
+        "IT band"
+      ],
+      "context": [
+        "standing",
+        "floor"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "A ball against a wall for the muscle; a roller if you want to work the band itself, understanding what that does and doesn't do.",
+        "release": "The muscle: find the front corner of your pelvis — the bony point at the front of the hip bone. Move a couple of inches down and slightly outward and you are on a small muscle that runs into the top of the band. Standing side-on to a wall, put a ball there, lean in, and hold. It is often surprisingly tender for its size.\n\nThe band itself: you can roll it, and it will hurt, and it will feel different afterward. What it will not do is get longer — the band is dense fibrous tissue anchored to bone at both ends, and the forces needed to deform it meaningfully are not available to a foam roller. If rolling it makes the outside of your thigh feel better, that is a real effect and a nervous-system one. Just do not expect it to change the band's length, and do not conclude that more pain means more result.",
+        "notice": "How much more tender the small muscle at the corner of the hip is than the band below it. Whether the outside of the thigh feels tight on the side you stand on, or the side with the dropped hip.",
+        "careful": "Do not roll over the bony knob at the side of the hip. If the outside of your knee is the painful part, that is a different problem and grinding the band above it is not the answer.",
+        "load": "Side-of-hip strength, which is the actual fix: this small muscle overworks when the bigger stabilisers beside it are not doing their share."
+      },
+      "populationCareful": "Hypermobile: this small muscle overworking is a classic pattern when a hip lacks passive support — it grips because something has to. Loading the side of the hip matters much more than releasing the band.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Ball on the front corner of the hip",
+          "note": "The muscle, standing, controlled. This is the useful rung."
+        },
+        {
+          "level": 2,
+          "name": "Add hip movement",
+          "note": "Hold the ball and slowly swing the leg back and across."
+        },
+        {
+          "level": 3,
+          "name": "Roll the band, knowing what it does",
+          "note": "Optional, and honestly optional. Comfort and sensation change; length does not."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-glute-med-side-lying",
+          "name": "Side-lying leg raises — the side of the hip working",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "lateral-hip-release",
+      "evidence": {
+        "family": "sustained-pressure",
+        "grade": "Inherits the sustained-pressure grade for short-term effect. The specific claim that rolling lengthens the IT band is not supported.",
+        "basis": "Rolling produces short-term comfort and range changes like any other self-myofascial work. The additional point this card makes — that the band is dense fibrous tissue anchored at both ends and is not meaningfully lengthened by rolling — is a mechanical argument that has been made in the biomechanics literature and is stated here because the opposite story is repeated everywhere. What rolling changes is how the area feels, which is worth having and is a different claim."
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-quadratus-lumborum",
+      "name": "The deep corner between the last rib and the pelvis",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "A thick muscle spanning from the top of the pelvis up to the last rib, deep and toward the back. It hikes the hip and side-bends the trunk, and it is a frequent source of one-sided low back ache — including the kind that comes on from standing rather than from bending.",
+      "equipment": "A ball, and a wall or the floor",
+      "regions": [
+        "low-back",
+        "trunk"
+      ],
+      "muscles": [
+        "quadratus lumborum"
+      ],
+      "context": [
+        "standing",
+        "floor"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "A ball against a wall, or lying on it with knees bent.",
+        "release": "Find the top ridge of your pelvis at the back and the bottom rib above it. The muscle fills the corner between them, close in toward the spine. Standing with your back near-side-on to a wall, place a ball in that corner just outside the thick rope of muscle beside the spine, and lean in. Hunt. Then side-bend gently away from the ball while holding the contact.",
+        "notice": "Whether one side is much shorter — measure by feel, not by looking: side-bend each way and see which is more restricted. Whether the ache you already had is on the same side.",
+        "careful": "This region has no rib and no bone protecting the deeper structures — lighter than you would go on a thigh, and never a hard ball driven hard. Stop for any deep ache that does not feel muscular. Not right after eating.",
+        "load": "Side-of-hip strength and trunk side-bending under control. This muscle overworks when the hip beneath it will not hold the pelvis level, which makes the side-of-hip item the real partner."
+      },
+      "populationCareful": "Hypermobile: side-bending against the ball can go a long way without much sensation. Keep it small, and treat the side-of-hip loading as the main event. Orthostatic: the standing wall version avoids floor transfers.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Ball against a wall",
+          "note": "Standing, controlled pressure."
+        },
+        {
+          "level": 2,
+          "name": "Add the side-bend",
+          "note": "Slow, small, tissue moving under the ball."
+        },
+        {
+          "level": 3,
+          "name": "Lying, knees dropped away",
+          "note": "Deeper access, less control. Knees falling to the opposite side opens the corner."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-glute-med-side-lying",
+          "name": "Side-lying leg raises — the side of the hip working",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "lateral-trunk-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-spinal-erectors-roller",
+      "name": "The long ropes either side of the spine",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "duration",
+      "tier": "established",
+      "role": "release",
+      "sides": false,
+      "why": "The long muscles running the length of your back hold you upright against gravity all day. In anyone whose deep core is not participating, they do that job alone — which is why they are tight in the evening and why pressing them has never solved it.",
+      "equipment": "A foam roller, or two balls in a sock",
+      "regions": [
+        "low-back",
+        "spine",
+        "upper-back"
+      ],
+      "muscles": [
+        "spinal erectors"
+      ],
+      "context": [
+        "floor",
+        "standing"
+      ],
+      "technique": "tech-broad-roll",
+      "fields": {
+        "tool": "A roller across the back, or two balls in a sock so the spine sits in the gap between them.",
+        "release": "With a roller, work the upper and middle back only — lie with the roller across your back, hands supporting your head, and move slowly with pauses, keeping your ribs down rather than arching over it. For the low back, do not use a roller across the spine; use the two-ball setup instead, with the balls either side of the bony bumps, and let your weight settle without rolling.",
+        "notice": "Whether these muscles are working right now, sitting still. They should be quiet when you are supported. Whether your low back arches as soon as you are on the roller — a sign the front is not sharing.",
+        "careful": "Not on the bony bumps, and no rolling the low back across a roller — the low back has less bony protection and the roller forces it into extension. Support your head with your hands so the neck is not hanging back. Stop for anything sharp or shooting.",
+        "load": "The deep abdominal connection item. These muscles are tight because they are doing two jobs; the fix is the other job getting an owner."
+      },
+      "populationCareful": "Hypermobile: arching over a roller takes a mobile spine well past where the pressure is doing anything. Ribs down, small range, and treat it as pressure rather than as an extension stretch. Orthostatic: floor item; get up in stages, and the standing ball-against-a-wall version is a full substitute.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Two balls, lying, no movement",
+          "note": "Weight settling, spine in the gap."
+        },
+        {
+          "level": 2,
+          "name": "Roller, upper and mid back",
+          "note": "Slow passes with pauses, ribs down."
+        },
+        {
+          "level": 3,
+          "name": "Roller with arms overhead",
+          "note": "Adds a stretch through the front. Only if the ribs stay down."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-deep-abdominal-connection",
+          "name": "Finding the deep abdominal layer",
+          "resolved": true,
+          "note": "Cross-file reference to release-pelvic-floor-deep-core.json."
+        }
+      ],
+      "swapGroup": "posterior-trunk-release",
+      "evidence": {
+        "inheritsFrom": "tech-broad-roll"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-thoracolumbar-fascia-glide",
+      "name": "The diamond of fascia across the low back",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": false,
+      "why": "Across the low back sits a broad diamond of dense fibrous sheeting where several large muscles from above, below and both sides all attach. It is one of the three fascia-only targets in the vocabulary, and it is a place where pressing muscle misses the point — the tissue is the junction, not the muscle.",
+      "equipment": "None",
+      "regions": [
+        "low-back"
+      ],
+      "muscles": [
+        "thoracolumbar fascia"
+      ],
+      "context": [
+        "bed",
+        "chair",
+        "floor"
+      ],
+      "technique": "tech-skin-glide",
+      "fields": {
+        "tool": "Flat hands.",
+        "release": "Lying on your side or your front, or seated leaning forward onto a table so the low back is slack. Place a flat hand over the low back to one side of the spine and move the skin and the layer beneath it over what lies underneath — side to side, up and down, diagonally — without sliding across the skin. Cover the whole diamond from the bottom ribs down to the top of the pelvis and out to the sides. Where it will not move, stay with a gentle sustained shift in that direction and breathe.",
+        "notice": "Where it glides and where it feels tethered, and whether that map is symmetrical. Whether the tethered areas correspond to anything you already knew about. This item is at least as much assessment as treatment.",
+        "careful": "Surface only, comfortable throughout. No dragging on dry skin.",
+        "load": "Movement that uses the junction — reaching diagonally across the body, rotating the trunk — and the deep abdominal connection, which tensions this sheet from the inside."
+      },
+      "populationCareful": "Hypermobile: skin and superficial tissue that move further than average change what normal glide feels like. Compare your own sides rather than any standard, and do not lift or shift to the limit. PEM/pacing: near-zero exertion.",
+      "carefulAudience": "hypermobile, PEM/pacing",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Map it",
+          "note": "Explore and notice. No treatment goal."
+        },
+        {
+          "level": 2,
+          "name": "Stay where it resists",
+          "note": "Gentle sustained shift into the restricted direction."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-deep-abdominal-connection",
+          "name": "Finding the deep abdominal layer",
+          "resolved": true,
+          "note": "Cross-file reference."
+        }
+      ],
+      "swapGroup": "posterior-trunk-release",
+      "evidence": {
+        "inheritsFrom": "tech-skin-glide"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-tibialis-anterior-shin",
+      "name": "The muscle down the front of the shin",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "The muscle just outside the shin bone lifts your foot with every step so your toes clear the ground. It is loaded every time you walk downhill or wear a stiff shoe, and it is almost never released — people work the calf and stop.",
+      "equipment": "A ball, or your knuckles",
+      "regions": [
+        "lower-leg"
+      ],
+      "muscles": [
+        "tibialis anterior"
+      ],
+      "context": [
+        "chair",
+        "floor",
+        "desk"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "Knuckles or a ball while seated. Or kneeling with a ball under the shin, if that is comfortable.",
+        "release": "Sit and find the sharp front edge of your shin bone. The muscle sits just outside that edge — press there and lift your foot; you will feel it firm up under your fingers. Work down its length from just below the knee toward the ankle with knuckles or a ball, stopping where it bites.",
+        "notice": "How tender it is given how rarely it gets attention. Whether the top third near the knee is the worst part, which it usually is. Whether your foot lands quietly when you walk afterward.",
+        "careful": "Just outside the bone, not on it. If the shin bone itself is tender to press over a length of it, that is a different problem and it is not a release problem.",
+        "load": "Toe raises — lifting the front of the foot with the heel down — and slow controlled lowering of the foot when you walk, which is what this muscle actually does."
+      },
+      "populationCareful": "Orthostatic: seated item throughout, no floor transfer. Hypermobile: knuckles give you a finer pressure dial than kneeling on a ball.",
+      "carefulAudience": "orthostatic, hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Seated, knuckles",
+          "note": "Fully controlled."
+        },
+        {
+          "level": 2,
+          "name": "Ball, seated",
+          "note": "More depth."
+        },
+        {
+          "level": 3,
+          "name": "Add the foot movement",
+          "note": "Hold the contact and slowly point and lift the foot. Pin-and-move."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": null,
+          "name": "Toe raises — lifting the front of the foot",
+          "resolveAgainst": "imported-legacy",
+          "note": "The imported 'Toe control' card may cover this. Match at S5."
+        }
+      ],
+      "swapGroup": "lower-leg-front-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-tibialis-posterior-deep-calf",
+      "name": "The deep muscle behind the shin bone",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "Deep in the calf, behind the big superficial muscles, sits one that runs down behind the inner ankle and fans into the underside of the foot. It is the main active support for the arch. Roll the calf and you miss it entirely, because it lies underneath.",
+      "equipment": "Thumbs, or a ball",
+      "regions": [
+        "lower-leg",
+        "foot"
+      ],
+      "muscles": [
+        "tibialis posterior"
+      ],
+      "context": [
+        "chair",
+        "floor"
+      ],
+      "technique": "tech-pin-and-move",
+      "fields": {
+        "tool": "Thumbs are better than a ball here, because the target is narrow and specific.",
+        "release": "Sit with the ankle across the opposite knee. Find the inner edge of your shin bone in the lower half of the calf, then press just behind that edge, angling in toward the back of the bone rather than into the calf bulk. That is where the muscle runs. Hold, and then slowly turn the sole of your foot inward and downward — the movement this muscle produces — a few times while keeping the contact.\n\nAlso follow it around: behind and just below the bony bump on the inside of the ankle, its tendon runs in a groove. Light contact only there.",
+        "notice": "Whether the arch of the foot on that side is lower. Whether turning the sole inward is weak. Whether the tenderness runs the whole length or sits near the ankle.",
+        "careful": "Behind the inner edge of the bone, and gently. A bundle of nerve and vessels runs behind the inner ankle — light contact there, and any pins and needles into the sole means come off. Pain along this line with activity, especially with a flattening arch, is a clinician's question rather than a release target.",
+        "load": "Calf raises done with the weight toward the big-toe side, and arch work — lifting the arch without curling the toes."
+      },
+      "populationCareful": "Hypermobile: flat or collapsing arches are common, and this muscle is often working hard against a foot that gives way. Loading it and the foot's own small muscles matters more than releasing it. Orthostatic: seated throughout.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Find it with thumbs",
+          "note": "Locating the line behind the bone. Finding it is the rung."
+        },
+        {
+          "level": 2,
+          "name": "Add the foot turning",
+          "note": "Slow inward turn of the sole under sustained contact."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": "load-foot-arch-and-calf",
+          "name": "Lifting the arch, and calf raises that use it",
+          "resolved": true
+        }
+      ],
+      "swapGroup": "deep-calf-release",
+      "evidence": {
+        "inheritsFrom": "tech-pin-and-move"
+      },
+      "sourceNote": "App content, not clinician-prescribed. Authored as its own item rather than folded into the calf card, which is a vote for keeping tibialis posterior as a separate census entry (D40 provisional flag)."
+    },
+    {
+      "id": "release-peroneals-outside-lower-leg",
+      "name": "The outside of the lower leg",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "The muscles running down the outside of the lower leg stop your ankle rolling outward. Anyone who has sprained an ankle, walks on uneven ground, or has unstable ankles has been leaning on them heavily — and they are on nobody's list.",
+      "equipment": "A ball, or a roller",
+      "regions": [
+        "lower-leg",
+        "foot"
+      ],
+      "muscles": [
+        "peroneals"
+      ],
+      "context": [
+        "chair",
+        "floor"
+      ],
+      "technique": "tech-sustained-pressure",
+      "fields": {
+        "tool": "A ball while seated, or side-lying on a roller.",
+        "release": "Find the thin bone running down the outside of your lower leg — you can feel its head just below and behind the outside of the knee, and its bottom end as the bump on the outside of the ankle. The muscles sit on and just behind that bone through the middle of the leg. Work down that line with a ball, stopping where it bites. Their tendons run behind the outer ankle bump — light contact there only.",
+        "notice": "Whether this side is much more tender than the calf. Whether you have a history of rolling that ankle. Whether the outer edge of your shoe wears faster.",
+        "careful": "Just below the head of that outer bone near the knee, a nerve runs close to the surface and around it — do not press hard there, and numbness or a foot that feels weak afterward means you were on it. Stay lower down the leg.",
+        "load": "Turning the sole of the foot outward against resistance, and single-leg balance — this pair of muscles is a major ankle stabiliser and it responds better to being asked to work than to being pressed."
+      },
+      "populationCareful": "Hypermobile: unstable ankles are common, and these muscles are the active defence against rolling one. Release plus loading, and if your ankle gives way, earn the balance rungs rather than skipping to unstable surfaces. Orthostatic: seated version needs no floor.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Seated, ball",
+          "note": "Controlled, no floor."
+        },
+        {
+          "level": 2,
+          "name": "Side-lying on a roller",
+          "note": "More pressure."
+        },
+        {
+          "level": 3,
+          "name": "Add the foot turning",
+          "note": "Hold contact and slowly turn the sole out and in."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": null,
+          "name": "Turning the foot outward against a band, and single-leg balance",
+          "resolveAgainst": "imported-legacy",
+          "note": "The balance ladder in vestibular_additions_v1.json covers half of this. Match at S5."
+        }
+      ],
+      "swapGroup": "lower-leg-side-release",
+      "evidence": {
+        "inheritsFrom": "tech-sustained-pressure"
+      },
+      "sourceNote": "App content, not clinician-prescribed."
+    },
+    {
+      "id": "release-soleus-contract-relax",
+      "name": "The deeper calf muscle — the one a straight-leg stretch misses",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "release",
+      "sides": true,
+      "why": "There are two calf muscles and they need different positions. The outer one crosses the knee, so a straight-leg stretch reaches it. The deeper one does not cross the knee — which means if your knee is straight you are not reaching it, and if your ankle is stiff it is very often the culprit.",
+      "equipment": "A wall or a step",
+      "regions": [
+        "lower-leg"
+      ],
+      "muscles": [
+        "soleus"
+      ],
+      "context": [
+        "standing",
+        "floor",
+        "chair"
+      ],
+      "technique": "tech-contract-relax",
+      "fields": {
+        "tool": "A wall or a step, and a bent knee. The bent knee is the entire point.",
+        "release": "Stand facing a wall in a short split stance with the back foot flat. Now bend the back knee while keeping that heel down. The stretch should drop from the middle of the calf down toward the ankle — that lower location is how you know you are on the right muscle.\n\nFrom there: press the ball of the back foot gently into the floor as if pushing the heel up, without letting it lift. Hold lightly, then release completely and let the knee bend a little further. Repeat.",
+        "notice": "How much less range you have with the knee bent than straight. Whether one ankle is stiffer. This is one of the most testable items in the library — the knee-to-wall self-test measures exactly this.",
+        "careful": "Heel stays down; the moment it lifts the position stops working. Gentle contraction. If you have had an Achilles problem, keep it gentle and progress slowly.",
+        "load": "Bent-knee calf raises — the same position, working. Almost nobody does calf raises with a bent knee, which is why this muscle stays weak."
+      },
+      "populationCareful": "Hypermobile: the ankle may already have plenty of range, in which case the useful half of this item is the loading half, not the stretching half. Orthostatic: there is a seated version — sit with the foot flat and press the knee forward over the toes with the heel down.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Seated, knee forward over the toes",
+          "note": "Gentlest, no standing required."
+        },
+        {
+          "level": 2,
+          "name": "Standing split stance, bent knee",
+          "note": "More range, more control needed."
+        },
+        {
+          "level": 3,
+          "name": "Contract and release",
+          "note": "Add the gentle press-and-let-go, taking up slack each round."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": null,
+          "name": "Bent-knee calf raises, slow lowering",
+          "resolveAgainst": "imported-legacy",
+          "note": "The imported 'Eccentric heel drops' card is the straight-knee version. The bent-knee variant may need authoring. Check at S5."
+        }
+      ],
+      "swapGroup": "calf-release",
+      "evidence": {
+        "inheritsFrom": "tech-contract-relax"
+      },
+      "sourceNote": "App content, not clinician-prescribed. Pairs directly with the knee-to-wall self-test already in the library (D36)."
+    },
+    {
+      "id": "release-calf-floss",
+      "name": "Wrapping the calf, then moving it",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "The compression flossing family's first appearance in this library, applied to the segment it has actually been studied on. Read the family guide before this item — the evidence has a twist that changes how you should read your own result.",
+      "equipment": "A wide latex compression band",
+      "regions": [
+        "lower-leg"
+      ],
+      "muscles": [
+        "gastrocnemius",
+        "soleus"
+      ],
+      "context": [
+        "floor",
+        "standing",
+        "chair"
+      ],
+      "technique": "tech-compression-floss",
+      "fields": {
+        "tool": "A flat rubber floss band, several inches wide. Not a resistance band.",
+        "release": "Wrap the calf in a firm overlapping spiral working upward from just above the ankle, tight enough to be clearly compressive but not so tight that the foot goes white, cold or numb. Then move: ankle circles, pointing and lifting the foot, and squats or heel raises if you can. Keep moving the whole time it is on. Then unwrap immediately and move the ankle again straight away.",
+        "notice": "Range before and after — and then, once, do the same movements without the band and compare that too. The trial evidence says the movements are doing most of the work, and you can test that on yourself in one session.",
+        "careful": "Short applications only. Off immediately for numbness, pins and needles, colour change, or coldness in the foot. Never over a wound, a rash, a varicose vein, or a numb area. If you have circulation problems, blood clots in your history, or take blood thinners, do not use this family without asking a clinician first.",
+        "load": "The movements under the band are the load, and continue them afterward."
+      },
+      "populationCareful": "Hypermobile: bruising and skin fragility make firm circumferential compression a poor first choice, and extra ankle range is probably not what you need. Orthostatic: compression and abrupt changes in limb blood flow sit badly with unstable blood pressure — raise this one with a clinician rather than experimenting.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "Around two minutes is the typical application in trials [derived — flossing trial protocols and a perfusion study using a two-minute application]. This library does not recommend longer.",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Light wrap, short, ankle movement only",
+          "note": "Learn the sensation before doing anything more."
+        },
+        {
+          "level": 2,
+          "name": "Add loaded movement",
+          "note": "Heel raises or squats while the band is on."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": null,
+          "name": "Calf raises, slow lowering",
+          "resolveAgainst": "imported-legacy",
+          "note": "The imported 'Eccentric heel drops' card. Match at S5."
+        }
+      ],
+      "swapGroup": "calf-release",
+      "evidence": {
+        "inheritsFrom": "tech-compression-floss"
+      },
+      "sourceNote": "App content, not clinician-prescribed. Worth raising with a clinician before use if you have orthostatic symptoms or any circulatory history."
+    },
+    {
+      "id": "release-quad-percussion",
+      "name": "Percussion on the front of the thigh",
+      "kind": "bodywork",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "duration",
+      "tier": "exploratory",
+      "role": "release",
+      "sides": true,
+      "why": "The percussion family's first appearance here, on the biggest and most forgiving muscle in the body. If a device is going to be useful to you at all, this is where you will find out — and it is the option that costs you no grip strength and no floor transfer.",
+      "equipment": "A percussive massage device",
+      "regions": [
+        "thigh"
+      ],
+      "muscles": [
+        "quadriceps"
+      ],
+      "context": [
+        "chair",
+        "bed"
+      ],
+      "technique": "tech-percussion",
+      "fields": {
+        "tool": "A percussive device with the soft round head. Low speed to start.",
+        "release": "Seated with the leg relaxed and supported. Move the head slowly along the front of the thigh from above the knee up toward the hip, then across the outer and inner portions. Let the device's own weight do the work — pressing it in adds bruising and nothing else. If it hurts rather than feeling strong, turn the speed down.",
+        "notice": "Whether the muscle feels genuinely different afterward or whether you just feel buzzed. That distinction is easy to lose with this tool and is worth holding onto deliberately.",
+        "careful": "Muscle belly only. Not on the kneecap, not on the bony points at the hip, not over a joint. Not on any area with numbness, a recent injury, or unexplained swelling. If you are on blood thinners or bruise easily, this family carries more risk for you than a ball does.",
+        "load": "Knee extension work and squatting through a range you control."
+      },
+      "populationCareful": "Hypermobile: lowest speed, softest head, short passes, and stay well away from the knee itself. Orthostatic: seated throughout, which makes this one of the easier release items for you to reach at all. PEM/pacing: the device removes the effort of self-massage, which genuinely lowers the cost — but the tissue still receives a real dose, so it is cheaper, not free.",
+      "carefulAudience": "hypermobile, orthostatic, PEM/pacing",
+      "dose": "Applications in trials range from about 30 seconds to several minutes per site [derived — the range reported across a 2023 systematic review of thirteen studies]. No standard exists.",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Low speed, short passes",
+          "note": "Front of the thigh only, device weight only."
+        },
+        {
+          "level": 2,
+          "name": "Cover the whole thigh",
+          "note": "Outer and inner portions too, same pressure."
+        }
+      ],
+      "loadAfter": [
+        {
+          "id": null,
+          "name": "Sit-to-stand or knee extension through a controlled range",
+          "resolveAgainst": "imported-legacy",
+          "note": "Match against existing leg strength content at S5."
+        }
+      ],
+      "swapGroup": "quad-release",
+      "evidence": {
+        "inheritsFrom": "tech-percussion"
+      },
+      "sourceNote": "App content, not clinician-prescribed. Sibling to the imported 'Front of thigh' pressure card — same target, different family, and a swap when your hands or your energy are the limit."
+    },
+    {
+      "id": "load-glute-med-side-lying",
+      "name": "Side-lying leg raises — the side of the hip working",
+      "kind": "exercise",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "activate",
+      "sides": true,
+      "why": "The load partner for the side-of-hip, IT band and low-back-corner items — three release items pointing at one piece of strength, which tells you where the actual problem usually is.",
+      "equipment": "None",
+      "regions": [
+        "hip"
+      ],
+      "muscles": [
+        "glute med/min"
+      ],
+      "context": [
+        "floor",
+        "bed",
+        "standing"
+      ],
+      "technique": null,
+      "fields": {
+        "tool": "Nothing. A wall behind you is a useful honesty check.",
+        "release": "Lie on your side with your back against a wall, knees and hips slightly bent, top leg straight. Keeping your heel lightly in contact with the wall, lift the top leg toward the ceiling. The wall stops you swinging the leg forward, which is the cheat almost everybody does without noticing — and the moment your heel leaves the wall you have stopped using the muscle you came for.\n\nStanding version: stand on one leg, level pelvis, and hold. Then notice whether the hip on the free side drops.",
+        "notice": "How small the honest range is with the heel on the wall. Whether one side is much weaker. Whether you feel it at the side of the hip or in the front corner — the front corner means the small overworking muscle has taken over again, so make the range smaller.",
+        "careful": "Small, clean range beats a big sloppy one. If the front corner of the hip cramps or takes over, reduce the height until it stops.",
+        "load": "This is the load."
+      },
+      "populationCareful": "Hypermobile: this is one of the highest-value items in the hip module for you, because side-to-side pelvic control is exactly what less passive support costs you. Progress by hold time and cleanliness rather than by adding weight.",
+      "carefulAudience": "hypermobile",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Side-lying against a wall",
+          "note": "Heel on the wall the whole time. Small and honest."
+        },
+        {
+          "level": 2,
+          "name": "Hold at the top",
+          "note": "Same, holding rather than repeating. Time under load."
+        },
+        {
+          "level": 3,
+          "name": "Standing, level pelvis",
+          "note": "Single-leg stand with the free hip staying level. This is the one that transfers to walking."
+        }
+      ],
+      "swapGroup": "lateral-hip-activation",
+      "evidence": {
+        "family": null,
+        "grade": "Established as standard rehabilitation content for hip and low back complaints.",
+        "basis": "Hip abductor strengthening is routine in rehabilitation for hip, knee and low back problems and has a substantial trial literature behind the general approach. Specific doses vary by protocol and none is reproduced here."
+      },
+      "sourceNote": "App content, not clinician-prescribed.",
+      "authoringNote": "Authored here as a load partner; may belong in the strength and activation file."
+    },
+    {
+      "id": "load-foot-arch-and-calf",
+      "name": "Lifting the arch, and calf raises that use it",
+      "kind": "exercise",
+      "category": "release",
+      "categoryName": "Release & reconnect",
+      "tracking": "check",
+      "tier": "established",
+      "role": "activate",
+      "sides": true,
+      "why": "The load partner for the deep calf and foot items. An arch is held up by muscles, not by shoe inserts, and the muscles that do it are ones most people cannot consciously find.",
+      "equipment": "None; a step for the later rungs",
+      "regions": [
+        "foot",
+        "lower-leg"
+      ],
+      "muscles": [
+        "foot intrinsics (arch)",
+        "tibialis posterior",
+        "soleus"
+      ],
+      "context": [
+        "chair",
+        "standing",
+        "desk"
+      ],
+      "technique": null,
+      "fields": {
+        "tool": "Nothing. Bare feet.",
+        "release": "Seated, foot flat on the floor. Without curling your toes and without lifting your heel or the ball of your foot, try to shorten the distance between your heel and the base of your big toe — the arch domes upward a small amount. Toes stay long and flat. It is a small movement and most people cannot produce it at first; that is normal and it comes with practice.\n\nThen: calf raises with the weight kept toward the big-toe side so the arch has to hold rather than collapse. Slow up, slower down.",
+        "notice": "Whether you can produce the arch lift at all, and whether your toes cheat by curling. Whether your ankle rolls inward as you rise onto your toes — that is the collapse the arch work is aimed at.",
+        "careful": "Small movements, no toe curling. Slow calf raises, holding something for balance if needed.",
+        "load": "This is the load."
+      },
+      "populationCareful": "Hypermobile: flat or collapsing arches are common with hypermobility and the passive support is not going to change — the active support is the part you can build. Frequent and small beats occasional and heavy. Orthostatic: the seated arch lift needs no standing at all; add calf raises near support.",
+      "carefulAudience": "hypermobile, orthostatic",
+      "dose": "[undetermined]",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Seated arch lift",
+          "note": "Finding it. Toes stay long."
+        },
+        {
+          "level": 2,
+          "name": "Standing arch lift",
+          "note": "Same movement with weight on the foot. Much harder."
+        },
+        {
+          "level": 3,
+          "name": "Calf raises holding the arch",
+          "note": "Slow up, slower down, weight toward the big toe."
+        },
+        {
+          "level": 4,
+          "name": "Single-leg calf raises",
+          "note": "Near support. Only once the arch holds through rung 3."
+        }
+      ],
+      "swapGroup": "foot-activation",
+      "evidence": {
+        "family": null,
+        "grade": "Established direction for foot intrinsic strengthening; specific arch-lift protocols vary and the transfer to symptoms is less settled.",
+        "basis": "Foot intrinsic muscle training is standard content in foot and ankle rehabilitation, and there is trial evidence that it changes foot posture and balance measures. Whether it resolves any given person's foot symptoms is a treatment claim this card does not make."
+      },
+      "sourceNote": "App content, not clinician-prescribed.",
+      "authoringNote": "Authored here as a load partner; may belong in the strength and activation file."
+    }
+  ]
+}
