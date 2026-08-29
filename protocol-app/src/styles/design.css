@@ -542,3 +542,12 @@ nav.tabs button[aria-current='page'] { color: var(--accent); font-weight: 650; }
 .notes > p > strong {
   color: var(--ink);
 }
+
+/* The change since last time (docs/TAXONOMY.md §5.2). Quiet by design: this is
+   somebody's own number read back to them, not a score. The line takes the
+   text colour unless the item states which way is progress. */
+.delta { margin-top: var(--sp-2); }
+.delta .spark path { stroke: var(--ink-3, currentColor); }
+.delta .spark-better path { stroke: var(--sage-6, currentColor); }
+.delta .spark-worse path { stroke: var(--clay-6, currentColor); }
+.delta p { margin: var(--sp-1) 0 0; }

@@ -845,3 +845,49 @@ test('a self-test on your day has somewhere to put the answer', async () => {
   const day = await store.loadDay(localDateKey());
   assert.equal(day.log['test-kneewall'].readings.left.value, 9.5);
 });
+
+test('a second reading shows the change, and a first one says there is none yet', async () => {
+  // The reason to take a reading twice. GAPS §3 asked for three things —
+  // a measurement, a cadence, and the delta — and this is the third.
+  store._resetForTests();
+  await store.ready({ name: 'screens-delta' });
+  const { localDateKey, addDays } = await import('../src/lib/core.js').then(async (core) => ({
+    localDateKey: core.localDateKey,
+    addDays: (await import('../src/lib/cadence.js')).addDays,
+  }));
+  const today = localDateKey();
+  const before = addDays(today, -14);
+
+  await store.saveProtocol({
+    id: 'p-delta', name: 'Measures', active: true, phases: [],
+    blocks: [{ id: 'b', name: 'Tests', order: 0, items: [
+      { id: 'test-kneewall', name: 'Knee to wall', tracking: 'measure', sides: true,
+        measure: { kind: 'number', unit: 'cm', better: 'higher' } },
+      { id: 'test-fold', name: 'Forward fold', tracking: 'measure',
+        measure: { kind: 'number', unit: 'cm', better: 'lower' } },
+    ] }],
+    createdAt: 'x', updatedAt: 'x',
+  });
+  await store.saveDay({ date: before, checks: {}, food: [],
+    log: { 'test-kneewall': { readings: { left: { value: 8, at: 'x' } } } }, updatedAt: 'x' });
+  await store.saveDay({ date: today, checks: {}, food: [],
+    log: {
+      'test-kneewall': { readings: { left: { value: 11, at: 'x' } } },
+      'test-fold': { readings: { both: { value: 20, at: 'x' } } },
+    }, updatedAt: 'x' });
+
+  draw(await viewToday({}));
+  await settled();
+  for (const card of document.querySelectorAll('details')) card.open = true;
+  await settled();
+  const text = document.body.textContent;
+
+  assert.match(text, /8 cm → 11 cm over 14 days: 3 cm more/, 'the change, with its dates');
+  assert.match(text, /Nothing to compare it to yet/, 'and a first reading says so rather than drawing a flat line');
+  assert.equal(document.querySelectorAll('.delta .spark').length, 1, 'one line, for the one item that has two readings');
+
+  // The line is decoration; everything it shows is also in the words.
+  const spark = document.querySelector('.delta .spark');
+  assert.equal(spark.getAttribute('aria-hidden'), 'true');
+  assert.ok(spark.classList.contains('spark-better'), 'and it is coloured by the item\'s own direction');
+});

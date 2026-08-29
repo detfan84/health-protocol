@@ -126,6 +126,11 @@ planned against.
   `viewReminders.js`. The schedule model, the kinds (R20), quiet hours and `.ics` export are
   real and tested. The open-triggered and while-open nudges that D12 names as *v1's actual
   delivery mechanism* do not exist, so R16's "a missed item may prompt, opt-out" has no path.
+- **D36 self-tests — CLOSED 29 Aug 2026.** All fourteen (thirteen imported plus one authored) now
+  carry `tracking: 'measure'`, a `measure` spec, a re-test cadence and a place to record the answer;
+  the change since last time renders beside it. The units and intervals were parsed out of the
+  cards' own prose rather than authored — every one of them was already written down in a field
+  nothing could read. See `TAXONOMY.md` §5.1–5.3. Original finding kept below.
 - **D36 self-tests — content only.** Thirteen `selftest` items ship in the library
   (knee-to-wall, forward fold, chest expansion, wall angel…), every one `tracking: 'check'`.
   No measurement recorded, no 2–4-week cadence, no sparkline, no delta. A tick box on a

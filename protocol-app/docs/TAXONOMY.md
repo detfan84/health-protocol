@@ -416,6 +416,33 @@ A `choice` reading stores the outcome's id **and the words it had at the time** 
 card next year and the record still says what was seen, rather than quietly starting to mean the
 new sentence.
 
+### 5.3 The delta
+
+`GAPS.md` §3 asked for three things and this is the third: **a number recorded and never shown
+back is a number nobody has any reason to record again.**
+
+`src/lib/readings.js` is pure and does three things it refuses to overstate:
+
+- **One reading is not a trend.** It says *"First reading, 2026-08-15: 8 cm. Nothing to compare it
+  to yet"* rather than drawing a flat line through a single dot.
+- **Which way is better is per item.** Knee-to-wall going up is progress; fingertips-to-floor going
+  up is not. **Without a stated direction the change is reported and not judged** — no `better`, no
+  verdict.
+- **The dates are carried.** *"8 cm → 11 cm over 14 days"*, so three readings across six months
+  cannot present themselves as steady progress.
+
+**The picture does not claim to be a timeline.** Readings are plotted evenly by position, and the
+words carry the dates — spacing six months and a fortnight identically along an axis would be a lie
+told by a picture, so the picture does not make the claim and the sentence does. The line is
+`aria-hidden`; everything it shows is in the text beside it. A flat run sits in the middle of the
+box rather than along the floor, where a straight line reads as zero.
+
+A choice does not subtract. What changed is which reading you got: *"The thigh sits above the
+trunk — 31 days later: The thigh rests level."*
+
+Nothing here compares one person to anybody else, and nothing scores. It is your own number, read
+back to you.
+
 ---
 
 ## 6 · Ordinary moments are matched, not enumerated

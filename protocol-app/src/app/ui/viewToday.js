@@ -24,6 +24,7 @@ import {
 } from '../trackerOps.js';
 import { unitsOf, stepMl, volumeUnitLabel, displayVolume, parseVolume, weightUnitLabel, displayWeight, parseWeight } from '../../lib/units.js';
 import { cadenceOf, cadenceLabel, addDays, dueToday } from '../../lib/cadence.js';
+import { seriesFor, summarise, sparkPath, summaryText } from '../../lib/readings.js';
 import { guarded } from './announcer.js';
 import * as store from '../store.js';
 import { localDateKey, nowIso, displayTime, timeFormatOf } from '../../lib/core.js';
@@ -197,7 +198,46 @@ function fieldsBlock(fields) {
  * Everything here is optional. The tap is still the whole daily ask: an item
  * ticked with nothing typed is complete, and always was.
  */
-function trainingBlock(item, day, { units, writeKey, onLogged, lastTime }) {
+/**
+ * The change since last time, for one side of one measurement.
+ *
+ * Deliberately quiet. A line, a sentence, and the dates — no grade, no streak,
+ * no comparison with anybody else. The direction word only appears when the
+ * item states which way is progress, because reporting a change is honest and
+ * calling an unlabelled one an improvement is not.
+ *
+ * The picture is not a timeline: readings are plotted evenly by position, and
+ * the words carry the dates. Three readings six months apart spaced evenly
+ * along an axis would be a lie told by a picture.
+ */
+function deltaBlock(item, side, history, day) {
+  // Today's reading is in `day`, which is not yet in `history` — pass it in
+  // rather than waiting for a reload, or a number just typed would not appear
+  // in its own trend until tomorrow.
+  const series = seriesFor(history, item.id, side, day);
+  if (!series.length) return null;
+  const summary = summarise(series, item.measure ?? {});
+  const text = summaryText(summary, item.measure ?? {});
+  if (!text) return null;
+
+  const path = sparkPath(series);
+  const host = h('div.delta', {});
+  if (path) {
+    host.append(
+      h('svg', {
+        viewBox: '0 0 120 28', width: '120', height: '28',
+        'aria-hidden': 'true', focusable: 'false',
+        class: 'spark' + (summary.direction ? ` spark-${summary.direction}` : ''),
+      }, h('path', { d: path, fill: 'none', 'stroke-width': '1.5' })),
+    );
+  }
+  // The sentence is the accessible version of the line, not a caption for it —
+  // everything the picture shows is in the words.
+  host.append(h('p.muted', {}, text));
+  return host;
+}
+
+function trainingBlock(item, day, { units, writeKey, onLogged, lastTime, history }) {
   if (item.tracking !== 'sets' && item.tracking !== 'duration' && item.tracking !== 'measure') return null;
 
   const host = h('div.training', {});
@@ -291,6 +331,12 @@ function trainingBlock(item, day, { units, writeKey, onLogged, lastTime }) {
           );
         }
       }
+      for (const side of sides) {
+        const delta = deltaBlock(item, side, history, day);
+        if (!delta) continue;
+        if (item.sides) delta.prepend(h('span.field-label', {}, label[side]));
+        rows.append(delta);
+      }
       if (item.measure.better) {
         rows.append(h('p.muted', {}, `${item.measure.better === 'higher' ? 'Higher' : 'Lower'} is better. It is your own number — nothing is compared to anybody else's.`));
       }
@@ -378,7 +424,7 @@ function trainingBlock(item, day, { units, writeKey, onLogged, lastTime }) {
   return host;
 }
 
-function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, cadence, weekly, writeKey = localDateKey, units = 'imperial', lastTime } = {}) {
+function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, cadence, weekly, writeKey = localDateKey, units = 'imperial', lastTime, history } = {}) {
   const pressed = Boolean(day.checks[item.id]);
   const btn = h(
     'button.check',
@@ -471,6 +517,7 @@ function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, 
     units,
     writeKey,
     lastTime,
+    history,
     onLogged: (next) => {
       Object.assign(day, next);
       training?._renderSets?.();
@@ -724,6 +771,7 @@ export async function viewToday({ reload, stamp, date: viewing, startSession, mo
         writeKey,
         units,
         lastTime: lastTimeFor(it),
+        history: state.history,
         onChanged: rerenderBlocks,
         onPause: pauseOrResume,
         unavailable: unavailableReason(it.id, { pause: state.pauses[it.id], supply: state.supplies[it.id] }),
