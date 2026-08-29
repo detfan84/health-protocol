@@ -165,7 +165,7 @@ test('the shipped catalogue is exactly its sources, and the authored file is in 
   const built = mergeCatalog(await collectSources());
   const overrides = JSON.parse(await readFile(url('../src/content/vocab/facet-overrides.json'), 'utf8'));
   const tags = JSON.parse(await readFile(url('../src/content/vocab/anatomy-tags.json'), 'utf8'));
-  built.items = checkRelations(tagAll(applyAnatomyTags(applyFoldin(built.items, foldin, nodes).items, tags, nodes), overrides)).items;
+  built.items = checkRelations(tagAll(applyAnatomyTags(applyFoldin(built.items, foldin, nodes).items, tags, nodes), overrides), nodes).items;
   built.version = versionOf(built.items);
   const shipped = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
 
@@ -577,4 +577,62 @@ test('equipment is a facet value, never a sentence taken apart', () => {
   assert.equal(prose.fields.tool, 'Foam roller or firm ball', 'it becomes the tool line instead');
   const [enumish] = tagAll([{ id: 'b', name: 'B', category: 'release', equipment: 'foam_roller' }]);
   assert.deepEqual(enumish.equipment, ['roller']);
+});
+
+/* ------------------------- a test that routes (§5) ----------------------- */
+
+test('an outcome that points nowhere stops the build', () => {
+  // A test with no outcomes at least does not promise. One whose reading sends
+  // you to an item that does not exist promises and then drops you.
+  const nodes = new Map([['psoas', { id: 'psoas' }]]);
+  const measure = (outcomes) => item('t', 'T', { type: 'measurement', outcomes });
+  assert.throws(
+    () => checkRelations([measure([{ tell: 'a', means: 'b', then: ['gone'] }])], nodes),
+    /not in the catalogue/,
+  );
+  assert.throws(
+    () => checkRelations([measure([{ tell: 'a', means: 'b', points: ['nope'] }])], nodes),
+    /not an anatomy node/,
+  );
+  assert.throws(
+    () => checkRelations([measure([{ tell: 'a' }])], nodes),
+    /routes nothing/,
+  );
+  assert.throws(
+    () => checkRelations([item('p', 'P', { type: 'practice', outcomes: [{ tell: 'a', means: 'b' }] })], nodes),
+    /only a measurement has outcomes/,
+  );
+});
+
+test('the hip-flexor test tells three muscles apart, and allows for none of them', async () => {
+  // "Tight hip flexors" is three muscles wearing one complaint, released in
+  // three different places. The fourth reading is the one nobody expects and
+  // the reason the test is worth running: nothing here is short.
+  const lib = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
+  const t = lib.items.find((i) => i.id === 'test-hipflexor-length');
+  assert.equal(t.type, 'measurement');
+  assert.equal(t.outcomes.length, 4);
+
+  const points = t.outcomes.flatMap((o) => o.points ?? []);
+  for (const muscle of ['psoas', 'iliacus', 'rectus-femoris', 'tfl']) {
+    assert.ok(points.includes(muscle), `${muscle} is one of the three answers`);
+  }
+  const nothingShort = t.outcomes.find((o) => !(o.points ?? []).length);
+  assert.ok(nothingShort, 'and one reading implicates nothing');
+  assert.match(nothingShort.means, /aimed at nothing/, 'saying plainly that stretching would be wasted');
+
+  // Every reading that implicates something sends you somewhere real.
+  for (const o of t.outcomes.filter((x) => (x.points ?? []).length)) {
+    assert.ok(o.then?.length, `"${o.tell.slice(0, 30)}…" names what to do about it`);
+  }
+});
+
+test('the prerequisite that asked for this test now points at it', async () => {
+  // The `test` field on a prerequisite existed and was empty, which was the
+  // honest state: the wire was specified and the thing it should point at had
+  // not been written. It has been now.
+  const lib = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
+  const [pre] = lib.items.find((i) => i.id === 'var-legs-up-wall-one-down').before;
+  assert.equal(pre.test, 'test-hipflexor-length');
+  assert.ok(lib.items.some((i) => i.id === pre.test));
 });

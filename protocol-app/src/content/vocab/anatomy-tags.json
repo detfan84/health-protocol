@@ -400,6 +400,16 @@
       ]
     },
     {
+      "id": "test-hipflexor-length",
+      "target": [
+        "hip-flexors",
+        "psoas",
+        "iliacus",
+        "rectus-femoris",
+        "tfl"
+      ]
+    },
+    {
       "id": "test-kneewall",
       "target": [
         "ankle-dorsiflexion",

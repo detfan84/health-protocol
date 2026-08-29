@@ -356,6 +356,41 @@ A test needs two things it does not have:
 
 This closes the loop a person actually walks: **pain site → referral edges → tests → items.**
 
+### 5.1 The first one that routes
+
+All thirteen imported tests got anatomy on 29 Aug (§3.3), so *Knee to wall* now records that it
+measures `ankle-dorsiflexion` and `soleus`. That is the first half. The second half is `outcomes`:
+a list of readings, each saying what it looks like, what it means, which anatomy it implicates, and
+what to do about it.
+
+`test-hipflexor-length` is the first item with both, and it exists because a prerequisite needed
+it — the one-leg-down wall stretch says *"only if your hip flexor is tight"* and nothing in the
+catalogue could tell anybody whether theirs was.
+
+Four readings from one position, and the shape is the point:
+
+| The tell | Implicates | Sends you to |
+|---|---|---|
+| Thigh rests level or below, knee near 90°, back flat | *nothing* | *nothing* |
+| Thigh sits above the line of the trunk | `psoas` `iliacus` | Front of hip |
+| Thigh rests down but the knee straightens | `rectus-femoris` | Front of thigh |
+| Thigh drifts out to the side | `tfl` `it-band` | The front corner of the hip |
+
+"Tight hip flexors" is three muscles wearing one complaint, released in three different places —
+and the first row is the reading nobody expects and the reason the test earns its place: *nothing
+here is short, and stretching it would be work aimed at nothing.*
+
+`build-catalog` refuses an outcome that points at a node or an item that does not exist. A test
+with no outcomes at least does not promise; one whose reading drops you somewhere that is not there
+promises and then fails.
+
+**Still true: 1 of 14 self-tests can route**, and the build prints that ratio every time.
+
+**And the tick box is still a tick box.** This ships `tracking: 'check'` like the other thirteen,
+which is the D36 defect `GAPS.md` §3 named — except here the cost is legible, because the result is
+a four-way reading per side and a tick cannot hold it. The outcomes carry the *meaning*; nothing
+yet carries the *answer*. That is a measurement type, and it is the next thing this needs.
+
 ---
 
 ## 6 · Ordinary moments are matched, not enumerated

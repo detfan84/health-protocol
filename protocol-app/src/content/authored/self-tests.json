@@ -1,0 +1,72 @@
+{
+  "format": "protocol-app/authored-v1",
+  "module": "self-tests",
+  "note": "Self-tests written to route rather than to score. The catalogue's thirteen imported tests carry no anatomy and no outcomes, so none of them can send anybody anywhere (TAXONOMY §5). This one is the first with both, and it exists because a prerequisite needed it: the one-leg-down wall stretch says \"only if your hip flexor is tight\", and nothing in the catalogue could tell somebody whether theirs is.",
+  "items": [
+    {
+      "id": "test-hipflexor-length",
+      "name": "The hanging-leg test — which hip flexor is short, if any",
+      "kind": "selftest",
+      "category": "measure",
+      "tracking": "check",
+      "sides": true,
+      "tier": "established",
+      "why": "\"Tight hip flexors\" is three different muscles wearing one complaint, and they are released in three different places. This is the position that tells them apart — including the answer nobody expects, which is that none of them is short.",
+      "equipment": [
+        "chair"
+      ],
+      "context": [
+        "bed",
+        "chair"
+      ],
+      "fields": {
+        "tool": "A bed, a bench or a sturdy table — something firm with an edge you can lie back from. A sofa is too soft to read.",
+        "release": "Sit on the very edge, close enough that the backs of your thighs are nearly off it. Hug one knee to your chest and lie back, keeping that knee held. Let the other leg hang.\n\nThat is the whole test. Now look at four things, in order: where the hanging thigh rests, what the knee does, whether the thigh drifts sideways, and whether your low back is still flat on the surface. Then swap sides.",
+        "notice": "Do it at the same time of day. Hip flexors read shorter after a day of sitting than they do first thing, and comparing a Friday evening with a Sunday morning tells you about your week rather than about your hips.",
+        "careful": "Keep the held knee held — if you let it go, your low back arches and the test reads short on everybody. Come out of it by pulling the hanging leg back up with your hands rather than lifting it with the muscle you were just testing.\n\nSkip this if you have had recent hip or abdominal surgery, or if letting the leg hang produces back pain rather than a stretch."
+      },
+      "outcomes": [
+        {
+          "tell": "The thigh rests level with the trunk or a little below, the knee hangs near 90°, and the low back stays flat.",
+          "means": "Nothing here is short. If a movement still feels blocked at the front of the hip, the restriction is somewhere else — and stretching this would be work aimed at nothing.",
+          "points": [],
+          "then": []
+        },
+        {
+          "tell": "The thigh sits above the line of your trunk — you could pass a hand under it without touching.",
+          "means": "The deep hip flexor is the short one: psoas and iliacus, which cross from the spine and the inside of the pelvis to the top of the thigh.",
+          "points": [
+            "psoas",
+            "iliacus"
+          ],
+          "then": [
+            "bw-hip"
+          ]
+        },
+        {
+          "tell": "The thigh rests down, but the knee straightens toward the floor rather than hanging bent.",
+          "means": "Rectus femoris — the one quad that crosses the hip as well as the knee. A hip-flexor stretch that keeps the knee straight never asks it for anything.",
+          "points": [
+            "rectus-femoris"
+          ],
+          "then": [
+            "bw-quad"
+          ]
+        },
+        {
+          "tell": "The thigh drifts out to the side as it lowers, or will not stay in line without you holding it.",
+          "means": "The muscle at the front corner of the hip and the band it tensions.",
+          "points": [
+            "tfl",
+            "it-band"
+          ],
+          "then": [
+            "release-tfl-and-it-band"
+          ]
+        }
+      ],
+      "sourceNote": "A long-standing clinical assessment position, written here as something a person can run on themselves and read. The four readings are the standard ones; the wording is this app's.",
+      "authoringNote": "Ships with tracking: 'check' like the other thirteen self-tests, and that is wrong for the same reason (GAPS §3, D36): the result of this one is a four-way reading per side, and a tick box cannot hold it. The outcomes below carry the meaning; nothing yet carries the answer."
+    }
+  ]
+}

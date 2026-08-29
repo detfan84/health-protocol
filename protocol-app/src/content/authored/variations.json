@@ -10,7 +10,8 @@
       "before": [
         {
           "item": "bw-hip",
-          "when": "Only if the hip flexor on the side you are dropping is tight. The tell is in the movement itself: the lower back lifts off the floor, or the pelvis turns with the down leg. If the back stays flat and the pelvis stays square, this step is not for you — go straight to the stretch."
+          "when": "Only if the hip flexor on the side you are dropping is tight. The tell is in the movement itself: the lower back lifts off the floor, or the pelvis turns with the down leg. If the back stays flat and the pelvis stays square, this step is not for you — go straight to the stretch. The hanging-leg test settles it either way.",
+          "test": "test-hipflexor-length"
         }
       ],
       "kind": "stretch",

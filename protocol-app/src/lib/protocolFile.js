@@ -277,6 +277,25 @@ function fixItem(raw, path, ctx) {
     if (values.length) item[k] = values;
   }
 
+  // A measurement's outcomes: what each reading means, and where it sends you.
+  // This is the half of a self-test that makes it a router rather than a tick
+  // box (TAXONOMY §5), and it has to travel — a test in your day that cannot
+  // tell you what its own result means is the tick box again with extra steps.
+  if (Array.isArray(raw.outcomes)) {
+    const outcomes = [];
+    for (const o of raw.outcomes) {
+      if (!isObj(o)) continue;
+      const tell = asTrimmed(String(o.tell ?? ''));
+      const means = asTrimmed(String(o.means ?? ''));
+      if (!tell || !means) continue;
+      const out = { tell, means };
+      const list = (v) => (Array.isArray(v) ? [...new Set(v.map((x) => asTrimmed(String(x))).filter(Boolean))] : []);
+      if (list(o.points).length) out.points = list(o.points);
+      if (list(o.then).length) out.then = list(o.then);
+      outcomes.push(out);
+    }
+    if (outcomes.length) item.outcomes = outcomes;
+  }
   // Cadence travels with the plan: "3× a week" is part of what the protocol
   // says to do, so a protocol shared with somebody else carries it. What does
   // NOT travel is anything personal about doing it — a pause lives in the

@@ -329,7 +329,7 @@ export function applyAnatomyTags(items, file, nodes) {
  * nothing to draw it to. A variation whose parent was renamed would go on
  * looking like a variation of something.
  */
-export function checkRelations(items) {
+export function checkRelations(items, nodes = new Map()) {
   const ids = new Set(items.map((i) => i.id));
   const broken = [];
   const unconditional = [];
@@ -347,6 +347,23 @@ export function checkRelations(items) {
       if (typeof b === 'string' || !b?.when) unconditional.push(`${item.id} → ${id}`);
     }
   }
+  // A test's outcomes are the router (TAXONOMY §5): each reading names the
+  // anatomy it implicates and what to do about it. A reading that points at a
+  // node or an item that does not exist routes somebody nowhere, which is worse
+  // than a test with no outcomes at all — that one at least does not promise.
+  for (const item of items) {
+    for (const [n, o] of (item.outcomes ?? []).entries()) {
+      const at = `${item.id}: outcome ${n + 1}`;
+      if (!o.tell) broken.push(`${at} has no "tell" — a reading nobody can recognise is not a reading.`);
+      if (!o.means) broken.push(`${at} has no "means" — the reading without its meaning routes nothing.`);
+      for (const pt of o.points ?? []) if (nodes.size && !nodes.has(pt)) broken.push(`${at} points at "${pt}", which is not an anatomy node`);
+      for (const th of o.then ?? []) if (!ids.has(th)) broken.push(`${at} sends you to "${th}", which is not in the catalogue`);
+    }
+    if (item.outcomes && item.type && item.type !== 'measurement') {
+      broken.push(`${item.id}: only a measurement has outcomes — this is a ${item.type}.`);
+    }
+  }
+
   if (broken.length) {
     throw new Error(`these items point at catalogue entries that do not exist:\n    ${broken.join('\n    ')}`);
   }
@@ -373,7 +390,7 @@ async function main() {
     const nodes = new Map(JSON.parse(await readFile(ANATOMY_FILE, 'utf8')).nodes.map((n) => [n.id, n]));
     const applied = applyFoldin(catalog.items, JSON.parse(await readFile(FOLDIN_FILE, 'utf8')), nodes);
     const tagged = applyAnatomyTags(applied.items, JSON.parse(await readFile(TAGS_FILE, 'utf8')), nodes);
-    const related = checkRelations(tagAll(tagged, JSON.parse(await readFile(OVERRIDES_FILE, 'utf8'))));
+    const related = checkRelations(tagAll(tagged, JSON.parse(await readFile(OVERRIDES_FILE, 'utf8'))), nodes);
     catalog.items = related.items;
     unconditional = related.unconditional;
     // The graph ships WITH the catalogue, slimmed to what a browser needs to
@@ -412,6 +429,9 @@ async function main() {
   if (unconditional.length) {
     console.log(`prerequisites with no condition — shown to every reader: ${unconditional.join(', ')}`);
   }
+  const routers = catalog.items.filter((i) => i.outcomes?.length);
+  const measurements = catalog.items.filter((i) => i.type === 'measurement');
+  console.log(`self-tests: ${routers.length}/${measurements.length} can route — the rest record a reading and point nowhere (TAXONOMY §5).`);
   const withTarget = catalog.items.filter((i) => i.target?.length).length;
   const bare = catalog.items.filter((i) => !i.target?.length);
   console.log(`anatomy: ${withTarget}/${catalog.items.length} items carry node ids (muscles and regions kept alongside).`);
