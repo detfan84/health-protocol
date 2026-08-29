@@ -13,7 +13,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { validateVocab, validateOpportunities, validateAnatomy, validateFoldin, rollUp, fits, coverage, readJson, VOCAB, LIBRARY, OPPORTUNITIES, ANATOMY, FOLDIN } from '../scripts/check-vocab.mjs';
+import { validateVocab, validateOpportunities, validateAnatomy, validateFoldin, rollUp, expand, childIndex, fits, coverage, readJson, VOCAB, LIBRARY, OPPORTUNITIES, ANATOMY, FOLDIN } from '../scripts/check-vocab.mjs';
 
 const facet = (id, values, extra = {}) => ({
   id,
@@ -290,4 +290,75 @@ test('the shipped graph and worklist are valid, and the worklist still covers th
   const entries = validateFoldin(await readJson(FOLDIN), nodes, library.items, 'anatomy-foldin.json');
   assert.ok(nodes.size >= 100);
   assert.equal(entries.length, new Set(library.items.flatMap((i) => i.muscles ?? [])).size);
+});
+
+/* ------------------------- groups, actions, search ----------------------- */
+// Kevin, 29 Aug: "searching for glutes pulls up all glutes, and searching glute
+// medius or hip abductors will also fall under glutes." That is two walks, not
+// one. Tagging goes UP so a specific tag is found under a general query;
+// searching goes DOWN so a general query returns the specifics. A graph with
+// only rollUp answers "hip" and loses "glute medius"; one with only expand
+// answers "glutes" and loses the item tagged at the region.
+
+const g = (nodes) => ({ format: 'protocol-app/anatomy-v1', version: 1, nodes });
+const nd = (id, parents = [], extra = {}) => ({ id, name: id, kind: 'structure', parents, ...extra });
+const action = (id, at, producedBy) => ({ id, name: id, kind: 'action', parents: [at], producedBy });
+
+test('an action must say what produces it, or it cannot be searched for', () => {
+  assert.throws(
+    () => validateAnatomy(g([nd('hip'), { id: 'hip-abduction', name: 'x', kind: 'action', parents: ['hip'] }])),
+    /an action with nothing producing it/,
+  );
+});
+
+test('producedBy must resolve, like any other edge', () => {
+  assert.throws(
+    () => validateAnatomy(g([nd('hip'), action('hip-abduction', 'hip', ['glute-med-min'])])),
+    /producedBy "glute-med-min" does not exist/,
+  );
+});
+
+test('only an action carries producedBy — a muscle is not produced by anything', () => {
+  assert.throws(
+    () => validateAnatomy(g([nd('hip'), nd('glutes', ['hip'], { producedBy: ['hip'] })])),
+    /only an action has producedBy/,
+  );
+});
+
+test('searching a group returns the group and every specific under it', () => {
+  const nodes = validateAnatomy(g([nd('hip'), nd('glutes', ['hip'], { kind: 'group' }),
+    nd('glute-max', ['glutes']), nd('glute-med-min', ['glutes'])]));
+  assert.deepEqual(expand('glutes', nodes).sort(), ['glute-max', 'glute-med-min', 'glutes']);
+});
+
+test('searching a specific stays specific — it does not drag its siblings in', () => {
+  const nodes = validateAnatomy(g([nd('hip'), nd('glutes', ['hip'], { kind: 'group' }),
+    nd('glute-max', ['glutes']), nd('glute-med-min', ['glutes'])]));
+  assert.deepEqual(expand('glute-med-min', nodes), ['glute-med-min']);
+});
+
+test('searching an action reaches the muscles that perform it', () => {
+  const nodes = validateAnatomy(g([nd('hip'), nd('glutes', ['hip'], { kind: 'group' }),
+    nd('glute-med-min', ['glutes']), nd('tfl', ['hip']),
+    action('hip-abduction', 'hip', ['glute-med-min', 'tfl'])]));
+  assert.deepEqual(expand('hip-abduction', nodes).sort(), ['glute-med-min', 'hip-abduction', 'tfl']);
+});
+
+test('the two walks are opposites, and both are needed', () => {
+  const nodes = validateAnatomy(g([nd('hip'), nd('glutes', ['hip'], { kind: 'group' }), nd('glute-med-min', ['glutes'])]));
+  assert.ok(rollUp('glute-med-min', nodes).includes('hip'), 'a glute is found under a search for hip');
+  assert.ok(expand('glutes', nodes).includes('glute-med-min'), 'a search for glutes returns the glute');
+  assert.ok(!expand('glute-med-min', nodes).includes('hip'), 'and searching down never widens to the region');
+});
+
+test('the shipped graph answers Kevin\'s three queries', async () => {
+  const nodes = validateAnatomy(await readJson(ANATOMY), 'anatomy.json');
+  const kids = childIndex(nodes);
+  const find = (q) => [...nodes.values()].find((n) => [n.name, ...(n.also ?? [])].some((x) => String(x).toLowerCase() === q));
+  const of = (q) => expand(find(q).id, nodes, kids);
+
+  assert.ok(of('glutes').includes('glute-max') && of('glutes').includes('glute-med-min'), 'glutes pulls up all glutes');
+  assert.deepEqual(of('glute medius'), ['glute-med-min'], 'glute medius finds the specific');
+  assert.ok(of('hip abductors').includes('glute-med-min'), 'hip abductors reaches what abducts');
+  assert.ok(rollUp('glute-med-min', nodes).includes('glutes'), 'and both fall under glutes');
 });

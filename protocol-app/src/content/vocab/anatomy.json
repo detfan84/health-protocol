@@ -1,7 +1,7 @@
 {
   "format": "protocol-app/anatomy-v1",
   "version": 1,
-  "note": "The anatomy graph (TAXONOMY.md §3). Region → area → structure, with parents, so an item tags at the precision it honestly has and a query rolls up: tag `glute-med-min` and a search for `hip` still finds it. Multi-parent on purpose — the upper trapezius belongs to the neck, the shoulder girdle and the upper back, and forcing one parent is the mistake a tree makes. Every node carries plain-language aliases because the average user types \"butt\", not \"gluteus medius\". Ids are append-only. SEEDED, NOT FINISHED: this covers what the 376-item catalogue actually references and stops there, per §3's guard — a node earns its existence when something can target it distinctly.",
+  "note": "The anatomy graph (TAXONOMY.md §3). Region → area → structure, with parents, so an item tags at the precision it honestly has and a query rolls up: tag `glute-med-min` and a search for `hip` still finds it. Multi-parent on purpose — the upper trapezius belongs to the neck, the shoulder girdle and the upper back, and forcing one parent is the mistake a tree makes. Every node carries plain-language aliases because the average user types \"butt\", not \"gluteus medius\". Ids are append-only. Depth follows what can be targeted: a group node holds the specific muscles under it wherever a technique can reach them apart (glutes -> maximus, medius/minimus), and `action` nodes name what the body DOES, listing the structures that produce it in `producedBy` -- so \"hip abductors\" and \"glute medius\" both land inside \"glutes\". SEEDED, NOT FINISHED: this covers what the 376-item catalogue actually references and stops there, per §3's guard — a node earns its existence when something can target it distinctly.",
   "nodes": [
     {
       "id": "head-neck",
@@ -491,7 +491,7 @@
     {
       "id": "rotator-cuff",
       "name": "Rotator cuff",
-      "kind": "structure",
+      "kind": "group",
       "parents": [
         "shoulder-girdle",
         "shoulder-joint"
@@ -705,8 +705,8 @@
       "name": "Psoas",
       "kind": "structure",
       "parents": [
-        "deep-core",
-        "hip"
+        "hip-flexors",
+        "deep-core"
       ],
       "also": [
         "the deep hip flexor"
@@ -717,7 +717,7 @@
       "name": "Iliacus",
       "kind": "structure",
       "parents": [
-        "hip",
+        "hip-flexors",
         "pelvis"
       ],
       "also": [
@@ -727,7 +727,7 @@
     {
       "id": "hip-flexors",
       "name": "Hip flexors",
-      "kind": "structure",
+      "kind": "group",
       "parents": [
         "hip"
       ],
@@ -740,12 +740,10 @@
       "name": "Gluteus maximus",
       "kind": "structure",
       "parents": [
-        "hip"
+        "glutes"
       ],
       "also": [
-        "glutes",
-        "butt",
-        "backside",
+        "gluteus maximus",
         "the big glute"
       ]
     },
@@ -754,13 +752,17 @@
       "name": "Gluteus medius and minimus",
       "kind": "structure",
       "parents": [
-        "hip"
+        "glutes"
       ],
       "also": [
+        "gluteus medius",
+        "glute medius",
         "glute med",
-        "side of the hip",
-        "hip abductors"
-      ]
+        "gluteus minimus",
+        "glute minimus",
+        "side of the hip"
+      ],
+      "note": "Medius and minimus are one node because nothing in this catalogue can target them apart — minimus lies under medius and no hands-on technique here separates them. Both names find it. Split when a technique arrives that can tell them apart (§3)."
     },
     {
       "id": "deep-hip-rotators",
@@ -787,6 +789,7 @@
       "name": "Tensor fasciae latae",
       "kind": "structure",
       "parents": [
+        "hip-flexors",
         "hip",
         "thigh"
       ],
@@ -1115,6 +1118,428 @@
         "forearm"
       ],
       "tissue": "nerve"
+    },
+    {
+      "id": "glutes",
+      "name": "Glutes",
+      "kind": "group",
+      "parents": [
+        "hip"
+      ],
+      "also": [
+        "butt",
+        "backside",
+        "bum",
+        "glute",
+        "seat"
+      ]
+    },
+    {
+      "id": "supraspinatus",
+      "name": "Supraspinatus",
+      "kind": "structure",
+      "parents": [
+        "rotator-cuff"
+      ],
+      "also": [
+        "top of the shoulder blade"
+      ]
+    },
+    {
+      "id": "infraspinatus",
+      "name": "Infraspinatus",
+      "kind": "structure",
+      "parents": [
+        "rotator-cuff"
+      ],
+      "also": [
+        "back of the shoulder blade"
+      ]
+    },
+    {
+      "id": "teres-minor",
+      "name": "Teres minor",
+      "kind": "structure",
+      "parents": [
+        "rotator-cuff"
+      ]
+    },
+    {
+      "id": "subscapularis",
+      "name": "Subscapularis",
+      "kind": "structure",
+      "parents": [
+        "rotator-cuff"
+      ],
+      "also": [
+        "under the shoulder blade",
+        "front of the cuff"
+      ]
+    },
+    {
+      "id": "rectus-femoris",
+      "name": "Rectus femoris",
+      "kind": "structure",
+      "parents": [
+        "hip-flexors",
+        "quadriceps"
+      ],
+      "also": [
+        "the quad that crosses the hip"
+      ]
+    },
+    {
+      "id": "vastus-lateralis",
+      "name": "Vastus lateralis",
+      "kind": "structure",
+      "parents": [
+        "quadriceps"
+      ],
+      "also": [
+        "outer quad"
+      ]
+    },
+    {
+      "id": "vastus-medialis",
+      "name": "Vastus medialis",
+      "kind": "structure",
+      "parents": [
+        "quadriceps"
+      ],
+      "also": [
+        "VMO",
+        "inner quad",
+        "the teardrop"
+      ]
+    },
+    {
+      "id": "vastus-intermedius",
+      "name": "Vastus intermedius",
+      "kind": "structure",
+      "parents": [
+        "quadriceps"
+      ],
+      "also": [
+        "the deep quad"
+      ]
+    },
+    {
+      "id": "biceps-femoris",
+      "name": "Biceps femoris",
+      "kind": "structure",
+      "parents": [
+        "hamstrings"
+      ],
+      "also": [
+        "outer hamstring",
+        "lateral hamstring"
+      ]
+    },
+    {
+      "id": "medial-hamstrings",
+      "name": "Medial hamstrings",
+      "kind": "structure",
+      "parents": [
+        "hamstrings"
+      ],
+      "also": [
+        "inner hamstring",
+        "semitendinosus",
+        "semimembranosus"
+      ]
+    },
+    {
+      "id": "adductor-magnus",
+      "name": "Adductor magnus",
+      "kind": "structure",
+      "parents": [
+        "adductors"
+      ],
+      "also": [
+        "the big adductor",
+        "high inner thigh"
+      ]
+    },
+    {
+      "id": "adductor-longus-brevis",
+      "name": "Adductor longus and brevis",
+      "kind": "structure",
+      "parents": [
+        "adductors"
+      ],
+      "also": [
+        "the front of the groin"
+      ]
+    },
+    {
+      "id": "gracilis",
+      "name": "Gracilis",
+      "kind": "structure",
+      "parents": [
+        "adductors"
+      ],
+      "also": [
+        "the long thin one down the inner thigh"
+      ]
+    },
+    {
+      "id": "pectineus",
+      "name": "Pectineus",
+      "kind": "structure",
+      "parents": [
+        "adductors"
+      ],
+      "also": [
+        "deep in the front of the groin"
+      ]
+    },
+    {
+      "id": "external-oblique",
+      "name": "External oblique",
+      "kind": "structure",
+      "parents": [
+        "obliques"
+      ],
+      "also": [
+        "the outer waist layer"
+      ]
+    },
+    {
+      "id": "internal-oblique",
+      "name": "Internal oblique",
+      "kind": "structure",
+      "parents": [
+        "obliques"
+      ],
+      "also": [
+        "the inner waist layer"
+      ]
+    },
+    {
+      "id": "obturators",
+      "name": "Obturators",
+      "kind": "structure",
+      "parents": [
+        "deep-hip-rotators"
+      ]
+    },
+    {
+      "id": "quadratus-femoris",
+      "name": "Quadratus femoris",
+      "kind": "structure",
+      "parents": [
+        "deep-hip-rotators"
+      ]
+    },
+    {
+      "id": "deltoid-lateral",
+      "name": "Side deltoid",
+      "kind": "structure",
+      "parents": [
+        "deltoid"
+      ],
+      "also": [
+        "lateral deltoid",
+        "middle delt",
+        "the side of the shoulder"
+      ]
+    },
+    {
+      "id": "hip-abduction",
+      "name": "Hip abduction",
+      "kind": "action",
+      "parents": [
+        "hip"
+      ],
+      "also": [
+        "hip abductors",
+        "taking the leg out to the side"
+      ],
+      "producedBy": [
+        "glute-med-min",
+        "tfl"
+      ]
+    },
+    {
+      "id": "hip-adduction",
+      "name": "Hip adduction",
+      "kind": "action",
+      "parents": [
+        "hip"
+      ],
+      "also": [
+        "bringing the leg back in"
+      ],
+      "producedBy": [
+        "adductors"
+      ]
+    },
+    {
+      "id": "hip-flexion",
+      "name": "Hip flexion",
+      "kind": "action",
+      "parents": [
+        "hip"
+      ],
+      "also": [
+        "lifting the knee"
+      ],
+      "producedBy": [
+        "hip-flexors"
+      ]
+    },
+    {
+      "id": "hip-extension",
+      "name": "Hip extension",
+      "kind": "action",
+      "parents": [
+        "hip"
+      ],
+      "also": [
+        "driving the leg back"
+      ],
+      "producedBy": [
+        "glute-max",
+        "hamstrings"
+      ]
+    },
+    {
+      "id": "hip-external-rotation",
+      "name": "Hip external rotation",
+      "kind": "action",
+      "parents": [
+        "hip"
+      ],
+      "also": [
+        "turning the leg out"
+      ],
+      "producedBy": [
+        "deep-hip-rotators",
+        "glute-max"
+      ]
+    },
+    {
+      "id": "hip-internal-rotation",
+      "name": "Hip internal rotation",
+      "kind": "action",
+      "parents": [
+        "hip"
+      ],
+      "also": [
+        "turning the leg in"
+      ],
+      "producedBy": [
+        "glute-med-min",
+        "adductors",
+        "tfl"
+      ]
+    },
+    {
+      "id": "ankle-dorsiflexion",
+      "name": "Ankle dorsiflexion",
+      "kind": "action",
+      "parents": [
+        "ankle"
+      ],
+      "also": [
+        "knee over toe",
+        "pulling the foot up"
+      ],
+      "producedBy": [
+        "tibialis-anterior"
+      ]
+    },
+    {
+      "id": "ankle-plantarflexion",
+      "name": "Ankle plantarflexion",
+      "kind": "action",
+      "parents": [
+        "ankle"
+      ],
+      "also": [
+        "pointing the foot",
+        "rising onto the toes"
+      ],
+      "producedBy": [
+        "calves"
+      ]
+    },
+    {
+      "id": "shoulder-external-rotation",
+      "name": "Shoulder external rotation",
+      "kind": "action",
+      "parents": [
+        "shoulder-joint"
+      ],
+      "also": [
+        "turning the arm out"
+      ],
+      "producedBy": [
+        "infraspinatus",
+        "teres-minor"
+      ]
+    },
+    {
+      "id": "shoulder-internal-rotation",
+      "name": "Shoulder internal rotation",
+      "kind": "action",
+      "parents": [
+        "shoulder-joint"
+      ],
+      "also": [
+        "turning the arm in"
+      ],
+      "producedBy": [
+        "subscapularis",
+        "lats",
+        "pec-major"
+      ]
+    },
+    {
+      "id": "scapular-retraction",
+      "name": "Scapular retraction",
+      "kind": "action",
+      "parents": [
+        "shoulder-girdle"
+      ],
+      "also": [
+        "pulling the shoulder blades together"
+      ],
+      "producedBy": [
+        "rhomboids",
+        "mid-lower-trapezius"
+      ]
+    },
+    {
+      "id": "scapular-protraction",
+      "name": "Scapular protraction",
+      "kind": "action",
+      "parents": [
+        "shoulder-girdle"
+      ],
+      "also": [
+        "reaching the shoulder blade forward"
+      ],
+      "producedBy": [
+        "serratus-anterior"
+      ]
+    },
+    {
+      "id": "grip",
+      "name": "Grip",
+      "kind": "action",
+      "parents": [
+        "hand"
+      ],
+      "also": [
+        "gripping",
+        "grip strength",
+        "holding on"
+      ],
+      "producedBy": [
+        "forearm-flexors",
+        "thenar"
+      ]
     }
   ]
 }

@@ -179,6 +179,19 @@ export function validateAnatomy(file, label = 'anatomy.json') {
     for (const parent of node.parents ?? []) {
       if (!byId.has(parent)) problems.push(`node "${node.id}": parent "${parent}" does not exist.`);
     }
+    // An action is produced by structures; it is not part of them. Two edge
+    // kinds, because "hip abduction" sits AT the hip and is produced BY the
+    // glutes, and collapsing that into one relation loses the half a search
+    // needs — a query for the action has to reach the muscles, downward.
+    for (const m of node.producedBy ?? []) {
+      if (!byId.has(m)) problems.push(`node "${node.id}": producedBy "${m}" does not exist.`);
+    }
+    if (node.kind === 'action' && !(node.producedBy ?? []).length) {
+      problems.push(`node "${node.id}": an action with nothing producing it cannot be searched for.`);
+    }
+    if (node.kind !== 'action' && (node.producedBy ?? []).length) {
+      problems.push(`node "${node.id}": only an action has producedBy.`);
+    }
   }
 
   // No node may reach itself through its parents.
@@ -204,6 +217,41 @@ export function validateAnatomy(file, label = 'anatomy.json') {
 
   if (problems.length) throw new Error(`${label} has ${problems.length} problem${problems.length === 1 ? '' : 's'}:\n  - ${problems.join('\n  - ')}`);
   return byId;
+}
+
+/** Children, keyed by parent — the index every downward walk needs. */
+export function childIndex(nodes) {
+  const kids = new Map();
+  for (const n of nodes.values()) {
+    for (const p of n.parents ?? []) {
+      if (!kids.has(p)) kids.set(p, []);
+      kids.get(p).push(n.id);
+    }
+  }
+  return kids;
+}
+
+/**
+ * What a SEARCH for a node should match: the node, everything under it, and —
+ * when it is an action — everything that produces it, with their descendants
+ * too.
+ *
+ * This is the other direction from rollUp, and both are needed. Tagging is
+ * upward (tag a glute, be found under "hip"); searching is downward (ask for
+ * "glutes", get maximus and medius; ask for "hip abductors", get what performs
+ * the abducting). One walk without the other gives a search that finds the
+ * general and misses every specific, which is the failure Kevin named.
+ */
+export function expand(id, nodes, kids = childIndex(nodes)) {
+  const out = new Set();
+  const walk = (n) => {
+    if (!n || out.has(n) || !nodes.has(n)) return;
+    out.add(n);
+    for (const c of kids.get(n) ?? []) walk(c);
+    for (const m of nodes.get(n).producedBy ?? []) walk(m);
+  };
+  walk(id);
+  return [...out];
 }
 
 /** Every node a tag implies, itself included — what makes a query for "hip" find a glute. */
@@ -335,6 +383,13 @@ async function main() {
   const kinds = {};
   for (const n of anatomy.values()) kinds[n.kind] = (kinds[n.kind] ?? 0) + 1;
   console.log(`\nanatomy: ${anatomy.size} nodes — ${Object.entries(kinds).map(([k, v]) => `${v} ${k}`).join(', ')}.`);
+  const kids = childIndex(anatomy);
+  const show = (q) => {
+    const hit = [...anatomy.values()].find((n) => [n.name, ...(n.also ?? [])].some((x) => String(x).toLowerCase() === q));
+    if (!hit) return console.log(`  "${q}" — no node answers to this.`);
+    console.log(`  "${q}".padEnd`.slice(0, 0) + `  ${`"${q}"`.padEnd(18)} → ${expand(hit.id, anatomy, kids).join(', ')}`);
+  };
+  for (const q of ['glutes', 'glute medius', 'hip abductors', 'knee over toe']) show(q);
 
   const clean = foldin.filter((e) => e.to && !e.review).length;
   const review = foldin.filter((e) => e.review);

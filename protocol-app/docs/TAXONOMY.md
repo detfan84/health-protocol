@@ -180,6 +180,29 @@ different opportunities.
 
 The 94 free-text strings become nodes in **region → group → structure**, each with a parent.
 
+**Depth follows what can be targeted, and search walks both ways.** Kevin, 29 Aug: *"Glutes should
+map to the whole group, but we should also be specific when available. Searching for glutes pulls
+up all glutes, and searching glute medius or hip abductors will also fall under glutes."*
+
+That is two walks, and a graph needs both:
+
+- **Tagging rolls UP.** An item tagged `glute-med-min` is found by a query for *hip* — the tag
+  implies every ancestor.
+- **Search expands DOWN.** A query for *glutes* returns `glute-max` and `glute-med-min` — the
+  query implies every descendant.
+
+With only the first, asking for "glutes" misses every specific. With only the second, an item
+tagged at the region disappears from a specific query. `rollUp()` and `expand()` are the two
+directions, and both are tested.
+
+**Actions are nodes too**, with a second edge kind. `hip-abduction` sits **at** the hip
+(`parents`) and is produced **by** glute med/min and TFL (`producedBy`), so a search for *hip
+abductors* reaches the muscles that abduct, and those muscles still roll up under *glutes*.
+Collapsing the two relations into one loses exactly the half the search needs. Thirteen actions
+are seeded — the six at the hip, two at the ankle, two at the shoulder, two at the scapula, and
+grip — chosen because the catalogue already refers to them or a self-test measures them
+(*Knee to wall* measures `ankle-dorsiflexion`, which is what §5 needs to route anybody anywhere).
+
 **Items tag at the precision they honestly have.** Tag `glute-med` and a search for *hip* finds it
 by roll-up. Tag only `hip`, because that is all the item honestly targets, and it still works.
 Precision becomes optional rather than a guess — which is the same three-state discipline (D24)
@@ -197,27 +220,31 @@ as a silo, and considerably more work.
 
 ### 3.1 What is seeded, 29 Aug
 
-`src/content/vocab/anatomy.json` — **101 nodes**: 6 regions, 22 areas, 5 joints, 61 structures,
-7 systems. The 21 `regions` values already tagged on 78 items are all present as nodes, so nothing
+`src/content/vocab/anatomy.json` — **134 nodes**: 6 regions, 22 areas, 3 groups, 5 joints, 78
+structures, 13 actions, 7 systems. The 21 `regions` values already tagged on 78 items are all present as nodes, so nothing
 existing is invalidated; they gain parents and aliases and keep working.
 
 `src/content/vocab/anatomy-foldin.json` — the 94 catalogue strings mapped onto it. **A worklist,
-not a migration: nothing reads it.** 78 map cleanly. Ten need a human, and each says why:
+not a migration: nothing reads it.** 84 map cleanly. Five need a human, and each says why:
 
 | String | Proposed | Item tags | The call |
 |---|---|---|---|
-| `glutes` | glute-max | 41 | Read as the big glute; items meaning the whole group need both |
 | `core` | deep-core | 36 | The catalogue uses it for both the canister and the abdominal wall |
-| `hip abductors` | glute-med-min | 3 | A movement named as a muscle; TFL abducts too |
 | `traps` | upper-trapezius | 1 | What the source items describe, but not the whole muscle |
 | `tibialis` | tibialis-anterior | 1 | Unqualified; posterior is a real and different target |
 | `outer thigh` | it-band, tfl | 1 | The band, the muscle that tensions it, or both |
-| `hip internal rotation` | glute-med-min, adductors | 1 | A movement; the internal rotators are not one tidy group |
-| *(and three more of the same kind)* | | | |
+| `deep hip rotators (piriformis group)` | deep-hip-rotators | 1 | The parenthetical names the best-known member, it does not narrow the target |
 
-Six were never anatomy and are recorded rather than dropped, because a vocabulary that deletes
+**Six review rows closed by adding depth rather than by deciding.** `glutes` was the biggest —
+41 item tags read as the big glute alone — and it stopped being a judgment call once the group
+node existed to hold both. `hip abductors`, `grip` and the three rotation strings stopped being
+judgment calls once actions were nodes: they now land exactly, on the thing they always named.
+That is the general lesson, and it is worth more than the six rows: **a review row is often a
+missing node rather than an ambiguous string.**
+
+Five were never anatomy and are recorded rather than dropped, because a vocabulary that deletes
 what it cannot classify teaches nothing about why it could not: `posture` · `full body` (4 tags) ·
-`grip` · `anti-rotation` · `ankle stability` · `cervical movement sense`. Each carries a note
+`anti-rotation` · `ankle stability` · `cervical movement sense`. Each carries a note
 saying where it should go instead — mostly the `effect` facet, a self-test, or nowhere.
 
 **Two alias collisions were caught by the checker during authoring**, which is the argument for

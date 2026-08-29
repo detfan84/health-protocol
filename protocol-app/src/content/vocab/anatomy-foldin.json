@@ -1,7 +1,7 @@
 {
   "format": "protocol-app/anatomy-foldin-v1",
   "version": 1,
-  "note": "The 94 free-text `muscles` strings in the catalogue, mapped onto anatomy.json (TAXONOMY.md §3). A WORKLIST FOR REVIEW, not a migration: nothing reads this file yet. Entries marked `review` are judgment calls, not string matches, and each one says why. Entries marked `notAnatomy` are values that were never anatomy and need a different home — recorded rather than silently dropped, because a vocabulary that deletes what it cannot classify teaches nothing about why it could not.",
+  "note": "The 94 free-text `muscles` strings in the catalogue, mapped onto anatomy.json (TAXONOMY.md §3). A WORKLIST FOR REVIEW, not a migration: nothing reads this file yet. Six rows closed 29 Aug by Kevin's correction: `glutes` now maps to the group node rather than the big glute, and the action nodes gave `hip abductors`, `grip` and the rotations somewhere exact to land. Entries marked `review` are judgment calls, not string matches, and each one says why. Entries marked `notAnatomy` are values that were never anatomy and need a different home — recorded rather than silently dropped, because a vocabulary that deletes what it cannot classify teaches nothing about why it could not.",
   "entries": [
     {
       "from": "IT band",
@@ -223,10 +223,8 @@
     {
       "from": "glutes",
       "to": [
-        "glute-max"
+        "glutes"
       ],
-      "review": true,
-      "why": "Read as the big glute. Items meaning the whole group should be re-tagged with both `glute-max` and `glute-med-min`.",
       "items": 41
     },
     {
@@ -238,8 +236,9 @@
     },
     {
       "from": "grip",
-      "notAnatomy": true,
-      "why": "A capacity produced by the forearm flexors and hand. Tag those, or leave it to a self-test.",
+      "to": [
+        "grip"
+      ],
       "items": 1
     },
     {
@@ -266,19 +265,15 @@
     {
       "from": "hip abductors",
       "to": [
-        "glute-med-min"
+        "hip-abduction"
       ],
-      "review": true,
-      "why": "A movement named as a muscle. The abductors are principally glute med/min; TFL also abducts.",
       "items": 3
     },
     {
       "from": "hip external rotation",
       "to": [
-        "deep-hip-rotators"
+        "hip-external-rotation"
       ],
-      "review": true,
-      "why": "A movement, not a structure.",
       "items": 1
     },
     {
@@ -291,21 +286,16 @@
     {
       "from": "hip internal rotation",
       "to": [
-        "glute-med-min",
-        "adductors"
+        "hip-internal-rotation"
       ],
-      "review": true,
-      "why": "A movement, not a structure. Internal rotators are not one tidy group.",
       "items": 1
     },
     {
       "from": "hip internal/external rotation",
       "to": [
-        "deep-hip-rotators",
-        "glute-med-min"
+        "hip-internal-rotation",
+        "hip-external-rotation"
       ],
-      "review": true,
-      "why": "A movement, not a structure.",
       "items": 1
     },
     {
