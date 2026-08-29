@@ -22,7 +22,7 @@ import * as store from '../store.js';
 import { guarded } from './announcer.js';
 import { localDateKey } from '../../lib/core.js';
 import { applyCheckToggle, addSet, updateSet, trainingLog, setTook } from '../trackerOps.js';
-import { unitsOf, weightUnitLabel, displayWeight, parseWeight } from '../../lib/units.js';
+import { unitsOf, weightUnitLabel, displayWeight, parseWeight, unitsForItem, cleanByEquipment } from '../../lib/units.js';
 
 const FIELD_ORDER = [
   ['release', 'Do this'],
@@ -39,7 +39,8 @@ const FIELD_ORDER = [
 export async function viewSession({ protocolId, blockId, done }) {
   const date = localDateKey();
   const [protocols, day] = await Promise.all([store.loadProtocols(), store.loadDay(date)]);
-  const units = unitsOf(await store.getSetting('ui.units'));
+  const globalUnits = unitsOf(await store.getSetting('ui.units'));
+  const byEquipment = cleanByEquipment((await store.getSetting('ui.units.byEquipment'))?.value);
 
   const protocol = protocols.find((p) => p.id === protocolId);
   const block = protocol?.blocks?.find((b) => b.id === blockId);
@@ -294,6 +295,9 @@ export async function viewSession({ protocolId, blockId, done }) {
     /* ------------------------------- sets --------------------------------- */
     if (item.tracking === 'sets') {
       const log = trainingLog(day, item.id);
+      // A kettlebell card reads in kilos even when the rest of the app is in
+      // pounds, if that is how this person's kettlebells are marked.
+      const units = unitsForItem(item, { units: globalUnits, byEquipment });
       const wLabel = weightUnitLabel(units);
       const sets = h('div.sets', {});
       (log?.sets ?? []).forEach((set, i) => {

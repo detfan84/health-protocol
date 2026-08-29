@@ -6,7 +6,16 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
 import {
-  unitsOf, stepMl, volumeUnitLabel, displayVolume, parseVolume, legacyGlassesToMl,
+  unitsOf,
+  stepMl,
+  volumeUnitLabel,
+  displayVolume,
+  parseVolume,
+  legacyGlassesToMl,
+  unitsForItem,
+  cleanByEquipment,
+  displayWeight,
+  parseWeight,
 } from '../src/lib/units.js';
 import { blankDay, normalizeDay, bumpWaterMl, setWaterMl } from '../src/app/trackerOps.js';
 import { openDb, put, getAll } from '../src/lib/db.js';
@@ -111,4 +120,46 @@ test('the migration ladder converts what is already in the database', async () =
 
   assert.equal('waterMl' in days[1], false, 'a day with no water does not grow one');
   db.close();
+});
+
+/* ------------------ units that follow the equipment (29 Aug) ------------- */
+// Kevin: "allow them to toggle the units based on the equipment." One global
+// toggle cannot tell the truth about a rack with both on it — kettlebells are
+// sold in kilograms where everything else is sold in pounds.
+
+test('a kettlebell can read in kilos while everything else reads in pounds', () => {
+  const prefs = { units: 'imperial', byEquipment: { kettlebell: 'metric' } };
+  assert.equal(unitsForItem({ equipment: ['kettlebell'] }, prefs), 'metric');
+  assert.equal(unitsForItem({ equipment: ['dumbbell'] }, prefs), 'imperial');
+  assert.equal(unitsForItem({ equipment: ['roller'] }, prefs), 'imperial');
+  assert.equal(unitsForItem({}, prefs), 'imperial');
+});
+
+test('an absent preference means "same as everything else", not metric', () => {
+  // Nobody is told their kettlebells are in kilos because kettlebells usually
+  // are. Theirs might not be. Three-state absence, as everywhere else.
+  assert.equal(unitsForItem({ equipment: ['kettlebell'] }, { units: 'imperial', byEquipment: {} }), 'imperial');
+  assert.equal(unitsForItem({ equipment: ['kettlebell'] }, { units: 'metric', byEquipment: {} }), 'metric');
+});
+
+test('an item needing two weighted things gets a stable answer', () => {
+  // A card can list its kit in any order; the answer must not depend on that.
+  const prefs = { units: 'imperial', byEquipment: { kettlebell: 'metric', dumbbell: 'imperial' } };
+  assert.equal(unitsForItem({ equipment: ['kettlebell', 'dumbbell'] }, prefs), 'imperial');
+  assert.equal(unitsForItem({ equipment: ['dumbbell', 'kettlebell'] }, prefs), 'imperial');
+});
+
+test('only equipment that carries a load can carry a unit', () => {
+  // A foam roller has no weight to express, so a preference on one is dropped
+  // rather than stored to confuse somebody later.
+  assert.deepEqual(cleanByEquipment({ kettlebell: 'metric', roller: 'metric', mace: 'nonsense' }), { kettlebell: 'metric' });
+  assert.deepEqual(cleanByEquipment(undefined), {});
+});
+
+test('the storage does not move — this is a reading preference', () => {
+  // 61.235 kg is 61.235 kg whichever way it is shown, so switching re-reads
+  // history instead of reinterpreting it (the rule the global toggle follows).
+  const kg = parseWeight('135', 'imperial');
+  assert.equal(displayWeight(kg, 'imperial'), 135);
+  assert.equal(displayWeight(kg, 'metric'), 61);
 });

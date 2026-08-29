@@ -89,3 +89,53 @@ export function parseWeight(text, units) {
   if (!Number.isFinite(n) || n < 0) return undefined;
   return units === 'metric' ? n : n * KG_PER_LB;
 }
+
+/* ---------------------- units that follow the equipment ------------------ *
+ *
+ * Kevin, 29 Aug: "allow them to toggle the units based on the equipment."
+ *
+ * One global toggle cannot tell the truth about a rack that has both.
+ * Kettlebells are sold in kilograms nearly everywhere, including where
+ * everything else is sold in pounds — so somebody doing a goblet squat with a
+ * 24 and a bench press with 135 is reading two scales, and asking them to pick
+ * one is asking them to do arithmetic in their head every session.
+ *
+ * Only equipment that carries a load can carry a unit. A foam roller has no
+ * weight to express.
+ *
+ * Storage does not change: everything is kilograms underneath, as it always
+ * was. This is a reading preference, so switching it re-reads history rather
+ * than reinterpreting it — the rule the global toggle already follows.
+ */
+export const WEIGHTED_EQUIPMENT = ['dumbbell', 'kettlebell', 'mace'];
+
+/**
+ * Which unit to show for one item.
+ *
+ * An absent preference means "same as everything else", which is a different
+ * fact from "metric". Nobody is told their kettlebells are in kilos because
+ * kettlebells usually are — theirs might not be.
+ *
+ * An item can need more than one piece of equipment, so the first weighted one
+ * in the order above decides. The answer is then stable rather than dependent
+ * on how a card happened to list its kit.
+ */
+export function unitsForItem(item, { units = 'imperial', byEquipment = {} } = {}) {
+  const kit = item?.equipment ?? [];
+  for (const eq of WEIGHTED_EQUIPMENT) {
+    if (!kit.includes(eq)) continue;
+    const pref = byEquipment[eq];
+    if (pref === 'metric' || pref === 'imperial') return pref;
+  }
+  return units;
+}
+
+/** The stored shape for the per-equipment preferences, with junk dropped. */
+export function cleanByEquipment(raw) {
+  const out = {};
+  for (const eq of WEIGHTED_EQUIPMENT) {
+    const v = raw?.[eq];
+    if (v === 'metric' || v === 'imperial') out[eq] = v;
+  }
+  return out;
+}

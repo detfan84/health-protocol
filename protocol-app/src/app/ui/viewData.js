@@ -5,7 +5,7 @@ import { h, clear } from './dom.js';
 import * as store from '../store.js';
 import { localDateKey, nowIso, displayTime, timeFormatOf, deviceUses12Hour } from '../../lib/core.js';
 import { STORES } from '../../lib/schema.js';
-import { unitsOf } from '../../lib/units.js';
+import { unitsOf, WEIGHTED_EQUIPMENT, cleanByEquipment } from '../../lib/units.js';
 import { disclaimerBody } from './viewDisclaimer.js';
 import { BUILD } from '../../lib/build.js';
 import { remindersCard } from './viewReminders.js';
@@ -325,8 +325,53 @@ export async function viewData({ applyTheme, applyScheme, go }) {
           ),
         ),
       ),
+      await weightByEquipment(),
     ),
   );
+
+  /**
+   * Units that follow the equipment (Kevin, 29 Aug).
+   *
+   * One toggle cannot tell the truth about a rack with both on it. Kettlebells
+   * are sold in kilograms nearly everywhere, including where everything else is
+   * sold in pounds, so a person reads two scales and the app should not make
+   * them convert one in their head every session.
+   *
+   * The default is "same as everything else" and stays absent until somebody
+   * chooses — nobody is told their kettlebells are in kilos because kettlebells
+   * usually are. Theirs might not be.
+   */
+  async function weightByEquipment() {
+    const stored = await store.getSetting('ui.units.byEquipment');
+    const prefs = cleanByEquipment(stored?.value);
+    const LABEL = { dumbbell: 'Dumbbells', kettlebell: 'Kettlebells', mace: 'Steel maces' };
+
+    const save = (eq, value) => {
+      const next = { ...prefs };
+      if (value) next[eq] = value; else delete next[eq];
+      return guarded(
+        () => store.putSetting({ key: 'ui.units.byEquipment', value: cleanByEquipment(next), updatedAt: nowIso() }),
+        { what: `The units for ${LABEL[eq].toLowerCase()}`, onOk: () => { prefs[eq] = value || undefined; } },
+      );
+    };
+
+    return h('div', { style: 'margin-top:var(--sp-3)' },
+      h('p.muted', {}, 'Weights can read differently per piece of kit, because that is how they are sold. Nothing about your records changes — everything is stored one way underneath.'),
+      ...WEIGHTED_EQUIPMENT.map((eq) => h('div.field', {},
+        h('label', { for: `units-${eq}` }, LABEL[eq]),
+        h('select', {
+          id: `units-${eq}`,
+          onchange: (e) => save(eq, e.target.value),
+        },
+          [
+            ['', 'Same as everything else'],
+            ['imperial', 'Pounds'],
+            ['metric', 'Kilograms'],
+          ].map(([value, label]) => h('option', { value, selected: (prefs[eq] ?? '') === value }, label)),
+        ),
+      )),
+    );
+  }
 
   /* ------------------------------- clock -------------------------------- */
   // Decision 23. The device's own convention is the default, because that is

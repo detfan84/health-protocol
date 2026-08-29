@@ -231,3 +231,21 @@ whether some of them are appropriate at all. It sorts under T and lands **tenth 
 after six of the drills it exists to gate.
 
 A file can specify an order. Nothing reads it.
+
+## Two `units.js`, two canonical units, one tree
+
+`protocol-app/src/lib/units.js` is the app's. It stores **kilograms** and millilitres and
+converts on display.
+
+`src/lib/units.js` at the repo root belongs to the 2025 React app on `master`. It stores
+**pounds** and ounces and converts the other way — `displayWeight(lb, unitSystem)`.
+
+They have the same filename, overlapping function names, and opposite canonical units. A
+shell that has drifted to the repo root will edit the wrong one and the code will look
+plausible: 29 Aug, fifty lines of new work went into the old app's file and had to be
+reverted. §1 says a file that looks missing is usually on the other branch; this is the same
+trap without the branch, because two apps share one tree.
+
+**The tell:** the app's file exports `unitsOf`, `weightUnitLabel` and `parseWeight`, and the
+old one exports none of them. Assert on something the file itself contains before writing to
+it — a path check alone does not help when both paths exist.

@@ -22,7 +22,7 @@ import {
   unavailableReason, addSet, updateSet, removeSet, setDuration, setReading, setTook, trainingLog, lastLoggedBefore,
   applyCheckToggle, setCheckUnits,
 } from '../trackerOps.js';
-import { unitsOf, stepMl, volumeUnitLabel, displayVolume, parseVolume, weightUnitLabel, displayWeight, parseWeight } from '../../lib/units.js';
+import { unitsOf, stepMl, volumeUnitLabel, displayVolume, parseVolume, weightUnitLabel, displayWeight, parseWeight, unitsForItem, cleanByEquipment } from '../../lib/units.js';
 import { cadenceOf, cadenceLabel, addDays, dueToday } from '../../lib/cadence.js';
 import { seriesFor, summarise, sparkPath, summaryText } from '../../lib/readings.js';
 import { paceOf, paceText } from '../../lib/durations.js';
@@ -238,7 +238,9 @@ function deltaBlock(item, side, history, day) {
   return host;
 }
 
-function trainingBlock(item, day, { units, writeKey, onLogged, lastTime, history }) {
+function trainingBlock(item, day, { units: globalUnits, byEquipment, writeKey, onLogged, lastTime, history }) {
+  // The unit this item reads in — its own equipment's, or everybody's.
+  const units = unitsForItem(item, { units: globalUnits, byEquipment });
   if (item.tracking !== 'sets' && item.tracking !== 'duration' && item.tracking !== 'measure') return null;
 
   const host = h('div.training', {});
@@ -493,7 +495,7 @@ function trainingBlock(item, day, { units, writeKey, onLogged, lastTime, history
   return host;
 }
 
-function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, cadence, weekly, writeKey = localDateKey, units = 'imperial', lastTime, history } = {}) {
+function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, cadence, weekly, writeKey = localDateKey, units = 'imperial', byEquipment, lastTime, history } = {}) {
   const pressed = Boolean(day.checks[item.id]);
   const btn = h(
     'button.check',
@@ -584,6 +586,7 @@ function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, 
   // upward: it never un-ticks something you already marked done.
   const training = trainingBlock(item, day, {
     units,
+    byEquipment,
     writeKey,
     lastTime,
     history,
@@ -657,7 +660,11 @@ export async function viewToday({ reload, stamp, date: viewing, startSession, mo
   const phaseSettings = isToday ? await store.advancePhases(protocols, loaded, date) : loaded;
   // Read once, up here: the day's rows need it for weights, the water card
   // needs it for volumes, and a second read would be a second answer.
-  const units = unitsOf(await store.getSetting('ui.units'));
+  const globalUnits = unitsOf(await store.getSetting('ui.units'));
+  const units = globalUnits;
+  // Kettlebells are sold in kilos where everything else is sold in pounds, so
+  // the unit can follow the equipment rather than the person.
+  const byEquipment = cleanByEquipment((await store.getSetting('ui.units.byEquipment'))?.value);
   // Opt-in, and absent means off (R17) — the law's posture is the default.
   const showWeekly = (await store.getSetting('ui.weeklyCount'))?.value === true;
   // Device convention unless somebody said otherwise (decision 23).
@@ -841,6 +848,7 @@ export async function viewToday({ reload, stamp, date: viewing, startSession, mo
         units,
         lastTime: lastTimeFor(it),
         history: state.history,
+        byEquipment,
         onChanged: rerenderBlocks,
         onPause: pauseOrResume,
         unavailable: unavailableReason(it.id, { pause: state.pauses[it.id], supply: state.supplies[it.id] }),
@@ -856,6 +864,7 @@ export async function viewToday({ reload, stamp, date: viewing, startSession, mo
    */
   function lastTimeFor(item) {
     if (item.tracking !== 'sets' && item.tracking !== 'duration') return null;
+    const units = unitsForItem(item, { units: globalUnits, byEquipment });
     const found = lastLoggedBefore(state.history, item.id, date);
     if (!found) return null;
     const wLabel = weightUnitLabel(units);
