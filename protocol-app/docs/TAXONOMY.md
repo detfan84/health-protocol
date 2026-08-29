@@ -498,6 +498,34 @@ law 1 pairs release with loading for the *body's* sake, while this is *"skip it 
 does not work"*. Legs Up the Wall with one leg down and a tight psoas is not a lesser version of
 the stretch, it is a lower back being pulled off the floor.
 
+**And a prerequisite carries a condition, or it is a caution that presumes one.** Kevin's second
+correction, an hour after the first: *"the psoas release is only a prerequisite if your psoas is
+tight, and if you are dropping one leg. If both are up the psoas isn't a factor."*
+
+The first half was already right — `before` sits on the variation, not on the parent, so nobody
+doing the both-legs-up version is told to release anything. The second half was a modelling error:
+`before: ["bw-hip"]` says *do this first* to every reader, including everyone whose hip flexors are
+fine. That is the same shape as the five cards that told the reader which conditions they have
+(commit `043f266`), and it costs the same thing — friction handed to people it is not for, who then
+skip the whole movement.
+
+So a prerequisite is `{ item, when? }`, and the `when` says who it is for **and how they would
+know**:
+
+> *Only if the hip flexor on the side you are dropping is tight. The tell is in the movement
+> itself: the lower back lifts off the floor, or the pelvis turns with the down leg. If the back
+> stays flat and the pelvis stays square, this step is not for you.*
+
+`build-catalog` reports every prerequisite with no condition by name. Unconditional is sometimes
+right and usually not, and a build that says nothing about it is how *do this first* quietly becomes
+an instruction to everybody.
+
+**Where the tell should eventually live** is a test (§5). There isn't one here: the catalogue has
+no hip-flexor-length test — `test-hipflex` measures hip flexion range, which is a different
+question — so the condition names the observation instead. The `test` field on a prerequisite
+exists and is empty, which is the honest state: the wire is specified, and the thing it should
+point at has not been written.
+
 And the honest status matters more here than anywhere. *"I felt the extra intensity but have not
 achieved a release yet"* is exactly the epistemic state law 5 exists to carry. An addition that has
 not worked yet ships saying so, or the fortieth reader takes it for a technique that works.

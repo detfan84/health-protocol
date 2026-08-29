@@ -165,7 +165,7 @@ test('the shipped catalogue is exactly its sources, and the authored file is in 
   const built = mergeCatalog(await collectSources());
   const overrides = JSON.parse(await readFile(url('../src/content/vocab/facet-overrides.json'), 'utf8'));
   const tags = JSON.parse(await readFile(url('../src/content/vocab/anatomy-tags.json'), 'utf8'));
-  built.items = checkRelations(tagAll(applyAnatomyTags(applyFoldin(built.items, foldin, nodes).items, tags, nodes), overrides));
+  built.items = checkRelations(tagAll(applyAnatomyTags(applyFoldin(built.items, foldin, nodes).items, tags, nodes), overrides)).items;
   built.version = versionOf(built.items);
   const shipped = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
 
@@ -471,9 +471,32 @@ test('a variation points at a parent that exists, or the build stops', () => {
     /variationOf "gone"/,
   );
   assert.throws(
-    () => checkRelations([item('v', 'V', { before: ['also-gone'] })]),
+    () => checkRelations([item('v', 'V', { before: [{ item: 'also-gone' }] })]),
     /before "also-gone"/,
   );
+});
+
+test('a prerequisite with no condition is reported, because it is shown to everybody', () => {
+  // Kevin, 29 Aug: "the psoas release is only a prerequisite if your psoas is
+  // tight." An unconditional "do this first" is an instruction handed to every
+  // reader including the ones it is not for — the same shape as a card telling
+  // somebody which condition they have. Sometimes right, usually not, so the
+  // build says so rather than refusing it.
+  const bare = checkRelations([item('a', 'A'), item('v', 'V', { before: ['a'] })]);
+  assert.deepEqual(bare.unconditional, ['v → a']);
+  const conditional = checkRelations([item('a', 'A'), item('v', 'V', { before: [{ item: 'a', when: 'only if tight' }] })]);
+  assert.deepEqual(conditional.unconditional, []);
+});
+
+test('the shipped prerequisite says who it is for, and how they would know', async () => {
+  const lib = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
+  const [pre] = lib.items.find((i) => i.id === 'var-legs-up-wall-one-down').before;
+  assert.equal(pre.item, 'bw-hip');
+  assert.match(pre.when, /^Only if/, 'it is conditional on its face');
+  assert.match(pre.when, /this step is not for you/, 'and says plainly when to skip it');
+  // And it applies to the variation, never to the parent: with both legs up the
+  // hip flexors are not in it at all.
+  assert.ok(!lib.items.find((i) => i.id === 'st-legs_up_wall').before);
 });
 
 test('a variation carries its own effect, because it does something else', async () => {
@@ -487,7 +510,7 @@ test('a variation carries its own effect, because it does something else', async
   assert.deepEqual(parent.effect, ['calm', 'circulate']);
   assert.deepEqual(oneDown.effect, ['lengthen']);
   assert.equal(oneDown.variationOf, parent.id);
-  assert.deepEqual(oneDown.before, ['bw-hip'], 'and names what has to happen first');
+  assert.equal(oneDown.before[0].item, 'bw-hip', 'and names what has to happen first');
 });
 
 test('an addition that has not worked yet says so where a reader will see it', async () => {

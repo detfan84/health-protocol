@@ -8,7 +8,10 @@
       "name": "Legs up the wall, one leg down",
       "variationOf": "st-legs_up_wall",
       "before": [
-        "bw-hip"
+        {
+          "item": "bw-hip",
+          "when": "Only if the hip flexor on the side you are dropping is tight. The tell is in the movement itself: the lower back lifts off the floor, or the pelvis turns with the down leg. If the back stays flat and the pelvis stays square, this step is not for you — go straight to the stretch."
+        }
       ],
       "kind": "stretch",
       "category": "mobility",
@@ -18,7 +21,7 @@
         "seconds": 120
       },
       "dose": "1–3 min each side",
-      "why": "The both-legs-up version settles you down. Drop one leg to the floor and it becomes a stretch of the hip flexor on that side, while the leg on the wall keeps its hamstring long.",
+      "why": "The both-legs-up version settles you down. Drop one leg to the floor and it becomes a stretch of the hip flexor on that side, while the leg on the wall keeps its hamstring long. With both legs up, the hip flexors are not in it at all.",
       "equipment": [
         "wall"
       ],
@@ -35,7 +38,7 @@
         "tool": "A clear stretch of wall, and floor space to lie in.",
         "release": "Lie on your back with both legs up the wall. Let one leg lower to the floor, straight, and leave it there. Breathe. Swap sides.",
         "notice": "The stretch arrives in the front of the hip on the leg that is down, and in the hamstring of the leg still up. Two things at once, on opposite sides.",
-        "careful": "If the lower back lifts off the floor, or the down leg pulls the pelvis round with it, the hip flexor is too tight for this today. Do the release first (below) or keep the down leg bent with the foot flat."
+        "careful": "If the lower back lifts off the floor, or the down leg pulls the pelvis round with it, the hip flexor is too tight for this today. Release it first, or keep the down leg bent with the foot flat. If the back stays flat, none of that applies."
       },
       "levels": [
         {

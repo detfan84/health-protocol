@@ -332,14 +332,25 @@ export function applyAnatomyTags(items, file, nodes) {
 export function checkRelations(items) {
   const ids = new Set(items.map((i) => i.id));
   const broken = [];
+  const unconditional = [];
   for (const item of items) {
     if (item.variationOf && !ids.has(item.variationOf)) broken.push(`${item.id}: variationOf "${item.variationOf}"`);
-    for (const b of item.before ?? []) if (!ids.has(b)) broken.push(`${item.id}: before "${b}"`);
+    for (const b of item.before ?? []) {
+      const id = typeof b === 'string' ? b : b.item;
+      if (!ids.has(id)) broken.push(`${item.id}: before "${id}"`);
+      if (b?.test && !ids.has(b.test)) broken.push(`${item.id}: before.test "${b.test}"`);
+      // A prerequisite with no condition is shown to EVERY reader. Kevin,
+      // 29 Aug: the psoas release is only a prerequisite if your psoas is
+      // tight. Unconditional is sometimes right and usually not, so this is
+      // reported rather than refused — a build that says nothing about it is
+      // how "do this first" becomes an instruction to people it is not for.
+      if (typeof b === 'string' || !b?.when) unconditional.push(`${item.id} → ${id}`);
+    }
   }
   if (broken.length) {
     throw new Error(`these items point at catalogue entries that do not exist:\n    ${broken.join('\n    ')}`);
   }
-  return items;
+  return { items, unconditional };
 }
 
 /* ------------------------------ the command ------------------------------ */
@@ -357,11 +368,14 @@ async function main() {
   // The fold-in runs over the merged shelf, so an authored file cannot invent
   // a muscle name without the build saying so.
   let usedReview;
+  let unconditional = [];
   try {
     const nodes = new Map(JSON.parse(await readFile(ANATOMY_FILE, 'utf8')).nodes.map((n) => [n.id, n]));
     const applied = applyFoldin(catalog.items, JSON.parse(await readFile(FOLDIN_FILE, 'utf8')), nodes);
     const tagged = applyAnatomyTags(applied.items, JSON.parse(await readFile(TAGS_FILE, 'utf8')), nodes);
-    catalog.items = checkRelations(tagAll(tagged, JSON.parse(await readFile(OVERRIDES_FILE, 'utf8'))));
+    const related = checkRelations(tagAll(tagged, JSON.parse(await readFile(OVERRIDES_FILE, 'utf8'))));
+    catalog.items = related.items;
+    unconditional = related.unconditional;
     // The graph ships WITH the catalogue, slimmed to what a browser needs to
     // walk it: id, display name, parents. Without it the library screen can
     // show a tag but cannot roll one up, so picking "Glutes" would miss every
@@ -395,6 +409,9 @@ async function main() {
   console.log(`effect: ${Object.entries(byEffect).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k} ${n}`).join(' · ')}`);
   for (const s of catalog.sources) console.log(`  ${s.file}: ${s.items}`);
   console.log(`muscles: ${new Set(catalog.items.flatMap((i) => i.muscles ?? [])).size} · equipment: ${new Set(catalog.items.map((i) => i.equipment).filter(Boolean)).size}`);
+  if (unconditional.length) {
+    console.log(`prerequisites with no condition — shown to every reader: ${unconditional.join(', ')}`);
+  }
   const withTarget = catalog.items.filter((i) => i.target?.length).length;
   const bare = catalog.items.filter((i) => !i.target?.length);
   console.log(`anatomy: ${withTarget}/${catalog.items.length} items carry node ids (muscles and regions kept alongside).`);

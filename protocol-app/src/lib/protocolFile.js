@@ -244,7 +244,29 @@ function fixItem(raw, path, ctx) {
     if (v) item[k] = v;
     else ctx.warn(`${path}.${k}`, `Empty — ignored, so this item says nothing about ${k}.`);
   }
-  for (const k of ['effect', 'tissue', 'target', 'context', 'equipment', 'demands', 'before']) {
+  // A prerequisite is { item, when? }. "Do this first" and "do this first IF"
+  // are different instructions and the second is usually the true one — the
+  // psoas release before a one-leg-down wall stretch matters only to somebody
+  // whose psoas is tight, and shown to everybody it is friction that makes
+  // people skip the whole thing. A bare string reads as unconditional, so
+  // older content keeps its pointer rather than losing it.
+  if (Array.isArray(raw.before)) {
+    const before = [];
+    for (const b of raw.before) {
+      const id = asTrimmed(String((isObj(b) ? b.item : b) ?? ''));
+      if (!id) continue;
+      const entry = { item: id };
+      if (isObj(b)) {
+        const when = asTrimmed(String(b.when ?? ''));
+        if (when) entry.when = when;
+        const test = asTrimmed(String(b.test ?? ''));
+        if (test) entry.test = test;
+      }
+      before.push(entry);
+    }
+    if (before.length) item.before = before;
+  }
+  for (const k of ['effect', 'tissue', 'target', 'context', 'equipment', 'demands']) {
     if (k === 'target' && isObj(raw.target)) continue; // the legacy dose, handled above
     if (raw[k] == null) continue;
     if (!Array.isArray(raw[k])) {
