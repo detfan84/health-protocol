@@ -45,6 +45,30 @@ const TYPES = [
   ['teaching', 'Read about it'],
 ];
 const EFFECT_LABELS = Object.fromEntries(EFFECTS);
+
+const CONTEXTS = [
+  ['floor', 'On the floor'], ['bed', 'In bed'], ['chair', 'In a chair'],
+  ['standing', 'Standing'], ['desk', 'At a desk'], ['travel', 'Travelling'],
+];
+
+/**
+ * The shelf is a view over one facet, and the facet is a choice (TAXONOMY §8).
+ *
+ * `effect` is the default because it is the one a person can answer about
+ * themselves — tight, weak, wired — where "which of the 2025 app's five source
+ * files did this come from" never was.
+ *
+ * Each slice says how to read its values off an item, so one matcher serves all
+ * of them and a new slice is a row here rather than a branch anywhere.
+ */
+const SLICES = [
+  { id: 'effect', label: 'What it does', read: (i) => i.effect ?? [] },
+  { id: 'target', label: 'Where in the body', read: (i) => i.target ?? [], rollUp: true },
+  { id: 'equipment', label: 'What you need', read: (i) => i.equipment ?? [] },
+  { id: 'context', label: 'Where you are', read: (i) => i.context ?? [] },
+  { id: 'type', label: 'Kind of thing', read: (i) => (i.type ? [i.type] : []) },
+];
+const SLICE_BY_ID = Object.fromEntries(SLICES.map((s) => [s.id, s]));
 const EQUIPMENT_LABELS = {
   none: 'Nothing', ball: 'Ball', roller: 'Foam roller', band: 'Resistance band',
   strap: 'Strap or towel', mat: 'Mat', wall: 'A wall', doorway: 'A doorway',
@@ -109,7 +133,11 @@ export async function viewLibrary({ reload } = {}) {
   const protocols = await store.loadProtocols();
   const owned = new Set(protocols.flatMap((p) => p.blocks.flatMap((b) => b.items.map((i) => i.id))));
 
-  const state = { q: '', kind: null, muscle: null, equipment: null };
+  // One slice on show at a time, but every chosen value keeps applying —
+  // TAXONOMY §8. Somebody looking for "something for my leg that releases" is
+  // asking two facets one after the other, not choosing between them, and the
+  // chosen ones stay visible as pills they can take off.
+  const state = { q: '', slice: 'effect', filters: { effect: null, type: null, target: null, equipment: null, context: null } };
   const results = h('div');
 
   /* ------------------------------ filters ------------------------------ */
@@ -134,16 +162,6 @@ export async function viewLibrary({ reload } = {}) {
     walk(id);
     return out;
   };
-  const inUse = new Set(library.items.flatMap((i) => i.target ?? []).flatMap((id) => [...rollUpOf(id)]));
-  const muscles = [...inUse]
-    .map((id) => [id, anatomyIndex.get(id)?.name ?? id])
-    .sort((a, b) => a[1].localeCompare(b[1]));
-  // `equipment` is the facet now: a list of ids from the vocabulary, not the
-  // free-text field it was derived from. That field held two things at once —
-  // 263 enum-ish values and 71 sentences written for a reader — and the sentence
-  // half was being offered as a dropdown option nobody could pick usefully. The
-  // prose stays where it belongs, in fields.tool.
-  const equipment = [...new Set(library.items.flatMap((i) => i.equipment ?? []))].sort();
 
   /**
    * Where else a complaint can come from (TAXONOMY §4).
@@ -196,12 +214,60 @@ export async function viewLibrary({ reload } = {}) {
     return card;
   }
 
+  /**
+   * The chips for one slice: every value with something behind it, largest
+   * first, counted against the OTHER filters already chosen.
+   *
+   * The count is not decoration. A chip with nothing behind it is worse than no
+   * chip — the suite has said so since the shelf was sliced by `kind` — and a
+   * count computed against the current narrowing is the difference between
+   * "there are 81 releases" and "there are 4 releases for your calf".
+   */
+  function valuesFor(sliceId) {
+    const slice = SLICE_BY_ID[sliceId];
+    const others = { ...state.filters, [sliceId]: null };
+    const counts = new Map();
+    for (const item of library.items) {
+      if (!matchesFilters(item, others) || !matchesQuery(item)) continue;
+      const seen = new Set();
+      for (const raw of slice.read(item)) {
+        for (const v of slice.rollUp ? rollUpOf(raw) : [raw]) {
+          if (seen.has(v)) continue;
+          seen.add(v);
+          counts.set(v, (counts.get(v) ?? 0) + 1);
+        }
+      }
+    }
+    let values = [...counts.entries()];
+    if (sliceId === 'target') {
+      // 136 nodes is not a chip row. The regions gather everything under them,
+      // and the search box is there for anybody who wants a named muscle.
+      const regions = new Set((library.anatomy ?? []).filter((n) => !n.parents?.length).map((n) => n.id));
+      values = values.filter(([v]) => regions.has(v));
+    }
+    return values
+      .filter(([, n]) => n > 0)
+      .sort((a, b) => b[1] - a[1] || labelFor(sliceId, a[0]).localeCompare(labelFor(sliceId, b[0])));
+  }
+
+  function labelFor(sliceId, value) {
+    if (sliceId === 'effect') return EFFECT_LABELS[value] ?? value;
+    if (sliceId === 'equipment') return EQUIPMENT_LABELS[value] ?? value.replace(/-/g, ' ');
+    if (sliceId === 'context') return Object.fromEntries(CONTEXTS)[value] ?? value;
+    if (sliceId === 'type') return { practice: 'Something to do', measurement: 'Measure yourself', teaching: 'Read about it' }[value] ?? value;
+    if (sliceId === 'target') return anatomyIndex.get(value)?.name ?? value;
+    return value;
+  }
+
   const search = h('input', {
     type: 'search',
     id: 'library-search',
     placeholder: 'Search — “hip”, “neck”, “band”, “breath”…',
     'aria-label': 'Search the library',
-    oninput: (e) => { state.q = e.target.value.trim().toLowerCase(); render(); },
+    // The chip counts are counted against the search too, so they move with it.
+    // A chip promising 81 releases while the query has cut the shelf to nine is
+    // a number that is true about the wrong thing.
+    oninput: (e) => { state.q = e.target.value.trim().toLowerCase(); renderFilters(); render(); },
   });
 
   const chip = (label, active, onclick) =>
@@ -210,46 +276,60 @@ export async function viewLibrary({ reload } = {}) {
   const filters = h('div');
   function renderFilters() {
     clear(filters);
+
+    // Which question you are asking. Three parallel mechanisms lived here —
+    // a chip row for `kind`, a muscle dropdown and an equipment dropdown — and
+    // they were three because the facets did not exist yet. One now.
     filters.append(
-      h('div.chip-row', {},
-        chip('Everything', !state.effect && !state.type, () => { state.effect = null; state.type = null; render(); }),
-        EFFECTS.map(([value, label]) =>
-          chip(label, state.effect === value, () => {
-            state.effect = state.effect === value ? null : value;
-            state.type = null;
-            render();
-          })),
-        TYPES.map(([value, label]) =>
-          chip(label, state.type === value, () => {
-            state.type = state.type === value ? null : value;
-            state.effect = null;
-            render();
-          })),
+      h('div.chip-row.slices', { role: 'group', 'aria-label': 'Browse by' },
+        h('span.field-label', {}, 'Browse by'),
+        SLICES.map((slice) => chip(slice.label, state.slice === slice.id, () => {
+          state.slice = slice.id;
+          renderFilters();
+        })),
       ),
-      h('div.field-row', { style: 'margin-top:var(--sp-2)' },
-        h('div', {},
-          h('label', { for: 'lib-muscle' }, 'Muscle or area'),
-          h('select', {
-            id: 'lib-muscle',
-            onchange: (e) => { state.muscle = e.target.value || null; render(); },
-          },
-            [h('option', { value: '' }, 'Any')].concat(
-              muscles.map(([id, label]) => h('option', { value: id, selected: state.muscle === id }, label)),
-            ),
-          ),
+    );
+
+    // What you have already narrowed to, and how to undo it. Chosen values from
+    // other facets keep applying while you browse this one, so they have to
+    // stay visible — a filter you cannot see is a filter you cannot take off.
+    const chosen = Object.entries(state.filters).filter(([, v]) => v);
+    if (chosen.length) {
+      filters.append(
+        h('div.chip-row', { role: 'group', 'aria-label': 'Narrowed to' },
+          h('span.field-label', {}, 'Narrowed to'),
+          chosen.map(([sliceId, value]) => h('button.chip.on', {
+            'aria-label': `Remove ${labelFor(sliceId, value)}`,
+            onclick: () => { state.filters[sliceId] = null; renderFilters(); render(); },
+          }, `${labelFor(sliceId, value)} ✕`)),
+          h('button.chip.quiet', {
+            onclick: () => {
+              for (const k of Object.keys(state.filters)) state.filters[k] = null;
+              renderFilters(); render();
+            },
+          }, 'Clear all'),
         ),
-        h('div', {},
-          h('label', { for: 'lib-equip' }, 'Equipment'),
-          h('select', {
-            id: 'lib-equip',
-            onchange: (e) => { state.equipment = e.target.value || null; render(); },
-          },
-            [h('option', { value: '' }, 'Any')].concat(
-              equipment.map((m) => h('option', { value: m, selected: state.equipment === m }, EQUIPMENT_LABELS[m] ?? m.replace(/-/g, ' '))),
-            ),
-          ),
-        ),
-      ),
+      );
+    }
+
+    const values = valuesFor(state.slice);
+    filters.append(
+      values.length
+        ? h('div.chip-row', { role: 'group', 'aria-label': SLICE_BY_ID[state.slice].label },
+            values.map(([value, count]) => chip(
+              `${labelFor(state.slice, value)} · ${count}`,
+              state.filters[state.slice] === value,
+              () => {
+                state.filters[state.slice] = state.filters[state.slice] === value ? null : value;
+                renderFilters();
+                render();
+              },
+            )),
+          )
+        // Not an error state: it means the narrowing you already have leaves
+        // nothing to choose here, which is worth saying rather than showing a
+        // row of chips that all return nothing.
+        : h('p.muted', {}, 'Nothing left to choose here with the filters you have on.'),
     );
   }
   renderFilters();
@@ -365,13 +445,27 @@ export async function viewLibrary({ reload } = {}) {
 
   /* ------------------------------ results ------------------------------ */
 
-  function matches(item) {
-    if (state.effect && !(item.effect ?? []).includes(state.effect)) return false;
-    if (state.type && item.type !== state.type) return false;
-    // An item tagged `glute-med-min` answers a search for "Glutes" and for
-    // "Hip", because the tag implies everything above it.
-    if (state.muscle && !(item.target ?? []).some((t) => rollUpOf(t).has(state.muscle))) return false;
-    if (state.equipment && !(item.equipment ?? []).includes(state.equipment)) return false;
+  /**
+   * Does this item satisfy every chosen facet? Separated from `matches` so the
+   * chip counts can ask the same question with one facet held back — which is
+   * how a chip knows how many items it would leave rather than how many exist.
+   */
+  function matchesFilters(item, filters) {
+    for (const [sliceId, value] of Object.entries(filters)) {
+      if (!value) continue;
+      const slice = SLICE_BY_ID[sliceId];
+      const values = slice.read(item);
+      // An item tagged `glute-med-min` answers "Leg" and "Hip", because the tag
+      // implies everything above it (TAXONOMY §3).
+      const hit = slice.rollUp
+        ? values.some((v) => rollUpOf(v).has(value))
+        : values.includes(value);
+      if (!hit) return false;
+    }
+    return true;
+  }
+
+  function matchesQuery(item) {
     if (!state.q) return true;
     const hay = [
       item.name, item.category, item.categoryName,
@@ -386,6 +480,8 @@ export async function viewLibrary({ reload } = {}) {
     ].join(' ').toLowerCase();
     return state.q.split(/\s+/).every((word) => hay.includes(word));
   }
+
+  const matches = (item) => matchesFilters(item, state.filters) && matchesQuery(item);
 
   function card(item) {
     // What the card says it is: what it does, in the words above. A teaching
@@ -489,7 +585,7 @@ export async function viewLibrary({ reload } = {}) {
 
     const found = library.items.filter(matches);
     results.append(
-      h('p.muted', { style: 'margin-top:var(--sp-4)' },
+      h('p.muted.result-count', { style: 'margin-top:var(--sp-4)' },
         `${found.length} of ${library.items.length}`),
     );
     if (!found.length) {

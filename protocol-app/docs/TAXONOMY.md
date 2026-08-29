@@ -665,6 +665,33 @@ by time available.
 No shelf anywhere is authoritative. This is what stops a browse decision from becoming a data
 decision, which is how `entry-points` — a UI position — ended up as a peer of `release`.
 
+### 8.1 Built, 29 Aug
+
+**Five slices, one on show at a time:** *What it does* (effect, the default) · *Where in the body*
+(the six anatomy regions) · *What you need* (equipment) · *Where you are* (context) · *Kind of
+thing* (type). Adding a sixth is a row in `SLICES` saying how to read its values off an item, not
+a branch anywhere.
+
+**The screen lost two mechanisms and gained one.** It had a chip row for `kind` plus a muscle
+dropdown plus an equipment dropdown — three parallel filters, and three because the facets did not
+exist yet.
+
+**Slices compose.** Choosing *Release something tight*, then switching to *Where in the body* and
+choosing *Leg*, applies both — because somebody looking for "something for my leg that releases" is
+asking two questions in a row, not choosing between them. Every chosen value stays on screen as a
+removable pill: a filter you cannot see is a filter you cannot take off.
+
+**Every chip carries a count, and counts are computed against everything else already on** — the
+other facets *and* the search text. So a chip says *"there are 4 releases for your calf"* rather
+than *"there are 81 releases"*, a chip with nothing behind it is never offered, and a chip can
+never promise more than the search has left. That last one is a test.
+
+Region chips are roll-ups (§3), so *Leg* returns items tagged at `calves` or `soleus`. The 136-node
+graph is not a chip row; the search box is there for anybody who wants a named muscle.
+
+When a narrowing leaves a facet with nothing to offer, the row says so in words rather than
+showing chips that all return nothing.
+
 ---
 
 ## 9 · What has to be built, in order

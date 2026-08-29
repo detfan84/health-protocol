@@ -921,3 +921,78 @@ test('searching a symptom offers where else it can come from, red flags first', 
   // The ordinary results are still there — this is above them, not instead.
   assert.match(main.textContent, /of 383/);
 });
+
+test('the shelf is a view over one facet, and the facets compose', async () => {
+  // TAXONOMY §8. Three parallel mechanisms lived in this screen — a chip row
+  // for `kind` and two dropdowns — because the facets did not exist yet.
+  store._resetForTests();
+  await store.ready({ name: 'screens-facets' });
+  const { viewLibrary } = await import('../src/app/ui/viewLibrary.js');
+  const main = draw(await viewLibrary({ open: () => {} }));
+  await settled();
+
+  const chipsIn = (label) => {
+    const group = [...main.querySelectorAll('[role=group]')].find((g) => g.getAttribute('aria-label') === label);
+    return group ? [...group.querySelectorAll('button')] : [];
+  };
+  const press = (label, text) => {
+    const b = chipsIn(label).find((x) => x.textContent.startsWith(text));
+    assert.ok(b, `no "${text}" chip under ${label} — got ${JSON.stringify(chipsIn(label).map((x) => x.textContent))}`);
+    b.dispatchEvent(new Event('click'));
+  };
+
+  // Every slice is offered, and effect is the one you land on.
+  const slices = chipsIn('Browse by').map((b) => b.textContent);
+  assert.deepEqual(slices, ['What it does', 'Where in the body', 'What you need', 'Where you are', 'Kind of thing']);
+
+  // Chips carry counts, so nothing offered is a dead end.
+  const effects = chipsIn('What it does').map((b) => b.textContent);
+  assert.ok(effects.every((t) => /· \d+$/.test(t)), `counts missing — ${JSON.stringify(effects)}`);
+
+  press('What it does', 'Release something tight');
+  await settled();
+  const shownCount = () => Number(/^(\d+) of/.exec(main.querySelector('.result-count').textContent)[1]);
+  const afterEffect = shownCount();
+  assert.equal(afterEffect, 84, 'the release shelf');
+
+  // Switch the slice; the first choice keeps applying and stays visible.
+  press('Browse by', 'Where in the body');
+  await settled();
+  assert.ok(chipsIn('Narrowed to').some((b) => /Release something tight/.test(b.textContent)),
+    'the earlier choice is still on, and still removable');
+
+  // And the region counts are now counted against it — a roll-up, so items
+  // tagged at a muscle answer for the region above it.
+  press('Where in the body', 'Leg');
+  await settled();
+  const afterBoth = shownCount();
+  assert.ok(afterBoth > 0 && afterBoth < afterEffect, `two facets should narrow further: ${afterBoth} vs ${afterEffect}`);
+  assert.match(main.textContent, /Calf Roll|Calves|Hamstrings/, 'and leg releases are what came back');
+
+  // Taking one off widens it again.
+  chipsIn('Narrowed to').find((b) => /Release something tight/.test(b.textContent)).dispatchEvent(new Event('click'));
+  await settled();
+  assert.ok(shownCount() > afterBoth);
+});
+
+test('a chip is never offered with nothing behind it', async () => {
+  store._resetForTests();
+  await store.ready({ name: 'screens-facets-2' });
+  const { viewLibrary } = await import('../src/app/ui/viewLibrary.js');
+  const main = draw(await viewLibrary({ open: () => {} }));
+  await settled();
+
+  const box = main.querySelector('input[type=search]');
+  box.value = 'kettlebell';
+  box.dispatchEvent(new Event('input'));
+  await settled();
+
+  // The counts move with the search, or a chip promises items the query has
+  // already cut away.
+  const group = [...main.querySelectorAll('[role=group]')].find((g) => g.getAttribute('aria-label') === 'What it does');
+  const counts = [...group.querySelectorAll('button')].map((b) => Number(/· (\d+)$/.exec(b.textContent)[1]));
+  assert.ok(counts.length, 'some effects survive the search');
+  assert.ok(counts.every((n) => n > 0), 'and none of them is zero');
+  const shown = Number(/^(\d+) of/.exec(main.querySelector('.result-count').textContent)[1]);
+  assert.ok(Math.max(...counts) <= shown, `a chip cannot promise more than the search left: ${Math.max(...counts)} > ${shown}`);
+});

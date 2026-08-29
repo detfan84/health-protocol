@@ -560,3 +560,11 @@ nav.tabs button[aria-current='page'] { color: var(--accent); font-weight: 650; }
 .referral-row { padding: var(--sp-2) 0; border-top: 1px solid var(--rule, rgba(0,0,0,.08)); }
 .referral-row p { margin: 0 0 var(--sp-1); }
 .referral-row .tier { margin-left: var(--sp-1); }
+
+/* Faceted browse (docs/TAXONOMY.md §8). One question on show at a time; the
+   answers you have already given stay visible as removable pills, because a
+   filter you cannot see is a filter you cannot take off. */
+.chip-row.slices { border-bottom: 1px solid var(--rule, rgba(0,0,0,.08)); padding-bottom: var(--sp-2); }
+.chip-row .field-label { align-self: center; margin-right: var(--sp-1); }
+.chip.on { background: var(--sage-2, rgba(0,0,0,.06)); }
+.chip.quiet { opacity: .7; }
