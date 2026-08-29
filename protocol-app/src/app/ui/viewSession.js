@@ -124,7 +124,7 @@ export async function viewSession({ protocolId, blockId, done }) {
   function render() {
     clear(stage);
     const item = items[index];
-    const seconds = item.target?.seconds;
+    const seconds = item.amount?.seconds;
     const isTimed = item.tracking === 'duration' && Number.isFinite(seconds);
     const alreadyDone = Boolean(day.checks[item.id]);
 
@@ -235,7 +235,7 @@ export async function viewSession({ protocolId, blockId, done }) {
       sets.append(h('button.btn', {
         onclick: () => {
           const existing = trainingLog(day, item.id)?.sets ?? [];
-          const seed = existing[existing.length - 1] ?? { reps: item.target?.reps };
+          const seed = existing[existing.length - 1] ?? { reps: item.amount?.reps };
           write((fresh) => addSet(fresh, item.id, { ...seed }));
         },
       }, (log?.sets ?? []).length ? 'Add another set' : 'Log a set'));

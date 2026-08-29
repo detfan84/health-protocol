@@ -536,9 +536,12 @@ Three shapes travel now, and one name changed:
 
 - **Single-valued:** `type` · `technique` · `performedBy` · `tradition`
 - **Lists:** `effect` · `tissue` · `anatomy` · `context` · `equipment` · `demands`
-- **The anatomy facet is stored as `anatomy`, not `target`.** This document calls the facet
-  "target"; `target` on an item has meant sets/reps/seconds since PLAN §4.2. Two questions cannot
-  share one key on one object, and the older meaning keeps the name.
+- **The anatomy facet is `target`, and the dose is `amount`.** For one commit it went the other
+  way — the facet was called `anatomy` so that `target`, meaning sets/reps/seconds since PLAN §4.2,
+  could keep the key. **Kevin reversed that the same day:** *"Can we not reformat things to fit the
+  current structure rather than allowing older versions of things to dictate what is happening
+  now?"* He is right, and the first version was a habit rather than a reason. The current structure
+  names the field; the old shape gets reformatted to fit it. See §10.1.
 
 **Values are not checked against the vocabularies, deliberately.** D40 says a vocabulary is data,
 and `carefulAudience` set the precedent: a validator deciding which values are legitimate is a
@@ -586,6 +589,43 @@ applied to every facet:
   decision; adding to an open one is authoring.
 
 Cheap now. Expensive after a few hundred more items.
+
+---
+
+## 10.1 · The rename rule
+
+**Kevin's ruling, 29 Aug: the current structure names things, and older versions are reformatted
+to fit it.** Not the reverse. Age is not a claim on a name.
+
+Worked once already, on `target`: the facet named in §2.1 wanted a key that a dose had held since
+PLAN §4.2, and the first answer was to let the dose keep it and call the facet something else. That
+is legacy setting the shape of everything after it, for no better reason than arriving first.
+
+What it costs to do properly, all of which happened here:
+
+- **A migration.** The schema-3 rung renames `target` to `amount` on every stored item. It could be
+  edited into that rung only because the rung was one day old and unreleased — a *released* rung is
+  never edited, so after ship a rename needs a rung of its own.
+- **A reader for the old shape.** `validateFile` reads the dose from either key and writes the
+  current one, so a backup from before the rename still imports. The two meanings are told apart by
+  type, unambiguously: the dose is an object, the facet is a list.
+- **One notice, not hundreds.** A pre-rename backup can hold hundreds of items; the reader is told
+  once, at file level, that the shape moved and nothing was lost.
+- **A build that refuses the old shape.** Four items in the vestibular module still used `target`
+  for a clinician's thirty seconds — and the fold-in would have overwritten it with a list of node
+  ids, silently. `build-catalog` now halts and names them.
+
+**The rule generalises, and there is a queue.** Still legacy-shaped, each waiting on something:
+
+| Field | Why it is still here | What it waits on |
+|---|---|---|
+| `kind` | provenance from the 2025 files (T7 says retire) | items carrying `type` |
+| `category` | seven questions in one field (§1) | items carrying `effect` |
+| `muscles`, `regions` | evidence for the fold-in (§9.2) | the four review rows |
+| `everyNDays` | pre-dates `cadence` | nothing — a small sweep |
+
+None of them keeps its name because it is old. Each keeps it until the thing that replaces it can
+carry the information, which is a different argument and has an end.
 
 ---
 

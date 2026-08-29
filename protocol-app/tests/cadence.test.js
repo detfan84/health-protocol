@@ -206,7 +206,7 @@ test('the day arc ships as anchors, and every anchor has a sixty-second floor', 
   for (const b of arc.blocks) {
     const first = b.items[0];
     assert.equal(first.tracking, 'duration', `${b.name}: the floor is a timed thing`);
-    assert.equal(first.target.seconds, 60, `${b.name}: the floor is sixty seconds (law 6)`);
+    assert.equal(first.amount.seconds, 60, `${b.name}: the floor is sixty seconds (law 6)`);
     assert.ok(/floor version/i.test(first.why ?? ''), `${b.name}: the floor says it is the floor`);
   }
 

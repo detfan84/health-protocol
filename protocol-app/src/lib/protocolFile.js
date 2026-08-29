@@ -166,13 +166,25 @@ function fixItem(raw, path, ctx) {
   }
   // What the plan asks for. Optional, and never a floor or a judgement — the
   // log records what happened, this only says what was written down.
-  if (isObj(raw.target)) {
-    const target = {};
+  //
+  // This was `target` until schema 3, and it lost the name to the anatomy facet
+  // (Kevin, 29 Aug: do not let older versions dictate what happens now). It is
+  // read from either key, so a backup written before the rename still imports —
+  // an old FILE is translated on the way in rather than being allowed to set
+  // the shape of everything after it.
+  //
+  // The two are told apart by type, and unambiguously: the dose is an object
+  // ({ sets, reps, seconds }), the anatomy facet is a list of node ids.
+  const legacyAmount = isObj(raw.target) ? raw.target : null;
+  const rawAmount = isObj(raw.amount) ? raw.amount : legacyAmount;
+  if (legacyAmount) ctx.sawLegacyAmount = true;
+  if (rawAmount) {
+    const amount = {};
     for (const k of ['sets', 'reps', 'seconds']) {
-      const n = asNumber(raw.target[k]);
-      if (n !== undefined && Number.isFinite(n) && n > 0) target[k] = Math.round(n);
+      const n = asNumber(rawAmount[k]);
+      if (n !== undefined && Number.isFinite(n) && n > 0) amount[k] = Math.round(n);
     }
-    if (Object.keys(target).length) item.target = target;
+    if (Object.keys(amount).length) item.amount = amount;
   }
   // Which rung of the ladder this person is actually on. A catalogue item
   // carries the whole progression (`levels`); the plan item carries the one
@@ -220,16 +232,20 @@ function fixItem(raw, path, ctx) {
   // `scripts/check-vocab.mjs` and the content build. An unrecognised facet
   // value is carried, because somebody wrote it on purpose.
   //
-  // The anatomy facet is stored as `anatomy`, not `target`: TAXONOMY.md names
-  // the facet "target", and `target` has meant sets/reps/seconds here since
-  // PLAN §4.2. The older meaning keeps the key.
+  // The anatomy facet is `target`, as TAXONOMY.md §2.1 names it. It used to
+  // mean sets/reps/seconds, and for one commit the anatomy facet was called
+  // `anatomy` so the older meaning could keep the key — which is backwards
+  // (Kevin, 29 Aug). The current structure names the field; the old shape gets
+  // reformatted to fit it, not the other way round. The dose is `amount` now,
+  // and a file written before the rename is translated above.
   for (const k of ['type', 'technique', 'performedBy', 'tradition']) {
     if (raw[k] == null) continue;
     const v = asTrimmed(String(raw[k]));
     if (v) item[k] = v;
     else ctx.warn(`${path}.${k}`, `Empty — ignored, so this item says nothing about ${k}.`);
   }
-  for (const k of ['effect', 'tissue', 'anatomy', 'context', 'equipment', 'demands']) {
+  for (const k of ['effect', 'tissue', 'target', 'context', 'equipment', 'demands']) {
+    if (k === 'target' && isObj(raw.target)) continue; // the legacy dose, handled above
     if (raw[k] == null) continue;
     if (!Array.isArray(raw[k])) {
       ctx.warn(`${path}.${k}`, `Expected a list — ignored. An item can have more than one, which is why it is a list even when there is one.`);
@@ -238,6 +254,7 @@ function fixItem(raw, path, ctx) {
     const values = [...new Set(raw[k].map((v) => asTrimmed(String(v))).filter(Boolean))];
     if (values.length) item[k] = values;
   }
+
   // Cadence travels with the plan: "3× a week" is part of what the protocol
   // says to do, so a protocol shared with somebody else carries it. What does
   // NOT travel is anything personal about doing it — a pause lives in the
@@ -464,6 +481,17 @@ export function validateFile(input) {
         }
       }
     }
+  }
+
+  // One notice per file, not one per item: a backup written before schema 3
+  // can hold hundreds of items and the reader needs to know the shape moved,
+  // once. Nothing was lost — the dose is read from the old key and written to
+  // the new one — so this reports a translation, not a casualty.
+  if (ctx.sawLegacyAmount) {
+    ctx.warn(
+      '(file)',
+      'This file writes what the plan asks for under "target", which now means the part of the body an item works on. Those numbers were read and saved as "amount" — nothing was lost, and re-exporting writes the current shape.',
+    );
   }
 
   const ok = ctx.errors.length === 0;

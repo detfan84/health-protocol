@@ -359,8 +359,8 @@ test('sets and reps are recorded, shown back, and survive an un-tick', async () 
     blocks: [{
       id: 'b', name: 'Full Body', order: 0,
       items: [
-        { id: 'ex-squat', name: 'Squat', tracking: 'sets', target: { sets: 3, reps: 10 } },
-        { id: 'ex-plank', name: 'Plank', tracking: 'duration', target: { seconds: 30 } },
+        { id: 'ex-squat', name: 'Squat', tracking: 'sets', amount: { sets: 3, reps: 10 } },
+        { id: 'ex-plank', name: 'Plank', tracking: 'duration', amount: { seconds: 30 } },
         { id: 'plain', name: 'Just a tick' },
       ],
     }],
@@ -524,7 +524,7 @@ test('an area page holds one area, with its parts as sessions', async () => {
     id: 'seed-day-arc', name: 'The day arc', active: true, phases: [],
     blocks: [
       { id: 'arc-wake', name: 'Before your feet touch the floor', start: '06:30', order: 0,
-        items: [{ id: 'a1', name: 'Rocking child’s pose', target: { seconds: 60 }, tracking: 'duration' }] },
+        items: [{ id: 'a1', name: 'Rocking child’s pose', amount: { seconds: 60 }, tracking: 'duration' }] },
       { id: 'arc-bed', name: 'In bed, winding down', start: '22:00', order: 1,
         items: [{ id: 'a2', name: 'Supine knee rocks' }] },
     ],
@@ -660,13 +660,13 @@ test('the library asks for what the item says, and invents nothing when it says 
 
     const eyes = byId['saccades-horizontal'];
     assert.ok(eyes, 'the authored drill was added');
-    assert.deepEqual(eyes.target, { seconds: 30 }, "the clinician's thirty seconds, not the app's forty-five");
+    assert.deepEqual(eyes.amount, { seconds: 30 }, "the clinician's thirty seconds, not the app's forty-five");
     assert.deepEqual(eyes.carefulAudience, ['orthostatic'], 'and the audience the careful text is gated to');
 
     const wheel = byId['ex-ab-wheel-rollout'];
     assert.ok(wheel, 'the legacy exercise was added');
     assert.equal(wheel.tracking, 'sets', 'still logged as sets');
-    assert.equal(wheel.target, undefined, 'but the plan asks for nothing, because the item says nothing');
+    assert.equal(wheel.amount, undefined, 'but the plan asks for nothing, because the item says nothing');
   } finally {
     globalThis.fetch = realFetch;
   }

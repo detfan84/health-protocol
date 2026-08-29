@@ -70,26 +70,56 @@ export const MIGRATIONS = [
     // what it does, what tissue and what anatomy it acts on, how it is done,
     // what it needs, who performs it, where it came from.
     //
-    // **Nothing stored is transformed, and that is the correct behaviour.** An
-    // item saved before this rung has no facets — not empty ones, not defaults.
-    // Absence means nobody has said, which is a different fact from "none", and
-    // the three-state rule (D24) makes it the app's job to keep them apart. A
-    // rung that helpfully wrote `effect: []` onto nine hundred old items would
-    // be inventing an answer on their behalf.
+    // No facets are invented for old items. One saved before this rung has
+    // none — not empty ones, not defaults. Absence means nobody has said, which
+    // is a different fact from "none", and the three-state rule (D24) makes it
+    // the app's job to keep them apart. A rung that helpfully wrote
+    // `effect: []` onto nine hundred old items would be inventing an answer on
+    // their behalf.
     //
-    // So why a rung at all, when IndexedDB stores whatever shape it is handed
-    // and `tier` and `carefulAudience` were both added without one? Because in
-    // this codebase SCHEMA_VERSION is one number doing two jobs: the database
+    // What it DOES do is rename one field, because the facet named `target` in
+    // the spec wants the key that a dose has been holding since PLAN §4.2.
+    // For one commit the facet was called `anatomy` so the older meaning could
+    // keep it. Kevin's ruling, 29 Aug: reformat things to fit the current
+    // structure rather than letting older versions dictate what happens now. So
+    // the dose becomes `amount` here and in every file the validator reads, and
+    // `target` means the part of the body an item works on.
+    //
+    // This rung was written yesterday and has not been released, which is the
+    // window the append-only rule leaves open: a RELEASED rung is never edited,
+    // and this one is not that yet. After it ships, a further rename needs a
+    // rung of its own.
+    //
+    // The version had to move anyway, for a reason worth keeping: in this
+    // codebase SCHEMA_VERSION is one number doing two jobs — the database
     // version AND the `schemaVersion` stamped into every exported file. The
-    // file format's MEANING changed here — a v3 backup can carry facets a v2
-    // app would silently drop on import — so the number has to move, and moving
-    // it moves the database version with it. The ladder is append-only, so the
-    // rung is recorded even though its work is nil.
-    //
-    // The other half of that argument is in protocolFile.js, which until now
-    // read `schemaVersion` and never once looked at it.
+    // file format's meaning changed, so both move together. The other half of
+    // that argument is in protocolFile.js, which until schema 3 read
+    // `schemaVersion` and never once looked at it.
     to: 3,
-    run() {},
+    run(db, transaction) {
+      const protocols = transaction.objectStore(STORES.PROTOCOLS);
+      const cursorReq = protocols.openCursor();
+      cursorReq.onsuccess = () => {
+        const cursor = cursorReq.result;
+        if (!cursor) return;
+        const rec = cursor.value;
+        let touched = false;
+        for (const block of rec?.blocks ?? []) {
+          for (const item of block.items ?? []) {
+            // Only an OBJECT is the old dose. A list is already the facet, so a
+            // record written by a newer build is left exactly as it is.
+            if (item.target && !Array.isArray(item.target) && typeof item.target === 'object') {
+              item.amount = item.target;
+              delete item.target;
+              touched = true;
+            }
+          }
+        }
+        if (touched) cursor.update(rec);
+        cursor.continue();
+      };
+    },
   },
 ];
 
@@ -105,7 +135,7 @@ export const MIGRATIONS = [
  *       id, name, dose?, why?, notes?, phaseIds?: [],
  *       cadence?: { kind, n? },                    // how often (PLAN 4.1)
  *       tracking?: 'check' | 'sets' | 'duration',   // how it is logged (4.2)
- *       target?: { sets?, reps?, seconds? },        // what the plan asks for
+ *       amount?: { sets?, reps?, seconds? },        // what the plan asks for
  *       fields?: { tool?, release?, load?, notice?, careful? },  // K3
  *       photos?: [ { set, caption?, approx? } ],   // two frames per set
  *
@@ -115,7 +145,7 @@ export const MIGRATIONS = [
  *       type?: 'practice' | 'measurement' | 'teaching' | 'intake' | 'record',
  *       effect?: [],        // release, load, calm…      — the ledger's words
  *       tissue?: [],        // muscle, fascia, nerve…    — multi, on purpose
- *       anatomy?: [],       // node ids from anatomy.json
+ *       target?: [],        // node ids from anatomy.json — where it acts
  *       technique?: string, // how it is done
  *       context?: [],       // floor, bed, chair, desk…
  *       equipment?: [],     // ball, band, kettlebell…
@@ -123,10 +153,11 @@ export const MIGRATIONS = [
  *       performedBy?: 'self' | 'practitioner',
  *       tradition?: string,
  *
- *       // NOTE the field is `anatomy`, not `target`. TAXONOMY.md calls the
- *       // facet "target", and `target` on an item has meant sets/reps/seconds
- *       // since PLAN §4.2. Two different questions cannot share one key on the
- *       // same object, and the older meaning keeps the name.
+ *       // `target` is the anatomy facet, as TAXONOMY.md §2.1 names it. It used
+ *       // to mean sets/reps/seconds; that is `amount` now. The rename runs the
+ *       // way round it does on Kevin's ruling (29 Aug): the current structure
+ *       // names the field and the old shape is reformatted to fit it, rather
+ *       // than the oldest thing in the repo keeping the good name forever.
  *     } ]
  *   } ]
  *   createdAt, updatedAt

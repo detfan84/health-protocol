@@ -198,7 +198,7 @@ export async function viewLibrary({ reload } = {}) {
           //
           // Absent stays absent. A blank asks the person to fill it in; a
           // confident wrong number tells them not to look.
-          ...(item.target ? { target: item.target } : {}),
+          ...(item.amount ? { amount: item.amount } : {}),
           ...(item.carefulAudience ? { carefulAudience: item.carefulAudience } : {}),
           // The facets travel now (schema 3, docs/TAXONOMY.md §9.3). They used
           // to stop here: this function translated a handful of fields and the
@@ -215,7 +215,7 @@ export async function viewLibrary({ reload } = {}) {
               .map((k) => [k, item[k]]),
           ),
           ...Object.fromEntries(
-            ['effect', 'tissue', 'anatomy', 'context', 'equipment', 'demands']
+            ['effect', 'tissue', 'target', 'context', 'equipment', 'demands']
               .filter((k) => Array.isArray(item[k]) && item[k].length)
               .map((k) => [k, [...item[k]]]),
           ),

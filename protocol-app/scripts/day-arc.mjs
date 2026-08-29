@@ -42,7 +42,7 @@ export function dayArcProtocol(now) {
     dose: `${seconds} sec`,
     why,
     tracking: 'duration',
-    target: { seconds },
+    amount: { seconds },
     fields,
   });
 
@@ -74,7 +74,7 @@ export function dayArcProtocol(now) {
             dose: '60–90 sec',
             why: 'A night on one side shortens what you slept on. This reverses it before you stand up on it.',
             tracking: 'duration',
-            target: { seconds: 75 },
+            amount: { seconds: 75 },
             fields: {
               release: 'From the same kneeling position, walk both hands to one side until you feel the stretch down the outside of the ribs and into the armpit. Breathe into that side. Then the other side.',
               notice: 'Ribs move on that side again. The overhead reach feels less blocked.',
@@ -87,7 +87,7 @@ export function dayArcProtocol(now) {
             dose: '60 sec',
             why: 'Undoes the curl the night put in — chest, front of shoulders, hip flexors, all at once.',
             tracking: 'duration',
-            target: { seconds: 60 },
+            amount: { seconds: 60 },
             fields: {
               release: 'Sit back on your heels, hands behind you on the bed, fingers pointing away. Lift the chest and let the shoulders roll back. Breathe wide, not deep.',
               notice: 'The first full breath of the day usually arrives here.',
@@ -117,7 +117,7 @@ export function dayArcProtocol(now) {
             dose: '30 sec each way',
             why: 'The hips have not moved through their own range in eight hours.',
             tracking: 'duration',
-            target: { seconds: 60 },
+            amount: { seconds: 60 },
             fields: {
               release: 'Hands on hips, feet planted. Draw the biggest slow circle you can with the pelvis, one way then the other. Keep the ribs still — this is the hips moving, not the whole torso.',
               notice: 'One direction is always worse than the other. That is information, not a fault.',
@@ -129,7 +129,7 @@ export function dayArcProtocol(now) {
             dose: '60–90 sec',
             why: 'Wakes up the deep hip and pelvic-floor work that standing all day never asks for.',
             tracking: 'duration',
-            target: { seconds: 75 },
+            amount: { seconds: 75 },
             fields: {
               release: 'Wide stance, toes slightly out, sit down into a quarter squat. Rock the pelvis front to back, then shift your weight side to side. Slow.',
               notice: 'The inner thighs and the floor of the pelvis switch on. Standing feels more planted afterwards.',
@@ -158,7 +158,7 @@ export function dayArcProtocol(now) {
             dose: '5–10 min',
             why: 'The day’s worst offender gets the pressure. Melting into the floor is the signal it worked — that is the nervous system letting go, not the tissue.',
             tracking: 'duration',
-            target: { seconds: 480 },
+            amount: { seconds: 480 },
             fields: {
               tool: 'A firm ball, a roller, or your own hands.',
               release: 'Pick what actually bothered you today rather than a routine. Sink in and wait — sixty to ninety seconds a spot. Breathe out through the intensity instead of holding your breath against it.',
@@ -187,7 +187,7 @@ export function dayArcProtocol(now) {
             dose: '60–90 sec',
             why: 'A rhythmic motion that carries people into sleep — the point is the rhythm, not the stretch.',
             tracking: 'duration',
-            target: { seconds: 75 },
+            amount: { seconds: 75 },
             fields: {
               release: 'Face down, knees bent, ankles crossed or apart. Swing the feet slowly side to side like a metronome. Let it get boring.',
               notice: 'Breathing slows on its own. Stopping because you drifted off is a success, not a skipped item.',

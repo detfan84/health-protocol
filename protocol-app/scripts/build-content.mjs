@@ -131,7 +131,7 @@ function flowBlock(routine, { id, name, start, minutes }) {
       if (step.note) item.why = step.note;
       if (Number.isFinite(step.duration)) {
         item.tracking = 'duration';
-        item.target = { seconds: step.duration };
+        item.amount = { seconds: step.duration };
       }
       if (step.details && !lib.details) item.fields = { release: step.details };
       if (lib.details) item.fields = { release: lib.details };
@@ -219,13 +219,13 @@ function exerciseItem(entry, i) {
     // an exercise is counted in reps or held for time; carry that across, or
     // the training log has nothing to attach itself to.
     tracking: ex.trackingType === 'duration' || entry.targetDuration ? 'duration' : 'sets',
-    target: Object.fromEntries(Object.entries({
+    amount: Object.fromEntries(Object.entries({
       sets: entry.sets,
       reps: entry.targetReps,
       seconds: entry.targetDuration,
     }).filter(([, v]) => Number.isFinite(v))),
   };
-  if (!Object.keys(item.target).length) delete item.target;
+  if (!Object.keys(item.amount).length) delete item.amount;
   const dose = entry.targetReps
     ? `${entry.sets} × ${entry.targetReps}`
     : entry.targetDuration

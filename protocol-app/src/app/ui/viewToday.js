@@ -203,10 +203,10 @@ function trainingBlock(item, day, { units, writeKey, onLogged, lastTime }) {
   const host = h('div.training', {});
   const wLabel = weightUnitLabel(units);
 
-  const target = item.target
+  const target = item.amount
     ? item.tracking === 'duration'
-      ? `${item.target.seconds ?? ''} sec`
-      : `${item.target.sets ?? ''} × ${item.target.reps ?? ''}`.trim()
+      ? `${item.amount.seconds ?? ''} sec`
+      : `${item.amount.sets ?? ''} × ${item.amount.reps ?? ''}`.trim()
     : null;
 
   host.append(
@@ -236,7 +236,7 @@ function trainingBlock(item, day, { units, writeKey, onLogged, lastTime }) {
             h('input', {
               type: 'number', min: '1', inputmode: 'numeric',
               value: Number.isFinite(secs) ? String(secs) : '',
-              placeholder: item.target?.seconds ? String(item.target.seconds) : '—',
+              placeholder: item.amount?.seconds ? String(item.amount.seconds) : '—',
               'aria-label': `Seconds for ${item.name}`,
               onchange: (e) => {
                 const n = Number(e.target.value);
@@ -259,7 +259,7 @@ function trainingBlock(item, day, { units, writeKey, onLogged, lastTime }) {
             h('input', {
               type: 'number', min: '0', inputmode: 'numeric',
               value: Number.isFinite(set.reps) ? String(set.reps) : '',
-              placeholder: item.target?.reps ? String(item.target.reps) : '—',
+              placeholder: item.amount?.reps ? String(item.amount.reps) : '—',
               'aria-label': `Reps in set ${i + 1} of ${item.name}`,
               onchange: (e) => {
                 const n = Number(e.target.value);
@@ -296,7 +296,7 @@ function trainingBlock(item, day, { units, writeKey, onLogged, lastTime }) {
           const previous = sets[sets.length - 1];
           const seed = previous
             ? { ...previous }
-            : { reps: item.target?.reps, kg: lastTime?.kg };
+            : { reps: item.amount?.reps, kg: lastTime?.kg };
           write((fresh) => addSet(fresh, item.id, seed), `A set of ${item.name}`);
         },
       }, (trainingLog(day, item.id)?.sets ?? []).length ? 'Add another set' : 'Log a set'),

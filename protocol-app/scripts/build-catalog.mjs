@@ -226,7 +226,7 @@ export async function collectSources({ legacy = LEGACY, authored = AUTHORED } = 
 
 /**
  * Apply the anatomy fold-in (docs/TAXONOMY.md §3.1): the catalogue's free-text
- * `muscles` and `regions` become `anatomy`, a list of node ids.
+ * `muscles` and `regions` become `target`, a list of anatomy node ids.
  *
  * Three rules, and the middle one is the point.
  *
@@ -248,6 +248,18 @@ export function applyFoldin(items, foldin, nodes) {
   const missing = new Set();
   const usedReview = new Map();
 
+  // `target` is the anatomy facet. It meant sets/reps/seconds until schema 3,
+  // and an authored file still using it that way would have its dose silently
+  // replaced by a list of node ids — the fold-in eating the prescription. That
+  // is a build failure, not a warning.
+  const stale = items.filter((i) => i.target && !Array.isArray(i.target)).map((i) => i.id);
+  if (stale.length) {
+    throw new Error(
+      `these items use "target" for a dose, which is now the anatomy facet:\n    ${stale.join('\n    ')}\n` +
+      '  Rename it to "amount" ({ sets, reps, seconds }) in the authored file.',
+    );
+  }
+
   const out = items.map((item) => {
     const strings = [...(item.muscles ?? []), ...(item.regions ?? [])];
     if (!strings.length) return item;
@@ -260,7 +272,7 @@ export function applyFoldin(items, foldin, nodes) {
       if (e.review) usedReview.set(s, (usedReview.get(s) ?? 0) + 1);
       for (const id of e.to ?? []) ids.add(id);
     }
-    return ids.size ? { ...item, anatomy: [...ids].sort() } : item;
+    return ids.size ? { ...item, target: [...ids].sort() } : item;
   });
 
   if (missing.size) {
@@ -309,7 +321,7 @@ async function main() {
   );
   for (const s of catalog.sources) console.log(`  ${s.file}: ${s.items}`);
   console.log(`muscles: ${new Set(catalog.items.flatMap((i) => i.muscles ?? [])).size} · equipment: ${new Set(catalog.items.map((i) => i.equipment).filter(Boolean)).size}`);
-  const tagged = catalog.items.filter((i) => i.anatomy?.length).length;
+  const tagged = catalog.items.filter((i) => i.target?.length).length;
   console.log(`anatomy: ${tagged}/${catalog.items.length} items carry node ids (muscles and regions kept alongside).`);
   if (usedReview.size) {
     console.log('  applied from rows still flagged for review — each is a proposal, not a decision:');

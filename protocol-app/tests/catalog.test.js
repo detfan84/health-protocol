@@ -183,7 +183,7 @@ test('the shipped catalogue is exactly its sources, and the authored file is in 
   const ninety = shipped.items.find((i) => i.id === 'st-ninety_ninety');
   assert.deepEqual(ninety.muscles, ['hip internal/external rotation', 'hips', 'hip internal rotation', 'hip external rotation'],
     'the source strings are kept — this is a translation, not a replacement');
-  assert.deepEqual(ninety.anatomy, ['hip', 'hip-external-rotation', 'hip-internal-rotation'],
+  assert.deepEqual(ninety.target, ['hip', 'hip-external-rotation', 'hip-internal-rotation'],
     'and the ids beside them say what it meant');
 });
 
@@ -203,7 +203,7 @@ test('a notAnatomy row contributes nothing rather than inventing a node', () => 
   const nodes = new Map([['upper-back', { id: 'upper-back' }]]);
   const foldin = { entries: [{ from: 'posture', notAnatomy: true, why: 'a quality' }, { from: 'upper back', to: ['upper-back'] }] };
   const { items } = applyFoldin([item('a', 'A', { muscles: ['posture', 'upper back'] })], foldin, nodes);
-  assert.deepEqual(items[0].anatomy, ['upper-back']);
+  assert.deepEqual(items[0].target, ['upper-back']);
 });
 
 test('an item with nothing to translate is left exactly as it was', () => {
@@ -321,4 +321,21 @@ test('every loadAfter id resolves, including across category files', async () =>
   }
   assert.ok(refs > 20, `expected real load-after coverage, got ${refs} references`);
   assert.deepEqual(broken, [], 'a load partner that does not exist is law 1 with nothing behind it');
+});
+
+test('an authored file still using "target" for a dose stops the build', () => {
+  // `target` is the anatomy facet now. Left as a dose, the fold-in would
+  // replace the prescription with a list of node ids — a clinician's thirty
+  // seconds overwritten by ["neck"], silently. The vestibular module was
+  // carrying exactly this on four items when the facet took the name.
+  assert.throws(
+    () => applyFoldin([item('eye-1', 'Gaze hold', { target: { seconds: 30 } })], { entries: [] }, new Map()),
+    /use "target" for a dose/,
+  );
+});
+
+test('the facet on an item is a list, and passes through untouched', () => {
+  const nodes = new Map([['neck', { id: 'neck' }]]);
+  const { items } = applyFoldin([item('a', 'A', { target: ['neck'] })], { entries: [] }, nodes);
+  assert.deepEqual(items[0].target, ['neck']);
 });

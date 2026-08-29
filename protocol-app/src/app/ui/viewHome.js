@@ -53,7 +53,7 @@ function tile({ title, sub, iconName, accent, onclick, wide = false }) {
 }
 
 const minutes = (block) => {
-  const secs = block.items.reduce((n, it) => n + (it.target?.seconds ?? 60), 0);
+  const secs = block.items.reduce((n, it) => n + (it.amount?.seconds ?? 60), 0);
   return Math.max(1, Math.round(secs / 60));
 };
 

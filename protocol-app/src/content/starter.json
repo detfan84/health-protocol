@@ -2,7 +2,7 @@
   "format": "protocol-app/v1",
   "kind": "backup",
   "schemaVersion": 2,
-  "exportedAt": "2026-08-29T15:28:30.323Z",
+  "exportedAt": "2026-08-29T16:38:46.637Z",
   "data": {
     "protocols": [
       {
@@ -25,7 +25,7 @@
                 "dose": "60 sec",
                 "why": "The floor version. Sixty seconds of rocking is the whole block on a bad morning.",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 60
                 },
                 "fields": {
@@ -41,7 +41,7 @@
                 "dose": "60–90 sec",
                 "why": "A night on one side shortens what you slept on. This reverses it before you stand up on it.",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 75
                 },
                 "fields": {
@@ -56,7 +56,7 @@
                 "dose": "60 sec",
                 "why": "Undoes the curl the night put in — chest, front of shoulders, hip flexors, all at once.",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 60
                 },
                 "fields": {
@@ -80,7 +80,7 @@
                 "dose": "60 sec",
                 "why": "The floor version. One minute while something else is happening.",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 60
                 },
                 "fields": {
@@ -96,7 +96,7 @@
                 "dose": "30 sec each way",
                 "why": "The hips have not moved through their own range in eight hours.",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 60
                 },
                 "fields": {
@@ -110,7 +110,7 @@
                 "dose": "60–90 sec",
                 "why": "Wakes up the deep hip and pelvic-floor work that standing all day never asks for.",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 75
                 },
                 "fields": {
@@ -134,7 +134,7 @@
                 "dose": "60 sec",
                 "why": "The floor version, and the one that does the most for the least.",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 60
                 },
                 "fields": {
@@ -149,7 +149,7 @@
                 "dose": "5–10 min",
                 "why": "The day’s worst offender gets the pressure. Melting into the floor is the signal it worked — that is the nervous system letting go, not the tissue.",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 480
                 },
                 "fields": {
@@ -174,7 +174,7 @@
                 "dose": "60 sec",
                 "why": "The floor version. One minute of this is a complete evening block.",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 60
                 },
                 "fields": {
@@ -188,7 +188,7 @@
                 "dose": "60–90 sec",
                 "why": "A rhythmic motion that carries people into sleep — the point is the rhythm, not the stretch.",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 75
                 },
                 "fields": {
@@ -200,8 +200,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T15:28:30.323Z",
-        "updatedAt": "2026-08-29T15:28:30.323Z"
+        "createdAt": "2026-08-29T16:38:46.637Z",
+        "updatedAt": "2026-08-29T16:38:46.637Z"
       },
       {
         "id": "seed-daily-flow",
@@ -222,7 +222,7 @@
                 "dose": "45 sec",
                 "why": "8 slow breaths",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 45
                 },
                 "fields": {
@@ -236,7 +236,7 @@
                 "dose": "40 sec",
                 "why": "20 sec each side",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 40
                 },
                 "fields": {
@@ -250,7 +250,7 @@
                 "dose": "60 sec",
                 "why": "5 per side with rotation",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 60
                 },
                 "fields": {
@@ -264,7 +264,7 @@
                 "dose": "30 sec",
                 "why": "Pedal feet, press heels",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 30
                 },
                 "fields": {
@@ -278,7 +278,7 @@
                 "dose": "40 sec",
                 "why": "20 sec each leg",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 40
                 },
                 "fields": {
@@ -292,7 +292,7 @@
                 "dose": "40 sec",
                 "why": "3 slow circles each leg",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 40
                 },
                 "fields": {
@@ -306,7 +306,7 @@
                 "dose": "45 sec",
                 "why": "Shift weight side to side",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 45
                 },
                 "fields": {
@@ -320,7 +320,7 @@
                 "dose": "30 sec",
                 "why": "5 circles each foot",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 30
                 },
                 "fields": {
@@ -334,7 +334,7 @@
                 "dose": "40 sec",
                 "why": "3 slow circles each arm",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 40
                 },
                 "fields": {
@@ -348,7 +348,7 @@
                 "dose": "40 sec",
                 "why": "20 sec each side",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 40
                 },
                 "fields": {
@@ -362,7 +362,7 @@
                 "dose": "30 sec",
                 "why": "Open the chest, shoulders back",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 30
                 },
                 "fields": {
@@ -376,7 +376,7 @@
                 "dose": "30 sec",
                 "why": "Side, diagonal, and front",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 30
                 },
                 "fields": {
@@ -398,7 +398,7 @@
                 "dose": "45 sec",
                 "why": "Wide knees, walk hands L/R for lat stretch",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 45
                 },
                 "fields": {
@@ -412,7 +412,7 @@
                 "dose": "40 sec",
                 "why": "Segmental, match breath",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 40
                 },
                 "fields": {
@@ -426,7 +426,7 @@
                 "dose": "40 sec",
                 "why": "20 sec each side, sink into it",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 40
                 },
                 "fields": {
@@ -440,7 +440,7 @@
                 "dose": "60 sec",
                 "why": "30 sec each side, melt forward",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 60
                 },
                 "fields": {
@@ -454,7 +454,7 @@
                 "dose": "40 sec",
                 "why": "20 sec each side",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 40
                 },
                 "fields": {
@@ -468,7 +468,7 @@
                 "dose": "50 sec",
                 "why": "25 sec each leg",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 50
                 },
                 "fields": {
@@ -482,7 +482,7 @@
                 "dose": "50 sec",
                 "why": "25 sec each side",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 50
                 },
                 "fields": {
@@ -496,7 +496,7 @@
                 "dose": "40 sec",
                 "why": "Feet together, knees out, fold forward",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 40
                 },
                 "fields": {
@@ -510,7 +510,7 @@
                 "dose": "30 sec",
                 "why": "Gentle, just gravity",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 30
                 },
                 "fields": {
@@ -524,7 +524,7 @@
                 "dose": "60 sec",
                 "why": "Close eyes, deep breaths",
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "seconds": 60
                 },
                 "fields": {
@@ -535,8 +535,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T15:28:30.323Z",
-        "updatedAt": "2026-08-29T15:28:30.323Z"
+        "createdAt": "2026-08-29T16:38:46.637Z",
+        "updatedAt": "2026-08-29T16:38:46.637Z"
       },
       {
         "id": "seed-support",
@@ -683,8 +683,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T15:28:30.323Z",
-        "updatedAt": "2026-08-29T15:28:30.323Z"
+        "createdAt": "2026-08-29T16:38:46.637Z",
+        "updatedAt": "2026-08-29T16:38:46.637Z"
       },
       {
         "id": "seed-body-work",
@@ -1335,8 +1335,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T15:28:30.323Z",
-        "updatedAt": "2026-08-29T15:28:30.323Z"
+        "createdAt": "2026-08-29T16:38:46.637Z",
+        "updatedAt": "2026-08-29T16:38:46.637Z"
       },
       {
         "id": "seed-routine-full-body",
@@ -1358,7 +1358,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 10
                 },
@@ -1378,7 +1378,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 10
                 },
@@ -1398,7 +1398,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 12
                 },
@@ -1418,7 +1418,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 10
                 },
@@ -1438,7 +1438,7 @@
                   "n": 3
                 },
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "seconds": 30
                 },
@@ -1458,7 +1458,7 @@
                   "n": 3
                 },
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "sets": 2,
                   "seconds": 30
                 },
@@ -1473,8 +1473,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T15:28:30.323Z",
-        "updatedAt": "2026-08-29T15:28:30.323Z"
+        "createdAt": "2026-08-29T16:38:46.637Z",
+        "updatedAt": "2026-08-29T16:38:46.637Z"
       },
       {
         "id": "seed-routine-upper-body",
@@ -1496,7 +1496,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 12
                 },
@@ -1516,7 +1516,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 10
                 },
@@ -1536,7 +1536,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 10
                 },
@@ -1556,7 +1556,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 10
                 },
@@ -1576,7 +1576,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 10
                 },
@@ -1596,7 +1596,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 20
                 },
@@ -1611,8 +1611,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T15:28:30.323Z",
-        "updatedAt": "2026-08-29T15:28:30.323Z"
+        "createdAt": "2026-08-29T16:38:46.637Z",
+        "updatedAt": "2026-08-29T16:38:46.637Z"
       },
       {
         "id": "seed-routine-lower-body",
@@ -1634,7 +1634,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 10
                 },
@@ -1654,7 +1654,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 12
                 },
@@ -1674,7 +1674,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 10
                 },
@@ -1694,7 +1694,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 12
                 },
@@ -1714,7 +1714,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 12
                 },
@@ -1734,7 +1734,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 2,
                   "reps": 15
                 },
@@ -1749,8 +1749,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T15:28:30.323Z",
-        "updatedAt": "2026-08-29T15:28:30.323Z"
+        "createdAt": "2026-08-29T16:38:46.637Z",
+        "updatedAt": "2026-08-29T16:38:46.637Z"
       },
       {
         "id": "seed-routine-push-day",
@@ -1772,7 +1772,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 4,
                   "reps": 12
                 },
@@ -1792,7 +1792,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 10
                 },
@@ -1812,7 +1812,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 10
                 },
@@ -1832,7 +1832,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 12
                 },
@@ -1852,7 +1852,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 10
                 },
@@ -1872,7 +1872,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 20
                 },
@@ -1887,8 +1887,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T15:28:30.323Z",
-        "updatedAt": "2026-08-29T15:28:30.323Z"
+        "createdAt": "2026-08-29T16:38:46.637Z",
+        "updatedAt": "2026-08-29T16:38:46.637Z"
       },
       {
         "id": "seed-routine-pull-day",
@@ -1910,7 +1910,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 10
                 },
@@ -1930,7 +1930,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 10
                 },
@@ -1950,7 +1950,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 10
                 },
@@ -1970,7 +1970,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "reps": 12
                 },
@@ -1990,7 +1990,7 @@
                   "n": 3
                 },
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "seconds": 30
                 },
@@ -2010,7 +2010,7 @@
                   "n": 3
                 },
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "seconds": 30
                 },
@@ -2025,8 +2025,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T15:28:30.323Z",
-        "updatedAt": "2026-08-29T15:28:30.323Z"
+        "createdAt": "2026-08-29T16:38:46.637Z",
+        "updatedAt": "2026-08-29T16:38:46.637Z"
       },
       {
         "id": "seed-routine-mobility-flow",
@@ -2048,7 +2048,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 2,
                   "reps": 5
                 },
@@ -2068,7 +2068,7 @@
                   "n": 3
                 },
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "sets": 3,
                   "seconds": 30
                 },
@@ -2088,7 +2088,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 2,
                   "reps": 8
                 },
@@ -2108,7 +2108,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 2,
                   "reps": 5
                 },
@@ -2128,7 +2128,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 2,
                   "reps": 8
                 },
@@ -2148,7 +2148,7 @@
                   "n": 3
                 },
                 "tracking": "duration",
-                "target": {
+                "amount": {
                   "sets": 2,
                   "seconds": 45
                 },
@@ -2168,7 +2168,7 @@
                   "n": 3
                 },
                 "tracking": "sets",
-                "target": {
+                "amount": {
                   "sets": 2,
                   "reps": 10
                 },
@@ -2183,13 +2183,13 @@
             ]
           }
         ],
-        "createdAt": "2026-08-29T15:28:30.323Z",
-        "updatedAt": "2026-08-29T15:28:30.323Z"
+        "createdAt": "2026-08-29T16:38:46.637Z",
+        "updatedAt": "2026-08-29T16:38:46.637Z"
       }
     ],
     "days": [],
     "labs": [],
     "settings": []
   },
-  "seedVersion": "b1065e36c9d7"
+  "seedVersion": "a366b1dba3d1"
 }

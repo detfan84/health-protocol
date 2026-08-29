@@ -432,7 +432,7 @@ test('an item carries its facets through validation', () => {
     id: 'i1', name: '90/90 Hip Switch',
     type: 'practice', technique: 'tech-contract-relax', performedBy: 'self', tradition: 'physio',
     effect: ['mobilise'], tissue: ['muscle', 'fascia', 'nerve'],
-    anatomy: ['hip', 'hip-external-rotation'], context: ['floor'],
+    target: ['hip', 'hip-external-rotation'], context: ['floor'],
     equipment: ['none'], demands: ['room'],
   })));
   assert.equal(r.ok, true);
@@ -440,7 +440,7 @@ test('an item carries its facets through validation', () => {
   assert.equal(item.type, 'practice');
   assert.equal(item.technique, 'tech-contract-relax');
   assert.deepEqual(item.tissue, ['muscle', 'fascia', 'nerve']);
-  assert.deepEqual(item.anatomy, ['hip', 'hip-external-rotation']);
+  assert.deepEqual(item.target, ['hip', 'hip-external-rotation']);
   assert.deepEqual(item.demands, ['room']);
 });
 
@@ -451,16 +451,16 @@ test('an unrecognised facet value is kept, because somebody wrote it on purpose'
   // file polices shape.
   const r = validateFile(JSON.stringify(protocolFile({
     id: 'i1', name: 'Dry needling', effect: ['release'], technique: 'tech-needling',
-    tissue: ['muscle', 'fascia', 'nerve'], anatomy: ['some-node-nobody-has-authored-yet'],
+    tissue: ['muscle', 'fascia', 'nerve'], target: ['some-node-nobody-has-authored-yet'],
   })));
   assert.equal(r.ok, true);
-  assert.deepEqual(r.value.protocol.blocks[0].items[0].anatomy, ['some-node-nobody-has-authored-yet']);
+  assert.deepEqual(r.value.protocol.blocks[0].items[0].target, ['some-node-nobody-has-authored-yet']);
 });
 
 test('absent facets stay absent — an untagged item is not an item tagged with nothing', () => {
   const r = validateFile(JSON.stringify(protocolFile({ id: 'i1', name: 'Walk' })));
   const item = r.value.protocol.blocks[0].items[0];
-  for (const k of ['type', 'effect', 'tissue', 'anatomy', 'context', 'equipment', 'demands', 'performedBy']) {
+  for (const k of ['type', 'effect', 'tissue', 'target', 'context', 'equipment', 'demands', 'performedBy', 'amount']) {
     assert.ok(!(k in item), `${k} should be absent, not empty`);
   }
 });
@@ -473,9 +473,9 @@ test('a facet handed a single value instead of a list is reported, not silently 
 
 test('duplicates within one facet collapse', () => {
   const r = validateFile(JSON.stringify(protocolFile({
-    id: 'i1', name: 'Walk', anatomy: ['hip', 'hip', ' hip '],
+    id: 'i1', name: 'Walk', target: ['hip', 'hip', ' hip '],
   })));
-  assert.deepEqual(r.value.protocol.blocks[0].items[0].anatomy, ['hip']);
+  assert.deepEqual(r.value.protocol.blocks[0].items[0].target, ['hip']);
 });
 
 test('a file from a newer app is imported with a warning, not silently thinned', () => {
@@ -494,4 +494,47 @@ test('a file from this version or older says nothing about versions', () => {
     const r = validateFile(JSON.stringify(f));
     assert.ok(!r.warnings.some((w) => w.path === 'schemaVersion'), `version ${v} should not warn`);
   }
+});
+
+/* ---------------- the rename: current structure wins the name ------------ */
+// Kevin, 29 Aug: reformat things to fit the current structure rather than
+// letting older versions dictate what happens now. `target` on an item meant
+// sets/reps/seconds since PLAN §4.2; TAXONOMY.md §2.1 names the anatomy facet
+// "target". The dose moved to `amount` rather than the facet taking second
+// choice, and old files are translated on the way in.
+
+test('a file written before the rename still imports, with the dose intact', () => {
+  const f = protocolFile({ id: 'i1', name: 'Plank', tracking: 'duration', target: { seconds: 30 } });
+  f.schemaVersion = 2;
+  const r = validateFile(JSON.stringify(f));
+  const item = r.value.protocol.blocks[0].items[0];
+  assert.deepEqual(item.amount, { seconds: 30 }, 'read from the old key, saved under the new one');
+  assert.ok(!('target' in item), 'and the old key does not survive as anatomy');
+});
+
+test('the reader is told the shape moved — once for the file, not once per item', () => {
+  const f = protocolFile({ id: 'i1', name: 'Plank', target: { seconds: 30 } });
+  f.protocol.blocks[0].items.push({ id: 'i2', name: 'Squat', target: { sets: 3, reps: 10 } });
+  f.schemaVersion = 2;
+  const r = validateFile(JSON.stringify(f));
+  const notices = r.warnings.filter((w) => /"target"/.test(w.message));
+  assert.equal(notices.length, 1, 'a backup with hundreds of items must not shout hundreds of times');
+  assert.match(notices[0].message, /nothing was lost/i);
+});
+
+test('the two meanings are told apart by shape, so a current file is untouched', () => {
+  const r = validateFile(JSON.stringify(protocolFile({
+    id: 'i1', name: '90/90', target: ['hip'], amount: { seconds: 45 },
+  })));
+  const item = r.value.protocol.blocks[0].items[0];
+  assert.deepEqual(item.target, ['hip'], 'a list is the facet');
+  assert.deepEqual(item.amount, { seconds: 45 }, 'an object under amount is the dose');
+  assert.ok(!r.warnings.some((w) => /"target"/.test(w.message)), 'and nothing is reported, because nothing was legacy');
+});
+
+test('amount wins when a file somehow carries both meanings on one item', () => {
+  const r = validateFile(JSON.stringify(protocolFile({
+    id: 'i1', name: 'Plank', target: { seconds: 30 }, amount: { seconds: 45 },
+  })));
+  assert.deepEqual(r.value.protocol.blocks[0].items[0].amount, { seconds: 45 }, 'the current key is the current answer');
 });

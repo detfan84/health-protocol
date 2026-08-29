@@ -102,9 +102,6 @@
           "note": "30 seconds. Position (seated or standing) not yet confirmed — ask."
         }
       ],
-      "target": {
-        "seconds": 30
-      },
       "_undetermined": [
         "position",
         "home frequency",
@@ -112,7 +109,10 @@
       ],
       "carefulAudience": [
         "orthostatic"
-      ]
+      ],
+      "amount": {
+        "seconds": 30
+      }
     },
     {
       "id": "saccades-vertical",
@@ -141,9 +141,6 @@
           "note": "30 seconds."
         }
       ],
-      "target": {
-        "seconds": 30
-      },
       "_undetermined": [
         "position",
         "home frequency",
@@ -151,7 +148,10 @@
       ],
       "carefulAudience": [
         "orthostatic"
-      ]
+      ],
+      "amount": {
+        "seconds": 30
+      }
     },
     {
       "id": "near-far-shifts",
@@ -180,9 +180,6 @@
           "note": "30 seconds."
         }
       ],
-      "target": {
-        "seconds": 30
-      },
       "_undetermined": [
         "position",
         "home frequency",
@@ -190,7 +187,10 @@
       ],
       "carefulAudience": [
         "orthostatic"
-      ]
+      ],
+      "amount": {
+        "seconds": 30
+      }
     },
     {
       "id": "smooth-pursuit",
@@ -450,16 +450,16 @@
           "note": "The two-section board with the forefoot and rearfoot moving separately. Start in its most stable configuration and free it up as you go."
         }
       ],
-      "target": {
-        "seconds": 30
-      },
       "evidence": {
         "grade": "established direction, small trials",
         "basis": "Exercise programmes including balance and proprioceptive work in hypermobility syndromes improve balance, proprioception, strength and pain across a small set of trials, with no adverse effects reported. The trials are few and small; the direction is consistent."
       },
       "sourceNote": "App content, not clinician-prescribed.",
       "carefulAudience": "hypermobile, orthostatic",
-      "authoringNote": "Rungs 6 and 7 use equipment already owned."
+      "authoringNote": "Rungs 6 and 7 use equipment already owned.",
+      "amount": {
+        "seconds": 30
+      }
     },
     {
       "id": "gaze-stabilization",
