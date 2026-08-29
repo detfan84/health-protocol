@@ -14,7 +14,7 @@ import { readFile, writeFile, mkdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 
-import { mergeCatalog, readSource, collectSources, applyFoldin, applyAnatomyTags, checkRelations, versionOf } from '../scripts/build-catalog.mjs';
+import { mergeCatalog, readSource, collectSources, applyFoldin, applyAnatomyTags, checkRelations, checkReferral, versionOf } from '../scripts/build-catalog.mjs';
 import { tagAll, typeOf, effectOf } from '../scripts/facet-tags.mjs';
 import { applyMeasureSpecs, unitFrom, directionFrom, cadenceFrom, whyWithout } from '../scripts/measure-specs.mjs';
 import { execFile } from 'node:child_process';
@@ -689,4 +689,60 @@ test('every shipped self-test records something real, on a stated interval', asy
   assert.deepEqual(kneewall.measure, { kind: 'number', unit: 'cm', name: 'centimetres', better: 'higher' });
   assert.deepEqual(kneewall.cadence, { kind: 'everyNDays', n: 14 });
   assert.ok(!kneewall.why, 'and its "why" is no longer a re-test note');
+});
+
+/* --------------------------- the referral map (§4) ------------------------ */
+
+test('a candidate that points nowhere, or claims without a grade, stops the build', () => {
+  const nodes = new Map([['forearm-extensors', { id: 'forearm-extensors' }], ['elbow', { id: 'elbow' }]]);
+  const items = [item('a', 'A')];
+  const site = (over) => ({ sites: [{
+    id: 's', name: 'S', at: ['elbow'], redFlags: 'x',
+    candidates: [{ source: ['forearm-extensors'], tell: 't', then: ['a'], evidence: { grade: 'established', basis: 'b' }, ...over }],
+  }] });
+
+  assert.doesNotThrow(() => checkReferral(site({}), nodes, items));
+  assert.throws(() => checkReferral(site({ source: ['nope'] }), nodes, items), /not an anatomy node/);
+  assert.throws(() => checkReferral(site({ then: ['gone'] }), nodes, items), /not in the catalogue/);
+  assert.throws(() => checkReferral(site({ evidence: undefined }), nodes, items), /no graded evidence/);
+  assert.throws(() => checkReferral(site({ tell: undefined }), nodes, items), /a suggestion, not a lead/);
+});
+
+test('every site carries red flags, because a symptom list owes the reader that first', () => {
+  const nodes = new Map([['elbow', { id: 'elbow' }]]);
+  assert.throws(
+    () => checkReferral({ sites: [{ id: 's', name: 'S', at: ['elbow'], candidates: [] }] }, nodes, []),
+    /not this app's business/,
+  );
+});
+
+test('the shipped map routes to real content and grades each claim separately', async () => {
+  const lib = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
+  assert.ok(lib.referral?.length >= 6, 'it ships with the catalogue');
+  const ids = new Set(lib.items.map((i) => i.id));
+  const nodes = new Set(lib.anatomy.map((n) => n.id));
+
+  const grades = new Set();
+  for (const site of lib.referral) {
+    assert.ok(site.redFlags);
+    for (const c of site.candidates) {
+      for (const n of c.source) assert.ok(nodes.has(n), `${site.id}: ${n}`);
+      for (const t of c.then) assert.ok(ids.has(t), `${site.id}: ${t}`);
+      grades.add(c.evidence.grade);
+    }
+  }
+  // The point of grading per edge rather than per file: a well-described local
+  // pattern and a postural-chain guess are both in here and must not look alike.
+  assert.deepEqual([...grades].sort(), ['established', 'exploratory']);
+
+  const elbow = lib.referral.find((s) => s.id === 'elbow-outer');
+  assert.equal(elbow.candidates[0].evidence.grade, 'established', 'the local source is the well-supported one');
+  assert.equal(elbow.candidates[3].evidence.grade, 'exploratory', 'and the postural chain says it is a guess');
+});
+
+test('the map is edges between anatomy, never a property of an item', async () => {
+  // "Elbow pain often comes from the shoulder" is not a fact about any
+  // exercise. No item carries a referral field, and nothing should tempt one to.
+  const lib = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
+  assert.equal(lib.items.filter((i) => i.referral || i.referredFrom).length, 0);
 });

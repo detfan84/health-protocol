@@ -145,6 +145,57 @@ export async function viewLibrary({ reload } = {}) {
   // prose stays where it belongs, in fields.tool.
   const equipment = [...new Set(library.items.flatMap((i) => i.equipment ?? []))].sort();
 
+  /**
+   * Where else a complaint can come from (TAXONOMY §4).
+   *
+   * It answers the search box, because that is where somebody types "elbow" —
+   * a person arriving with a symptom does not know the app files things by what
+   * they do to you. Typing a site name puts this above the results rather than
+   * instead of them.
+   *
+   * Red flags first, always. Then candidates, each with the tell that makes it
+   * worth checking and its own grade — the local patterns and the
+   * postural-chain guesses must not look alike on the page (law 5).
+   */
+  function referralFor(query) {
+    const q = query.trim().toLowerCase();
+    if (q.length < 3) return null;
+    return (library.referral ?? []).find((site) =>
+      [site.name, ...(site.also ?? [])].some((t) => t.toLowerCase().includes(q) || q.includes(t.toLowerCase())));
+  }
+
+  function referralCard(site) {
+    const KIND = { local: 'Where it hurts', neural: 'A nerve', referred: 'Referred from', chain: 'Further up the chain' };
+    const card = h('details.card.referral', { open: true },
+      h('summary', {},
+        h('span.name', {}, `${site.name} — where else it can come from`),
+        h('span.why', {}, 'Candidates worth checking. Not a diagnosis, and not a list of what you have.'),
+      ),
+      h('div.field-line.careful', {},
+        h('span.field-label', {}, 'Before anything else'),
+        h('span', {}, site.redFlags),
+      ),
+    );
+    for (const c of site.candidates) {
+      const names = c.source
+        .map((id) => anatomyIndex.get(id)?.name ?? id)
+        .join(', ');
+      card.append(h('div.referral-row', {},
+        h('p', {}, h('strong', {}, names), ' — ', KIND[c.kind] ?? c.kind,
+          h('span.tier', { dataset: { tier: c.evidence.grade } }, TIER_LABELS[c.evidence.grade] ?? c.evidence.grade)),
+        c.why ? h('p.muted', {}, c.why) : null,
+        h('p', {}, h('span.field-label', {}, 'The tell'), ' ', c.tell),
+        h('p.muted', {}, c.evidence.basis),
+        h('div.chip-row', {}, c.then.map((id) => {
+          const target = library.items.find((i) => i.id === id);
+          if (!target) return null;
+          return chip(target.name, false, () => { state.q = target.name.toLowerCase(); search.value = target.name; render(); });
+        }).filter(Boolean)),
+      ));
+    }
+    return card;
+  }
+
   const search = h('input', {
     type: 'search',
     id: 'library-search',
@@ -431,12 +482,18 @@ export async function viewLibrary({ reload } = {}) {
 
   function render() {
     clear(results);
+    // A symptom search gets the map first, then the ordinary results. Above
+    // them rather than instead of them: somebody typing "elbow" may want either.
+    const site = referralFor(state.q ?? '');
+    if (site) results.append(referralCard(site));
+
     const found = library.items.filter(matches);
     results.append(
       h('p.muted', { style: 'margin-top:var(--sp-4)' },
         `${found.length} of ${library.items.length}`),
     );
     if (!found.length) {
+      if (site) return; // the map is a real answer, so this is not an empty screen
       results.append(h('div.card', {}, h('p.muted', {}, 'Nothing matches that. Try a muscle, a piece of equipment, or a plainer word.')));
       return;
     }

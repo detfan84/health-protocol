@@ -43,6 +43,7 @@ export const ANATOMY_FILE = resolve(CONTENT, 'vocab/anatomy.json');
 export const FOLDIN_FILE = resolve(CONTENT, 'vocab/anatomy-foldin.json');
 export const OVERRIDES_FILE = resolve(CONTENT, 'vocab/facet-overrides.json');
 export const TAGS_FILE = resolve(CONTENT, 'vocab/anatomy-tags.json');
+export const REFERRAL_FILE = resolve(CONTENT, 'referral.json');
 
 const rel = (p) => relative(APP, p).replace(/\\/g, '/');
 
@@ -371,6 +372,49 @@ export function checkRelations(items, nodes = new Map()) {
   return { items, unconditional };
 }
 
+/**
+ * The referral map (TAXONOMY §4, D37): where else a complaint can come from.
+ *
+ * Checked for the three ways it could quietly become useless. A site or a
+ * candidate pointing at an anatomy node that does not exist joins nothing to
+ * anything. A candidate routing to an item that is not in the catalogue sends
+ * somebody to a blank. And a candidate with no grade is a causal claim made
+ * without saying how well supported it is, which is the one thing law 5 will
+ * not have — the local patterns and the postural-chain guesses cannot look
+ * alike on the page.
+ *
+ * Red flags are required per site, not optional. A person arriving at a symptom
+ * list is arriving with a symptom.
+ */
+export function checkReferral(file, nodes, items) {
+  const ids = new Set(items.map((i) => i.id));
+  const problems = [];
+  const seen = new Set();
+  for (const site of file?.sites ?? []) {
+    const at = `site "${site.id ?? '(no id)'}"`;
+    if (!site.id) problems.push(`${at}: needs an id.`);
+    if (!site.name) problems.push(`${at}: needs a display name.`);
+    if (seen.has(site.id)) problems.push(`${at}: duplicated.`);
+    seen.add(site.id);
+    if (!site.redFlags) problems.push(`${at}: no red flags. Every symptom list owes the reader the short list of things that are not this app's business.`);
+    for (const n of site.at ?? []) if (!nodes.has(n)) problems.push(`${at}: sits at "${n}", which is not an anatomy node.`);
+    if (!site.candidates?.length) problems.push(`${at}: has no candidates.`);
+    for (const [i, c] of (site.candidates ?? []).entries()) {
+      const cat = `${at}, candidate ${i + 1}`;
+      for (const n of c.source ?? []) if (!nodes.has(n)) problems.push(`${cat}: source "${n}" is not an anatomy node.`);
+      if (!c.source?.length) problems.push(`${cat}: names no source.`);
+      if (!c.tell) problems.push(`${cat}: no tell — a candidate nobody can check is a suggestion, not a lead.`);
+      for (const t of c.then ?? []) if (!ids.has(t)) problems.push(`${cat}: routes to "${t}", which is not in the catalogue.`);
+      if (!c.then?.length) problems.push(`${cat}: routes nowhere.`);
+      if (!c.evidence?.grade || !c.evidence?.basis) problems.push(`${cat}: no graded evidence. A causal claim without one reads exactly like a well-supported one (law 5).`);
+    }
+  }
+  if (problems.length) {
+    throw new Error(`referral.json has ${problems.length} problem${problems.length === 1 ? '' : 's'}:\n  - ${problems.join('\n  - ')}`);
+  }
+  return file.sites;
+}
+
 /* ------------------------------ the command ------------------------------ */
 
 async function main() {
@@ -400,6 +444,9 @@ async function main() {
     // show a tag but cannot roll one up, so picking "Glutes" would miss every
     // item tagged `glute-max` — the same invisibility this build just fixed,
     // one layer further out.
+    // The map ships with the catalogue, like the graph, because a door that
+    // needs a second fetch is a door that fails differently.
+    catalog.referral = checkReferral(JSON.parse(await readFile(REFERRAL_FILE, 'utf8')), nodes, catalog.items);
     catalog.anatomy = [...nodes.values()].map((n) => ({
       id: n.id,
       name: n.name,
@@ -431,6 +478,9 @@ async function main() {
   if (unconditional.length) {
     console.log(`prerequisites with no condition — shown to every reader: ${unconditional.join(', ')}`);
   }
+  const cands = catalog.referral.reduce((n, s) => n + s.candidates.length, 0);
+  const graded = catalog.referral.flatMap((s) => s.candidates).filter((c) => c.evidence.grade === 'established').length;
+  console.log(`referral: ${catalog.referral.length} sites, ${cands} candidates — ${graded} established, ${cands - graded} exploratory.`);
   const routers = catalog.items.filter((i) => i.outcomes?.length);
   const measurements = catalog.items.filter((i) => i.type === 'measurement');
   const scheduled = measurements.filter((i) => i.cadence);

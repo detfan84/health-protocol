@@ -48,7 +48,7 @@ Nothing below is inferred from a commit message.
 | **4 — Three doors** | library browser — 258 catalogued items, add-to-day; a real precursor to the module browser | recognition quiz · deep-dive excavation |
 | **5 — Records out** | `LABS` store exists in the schema, unused | doctor summary · artifact family · labs UI · export-for-AI · answer-set export |
 | **6 — Education** | Reference screen: 4 diet phases, 6 spacing principles, 15 symptoms | connection cards · awareness curriculum · toolkit port · PEM education (D28) · joint security (D39) · sleep setup (D30) |
-| **7 — Profile** | — | templates (K5) · pacing profile · faith layer · achievements (8b) · reverse referral (D37) |
+| **7 — Profile** | — | templates (K5) · pacing profile · faith layer · achievements (8b) · ~~reverse referral (D37)~~ **built 29 Aug** |
 | **Ship hygiene** | design system, calm palette, reduced motion, accessibility, persistent-storage request, disclaimer, version display | feedback button · About/story · help + FAQ · early-version note · landing · for-clinicians · legal · domain · single-file edition |
 
 **The headline: layer 2 is at zero.** `grep -riE "ledger|finding|rating|dial|tier|swap"` over

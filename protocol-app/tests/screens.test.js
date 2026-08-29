@@ -891,3 +891,33 @@ test('a second reading shows the change, and a first one says there is none yet'
   assert.equal(spark.getAttribute('aria-hidden'), 'true');
   assert.ok(spark.classList.contains('spark-better'), 'and it is coloured by the item\'s own direction');
 });
+
+test('searching a symptom offers where else it can come from, red flags first', async () => {
+  // TAXONOMY §4. Somebody arriving with "elbow" does not know the app files
+  // things by what they do to you, so the map answers the search box.
+  store._resetForTests();
+  await store.ready({ name: 'screens-referral' });
+  const { viewLibrary } = await import('../src/app/ui/viewLibrary.js');
+  const main = draw(await viewLibrary({ open: () => {} }));
+  await settled();
+
+  const box = main.querySelector('input[type=search], input');
+  box.value = 'elbow';
+  box.dispatchEvent(new Event('input'));
+  await settled();
+
+  const card = main.querySelector('.referral');
+  assert.ok(card, 'the map appears for a symptom search');
+  assert.match(card.textContent, /Not a diagnosis/, 'and says what it is not');
+  assert.match(card.textContent, /Before anything else/, 'red flags come first');
+  assert.match(card.textContent, /elbow that locks or gives way/);
+
+  // Each candidate wears its own grade, so a described pattern and a postural
+  // guess do not look alike.
+  const tiers = [...card.querySelectorAll('.tier')].map((t) => t.textContent);
+  assert.ok(tiers.length >= 4, `expected a grade per candidate, got ${JSON.stringify(tiers)}`);
+  assert.ok(new Set(tiers).size > 1, 'and they are not all the same word');
+
+  // The ordinary results are still there — this is above them, not instead.
+  assert.match(main.textContent, /of 383/);
+});

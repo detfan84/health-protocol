@@ -1,0 +1,424 @@
+{
+  "format": "protocol-app/referral-v1",
+  "version": 1,
+  "note": "Where else a complaint can come from (TAXONOMY §4, D37). Edges between anatomy nodes, never properties of an item — \"elbow pain often comes from the shoulder\" is not a fact about any exercise.\n\nWHAT THIS IS NOT: a diagnosis. Every entry is a candidate worth checking, with the tell that would make it worth checking, and nothing here tells anybody what they have. The app configures pacing and safety and never treatment (FRAMEWORK law 11, D28). Each candidate carries its own grade, because these are causal claims and they are not equally supported — the local ones are usually well described, the postural-chain ones are plausible, cheap to try and weak to claim, and the file says which is which per edge rather than once at the top.\n\nEvery site carries red flags first. A person arriving here is arriving with a symptom, and the first thing a symptom list owes them is the short list of things that are not this app's business.",
+  "sites": [
+    {
+      "id": "elbow-outer",
+      "name": "Outer elbow",
+      "also": [
+        "tennis elbow area",
+        "outside of the elbow",
+        "elbow pain"
+      ],
+      "at": [
+        "elbow",
+        "forearm-extensors"
+      ],
+      "redFlags": "Pain after a fall or a wrench, an elbow that locks or gives way, swelling, or numbness in the hand that does not come and go — none of those is a self-treatment problem.",
+      "candidates": [
+        {
+          "source": [
+            "forearm-extensors"
+          ],
+          "kind": "local",
+          "tell": "Sore to press an inch or two below the bony point on the outside, and worse gripping or lifting with the palm down.",
+          "then": [
+            "release-forearm-scrape",
+            "point-forearm-outside"
+          ],
+          "evidence": {
+            "grade": "established",
+            "basis": "The commonest source, and the one worth ruling in or out first."
+          },
+          "why": "The muscles that lift the wrist all anchor to the outside of the elbow, and they pull on it every time you grip."
+        },
+        {
+          "source": [
+            "radial-nerve"
+          ],
+          "kind": "neural",
+          "tell": "A line rather than a patch, sometimes running to the back of the hand; changes when you move your neck or shoulder rather than only your elbow.",
+          "then": [
+            "nerve-which-nerve-map",
+            "nerve-when-to-get-evaluated",
+            "nerve-glide-what-this-is"
+          ],
+          "evidence": {
+            "grade": "established",
+            "basis": "Radial nerve irritation is a recognised mimic of lateral elbow pain and is treated differently."
+          },
+          "why": "The radial nerve runs past the outside of the elbow. A nerve under tension pulls like a short muscle and does not answer to the same treatment."
+        },
+        {
+          "source": [
+            "scalenes",
+            "pec-minor"
+          ],
+          "kind": "referred",
+          "tell": "Elbow pain alongside a heavy or tingling arm, worse carrying a bag on that shoulder or after a day at a desk.",
+          "then": [
+            "release-scalenes-gentle",
+            "release-pec-minor-under-collarbone"
+          ],
+          "evidence": {
+            "grade": "exploratory",
+            "basis": "The thoracic-outlet pattern is well described clinically and hard to confirm at home. Worth a look, not a conclusion."
+          }
+        },
+        {
+          "source": [
+            "thoracic-spine",
+            "mid-lower-trapezius",
+            "rhomboids"
+          ],
+          "kind": "chain",
+          "tell": "Nothing local is especially tender, and the arm feels better on days you sit less.",
+          "then": [
+            "release-spinal-erectors-roller",
+            "bw-thor"
+          ],
+          "evidence": {
+            "grade": "exploratory",
+            "basis": "Posture and mid-back mobility are plausible contributors and poorly separated from everything else. Cheap to try, weak to claim."
+          }
+        }
+      ]
+    },
+    {
+      "id": "low-back",
+      "name": "Lower back",
+      "also": [
+        "low back pain",
+        "small of the back",
+        "lumbar"
+      ],
+      "at": [
+        "low-back",
+        "lumbar-spine"
+      ],
+      "redFlags": "Numbness in the groin or inner thighs, any change in bladder or bowel control, weakness in a leg, fever, unexplained weight loss, or pain after a significant fall — stop and see somebody today rather than working through a card.",
+      "candidates": [
+        {
+          "source": [
+            "quadratus-lumborum"
+          ],
+          "kind": "local",
+          "tell": "A deep ache in the corner between the last rib and the top of the pelvis, worse standing on one leg or leaning to the side.",
+          "then": [
+            "release-quadratus-lumborum"
+          ],
+          "evidence": {
+            "grade": "established",
+            "basis": "A common and reachable source, and one people rarely think to check."
+          }
+        },
+        {
+          "source": [
+            "hip-flexors",
+            "psoas"
+          ],
+          "kind": "referred",
+          "tell": "Worse after sitting, easier after walking; standing up straight after a long sit takes a moment.",
+          "then": [
+            "bw-hip",
+            "release-psoas-constructive-rest",
+            "test-hipflexor-length"
+          ],
+          "evidence": {
+            "grade": "exploratory",
+            "basis": "The hip-flexor contribution to low back load is widely taught and variably supported. The hanging-leg test at least tells you whether they are short."
+          },
+          "why": "A short hip flexor pulls the front of the pelvis down, and the lower back is what takes up the slack."
+        },
+        {
+          "source": [
+            "glutes",
+            "deep-hip-rotators"
+          ],
+          "kind": "referred",
+          "tell": "Tender deep in the buttock, and the back is worse on the days you sit longest.",
+          "then": [
+            "bw-glute",
+            "release-deep-hip-rotators-figure4"
+          ],
+          "evidence": {
+            "grade": "exploratory",
+            "basis": "Gluteal referral into the low back is a traditional trigger-point pattern, noted here as a claim."
+          }
+        },
+        {
+          "source": [
+            "hamstrings"
+          ],
+          "kind": "chain",
+          "tell": "A forward fold is limited and the back rounds early to get there.",
+          "then": [
+            "bw-ham",
+            "release-hamstring-belly-pin-and-move",
+            "test-fold"
+          ],
+          "evidence": {
+            "grade": "exploratory",
+            "basis": "The posterior-chain argument is reasonable and hard to isolate. The forward-fold test gives you a number to watch."
+          }
+        }
+      ]
+    },
+    {
+      "id": "back-of-thigh",
+      "name": "Back of the thigh",
+      "also": [
+        "tight hamstring",
+        "hamstring tightness",
+        "back of the leg"
+      ],
+      "at": [
+        "hamstrings"
+      ],
+      "redFlags": "A sudden tearing during effort, bruising, or weakness pushing off — that is an injury and not a tightness.",
+      "candidates": [
+        {
+          "source": [
+            "hamstrings"
+          ],
+          "kind": "local",
+          "tell": "It eases within a minute of stretching and comes back slowly over days.",
+          "then": [
+            "bw-ham",
+            "release-hamstring-belly-pin-and-move",
+            "release-hamstring-lateral-vs-medial"
+          ],
+          "evidence": {
+            "grade": "established",
+            "basis": "The obvious reading, and often the right one."
+          }
+        },
+        {
+          "source": [
+            "sciatic-nerve"
+          ],
+          "kind": "neural",
+          "tell": "Years of daily stretching and no change; the pull is a line rather than a broad ache, and it changes when you tuck your chin.",
+          "then": [
+            "release-hamstring-nerve-or-muscle",
+            "bw-nv-sciatic",
+            "nerve-when-to-get-evaluated"
+          ],
+          "evidence": {
+            "grade": "established",
+            "basis": "Neural tension mimicking hamstring shortness is well recognised, and stretching it is the wrong answer."
+          },
+          "why": "The sciatic nerve runs the length of the back of the thigh. A nerve under tension does not lengthen the way a muscle does."
+        },
+        {
+          "source": [
+            "deep-hip-rotators",
+            "glutes"
+          ],
+          "kind": "referred",
+          "tell": "Tender deep in the buttock before the thigh, and sitting on a hard chair is the worst part of the day.",
+          "then": [
+            "release-deep-hip-rotators-figure4",
+            "release-sit-bone-external"
+          ],
+          "evidence": {
+            "grade": "exploratory",
+            "basis": "Deep-rotator referral down the back of the thigh is a traditional pattern and is recorded as a claim."
+          }
+        }
+      ]
+    },
+    {
+      "id": "outer-hip",
+      "name": "Side of the hip",
+      "also": [
+        "outer hip",
+        "hip pain lying on your side",
+        "lateral hip"
+      ],
+      "at": [
+        "hip",
+        "glute-med-min",
+        "tfl"
+      ],
+      "redFlags": "A hip that gives way, or pain that started with a fall — get it looked at rather than pressing on it.",
+      "candidates": [
+        {
+          "source": [
+            "glute-med-min"
+          ],
+          "kind": "local",
+          "tell": "Tender in the fan above and behind the bony point, and worse standing on that leg.",
+          "then": [
+            "release-glute-med-side-of-hip",
+            "load-glute-med-side-lying"
+          ],
+          "evidence": {
+            "grade": "established",
+            "basis": "The usual source, and nearly always weak as well as tender — which is why the load partner matters."
+          }
+        },
+        {
+          "source": [
+            "tfl",
+            "it-band"
+          ],
+          "kind": "local",
+          "tell": "Tender at the front corner of the hip; the outside of the thigh feels like a band rather than a muscle.",
+          "then": [
+            "release-tfl-and-it-band"
+          ],
+          "evidence": {
+            "grade": "established",
+            "basis": "Common. Note that rolling the band itself does not do what it is usually said to do — the card explains why."
+          }
+        },
+        {
+          "source": [
+            "quadratus-lumborum"
+          ],
+          "kind": "referred",
+          "tell": "Nothing on the hip itself is very tender, and the ache sits higher than you can reach from the side.",
+          "then": [
+            "release-quadratus-lumborum"
+          ],
+          "evidence": {
+            "grade": "exploratory",
+            "basis": "A described referral pattern, recorded as a claim."
+          }
+        }
+      ]
+    },
+    {
+      "id": "heel-underfoot",
+      "name": "Heel and underside of the foot",
+      "also": [
+        "heel pain",
+        "plantar fascia",
+        "first steps in the morning"
+      ],
+      "at": [
+        "foot",
+        "plantar-fascia"
+      ],
+      "redFlags": "Numbness or burning through the sole rather than pain, or heel pain after a fall — different problem, different answer.",
+      "candidates": [
+        {
+          "source": [
+            "plantar-fascia",
+            "foot-intrinsics"
+          ],
+          "kind": "local",
+          "tell": "Worst on the first few steps out of bed and easing as you move.",
+          "then": [
+            "bw-feet",
+            "point-foot-arch",
+            "load-foot-arch-and-calf"
+          ],
+          "evidence": {
+            "grade": "established",
+            "basis": "The classic presentation."
+          }
+        },
+        {
+          "source": [
+            "calves",
+            "soleus"
+          ],
+          "kind": "chain",
+          "tell": "Ankle dorsiflexion is limited on that side — the knee-to-wall reading is short.",
+          "then": [
+            "test-kneewall",
+            "release-soleus-contract-relax",
+            "bw-calf",
+            "bw-rg-ecc"
+          ],
+          "evidence": {
+            "grade": "established",
+            "basis": "Restricted dorsiflexion loading the underside of the foot is well described, and knee-to-wall gives you a number for it."
+          },
+          "why": "If the ankle cannot bend, the arch takes the movement instead, every step."
+        },
+        {
+          "source": [
+            "tibialis-posterior"
+          ],
+          "kind": "referred",
+          "tell": "The ache is more to the inside of the heel and up behind the shin bone.",
+          "then": [
+            "release-tibialis-posterior-deep-calf"
+          ],
+          "evidence": {
+            "grade": "exploratory",
+            "basis": "Recorded as a pattern worth checking rather than a likely cause."
+          }
+        }
+      ]
+    },
+    {
+      "id": "base-of-skull",
+      "name": "Base of the skull and back of the head",
+      "also": [
+        "headache from the neck",
+        "tension headache",
+        "back of the head"
+      ],
+      "at": [
+        "suboccipitals",
+        "neck"
+      ],
+      "redFlags": "The worst headache of your life, one that came on like a thunderclap, one with fever, confusion, visual loss or weakness, or a new headache after a head injury — emergency, not a card.",
+      "candidates": [
+        {
+          "source": [
+            "suboccipitals"
+          ],
+          "kind": "local",
+          "tell": "Tender in the shelf where the skull meets the neck; the ache wraps forward toward the eye on the same side.",
+          "then": [
+            "bw-neck",
+            "release-suboccipital-pin-and-nod",
+            "neck-anatomy-what-not-to-press"
+          ],
+          "evidence": {
+            "grade": "established",
+            "basis": "A well-described pattern, and one of the most reliably self-treatable."
+          }
+        },
+        {
+          "source": [
+            "upper-trapezius",
+            "levator-scapulae"
+          ],
+          "kind": "referred",
+          "tell": "The shoulder-neck corner is tight and the ache climbs from there rather than starting at the skull.",
+          "then": [
+            "release-upper-trap-ball-wall",
+            "release-levator-corner-hold"
+          ],
+          "evidence": {
+            "grade": "established",
+            "basis": "Standard referral patterns for both."
+          }
+        },
+        {
+          "source": [
+            "masseter",
+            "temporalis"
+          ],
+          "kind": "referred",
+          "tell": "Jaw wakes tired or sore, or you catch yourself clenching; the ache sits at the temple as much as the back of the head.",
+          "then": [
+            "release-jaw-contract-relax",
+            "release-jaw-breath-down-train"
+          ],
+          "evidence": {
+            "grade": "exploratory",
+            "basis": "Jaw contribution to head and neck pain is well described and hard to attribute confidently at home."
+          }
+        }
+      ]
+    }
+  ]
+}

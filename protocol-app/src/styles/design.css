@@ -551,3 +551,12 @@ nav.tabs button[aria-current='page'] { color: var(--accent); font-weight: 650; }
 .delta .spark-better path { stroke: var(--sage-6, currentColor); }
 .delta .spark-worse path { stroke: var(--clay-6, currentColor); }
 .delta p { margin: var(--sp-1) 0 0; }
+
+/* Where else a complaint can come from (docs/TAXONOMY.md §4). Sits above the
+   ordinary results when somebody searches a symptom. The red flags are styled
+   as a warning because that is what they are, and each candidate wears its own
+   grade — a described pattern and a postural guess must not look alike. */
+.referral { border-left: 3px solid var(--ochre-6, currentColor); }
+.referral-row { padding: var(--sp-2) 0; border-top: 1px solid var(--rule, rgba(0,0,0,.08)); }
+.referral-row p { margin: 0 0 var(--sp-1); }
+.referral-row .tier { margin-left: var(--sp-1); }
