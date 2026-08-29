@@ -452,6 +452,7 @@ async function main() {
     catalog.anatomy = [...nodes.values()].map((n) => ({
       id: n.id,
       name: n.name,
+      kind: n.kind,
       ...(n.parents?.length ? { parents: n.parents } : {}),
     }));
     catalog.version = versionOf(catalog.items);

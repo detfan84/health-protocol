@@ -45,7 +45,7 @@
       "required": false,
       "multi": true,
       "closed": true,
-      "note": "Required on a practice and meaningless without one: a teaching card and a self-test do nothing to the body, so an empty effect on them is the truth rather than a gap. The coverage ledger counts in this vocabulary and the pairing law spends it, so every value here is a column in the ledger. The most expensive facet to change later — see TAXONOMY.md §11.1, still open.",
+      "note": "Settled 29 Aug against the tagged catalogue (§11.1 closed). Nine values, no merges and no cuts.\n\n`counts` is the part that needed deciding, and it reconciles FRAMEWORK's ledger with this list. FRAMEWORK names four roles the coverage ledger counts per muscle — released, strengthened, stretched, balanced. The content demanded two more of the same kind (`activate`, `mobilise`) and three that are not per-muscle at all. A `perTarget` effect is a ledger column against an anatomy node; a `systemic` one is recorded as having happened and never as coverage of a body part, or the pairing law would believe debts paid that were not.",
       "values": [
         {
           "id": "release",
@@ -54,14 +54,17 @@
             "let go",
             "loosen"
           ],
-          "note": "Lower resting tone or adhesion in a tissue."
+          "note": "84 items, every one tagged, none systemic. \"The calf has been released twice this week\" is a sentence about a muscle.",
+          "counts": "perTarget"
         },
         {
           "id": "lengthen",
           "name": "Lengthen",
           "also": [
             "stretch"
-          ]
+          ],
+          "counts": "perTarget",
+          "note": "33 items. Settled as distinct from `mobilise` by the mobility shelf: 23 held positions against 11 driven through range (§10.2)."
         },
         {
           "id": "load",
@@ -70,7 +73,8 @@
             "strengthen",
             "build"
           ],
-          "note": "Load through a range. Law 1's other half."
+          "note": "135 items and no overlap at all with `activate` — the two are cleanly different questions in practice, not just in principle.",
+          "counts": "perTarget"
         },
         {
           "id": "activate",
@@ -79,7 +83,8 @@
             "switch on",
             "wake up"
           ],
-          "note": "Find and fire something that is offline. Not the same as loading it."
+          "note": "16 items, zero of them also `load`. A chin nod and a deep-neck-flexor hold find something offline; they do not load it. Keeping them apart is what law 1 needs.",
+          "counts": "perTarget"
         },
         {
           "id": "mobilise",
@@ -87,7 +92,9 @@
           "also": [
             "mobilize",
             "move through range"
-          ]
+          ],
+          "counts": "perTarget",
+          "note": "24 items, mostly at joints and regions. A joint driven through its own range is coverage of that joint."
         },
         {
           "id": "calm",
@@ -95,7 +102,9 @@
           "also": [
             "downregulate",
             "settle"
-          ]
+          ],
+          "counts": "systemic",
+          "note": "17 items, 57% of targets systemic. \"The nervous system was calmed\" is not muscle coverage, and counting it as such would let an evening of breathing look like work on the diaphragm."
         },
         {
           "id": "circulate",
@@ -104,7 +113,8 @@
             "drainage",
             "flush"
           ],
-          "note": "Blood, lymph, or both."
+          "note": "9 items, 73% systemic. Lymph and blood are not covered muscle by muscle. Thin, and honest about being thin.",
+          "counts": "systemic"
         },
         {
           "id": "control",
@@ -113,7 +123,9 @@
             "balance",
             "coordination",
             "proprioception"
-          ]
+          ],
+          "counts": "perTarget",
+          "note": "11 items, 38% of their targets systemic — balance at an ankle is coverage, and the eye drills point at the vestibular and oculomotor systems, which are nodes too. Thin at 11 and worth watching."
         },
         {
           "id": "condition",
@@ -122,7 +134,8 @@
             "cardio",
             "capacity"
           ],
-          "note": "Provisional — TAXONOMY.md §11.1 asks whether this is in v1 at all."
+          "counts": "systemic",
+          "note": "37 items, and the reason it survives §11.1: `full body` was four items with no other tag at all, and this is where they live. Systemic despite tagging tissue — counting a rope session as coverage of the calves would let the pairing law believe a debt was paid that was not."
         }
       ],
       "requiredFor": [

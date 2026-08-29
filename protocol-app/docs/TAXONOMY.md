@@ -117,6 +117,44 @@ expensive facet to change later and the one that most deserves argument now.
 Multi-valued: contract–relax is `release` + `load`. That is the point of law 1, expressed in one
 item rather than a scheduling rule.
 
+### 2.3.1 Settled, 29 Aug
+
+**Nine values. No merges, no cuts** — and the argument was settled by the tagging rather than by
+preference, because by the time the question came back the whole catalogue had answered it.
+
+| Question asked in §11.1 | What the data said |
+|---|---|
+| Are `mobilise` and `lengthen` one thing? | **No.** The mobility shelf split 23 held positions from 11 driven through range (§10.2). One shelf, two effects, and the ledger would have counted every static stretch as movement. |
+| Is `condition` in v1 at all? | **Yes.** 37 items, and `full body` was four items with no other tag in the world — this is where they live. |
+| Is `activate` just light `load`? | **No.** 16 items and **zero overlap** with `load`. A chin nod finds something offline; it does not load it. Keeping them apart is what law 1 needs. |
+| Is anything missing? | **Almost.** Dead Hang reads as `load` where it is really decompression, and it is one item. A value earns its place when something can target it distinctly — same guard as §3. Recorded, not built. |
+
+### 2.3.2 What actually needed deciding: `counts`
+
+Not the list — whether the coverage ledger counts a value **against an anatomy node** or only
+records that it happened. Measured across every tagged item, by the kind of node each effect
+points at:
+
+```
+release 0% systemic · lengthen 0% · load 0% · activate 0% · mobilise 0% · condition 0%
+control 38% · calm 57% · circulate 73%
+```
+
+`perTarget` — **release · lengthen · load · activate · mobilise · control**
+`systemic` — **calm · circulate · condition**
+
+This reconciles `FRAMEWORK.md` with the measured list. The framework names four roles the ledger
+counts per muscle — *released, strengthened, stretched, balanced*. The content demanded two more of
+exactly that kind (`activate`, `mobilise`) and three that are not per-muscle at all.
+
+**`condition` is the one worth explaining**, because it measures 0% systemic and is systemic
+anyway. A rope session tags the calves, and counting that as *coverage of the calves* would let the
+pairing law believe a debt was paid that was not. What an effect touches and what it covers are
+different questions, and `counts` is the field that keeps them apart.
+
+Every value now carries its own note citing the count behind it, and `check-vocab` refuses an
+effect with no `counts` and no reason. The argument is in the file rather than in somebody's memory.
+
 ### 2.4 tissue — what is it acting on?
 
 `muscle` · `fascia` · `nerve` · `joint` · `tendon` · `lymph` · `skin`
@@ -938,10 +976,7 @@ catalogue and a map of referral patterns are answering in the same words.
 
 ## 11 · Open questions
 
-1. **The `effect` vocabulary (§2.3)** — the one worth arguing about before it is spent, since the
-   ledger and the pairing law both build on it. Nine values; are `mobilise` and `lengthen` one
-   thing? Is `condition` (cardio/capacity) in v1 at all?
-2. **`type: intake`** — supplements are "ordinary content" per FRAMEWORK's decision record, but
+1. **`type: intake`** — supplements are "ordinary content" per FRAMEWORK's decision record, but
    food rules currently live in `reference.json` as reading, not as items. Which becomes doable?
 3. **Anatomy depth** — how far down region → group → structure goes before §3's guard bites.
 4. **Referral evidence bar** — the map makes causal claims. `FRAMEWORK.md` puts the tender-point

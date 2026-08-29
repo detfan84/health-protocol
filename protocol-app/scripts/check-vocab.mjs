@@ -90,6 +90,14 @@ export function validateVocab(vocab, label = 'facets.json') {
       seen.add(v.id);
       everyValueId.set(`${facet.id}.${v.id}`, true);
       if (v.also && !Array.isArray(v.also)) say(`${vat}: "also" must be a list of plain-language aliases.`);
+      // Every effect says whether the coverage ledger counts it against an
+      // anatomy node or only records that it happened. Without that, a rope
+      // session counts as coverage of the calves and the pairing law believes
+      // a debt was paid that was not (TAXONOMY §11.1).
+      if (facet.id === 'effect') {
+        if (!['perTarget', 'systemic'].includes(v.counts)) say(`${vat}: needs "counts": perTarget or systemic.`);
+        if (!v.note) say(`${vat}: needs a note saying what the evidence for it was.`);
+      }
     }
   }
 

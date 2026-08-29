@@ -36,47 +36,47 @@ const val = (id) => ({ id, name: id });
 /* ------------------------------- structure ------------------------------ */
 
 test('a well-formed vocabulary validates and comes back keyed by facet id', () => {
-  const byId = validateVocab(vocab([facet('effect', [val('release'), val('load')])]));
+  const byId = validateVocab(vocab([facet('demo', [val('release'), val('load')])]));
   assert.equal(byId.size, 1);
-  assert.deepEqual(byId.get('effect').values.map((v) => v.id), ['release', 'load']);
+  assert.deepEqual(byId.get('demo').values.map((v) => v.id), ['release', 'load']);
 });
 
 test('a duplicated value id inside one facet is refused', () => {
   assert.throws(
-    () => validateVocab(vocab([facet('effect', [val('release'), val('release')])])),
+    () => validateVocab(vocab([facet('demo', [val('release'), val('release')])])),
     /duplicated within its facet/,
   );
 });
 
 test('two facets cannot share an id', () => {
   assert.throws(
-    () => validateVocab(vocab([facet('effect', [val('a')]), facet('effect', [val('b')])])),
+    () => validateVocab(vocab([facet('demo', [val('a')]), facet('demo', [val('b')])])),
     /two facets share this id/,
   );
 });
 
 test('a value with no display name is refused — the id is never shown to a person', () => {
   assert.throws(
-    () => validateVocab(vocab([facet('effect', [{ id: 'release' }])])),
+    () => validateVocab(vocab([facet('demo', [{ id: 'release' }])])),
     /needs a display name/,
   );
 });
 
 test('required, multi and closed must each be stated, because absent is not false', () => {
-  const f = facet('effect', [val('release')]);
+  const f = facet('demo', [val('release')]);
   delete f.closed;
   assert.throws(() => validateVocab(vocab([f])), /"closed" must be true or false/);
 });
 
 test('a facet must say which single question it answers', () => {
-  const f = facet('effect', [val('release')]);
+  const f = facet('demo', [val('release')]);
   delete f.question;
   assert.throws(() => validateVocab(vocab([f])), /the one question it answers/);
 });
 
 test('every problem is reported at once, not one per run', () => {
   try {
-    validateVocab(vocab([facet('effect', [{ id: 'a' }, { id: 'a', name: 'A' }])]));
+    validateVocab(vocab([facet('demo', [{ id: 'a' }, { id: 'a', name: 'A' }])]));
     assert.fail('expected a throw');
   } catch (err) {
     assert.match(err.message, /2 problems/);
@@ -87,24 +87,24 @@ test('every problem is reported at once, not one per run', () => {
 
 test('a supersession keeps both ends: the retired id stays in the file', () => {
   const v = vocab(
-    [facet('effect', [val('mobilise'), val('mobilize')])],
-    [{ facet: 'effect', from: 'mobilize', to: 'mobilise' }],
+    [facet('demo', [val('mobilise'), val('mobilize')])],
+    [{ facet: 'demo', from: 'mobilize', to: 'mobilise' }],
   );
   assert.doesNotThrow(() => validateVocab(v));
 });
 
 test('deleting a superseded value instead of keeping it is refused', () => {
   const v = vocab(
-    [facet('effect', [val('mobilise')])],
-    [{ facet: 'effect', from: 'mobilize', to: 'mobilise' }],
+    [facet('demo', [val('mobilise')])],
+    [{ facet: 'demo', from: 'mobilize', to: 'mobilise' }],
   );
   assert.throws(() => validateVocab(v), /it does not get deleted/);
 });
 
 test('a supersession pointing at a value that does not exist is refused', () => {
   const v = vocab(
-    [facet('effect', [val('mobilize')])],
-    [{ facet: 'effect', from: 'mobilize', to: 'mobilise' }],
+    [facet('demo', [val('mobilize')])],
+    [{ facet: 'demo', from: 'mobilize', to: 'mobilise' }],
   );
   assert.throws(() => validateVocab(v), /does not exist/);
 });
@@ -393,4 +393,39 @@ test('the fold-in has no unreviewed row carrying real weight', async () => {
   const entries = validateFoldin(await readJson(FOLDIN), nodes, library.items);
   const heavy = entries.filter((e) => (e.review || e.notAnatomy) && (e.items ?? 0) > 4);
   assert.deepEqual(heavy.map((e) => e.from), [], 'an unresolved row with more than four item tags needs a decision, not a flag');
+});
+
+/* ------------------------ the effect vocabulary (§11.1) ------------------- */
+// Settled 29 Aug against the tagged catalogue: nine values, no merges, no cuts.
+// What needed deciding was not the list but whether the coverage ledger counts
+// each value against an anatomy node — because a value that is systemic and
+// counted per muscle lets the pairing law believe a debt was paid that was not.
+
+test('every effect says whether the ledger counts it per target, and why', () => {
+  const bad = vocab([{ ...facet('effect', [{ id: 'release', name: 'Release' }]), closed: true }]);
+  assert.throws(() => validateVocab(bad), /needs "counts": perTarget or systemic/);
+  const noReason = vocab([{ ...facet('effect', [{ id: 'release', name: 'Release', counts: 'perTarget' }]) }]);
+  assert.throws(() => validateVocab(noReason), /needs a note saying what the evidence for it was/);
+});
+
+test('the shipped effect vocabulary is settled, and says which values are systemic', async () => {
+  const byId = validateVocab(await readJson(VOCAB));
+  const effect = byId.get('effect');
+  assert.equal(effect.values.length, 9, 'nine values — no merges and no cuts');
+
+  const by = Object.fromEntries(effect.values.map((v) => [v.id, v.counts]));
+  // FRAMEWORK names four roles the ledger counts per muscle — released,
+  // strengthened, stretched, balanced. The content demanded two more of the
+  // same kind, and three that are not per-muscle at all.
+  assert.deepEqual(
+    effect.values.filter((v) => v.counts === 'perTarget').map((v) => v.id).sort(),
+    ['activate', 'control', 'lengthen', 'load', 'mobilise', 'release'],
+  );
+  assert.deepEqual(
+    effect.values.filter((v) => v.counts === 'systemic').map((v) => v.id).sort(),
+    ['calm', 'circulate', 'condition'],
+  );
+  assert.equal(by.condition, 'systemic',
+    'a rope session must not read as coverage of the calves');
+  for (const v of effect.values) assert.match(v.note, /\d/, `${v.id} cites no count`);
 });
