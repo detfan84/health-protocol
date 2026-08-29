@@ -238,13 +238,13 @@ function fixItem(raw, path, ctx) {
   // (Kevin, 29 Aug). The current structure names the field; the old shape gets
   // reformatted to fit it, not the other way round. The dose is `amount` now,
   // and a file written before the rename is translated above.
-  for (const k of ['type', 'technique', 'performedBy', 'tradition']) {
+  for (const k of ['type', 'technique', 'performedBy', 'tradition', 'variationOf']) {
     if (raw[k] == null) continue;
     const v = asTrimmed(String(raw[k]));
     if (v) item[k] = v;
     else ctx.warn(`${path}.${k}`, `Empty — ignored, so this item says nothing about ${k}.`);
   }
-  for (const k of ['effect', 'tissue', 'target', 'context', 'equipment', 'demands']) {
+  for (const k of ['effect', 'tissue', 'target', 'context', 'equipment', 'demands', 'before']) {
     if (k === 'target' && isObj(raw.target)) continue; // the legacy dose, handled above
     if (raw[k] == null) continue;
     if (!Array.isArray(raw[k])) {

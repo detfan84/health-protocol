@@ -114,7 +114,30 @@ export async function viewLibrary({ reload } = {}) {
 
   /* ------------------------------ filters ------------------------------ */
 
-  const muscles = [...new Set(library.items.flatMap((i) => i.muscles ?? []))].sort();
+  // Filter by the anatomy graph, not by the free-text `muscles` field.
+  //
+  // This is what hid the calf releases. `bw-calf` is a release card called
+  // "Calves" and it carried no `muscles` at all — like every body-work card, as
+  // the 28 Aug correction log recorded — so filtering by a muscle could not
+  // return it, and the shelf looked like it held no calf release. It holds
+  // four. The graph tags them now, and one option covers a group and everything
+  // under it: picking "Glutes" returns items tagged maximus or medius, because
+  // a tag rolls up (TAXONOMY §3).
+  const anatomyIndex = new Map((library.anatomy ?? []).map((n) => [n.id, n]));
+  const rollUpOf = (id) => {
+    const out = new Set();
+    const walk = (n) => {
+      if (!n || out.has(n) || !anatomyIndex.has(n)) return;
+      out.add(n);
+      for (const parent of anatomyIndex.get(n).parents ?? []) walk(parent);
+    };
+    walk(id);
+    return out;
+  };
+  const inUse = new Set(library.items.flatMap((i) => i.target ?? []).flatMap((id) => [...rollUpOf(id)]));
+  const muscles = [...inUse]
+    .map((id) => [id, anatomyIndex.get(id)?.name ?? id])
+    .sort((a, b) => a[1].localeCompare(b[1]));
   // `equipment` is the facet now: a list of ids from the vocabulary, not the
   // free-text field it was derived from. That field held two things at once —
   // 263 enum-ish values and 71 sentences written for a reader — and the sentence
@@ -160,7 +183,7 @@ export async function viewLibrary({ reload } = {}) {
             onchange: (e) => { state.muscle = e.target.value || null; render(); },
           },
             [h('option', { value: '' }, 'Any')].concat(
-              muscles.map((m) => h('option', { value: m, selected: state.muscle === m }, m)),
+              muscles.map(([id, label]) => h('option', { value: id, selected: state.muscle === id }, label)),
             ),
           ),
         ),
@@ -250,12 +273,12 @@ export async function viewLibrary({ reload } = {}) {
           // not tagged arrives untagged rather than arriving with empty lists,
           // because "nobody has said" and "none" are different facts (D24).
           ...Object.fromEntries(
-            ['type', 'technique', 'performedBy', 'tradition']
+            ['type', 'technique', 'performedBy', 'tradition', 'variationOf']
               .filter((k) => item[k])
               .map((k) => [k, item[k]]),
           ),
           ...Object.fromEntries(
-            ['effect', 'tissue', 'target', 'context', 'equipment', 'demands']
+            ['effect', 'tissue', 'target', 'context', 'equipment', 'demands', 'before']
               .filter((k) => Array.isArray(item[k]) && item[k].length)
               .map((k) => [k, [...item[k]]]),
           ),
@@ -292,7 +315,9 @@ export async function viewLibrary({ reload } = {}) {
   function matches(item) {
     if (state.effect && !(item.effect ?? []).includes(state.effect)) return false;
     if (state.type && item.type !== state.type) return false;
-    if (state.muscle && !(item.muscles ?? []).includes(state.muscle)) return false;
+    // An item tagged `glute-med-min` answers a search for "Glutes" and for
+    // "Hip", because the tag implies everything above it.
+    if (state.muscle && !(item.target ?? []).some((t) => rollUpOf(t).has(state.muscle))) return false;
     if (state.equipment && !(item.equipment ?? []).includes(state.equipment)) return false;
     if (!state.q) return true;
     const hay = [

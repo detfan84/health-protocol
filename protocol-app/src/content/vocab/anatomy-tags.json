@@ -1,0 +1,423 @@
+{
+  "format": "protocol-app/anatomy-tags-v1",
+  "version": 1,
+  "note": "Anatomy for items the fold-in cannot reach, because they carry no `muscles` or `regions` to translate (TAXONOMY §3.3). This is the 28 Aug correction-log entry finally closed: the body-work release cards are named after body parts — \"Calves\", \"Hamstrings\", \"Front of hip\" — and carried no anatomy at all, so filtering the library by a muscle could not find any of them. Kevin looked for a calf release on 29 Aug and concluded there wasn't one. There are four. An item listed with `noTarget` has none and says why: a teaching card, a whole-body conditioning piece, or a practice whose effect is real and whose site is not anatomical. Recorded rather than left blank, so the next person does not re-derive the same silence.",
+  "entries": [
+    {
+      "id": "bw-br-9090",
+      "target": [
+        "diaphragm",
+        "deep-core",
+        "pelvic-floor"
+      ]
+    },
+    {
+      "id": "bw-br-belly",
+      "target": [
+        "diaphragm",
+        "transverse-abdominis"
+      ]
+    },
+    {
+      "id": "bw-br-co2",
+      "target": [
+        "respiratory"
+      ]
+    },
+    {
+      "id": "bw-br-exhale",
+      "target": [
+        "diaphragm",
+        "nervous-system"
+      ]
+    },
+    {
+      "id": "bw-br-nasal",
+      "target": [
+        "respiratory"
+      ]
+    },
+    {
+      "id": "bw-calf",
+      "target": [
+        "calves"
+      ]
+    },
+    {
+      "id": "bw-feet",
+      "target": [
+        "foot",
+        "plantar-fascia",
+        "foot-intrinsics"
+      ]
+    },
+    {
+      "id": "bw-glute",
+      "target": [
+        "glutes",
+        "deep-hip-rotators"
+      ]
+    },
+    {
+      "id": "bw-ham",
+      "target": [
+        "hamstrings"
+      ]
+    },
+    {
+      "id": "bw-hip",
+      "target": [
+        "hip-flexors"
+      ]
+    },
+    {
+      "id": "bw-lat",
+      "target": [
+        "lats"
+      ]
+    },
+    {
+      "id": "bw-neck",
+      "target": [
+        "suboccipitals"
+      ]
+    },
+    {
+      "id": "bw-nv-median",
+      "target": [
+        "median-nerve"
+      ]
+    },
+    {
+      "id": "bw-nv-sciatic",
+      "target": [
+        "sciatic-nerve"
+      ]
+    },
+    {
+      "id": "bw-pec",
+      "target": [
+        "pec-major",
+        "pec-minor",
+        "deltoid-anterior"
+      ]
+    },
+    {
+      "id": "bw-quad",
+      "target": [
+        "quadriceps"
+      ]
+    },
+    {
+      "id": "bw-rb-diaph",
+      "target": [
+        "diaphragm"
+      ]
+    },
+    {
+      "id": "bw-rb-inter",
+      "target": [
+        "intercostals",
+        "ribs"
+      ]
+    },
+    {
+      "id": "bw-rb-side",
+      "target": [
+        "ribs",
+        "intercostals"
+      ]
+    },
+    {
+      "id": "bw-rg-calf",
+      "target": [
+        "calves"
+      ]
+    },
+    {
+      "id": "bw-rg-cr",
+      "noTarget": true,
+      "why": "The technique itself, applied to whatever is tight today. It has no site until somebody picks one."
+    },
+    {
+      "id": "bw-rg-ecc",
+      "target": [
+        "calves",
+        "achilles"
+      ]
+    },
+    {
+      "id": "bw-rg-ham",
+      "target": [
+        "hamstrings"
+      ]
+    },
+    {
+      "id": "bw-rg-squat",
+      "target": [
+        "hip",
+        "ankle",
+        "lumbar-spine"
+      ]
+    },
+    {
+      "id": "bw-thor",
+      "target": [
+        "upper-back",
+        "rhomboids",
+        "mid-lower-trapezius"
+      ]
+    },
+    {
+      "id": "bw-vg-face",
+      "target": [
+        "nervous-system"
+      ],
+      "why": "The dive reflex — the site is the face, the target is the nervous system."
+    },
+    {
+      "id": "bw-vg-hum",
+      "target": [
+        "nervous-system"
+      ]
+    },
+    {
+      "id": "bw-vg-mat",
+      "target": [
+        "nervous-system",
+        "back"
+      ]
+    },
+    {
+      "id": "dizziness-which-kind",
+      "noTarget": true,
+      "why": "A teaching card, and a gating one."
+    },
+    {
+      "id": "ex-jump-rope-tabata",
+      "noTarget": true,
+      "why": "Whole-body conditioning. `effect: condition` is the honest answer; an anatomy tag would be a guess."
+    },
+    {
+      "id": "ex-kb-turkish-get-up",
+      "noTarget": true,
+      "why": "Whole-body conditioning."
+    },
+    {
+      "id": "ex-mace-flow",
+      "noTarget": true,
+      "why": "Whole-body conditioning."
+    },
+    {
+      "id": "eye-shared-guide",
+      "noTarget": true,
+      "why": "A teaching card."
+    },
+    {
+      "id": "points-how-to-press",
+      "noTarget": true,
+      "why": "A teaching card."
+    },
+    {
+      "id": "sup-acupressure",
+      "noTarget": true,
+      "why": "No fixed site."
+    },
+    {
+      "id": "sup-bluelight",
+      "noTarget": true,
+      "why": "Circadian."
+    },
+    {
+      "id": "sup-breath",
+      "target": [
+        "respiratory",
+        "nervous-system"
+      ]
+    },
+    {
+      "id": "sup-castor",
+      "target": [
+        "abdomen",
+        "digestive"
+      ]
+    },
+    {
+      "id": "sup-cold",
+      "target": [
+        "nervous-system",
+        "circulatory"
+      ]
+    },
+    {
+      "id": "sup-cupping",
+      "noTarget": true,
+      "why": "No fixed site — wherever it is applied."
+    },
+    {
+      "id": "sup-drybrush",
+      "target": [
+        "lymphatic"
+      ],
+      "why": "The skin is where it happens and the lymph is what it targets. \"skin\" is a `tissue` value, not a place — the tissue facet carries that half."
+    },
+    {
+      "id": "sup-enema",
+      "target": [
+        "digestive"
+      ]
+    },
+    {
+      "id": "sup-grounding",
+      "target": [
+        "nervous-system"
+      ]
+    },
+    {
+      "id": "sup-journal",
+      "noTarget": true,
+      "why": "Nothing anatomical, and pretending otherwise would be the vocabulary lying."
+    },
+    {
+      "id": "sup-meditate",
+      "target": [
+        "nervous-system"
+      ]
+    },
+    {
+      "id": "sup-oilpull",
+      "noTarget": true,
+      "why": "Oral, and the claimed target is systemic rather than a structure."
+    },
+    {
+      "id": "sup-screen",
+      "target": [
+        "nervous-system"
+      ]
+    },
+    {
+      "id": "sup-sleephygiene",
+      "noTarget": true,
+      "why": "Circadian."
+    },
+    {
+      "id": "sup-sunlight",
+      "noTarget": true,
+      "why": "Circadian. The effect is real and the site is not anatomical."
+    },
+    {
+      "id": "sup-sweat",
+      "target": [
+        "circulatory",
+        "lymphatic"
+      ]
+    },
+    {
+      "id": "test-balance_closed",
+      "target": [
+        "ankle",
+        "vestibular"
+      ]
+    },
+    {
+      "id": "test-bigtoe",
+      "target": [
+        "foot-intrinsics",
+        "foot"
+      ]
+    },
+    {
+      "id": "test-chestexp",
+      "target": [
+        "ribs",
+        "diaphragm"
+      ]
+    },
+    {
+      "id": "test-chinnod",
+      "target": [
+        "deep-neck-flexors"
+      ]
+    },
+    {
+      "id": "test-crackurge",
+      "target": [
+        "neck"
+      ]
+    },
+    {
+      "id": "test-drymouth",
+      "target": [
+        "respiratory"
+      ]
+    },
+    {
+      "id": "test-fold",
+      "target": [
+        "hamstrings",
+        "lumbar-spine"
+      ]
+    },
+    {
+      "id": "test-hang",
+      "target": [
+        "shoulder-joint",
+        "lats"
+      ]
+    },
+    {
+      "id": "test-hipflex",
+      "target": [
+        "hip",
+        "hip-flexors"
+      ]
+    },
+    {
+      "id": "test-kneewall",
+      "target": [
+        "ankle-dorsiflexion",
+        "soleus"
+      ]
+    },
+    {
+      "id": "test-nosewalk",
+      "target": [
+        "respiratory"
+      ]
+    },
+    {
+      "id": "test-squatsup",
+      "target": [
+        "hip",
+        "ankle-dorsiflexion"
+      ]
+    },
+    {
+      "id": "test-wallangel",
+      "target": [
+        "shoulder-girdle",
+        "thoracic-spine"
+      ]
+    },
+    {
+      "id": "var-hamstring-glute-junction-ball",
+      "target": [
+        "hamstrings",
+        "glute-max"
+      ]
+    },
+    {
+      "id": "var-legs-up-wall-one-down",
+      "target": [
+        "hip-flexors",
+        "hamstrings",
+        "psoas"
+      ]
+    },
+    {
+      "id": "visual-motion-tolerance",
+      "noTarget": true,
+      "why": "A teaching card."
+    }
+  ]
+}

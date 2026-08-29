@@ -14,7 +14,7 @@ import { readFile, writeFile, mkdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 
-import { mergeCatalog, readSource, collectSources, applyFoldin, versionOf } from '../scripts/build-catalog.mjs';
+import { mergeCatalog, readSource, collectSources, applyFoldin, applyAnatomyTags, checkRelations, versionOf } from '../scripts/build-catalog.mjs';
 import { tagAll, typeOf, effectOf } from '../scripts/facet-tags.mjs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -164,7 +164,8 @@ test('the shipped catalogue is exactly its sources, and the authored file is in 
   const foldin = JSON.parse(await readFile(url('../src/content/vocab/anatomy-foldin.json'), 'utf8'));
   const built = mergeCatalog(await collectSources());
   const overrides = JSON.parse(await readFile(url('../src/content/vocab/facet-overrides.json'), 'utf8'));
-  built.items = tagAll(applyFoldin(built.items, foldin, nodes).items, overrides);
+  const tags = JSON.parse(await readFile(url('../src/content/vocab/anatomy-tags.json'), 'utf8'));
+  built.items = checkRelations(tagAll(applyAnatomyTags(applyFoldin(built.items, foldin, nodes).items, tags, nodes), overrides));
   built.version = versionOf(built.items);
   const shipped = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
 
@@ -405,4 +406,98 @@ test('the shipped overrides split the mobility shelf by what the items do', asyn
   assert.deepEqual(held.effect, ['lengthen'], 'a position held at end range lengthens');
   assert.deepEqual(moved.effect, ['mobilise'], 'a joint driven through its range does not');
   assert.deepEqual(neither.effect, ['calm', 'circulate'], 'and one of them was never a stretch at all');
+});
+
+/* --------------------- the releases nobody could find -------------------- */
+
+test('a release card named after a body part can be found by that body part', async () => {
+  // Kevin, 29 Aug: "I looked earlier for a calf release and found none." There
+  // are four. `bw-calf` is a release card called "Calves" carrying no `muscles`
+  // at all — like every body-work card, as the 28 Aug correction log recorded —
+  // so the library's muscle filter could not return it, and the shelf looked
+  // empty. The fold-in could not fix it either: a translation needs something
+  // to translate.
+  const lib = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
+  const idx = new Map(lib.anatomy.map((n) => [n.id, n]));
+  const rollUp = (id) => {
+    const out = new Set();
+    const walk = (n) => {
+      if (!n || out.has(n) || !idx.has(n)) return;
+      out.add(n);
+      for (const p of idx.get(n).parents ?? []) walk(p);
+    };
+    walk(id);
+    return out;
+  };
+  const releasesFor = (node) => lib.items
+    .filter((i) => (i.effect ?? []).includes('release'))
+    .filter((i) => (i.target ?? []).some((t) => rollUp(t).has(node)));
+
+  assert.equal(releasesFor('calves').length, 4, 'all four calf releases are reachable by filtering on calves');
+  assert.ok(releasesFor('hamstrings').length >= 1);
+  // Roll-up: a card tagged at a specific muscle answers the region above it.
+  assert.ok(releasesFor('hip').length > releasesFor('glutes').length, 'and a region gathers what is under it');
+});
+
+test('the graph ships with the catalogue, or the screen can show a tag and not walk it', async () => {
+  const lib = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
+  assert.ok(lib.anatomy?.length >= 130);
+  const glutes = lib.anatomy.find((n) => n.id === 'glute-max');
+  assert.deepEqual(glutes.parents, ['glutes'], 'with the parents a roll-up needs');
+});
+
+test('an item with no anatomy says so on purpose, or the build stops', () => {
+  const nodes = new Map([['calves', { id: 'calves' }]]);
+  assert.throws(
+    () => applyAnatomyTags([{ id: 'a', name: 'A' }], { entries: [{ id: 'gone', target: ['calves'] }] }, nodes),
+    /not in the catalogue/,
+  );
+  assert.throws(
+    () => applyAnatomyTags([{ id: 'a', name: 'A' }], { entries: [{ id: 'a', target: ['nope'] }] }, nodes),
+    /nodes that do not exist/,
+  );
+  const [kept] = applyAnatomyTags([{ id: 'a', name: 'A' }], { entries: [{ id: 'a', noTarget: true, why: 'teaching' }] }, nodes);
+  assert.ok(!('target' in kept), 'an explicit none is left absent, not written as an empty list');
+});
+
+/* --------------------------- variations (§6.7) --------------------------- */
+
+test('a variation points at a parent that exists, or the build stops', () => {
+  // A pointer that misses is worse than no pointer: the screen has a relation
+  // to draw and nothing to draw it to, and a variation whose parent was renamed
+  // goes on looking like a variation of something.
+  assert.throws(
+    () => checkRelations([item('v', 'V', { variationOf: 'gone' })]),
+    /variationOf "gone"/,
+  );
+  assert.throws(
+    () => checkRelations([item('v', 'V', { before: ['also-gone'] })]),
+    /before "also-gone"/,
+  );
+});
+
+test('a variation carries its own effect, because it does something else', async () => {
+  // The ledger has to count these apart. Legs Up the Wall settles you down;
+  // the same position with one leg on the floor is a hip-flexor stretch. Filed
+  // as a rung of its parent, the ledger would record a stretch as
+  // downregulation.
+  const lib = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
+  const parent = lib.items.find((i) => i.id === 'st-legs_up_wall');
+  const oneDown = lib.items.find((i) => i.id === 'var-legs-up-wall-one-down');
+  assert.deepEqual(parent.effect, ['calm', 'circulate']);
+  assert.deepEqual(oneDown.effect, ['lengthen']);
+  assert.equal(oneDown.variationOf, parent.id);
+  assert.deepEqual(oneDown.before, ['bw-hip'], 'and names what has to happen first');
+});
+
+test('an addition that has not worked yet says so where a reader will see it', async () => {
+  // Law 5: the epistemic status travels with the claim. "I felt the extra
+  // intensity but have not achieved a release yet" is the status of that card,
+  // and the fortieth reader must not take it for a technique that works.
+  const lib = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
+  const ball = lib.items.find((i) => i.id === 'var-hamstring-glute-junction-ball');
+  assert.equal(ball.tier, 'exploratory');
+  assert.match(ball.evidence.basis, /not yet successful/);
+  assert.match(ball.sourceNote, /the release was not/);
+  assert.match(ball.fields.careful, /sciatic/i, 'and the nerve that runs through there is named');
 });

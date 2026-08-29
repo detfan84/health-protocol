@@ -292,6 +292,30 @@ is the largest content-authoring job in the project, and the ten review rows nee
 each. `deep hip rotators (piriformis group)` versus `piriformis` is a judgment call, not a string
 match.
 
+### 3.3 The releases nobody could find
+
+**Kevin, 29 Aug:** *"I looked earlier for a calf release and found none."* There are four:
+Calf Roll · Calves · *The deeper calf muscle — the one a straight-leg stretch misses* · *Wrapping
+the calf, then moving it*.
+
+He could not find them because `bw-calf` — a release card **called "Calves"** — carried no
+`muscles` field at all, like every body-work card. The 28 Aug correction log recorded exactly this
+("65 of 258 items are unfindable that way") and it was never closed. The anatomy fold-in did not
+close it either: **a translation needs something to translate**, and these cards had nothing.
+
+`src/content/vocab/anatomy-tags.json` tags them directly — 49 items, plus 15 that record
+`noTarget` **with a reason**, because "this has no anatomical site" is a real answer and leaving it
+blank makes the next person derive the silence again. Coverage went 289 → **338 of 376**, and the
+self-tests got their wires: *Knee to wall* now says it measures `ankle-dorsiflexion` and `soleus`.
+
+The library filter had to move too. It read the free-text `muscles` field, so it could show a tag
+and not walk one; picking *Glutes* missed everything tagged `glute-max`. It reads the graph now,
+and the graph ships with the catalogue.
+
+**What this surfaced:** filtering on `hamstrings` returns 22 items and **one** release. Kevin's
+own report is that calves and hamstrings are the tightest things he has left. Four releases and
+one is a content gap, and it is now visible as a number rather than as a feeling.
+
 ---
 
 ## 4 · Referred pain is an edge between anatomy nodes
@@ -443,6 +467,41 @@ leaves free, here is what fits in it — which is the thing that transfers. The 
 `FRAMEWORK.md` is that the app's success is measured by how much of itself becomes unnecessary; a
 person who can improvise a stack has stopped needing to be told one.
 
+### 6.7 Variations: the knowledge that lives around a movement
+
+**Kevin, 29 Aug**, on Legs Up the Wall — which the shelf had filed under mobility and which §10.2
+had just re-tagged as `calm` + `circulate`:
+
+> *It can be turned into a stretch of sorts by putting one leg up and one leg down. It's helpful
+> to do a psoas release first or the leg that is supposed to lie on the ground will torque the hip
+> and try to pull your lower back off the floor. To add extra stretch something can be placed under
+> the heel or calf that is up the wall, or a lacrosse ball can be placed on the hamstring where it
+> meets the glute — I tried it and felt the extra intensity with the ball but have not achieved a
+> release yet.*
+
+That is **four different kinds of thing**, and the catalogue has a field for one of them:
+
+| What it is | Example | Where it goes |
+|---|---|---|
+| A harder or easier rung | prop under the heel | `levels` — exists, on 312 items |
+| A **variation** that changes what the movement DOES | one leg down: `calm` becomes `lengthen` | nothing |
+| A **prerequisite** — do this first or it goes wrong | psoas release, or the down leg torques the hip | nothing |
+| An **addition** with its own honest status | ball at the hamstring–glute junction: *tried, no release yet* | nothing |
+
+`levels` is a ladder: same movement, more or less of it. A variation is a **different movement
+sharing a parent** — and the one-leg-down version has a different `effect`, which means the
+coverage ledger must count it differently. Filing it as rung 4 of Legs Up the Wall would have the
+ledger record a stretch as downregulation.
+
+**The prerequisite is the fourth relation** (§6.6 named three). It is not `loadAfter` reversed:
+law 1 pairs release with loading for the *body's* sake, while this is *"skip it and the movement
+does not work"*. Legs Up the Wall with one leg down and a tight psoas is not a lesser version of
+the stretch, it is a lower back being pulled off the floor.
+
+And the honest status matters more here than anywhere. *"I felt the extra intensity but have not
+achieved a release yet"* is exactly the epistemic state law 5 exists to carry. An addition that has
+not worked yet ships saying so, or the fortieth reader takes it for a technique that works.
+
 ### 6.6 Three relations between items, of which two exist
 
 The catalogue already carries two item-to-item relations and is missing the third:
@@ -452,6 +511,7 @@ The catalogue already carries two item-to-item relations and is missing the thir
 | **pair** | do this, then load it | `loadAfter`, 67 items — law 1 written down |
 | **swap** | do this instead | `swapGroup`, 42 groups |
 | **stack** | do this *during* | nothing |
+| **before** | do this first or it will not work | nothing (§6.7) |
 
 Stack is the one that turns a catalogue into a vocabulary somebody can speak. It should be derived
 from §6.5's match rather than authored per pair, or it becomes 376² of curation nobody finishes.

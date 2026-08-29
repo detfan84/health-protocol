@@ -1,0 +1,97 @@
+{
+  "format": "protocol-app/authored-v1",
+  "module": "variations",
+  "note": "Variations, prerequisites and additions — the knowledge that lives around a movement rather than inside it (TAXONOMY §6.7). A variation is a different movement sharing a parent, so it gets its own item and its own effect; a rung of the same movement belongs in `levels` instead. First authored from Kevin's own practice, 29 Aug, and marked accordingly.",
+  "items": [
+    {
+      "id": "var-legs-up-wall-one-down",
+      "name": "Legs up the wall, one leg down",
+      "variationOf": "st-legs_up_wall",
+      "before": [
+        "bw-hip"
+      ],
+      "kind": "stretch",
+      "category": "mobility",
+      "role": "stretch",
+      "tracking": "duration",
+      "amount": {
+        "seconds": 120
+      },
+      "dose": "1–3 min each side",
+      "why": "The both-legs-up version settles you down. Drop one leg to the floor and it becomes a stretch of the hip flexor on that side, while the leg on the wall keeps its hamstring long.",
+      "equipment": [
+        "wall"
+      ],
+      "context": [
+        "floor"
+      ],
+      "demands": [
+        "floor",
+        "room"
+      ],
+      "tier": "exploratory",
+      "sourceNote": "Written from one person's practice rather than from a published source. The movement is ordinary; the sequencing note — release the hip flexor first — is theirs.",
+      "fields": {
+        "tool": "A clear stretch of wall, and floor space to lie in.",
+        "release": "Lie on your back with both legs up the wall. Let one leg lower to the floor, straight, and leave it there. Breathe. Swap sides.",
+        "notice": "The stretch arrives in the front of the hip on the leg that is down, and in the hamstring of the leg still up. Two things at once, on opposite sides.",
+        "careful": "If the lower back lifts off the floor, or the down leg pulls the pelvis round with it, the hip flexor is too tight for this today. Do the release first (below) or keep the down leg bent with the foot flat."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Down leg bent",
+          "note": "Foot flat on the floor, knee up. The pelvis stays put."
+        },
+        {
+          "level": 2,
+          "name": "Down leg straight",
+          "note": "The full version."
+        },
+        {
+          "level": 3,
+          "name": "Heel raised on the wall side",
+          "note": "A folded towel or a block under the heel or calf of the leg on the wall — more hamstring, same position."
+        }
+      ]
+    },
+    {
+      "id": "var-hamstring-glute-junction-ball",
+      "name": "A ball where the hamstring meets the glute",
+      "variationOf": "st-legs_up_wall",
+      "kind": "bodywork",
+      "category": "release",
+      "role": "release",
+      "technique": "tech-sustained-pressure",
+      "tracking": "duration",
+      "amount": {
+        "seconds": 90
+      },
+      "dose": "60–90 sec a side",
+      "why": "The hamstrings attach at the sitting bone, and the top of that attachment is a spot most rolling never reaches. Pinning it while the leg is supported is one way at it.",
+      "equipment": [
+        "ball",
+        "wall"
+      ],
+      "context": [
+        "floor"
+      ],
+      "demands": [
+        "floor",
+        "room"
+      ],
+      "tier": "exploratory",
+      "evidence": {
+        "grade": "unverified",
+        "basis": "A single person's attempt, reported honestly and not yet successful. It is here because the reasoning is sound and the attempt is real — not because it worked."
+      },
+      "sourceNote": "Written from one person's trial, reported as it went: the extra intensity was there, and the release was not. That sentence is this card's status, not a preamble to it.",
+      "fields": {
+        "tool": "A lacrosse ball or similar firm ball. A wall to keep the legs up.",
+        "release": "Legs up the wall. Slide a firm ball under one leg high on the back of the thigh, where the hamstring meets the buttock, and let the weight of the leg press into it. Stay, and breathe out long.",
+        "notice": "The intensity climbs quickly and is meant to. What you are waiting for is the moment it stops climbing and starts to fade — that is the release, and it does not always come.",
+        "careful": "Sharp, electric or radiating sensation down the leg is not this working — that is the sciatic nerve, which runs close to here. Come off it. A dull, spreading ache is the tissue; a bright line is not."
+      }
+    }
+  ]
+}

@@ -41,6 +41,7 @@ export const OUT = resolve(CONTENT, 'library.json');
 export const ANATOMY_FILE = resolve(CONTENT, 'vocab/anatomy.json');
 export const FOLDIN_FILE = resolve(CONTENT, 'vocab/anatomy-foldin.json');
 export const OVERRIDES_FILE = resolve(CONTENT, 'vocab/facet-overrides.json');
+export const TAGS_FILE = resolve(CONTENT, 'vocab/anatomy-tags.json');
 
 const rel = (p) => relative(APP, p).replace(/\\/g, '/');
 
@@ -286,6 +287,61 @@ export function applyFoldin(items, foldin, nodes) {
   return { items: out, usedReview };
 }
 
+/**
+ * Anatomy for items the fold-in cannot reach — the ones carrying no `muscles`
+ * or `regions` to translate.
+ *
+ * Eighty-seven items had no anatomy after the fold-in, and eleven of them were
+ * the body-work release cards: "Calves", "Hamstrings", "Front of hip" — named
+ * after the very thing they work on, and invisible to a search for it. The
+ * 28 Aug correction log recorded that gap; the fold-in could not close it,
+ * because a translation needs something to translate.
+ *
+ * An entry may say `noTarget` with a reason. That is a real answer — a teaching
+ * card, a whole-body conditioning piece, a practice whose site is not
+ * anatomical — and recording it stops the next person re-deriving the silence.
+ */
+export function applyAnatomyTags(items, file, nodes) {
+  const byId = new Map((file.entries ?? []).map((e) => [e.id, e]));
+  const unknownNode = [];
+  const out = items.map((item) => {
+    const e = byId.get(item.id);
+    if (!e || e.noTarget || item.target?.length) return item;
+    for (const t of e.target ?? []) if (!nodes.has(t)) unknownNode.push(`${item.id} \u2192 ${t}`);
+    return { ...item, target: [...(e.target ?? [])].sort() };
+  });
+  if (unknownNode.length) {
+    throw new Error(`anatomy-tags.json points at nodes that do not exist:\n    ${unknownNode.join('\n    ')}`);
+  }
+  const present = new Set(items.map((i) => i.id));
+  const orphans = [...byId.keys()].filter((id) => !present.has(id));
+  if (orphans.length) {
+    throw new Error(`anatomy-tags.json names items that are not in the catalogue:\n    ${orphans.join('\n    ')}`);
+  }
+  return out;
+}
+
+/**
+ * The item-to-item relations, checked (TAXONOMY §6.6, §6.7).
+ *
+ * `variationOf` and `before` point at other items by id, and a pointer that
+ * misses is worse than no pointer: the screen has a relation to draw and
+ * nothing to draw it to. A variation whose parent was renamed would go on
+ * looking like a variation of something.
+ */
+export function checkRelations(items) {
+  const ids = new Set(items.map((i) => i.id));
+  const broken = [];
+  for (const item of items) {
+    if (item.variationOf && !ids.has(item.variationOf)) broken.push(`${item.id}: variationOf "${item.variationOf}"`);
+    for (const b of item.before ?? []) if (!ids.has(b)) broken.push(`${item.id}: before "${b}"`);
+  }
+  if (broken.length) {
+    throw new Error(`these items point at catalogue entries that do not exist:\n    ${broken.join('\n    ')}`);
+  }
+  return items;
+}
+
 /* ------------------------------ the command ------------------------------ */
 
 async function main() {
@@ -304,7 +360,18 @@ async function main() {
   try {
     const nodes = new Map(JSON.parse(await readFile(ANATOMY_FILE, 'utf8')).nodes.map((n) => [n.id, n]));
     const applied = applyFoldin(catalog.items, JSON.parse(await readFile(FOLDIN_FILE, 'utf8')), nodes);
-    catalog.items = tagAll(applied.items, JSON.parse(await readFile(OVERRIDES_FILE, 'utf8')));
+    const tagged = applyAnatomyTags(applied.items, JSON.parse(await readFile(TAGS_FILE, 'utf8')), nodes);
+    catalog.items = checkRelations(tagAll(tagged, JSON.parse(await readFile(OVERRIDES_FILE, 'utf8'))));
+    // The graph ships WITH the catalogue, slimmed to what a browser needs to
+    // walk it: id, display name, parents. Without it the library screen can
+    // show a tag but cannot roll one up, so picking "Glutes" would miss every
+    // item tagged `glute-max` — the same invisibility this build just fixed,
+    // one layer further out.
+    catalog.anatomy = [...nodes.values()].map((n) => ({
+      id: n.id,
+      name: n.name,
+      ...(n.parents?.length ? { parents: n.parents } : {}),
+    }));
     catalog.version = versionOf(catalog.items);
     usedReview = applied.usedReview;
   } catch (err) {
@@ -328,8 +395,10 @@ async function main() {
   console.log(`effect: ${Object.entries(byEffect).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k} ${n}`).join(' · ')}`);
   for (const s of catalog.sources) console.log(`  ${s.file}: ${s.items}`);
   console.log(`muscles: ${new Set(catalog.items.flatMap((i) => i.muscles ?? [])).size} · equipment: ${new Set(catalog.items.map((i) => i.equipment).filter(Boolean)).size}`);
-  const tagged = catalog.items.filter((i) => i.target?.length).length;
-  console.log(`anatomy: ${tagged}/${catalog.items.length} items carry node ids (muscles and regions kept alongside).`);
+  const withTarget = catalog.items.filter((i) => i.target?.length).length;
+  const bare = catalog.items.filter((i) => !i.target?.length);
+  console.log(`anatomy: ${withTarget}/${catalog.items.length} items carry node ids (muscles and regions kept alongside).`);
+  console.log(`  ${bare.length} with none — ${bare.filter((i) => i.type !== 'practice').length} teaching or measurement, ${bare.filter((i) => i.type === 'practice').length} practices.`);
   if (usedReview.size) {
     console.log('  applied from rows still flagged for review — each is a proposal, not a decision:');
     for (const [s, n] of [...usedReview].sort((a, b) => b[1] - a[1])) console.log(`    "${s}" on ${n} item${n === 1 ? '' : 's'}`);
