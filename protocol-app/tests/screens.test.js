@@ -35,6 +35,67 @@ function draw(view) {
   return main;
 }
 
+/**
+ * Shipped content is written to a stranger.
+ *
+ * It may say "if a hip clicks" — that warns the person who has one and tells
+ * nobody else they do. It may not say "given the dysautonomia", because that
+ * sentence informs the reader they have a condition they may never have heard
+ * of, in an app that has no way of knowing.
+ *
+ * This checks the CONSTRUCTION, not a list of conditions. A four-phrase
+ * wordlist is what let five of these ship: it cannot catch a phrase nobody
+ * thought to add to it, and the next leak will name a condition nobody listed.
+ * Every one of the five used the same presupposition trigger — "given the X" —
+ * so that is what is checked. Innocent uses ("given how rarely", "given
+ * nothing to do", "any given episode") do not take a definite article and are
+ * not matched.
+ *
+ * Gated text is exempt by design: `populationCareful` is shown only to people
+ * who have self-selected into that population (D29), so naming the condition
+ * there is the entire point of the field.
+ */
+const PRESUPPOSES_A_DIAGNOSIS = [
+  /\bgiven (?:the|your)\s+[a-z]/i,
+  /\b(?:since|because) you have\b/i,
+  /\bbecause of your\b/i,
+];
+
+/** Every string a reader sees without opting into anything. */
+function universalText(item) {
+  // sourceNote is in here because it RENDERS. It was left out on the first
+  // pass and that was the same mistake one layer out: a guard that does not
+  // look where the text is shown. It was carrying authoring asides and the
+  // author's own name until those were lifted into `authoringNote`, which
+  // renders nowhere.
+  return [item.why, item.dose, item.notes, item.sourceNote, ...Object.values(item.fields ?? {})]
+    .filter((v) => typeof v === 'string');
+}
+
+/**
+ * The app is shareable. A stranger opening it should not be able to work out
+ * whose regimen it grew out of, and provenance notes are where that leaks —
+ * they are written by an author, to an author, and then rendered.
+ */
+function namesTheAuthor(items) {
+  return items
+    .filter((i) => universalText(i).some((t) => /\bKevin\b/i.test(t)))
+    .map((i) => i.id);
+}
+
+function diagnosisPresumptions(items) {
+  const found = [];
+  for (const item of items) {
+    for (const text of universalText(item)) {
+      for (const pattern of PRESUPPOSES_A_DIAGNOSIS) {
+        const m = text.match(pattern);
+        if (m) found.push(`${item.id} — "${text.slice(Math.max(0, m.index - 20), m.index + 60).trim()}"`);
+      }
+    }
+  }
+  return found;
+}
+
 const NOTES = 'Tool: a soft ball.\n\nCareful: never force the range. Stop at sharp pain.';
 
 function dayLongProtocol() {
@@ -259,6 +320,11 @@ test('the shipped starter content is real, valid, and free of one person’s reg
   for (const phrase of ['the right hip', 'right shoulder subluxes', 'surgically altered']) {
     assert.equal(blob.includes(phrase), false, `shipped content still says "${phrase}"`);
   }
+  // Nor anything that tells the reader which conditions they have.
+  assert.deepEqual(diagnosisPresumptions(items), [],
+    'shipped content presumes the reader has a diagnosis');
+  assert.deepEqual(namesTheAuthor(items), [],
+    'shipped content names its author');
 });
 
 test('no screen ever prints the word "null" at a person', async () => {
@@ -410,6 +476,13 @@ test('the library is comprehensive, merged, and every item can be picked up', as
   for (const word of ['rho ', 'boost blenz', 'the right hip', 'surgically altered']) {
     assert.equal(blob.includes(word), false, `the library must not carry "${word}"`);
   }
+  // PLAN §1: a stranger gets an app, not one person's regimen. The wordlist
+  // above is the old guard and stays; this is the one that would have caught
+  // the five that got past it.
+  assert.deepEqual(diagnosisPresumptions(lib.items), [],
+    'the library presumes the reader has a diagnosis');
+  assert.deepEqual(namesTheAuthor(lib.items), [],
+    'the library names its author in text a stranger reads');
 });
 
 test('the front door is a menu, not a list', async () => {

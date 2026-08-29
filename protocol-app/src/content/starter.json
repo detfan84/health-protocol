@@ -2,7 +2,7 @@
   "format": "protocol-app/v1",
   "kind": "backup",
   "schemaVersion": 2,
-  "exportedAt": "2026-08-23T17:05:11.895Z",
+  "exportedAt": "2026-08-29T00:10:24.255Z",
   "data": {
     "protocols": [
       {
@@ -200,8 +200,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T17:05:11.895Z",
-        "updatedAt": "2026-08-23T17:05:11.895Z"
+        "createdAt": "2026-08-29T00:10:24.255Z",
+        "updatedAt": "2026-08-29T00:10:24.255Z"
       },
       {
         "id": "seed-daily-flow",
@@ -535,8 +535,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T17:05:11.895Z",
-        "updatedAt": "2026-08-23T17:05:11.895Z"
+        "createdAt": "2026-08-29T00:10:24.255Z",
+        "updatedAt": "2026-08-29T00:10:24.255Z"
       },
       {
         "id": "seed-support",
@@ -683,8 +683,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T17:05:11.895Z",
-        "updatedAt": "2026-08-23T17:05:11.895Z"
+        "createdAt": "2026-08-29T00:10:24.255Z",
+        "updatedAt": "2026-08-29T00:10:24.255Z"
       },
       {
         "id": "seed-body-work",
@@ -989,7 +989,7 @@
                 "fields": {
                   "tool": "Phone timer",
                   "notice": "Under 10 seconds is a very reactive set-point. 10–20 is reactive and common with a breathing pattern disorder. 20–30 is moderate. 40+ is well regulated. The number rising over weeks IS the thing you are trying to fix, and it is the only hard metric in this document.",
-                  "careful": "Do it sitting or lying, never standing, given the orthostatic picture."
+                  "careful": "Do it sitting or lying, never standing — more so if you are prone to lightheadedness when upright."
                 },
                 "cadence": {
                   "kind": "everyNDays",
@@ -1099,7 +1099,7 @@
                 "fields": {
                   "tool": "A step or stair with a rail",
                   "notice": "Calves get stronger and longer at the same time. This is how you get range that holds instead of range you have to keep re-earning.",
-                  "careful": "Eccentrics cause real delayed soreness, and delayed is the operative word given the post-exertional picture. Start at half the volume you think you need and watch the following two days before adding any."
+                  "careful": "Eccentrics cause real delayed soreness, and delayed is the operative word: if you are someone who pays for exertion a day or two later, this is a drill that can set that off. Start at half the volume you think you need and watch the following two days before adding any."
                 },
                 "photos": [
                   {
@@ -1206,7 +1206,7 @@
                 "fields": {
                   "tool": "None",
                   "notice": "Waking less dry-mouthed. Tongue posture starting to hold without attention. Effects on sleep take months, not days — this is the slowest-acting thing in this document and also one of the highest-value.",
-                  "careful": "Jaw fatigue is expected; jaw pain is not. Given the TMJ picture, go easy on the wide-open suction hold and cut the range right back if the joint complains."
+                  "careful": "Jaw fatigue is expected; jaw pain is not. If your jaw clicks, locks, or has a history of trouble, go easy on the wide-open suction hold and cut the range right back if the joint complains."
                 }
               },
               {
@@ -1243,7 +1243,7 @@
                 "fields": {
                   "tool": "None",
                   "notice": "Arm symptoms that come and go with position are usually neural rather than muscular. This tests that directly.",
-                  "careful": "Given the thoracic outlet picture, start with a much smaller range than feels necessary. If it reproduces numbness or tingling, halve the range. Never push into symptoms."
+                  "careful": "Start with a much smaller range than feels necessary, and smaller still for anyone who already gets numbness or tingling into the hand. If it reproduces those symptoms, halve the range. Never push into symptoms."
                 },
                 "photos": [
                   {
@@ -1267,7 +1267,7 @@
                 "fields": {
                   "tool": "Bare feet, and a wall or counter within reach",
                   "notice": "Your foot will be visibly working — toes gripping, arch adjusting constantly. That is the foot-to-brain conversation you are trying to restart.",
-                  "careful": "Stay within reach of a counter. The Level 3 head turns can trigger dizziness given the dysautonomia — if the room moves, sit down and come back to it another day at a slower speed."
+                  "careful": "Stay within reach of a counter. The Level 3 head turns can bring on dizziness in anyone whose balance or blood pressure is unreliable — if the room moves, sit down and come back to it another day at a slower speed."
                 },
                 "photos": [
                   {
@@ -1335,8 +1335,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T17:05:11.895Z",
-        "updatedAt": "2026-08-23T17:05:11.895Z"
+        "createdAt": "2026-08-29T00:10:24.255Z",
+        "updatedAt": "2026-08-29T00:10:24.255Z"
       },
       {
         "id": "seed-routine-full-body",
@@ -1473,8 +1473,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T17:05:11.895Z",
-        "updatedAt": "2026-08-23T17:05:11.895Z"
+        "createdAt": "2026-08-29T00:10:24.255Z",
+        "updatedAt": "2026-08-29T00:10:24.255Z"
       },
       {
         "id": "seed-routine-upper-body",
@@ -1611,8 +1611,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T17:05:11.895Z",
-        "updatedAt": "2026-08-23T17:05:11.895Z"
+        "createdAt": "2026-08-29T00:10:24.255Z",
+        "updatedAt": "2026-08-29T00:10:24.255Z"
       },
       {
         "id": "seed-routine-lower-body",
@@ -1749,8 +1749,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T17:05:11.895Z",
-        "updatedAt": "2026-08-23T17:05:11.895Z"
+        "createdAt": "2026-08-29T00:10:24.255Z",
+        "updatedAt": "2026-08-29T00:10:24.255Z"
       },
       {
         "id": "seed-routine-push-day",
@@ -1887,8 +1887,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T17:05:11.895Z",
-        "updatedAt": "2026-08-23T17:05:11.895Z"
+        "createdAt": "2026-08-29T00:10:24.255Z",
+        "updatedAt": "2026-08-29T00:10:24.255Z"
       },
       {
         "id": "seed-routine-pull-day",
@@ -2025,8 +2025,8 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T17:05:11.895Z",
-        "updatedAt": "2026-08-23T17:05:11.895Z"
+        "createdAt": "2026-08-29T00:10:24.255Z",
+        "updatedAt": "2026-08-29T00:10:24.255Z"
       },
       {
         "id": "seed-routine-mobility-flow",
@@ -2183,13 +2183,13 @@
             ]
           }
         ],
-        "createdAt": "2026-08-23T17:05:11.895Z",
-        "updatedAt": "2026-08-23T17:05:11.895Z"
+        "createdAt": "2026-08-29T00:10:24.255Z",
+        "updatedAt": "2026-08-29T00:10:24.255Z"
       }
     ],
     "days": [],
     "labs": [],
     "settings": []
   },
-  "seedVersion": "7f290244a96e"
+  "seedVersion": "8e0ffda37817"
 }

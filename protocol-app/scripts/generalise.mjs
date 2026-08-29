@@ -29,6 +29,28 @@ export const GENERALISE = {
   'rg-calf': {
     careful: 'If either calf has been operated on or injured, go lighter on that side.',
   },
+
+  /* Five cards said "given the X picture" — a sentence that tells the reader
+     they have a condition, in an app with no way of knowing. Each keeps its
+     caution in full and states the condition as a case rather than a fact,
+     the same way the hip and pec cards above already do. Rewritten 28 Aug
+     2026 after a pattern check found them; the wordlist that was supposed to
+     catch them held four phrases and none of these was one of them. */
+  'br-co2': {
+    careful: 'Do it sitting or lying, never standing — more so if you are prone to lightheadedness when upright.',
+  },
+  'rg-ecc': {
+    careful: 'Eccentrics cause real delayed soreness, and delayed is the operative word: if you are someone who pays for exertion a day or two later, this is a drill that can set that off. Start at half the volume you think you need and watch the following two days before adding any.',
+  },
+  'nv-median': {
+    careful: 'Start with a much smaller range than feels necessary, and smaller still for anyone who already gets numbness or tingling into the hand. If it reproduces those symptoms, halve the range. Never push into symptoms.',
+  },
+  'bl-prog': {
+    careful: 'Stay within reach of a counter. The Level 3 head turns can bring on dizziness in anyone whose balance or blood pressure is unreliable — if the room moves, sit down and come back to it another day at a slower speed.',
+  },
+  'aw-press': {
+    careful: 'Jaw fatigue is expected; jaw pain is not. If your jaw clicks, locks, or has a history of trouble, go easy on the wide-open suction hold and cut the range right back if the joint complains.',
+  },
 };
 
 /* The section notes were written to one person, in the second person — "the

@@ -2,16 +2,16 @@
   "format": "protocol-app/library-v1",
   "_meta": {
     "file": "imported-legacy.json — the legacy catalogue, frozen.",
-    "generated": "2026-08-28",
+    "generated": "2026-08-29",
     "generatedFrom": "master@4f631aebd4fd75a3e2c91fb88a915c8ebd30cf90 (short 4f631ae), via scripts/build-library.mjs --re-freeze",
     "sourceFiles": "src/data/{exercises,stretching,bodywork,movements}.js on the master branch",
     "ruling": "Frozen per Kevin's ruling of 28 Aug 2026: nothing is being written into the old app; the new app replaces it. Strategy v0.5 §4, Option 2.",
     "doNotEdit": "Do not hand-edit this file. New content is authored in src/content/authored/<category>.json and merged by scripts/build-catalog.mjs.",
     "regenerate": "Only if master changes, which it is not expected to. `npm run re-freeze`, then `npm run catalog` to rebuild the shelf.",
     "itemCount": 258,
-    "generatorVersionHash": "adbc89d0808d"
+    "generatorVersionHash": "c52e79db9860"
   },
-  "version": "adbc89d0808d",
+  "version": "c52e79db9860",
   "items": [
     {
       "id": "bw-br-9090",
@@ -2109,7 +2109,7 @@
         "release": "Sit quietly for 5 minutes first. Morning, before getting up, gives the most consistent reading. Breathe normally in through the nose, and normally out. Not a big breath, not a forced exhale. Pinch your nose. Time until the FIRST definite urge to breathe. Not how long you can hold on — the first real signal: a swallow, a contraction in the throat, a jerk in the belly. Release and breathe normally. If you are gasping afterwards you held too long and the number is invalid.",
         "notice": "Under 10 seconds is a very reactive set-point. 10–20 is reactive and common with a breathing pattern disorder. 20–30 is moderate. 40+ is well regulated. The number rising over weeks IS the thing you are trying to fix, and it is the only hard metric in this document. Uncomfortable, not distressing. You should be able to breathe normally straight after.",
         "tool": "Phone timer",
-        "careful": "Do it sitting or lying, never standing, given the orthostatic picture."
+        "careful": "Do it sitting or lying, never standing — more so if you are prone to lightheadedness when upright."
       },
       "categoryName": "Breathing",
       "equipment": "Phone timer",
@@ -3481,7 +3481,7 @@
         "tool": "A step or stair with a rail",
         "release": "Stand with the balls of both feet on the edge of a step, heels hanging off. Hold the rail. Rise up onto both toes. Shift all your weight onto ONE leg. Lower that heel slowly, counting 5 seconds, until it is well below the level of the step. Put the other foot back down and use BOTH legs to come back up. Never come up on one leg. That is one rep.",
         "notice": "Calves get stronger and longer at the same time. This is how you get range that holds instead of range you have to keep re-earning. You will be sore 24–48 hours later. That is the drill working, and it is also why the starting dose is deliberately low.",
-        "careful": "Eccentrics cause real delayed soreness, and delayed is the operative word given the post-exertional picture. Start at half the volume you think you need and watch the following two days before adding any."
+        "careful": "Eccentrics cause real delayed soreness, and delayed is the operative word: if you are someone who pays for exertion a day or two later, this is a drill that can set that off. Start at half the volume you think you need and watch the following two days before adding any."
       },
       "photos": [
         {
@@ -5674,7 +5674,7 @@
         "tool": "None",
         "release": "Arm out to the side at shoulder height, elbow bent, palm facing up near your shoulder. Straighten the elbow out to the side while bending the wrist back so the fingers point down and behind you — and at the same time tilt your head AWAY from that arm. Reverse: bend the elbow back in, relax the wrist, and tilt your head TOWARD the arm. Slow and smooth, about 2 seconds each way.",
         "notice": "Arm symptoms that come and go with position are usually neural rather than muscular. This tests that directly.",
-        "careful": "Given the thoracic outlet picture, start with a much smaller range than feels necessary. If it reproduces numbness or tingling, halve the range. Never push into symptoms."
+        "careful": "Start with a much smaller range than feels necessary, and smaller still for anyone who already gets numbness or tingling into the hand. If it reproduces those symptoms, halve the range. Never push into symptoms."
       },
       "photos": [
         {
@@ -7123,7 +7123,7 @@
         "tool": "Bare feet, and a wall or counter within reach",
         "release": "Only move up a level when the current one is boring.",
         "notice": "Your foot will be visibly working — toes gripping, arch adjusting constantly. That is the foot-to-brain conversation you are trying to restart.",
-        "careful": "Stay within reach of a counter. The Level 3 head turns can trigger dizziness given the dysautonomia — if the room moves, sit down and come back to it another day at a slower speed."
+        "careful": "Stay within reach of a counter. The Level 3 head turns can bring on dizziness in anyone whose balance or blood pressure is unreliable — if the room moves, sit down and come back to it another day at a slower speed."
       },
       "levels": [
         {
@@ -8125,7 +8125,7 @@
         "tool": "None",
         "release": "PRESS — whole tongue flat against the roof of the mouth, push up hard. Hold 10 seconds. ×10. SUCTION HOLD — suction the whole tongue flat to the palate so it makes a vacuum. Keeping that seal, slowly open your jaw as wide as you can WITHOUT the tongue peeling off. Hold 5 seconds, then close. ×10. SLIDE — tip of the tongue on the ridge behind the top front teeth, then slide it backwards along the roof of the mouth as far as it will go. ×10. STRONG SWALLOW — anchor the tongue tip on that ridge and swallow, pressing the tongue up hard through the whole swallow. ×10.",
         "notice": "Waking less dry-mouthed. Tongue posture starting to hold without attention. Effects on sleep take months, not days — this is the slowest-acting thing in this document and also one of the highest-value. Your tongue gets tired, which tells you it was weak.",
-        "careful": "Jaw fatigue is expected; jaw pain is not. Given the TMJ picture, go easy on the wide-open suction hold and cut the range right back if the joint complains."
+        "careful": "Jaw fatigue is expected; jaw pain is not. If your jaw clicks, locks, or has a history of trouble, go easy on the wide-open suction hold and cut the range right back if the joint complains."
       }
     },
     {
