@@ -25,6 +25,7 @@ import { surfacePastFailures, installGlobalNet, plainReason } from './announcer.
 import { recordFailure } from '../failLog.js';
 import { hhmm } from '../todayModel.js';
 import { localDateKey, nowIso } from '../../lib/core.js';
+import { seedPlan, baselinesOf, refreshed } from '../../lib/seed.js';
 
 // Five destinations, and the first one is a menu rather than a list. The
 // structure the app now has is: menu → area → session. A tab bar with a
@@ -259,32 +260,23 @@ export async function init() {
 }
 
 /**
- * Which shipped protocols this device should be handed, given what it already
- * has and what it has already been offered.
- *
- * Pure, and separate from the fetching around it, because the rule it encodes
- * is the one worth pinning with a test: **new content arrives, and a decision
- * to delete something sticks.** Both halves matter and they pull against each
- * other — an app that never re-checks freezes its content at whatever the
- * first launch saw, and an app that re-checks naively hands back the protocol
- * you threw away every time the content changes.
- */
-export function protocolsToOffer({ shipped = [], have = new Set(), offered = new Set() } = {}) {
-  return shipped.filter((p) => !have.has(p.id) && !offered.has(p.id));
-}
-
-/**
- * The content the app ships with, put in on the first run.
+ * The content the app ships with — put in on the first run, and kept current
+ * after it.
  *
  * Without this the app opens empty — a screen that says "nothing active yet"
  * over a journal and a water tracker, which is what it did for four days
  * while a full body-work library sat in the repo. Ship the content or the app
  * is a filing cabinet.
  *
- * Applied ONCE and remembered: someone who deletes a seeded protocol has
- * decided something, and an app that puts it back every launch is arguing.
- * It goes through the ordinary import path, so the validator sees it like any
- * other file and a broken seed cannot write half of itself.
+ * "Kept current" is the 29 Aug repair. This used to offer only protocols the
+ * device did not have, so a REVISION to one it held could never arrive: the
+ * day arc's second block was renamed, shipped, deployed, and every installed
+ * app went on saying "While the kettle boils" — while the applied-version
+ * record claimed the new content was in. See `lib/seed.js` for the rule and
+ * for what it deliberately will not touch.
+ *
+ * Everything goes through the ordinary import path, so the validator sees it
+ * like any other file and a broken seed cannot write half of itself.
  */
 async function seedContentOnce() {
   try {
@@ -305,10 +297,13 @@ async function seedContentOnce() {
     }
 
     const applied = await store.getSetting('seed.applied');
-    if (version && applied?.value === version) return; // nothing new to offer
+    // The version check is an optimisation, and it needs the second half. A
+    // device from before baselines existed can hold the current version number
+    // over stale content — that is exactly the state the rename got stuck in —
+    // so it does one full pass to work out where it actually stands.
+    if (version && applied?.value === version && applied?.baselines) return;
 
-    const existing = await store.loadProtocols();
-    const have = new Set(existing.map((p) => p.id));
+    const have = await store.loadProtocols();
 
     // What has this device ever been OFFERED? Not the same question as what it
     // has. Somebody who deleted a seeded protocol decided something, and an app
@@ -319,24 +314,51 @@ async function seedContentOnce() {
     // offered, so what they currently hold is the best evidence there is. The
     // honest cost, stated rather than hidden: a protocol deleted before this
     // upgrade can return once, at the next content change, and then stay gone.
-    const offered = new Set(Array.isArray(applied?.ids) ? applied.ids : [...have]);
+    const offered = new Set(Array.isArray(applied?.ids) ? applied.ids : have.map((p) => p.id));
 
     const shipped = file.data?.protocols ?? [];
-    const fresh = protocolsToOffer({ shipped, have, offered });
-    if (fresh.length) {
+    const baselines = applied?.baselines ?? null;
+    const plan = seedPlan({ shipped, have, offered, baselines: baselines ?? {} });
+
+    const stamp = nowIso();
+    const incoming = [
+      ...plan.fresh,
+      ...plan.refresh.map(({ shipped: p, stored }) => refreshed(p, stored, stamp)),
+    ];
+    if (incoming.length) {
       const out = await store.importFile(JSON.stringify({
         ...file,
-        data: { ...file.data, protocols: fresh },
+        data: { ...file.data, protocols: incoming },
       }));
       if (!out.ok) throw new Error(out.errors?.map((e) => `${e.path}: ${e.message}`).join('; ') || 'invalid');
-      console.info(`[protocol-app] added ${fresh.length} protocol(s) from the shipped content`);
+      if (plan.fresh.length) console.info(`[protocol-app] added ${plan.fresh.length} protocol(s) from the shipped content`);
+      if (plan.refresh.length) {
+        console.info(`[protocol-app] brought ${plan.refresh.length} protocol(s) up to date: ${plan.refresh.map((r) => r.shipped.id).join(', ')}`);
+      }
     }
+    // Said out loud rather than silently skipped: a plan somebody has edited
+    // stops tracking the shipped content, and that is a thing worth being able
+    // to find out about when their copy is missing a correction everyone else
+    // got.
+    if (plan.kept.length) {
+      console.info(`[protocol-app] left alone because you have edited them: ${plan.kept.join(', ')}`);
+    }
+
     for (const p of shipped) offered.add(p.id);
+    // A baseline is recorded only for content this device now actually holds at
+    // the shipped version. The edited ones get none, so the next update asks
+    // the same question again rather than assuming their current state was
+    // ours.
+    const nextBaselines = { ...(baselines ?? {}) };
+    for (const [id, print] of Object.entries(baselinesOf(shipped))) {
+      if (!plan.kept.includes(id)) nextBaselines[id] = print;
+    }
     await store.putSetting({
       key: 'seed.applied',
       value: version ?? applied?.value ?? null,
       ids: [...offered],
-      at: nowIso(),
+      baselines: nextBaselines,
+      at: stamp,
     });
   } catch (error) {
     // Loud, not fatal: the app still works, and the person can import

@@ -147,33 +147,84 @@ test('the shipped content carries a version, so an update can reach an installed
 });
 
 test('new content arrives, and a protocol you deleted stays deleted', async () => {
-  const { protocolsToOffer } = await import('../src/app/ui/app.js');
-  const shipped = [{ id: 'seed-a' }, { id: 'seed-b' }, { id: 'seed-new' }];
+  const { seedPlan } = await import('../src/lib/seed.js');
+  const p = (id, name) => ({ id, name, blocks: [], phases: [], active: true, createdAt: 't', updatedAt: 't' });
+  const shipped = [p('seed-a', 'A'), p('seed-b', 'B'), p('seed-new', 'New')];
 
   // First run: nothing here, nothing offered yet — take all of it.
   assert.deepEqual(
-    protocolsToOffer({ shipped, have: new Set(), offered: new Set() }).map((p) => p.id),
+    seedPlan({ shipped, have: [], offered: new Set() }).fresh.map((x) => x.id),
     ['seed-a', 'seed-b', 'seed-new'],
   );
 
-  // Later run, new content in the file: only the new one is handed over.
-  assert.deepEqual(
-    protocolsToOffer({
-      shipped,
-      have: new Set(['seed-a', 'seed-b']),
-      offered: new Set(['seed-a', 'seed-b']),
-    }).map((p) => p.id),
-    ['seed-new'],
-  );
+  // Later run, new content in the file: only the new one is handed over, and
+  // the two already held are current so nothing else moves.
+  const held = seedPlan({
+    shipped,
+    have: [p('seed-a', 'A'), p('seed-b', 'B')],
+    offered: new Set(['seed-a', 'seed-b']),
+  });
+  assert.deepEqual(held.fresh.map((x) => x.id), ['seed-new']);
+  assert.deepEqual(held.refresh, []);
 
   // The person deleted seed-b. It was offered; it does not come back — and the
   // genuinely new one still does.
   assert.deepEqual(
-    protocolsToOffer({
+    seedPlan({
       shipped,
-      have: new Set(['seed-a']),
+      have: [p('seed-a', 'A')],
       offered: new Set(['seed-a', 'seed-b']),
-    }).map((p) => p.id),
+    }).fresh.map((x) => x.id),
     ['seed-new'],
   );
+});
+
+// The bug: the day arc's second block was renamed, shipped and deployed, and
+// every installed app went on saying "While the kettle boils" — because a
+// protocol the device already held was never a candidate for anything. The
+// applied-version record said the new content was in.
+test('a revision to a protocol you already have actually reaches you', async () => {
+  const { seedPlan, contentFingerprint, baselinesOf, refreshed } = await import('../src/lib/seed.js');
+  const arc = (blockName, stamps = {}) => ({
+    id: 'seed-day-arc', name: 'The day arc', active: true, phases: [],
+    blocks: [{ id: 'arc-rise', name: blockName, order: 0, items: [{ id: 'i', name: 'A thing' }] }],
+    createdAt: 't0', updatedAt: 't0', ...stamps,
+  });
+  const before = arc('While the kettle boils');
+  const after = arc('While you’re already up');
+  const baselines = baselinesOf([before]);
+
+  // Untouched since it was handed over: the rename lands.
+  const plan = seedPlan({ shipped: [after], have: [before], offered: new Set(['seed-day-arc']), baselines });
+  assert.deepEqual(plan.refresh.map((r) => r.shipped.blocks[0].name), ['While you’re already up']);
+  assert.deepEqual(plan.kept, []);
+
+  // What the person owns survives the refresh: their on/off decision and the
+  // day this arrived on their device.
+  const mine = { ...before, active: false, createdAt: 'the-day-i-installed-it' };
+  const out = refreshed(after, mine, 'now');
+  assert.equal(out.blocks[0].name, 'While you’re already up');
+  assert.equal(out.active, false, 'switching a plan off is a decision about your day, not about the content');
+  assert.equal(out.createdAt, 'the-day-i-installed-it');
+  assert.equal(out.updatedAt, 'now', 'updatedAt is the merge referee — the incoming copy has to win');
+
+  // Edited it? Then it is theirs, and the update does not touch it.
+  const edited = { ...before, blocks: [{ ...before.blocks[0], name: 'My own morning' }] };
+  const kept = seedPlan({ shipped: [after], have: [edited], offered: new Set(['seed-day-arc']), baselines });
+  assert.deepEqual(kept.refresh, []);
+  assert.deepEqual(kept.kept, ['seed-day-arc']);
+
+  // No baseline (installed before this mechanism existed): never saved is proof
+  // enough, and a save of any kind is not.
+  const noBase = { shipped: [after], offered: new Set(['seed-day-arc']), baselines: {} };
+  assert.equal(seedPlan({ ...noBase, have: [before] }).refresh.length, 1, 'untouched: bring it up to date');
+  assert.deepEqual(
+    seedPlan({ ...noBase, have: [{ ...before, updatedAt: 't1' }] }).kept, ['seed-day-arc'],
+    'saved at least once: err toward never overwriting somebody’s work',
+  );
+
+  // And the fingerprint ignores what is not content, or a person switching a
+  // plan off would read as an edit and freeze it forever.
+  assert.equal(contentFingerprint(before), contentFingerprint({ ...before, active: false, updatedAt: 'later' }));
+  assert.notEqual(contentFingerprint(before), contentFingerprint(after));
 });
