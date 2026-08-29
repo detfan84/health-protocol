@@ -176,7 +176,12 @@ clock on them", not silently add a minute each.
 
 ### Pushed and deployed, 29 Aug
 
-Thirty commits on `origin/protocol-app-v0.2`, and the live URL is serving build
+The tile collapse is live: build **`20260829T2243Z-bf89d5e`** (version `a72d4839`),
+verified on the deployed URL — seven things on the front door before a fold is opened,
+"Anytime today — 12 parts, 51 things", "Your plans — 5 on, 5 off", and the session runner
+free of the raw `null` it had been printing. `bf89d5e` is committed but **not pushed**.
+
+Before that, thirty commits on `origin/protocol-app-v0.2` and build
 **`20260829T2212Z-b2b6192`** (version `4158bd47`). Verified on the deployed URL in a browser
 that had never seen the app: the disclaimer gate fires, and the shipped catalogue is 383
 items, 136 anatomy nodes, 6 referral sites, with zero items still carrying `kind` or
