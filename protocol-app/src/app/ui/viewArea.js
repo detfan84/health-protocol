@@ -13,7 +13,7 @@ import { h, clear } from './dom.js';
 import * as store from '../store.js';
 import { guarded } from './announcer.js';
 import { icon } from './icons.js';
-import { lookFor, minutes } from './viewHome.js';
+import { lookFor, lengthLabel } from './viewHome.js';
 import { localDateKey, displayTime, timeFormatOf } from '../../lib/core.js';
 import { cadenceOf, cadenceLabel } from '../../lib/cadence.js';
 
@@ -95,7 +95,7 @@ export async function viewArea({ areaId, back, startSession, openEditor }) {
                 : `from ${displayTime(b.start, fmt)}`)
             : null,
         ),
-        h('p.muted', {}, `${b.items.length} ${b.items.length === 1 ? 'thing' : 'things'} · about ${minutes(b)} min${doneCount ? ` · ${doneCount} done today` : ''}`),
+        h('p.muted', {}, `${lengthLabel(b)}${doneCount ? ` · ${doneCount} done today` : ''}`),
         h('button.btn.primary', {
           style: 'width:100%',
           onclick: () => startSession(p.id, b.id),

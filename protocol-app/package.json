@@ -4,7 +4,7 @@
   "version": "0.2.0",
   "type": "module",
   "scripts": {
-    "test": "node --test tests/data-layer.test.js tests/editor.test.js tests/trackers.test.js tests/ui-imports.test.js tests/fail-loudly-imports.test.js tests/fail-loudly.test.js tests/import-file.test.js tests/units.test.js tests/screens.test.js tests/cadence.test.js tests/reminders.test.js tests/navigation.test.js tests/supply-dose.test.js tests/clock-phases.test.js tests/catalog.test.js tests/vocab.test.js tests/readings.test.js",
+    "test": "node --test tests/data-layer.test.js tests/editor.test.js tests/trackers.test.js tests/ui-imports.test.js tests/fail-loudly-imports.test.js tests/fail-loudly.test.js tests/import-file.test.js tests/units.test.js tests/screens.test.js tests/cadence.test.js tests/reminders.test.js tests/navigation.test.js tests/supply-dose.test.js tests/clock-phases.test.js tests/catalog.test.js tests/vocab.test.js tests/readings.test.js tests/durations.test.js",
     "convert": "node scripts/convert-legacy.mjs",
     "icons": "node scripts/make-icons.mjs",
     "content": "node scripts/build-content.mjs",

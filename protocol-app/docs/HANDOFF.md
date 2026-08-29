@@ -153,7 +153,8 @@ number is fabricated, and it is displayed to a person as though it were known. I
 failure the 28 Aug correction log records for the add-flow inventing `3 × 10` and forty-five
 seconds, still live on the busiest screen in the app.
 
-**So the first job next session is not the layout. It is durations** — and the honest version
+**Durations were done on 29 Aug and the answer is uncomfortable — see below. The first job
+next session is not the layout. It is durations** — and the honest version
 is per item, from the content, the way the measurement units were parsed out of the cards
 rather than guessed at build time (`TAXONOMY.md` §5.2). Where an item genuinely has no
 sensible duration, it should say so and the budget should say "plus a few things with no
@@ -172,3 +173,52 @@ clock on them", not silently add a minute each.
 24 commits ahead of `origin`, nothing pushed, nothing built to the worker. The live URL is
 still running the build from before 29 Aug. `npm run deploy` is a direct upload — a git push
 does not deploy (see §The one lesson that cost the most).
+
+---
+
+## Durations, done 29 Aug — and what they showed
+
+The invented minute is gone. `viewHome` and `viewArea` now read `lengthOf` /
+`lengthText` from `src/lib/durations.js`, which parses a time out of a dose where the
+dose states one and returns **nothing** where it does not.
+
+What is deliberately not parsed, because none of it is a clock: `5 breaths` (a breath is
+not a unit of time, and slow breathing is the point of most items that count in them),
+`2 × 10, slow`, `3 rounds per side`, `all day`, and anything carrying an explicit
+`[undetermined]` — somebody looked at that dose and decided not to say.
+
+**The result: 14 of 383 catalogue items say how long they take.** The shipped day, block
+by block:
+
+```
+The day arc › all four blocks            about 2–9 min each   ← authored with durations
+Morning / Evening flow                   about 8 min each     ← authored with durations
+Daily support › Movement                 3 things, none of them timed
+Daily support › Drainage & recovery      8 things, none of them timed
+Daily support › Mind & nervous system    6 things, none of them timed
+Body work › all eight sections           2–10 things, none of them timed
+Full Body                                6 things, only 1 timed (about 1 min of it)
+```
+
+**Twelve of eighteen blocks carry no clock at all.** That is the real state, it was always
+the real state, and until today the screen was papering over it at sixty seconds an item.
+
+One wording rule worth keeping: when most of a block is untimed the **count leads and the
+minutes follow in brackets** — "6 things, only 1 timed (about 1 min of it)". The first
+version said "about 1 min, plus 5 with no clock on them", which describes a strength
+session as a minute long. A true number in a misleading position is still misleading.
+
+### What this means for the presets
+
+Two ways forward, and they are not exclusive:
+
+1. **Author durations for the body-work and support content.** ~80 items in the shipped
+   day. Real work, and the honest kind — a foam-roll card genuinely has a dose, it just
+   was never written down.
+2. **Let a preset carry its own authored minutes.** "Floor — about 7 minutes" is a design
+   statement about a preset somebody built, not a sum over items. That is honest even with
+   the catalogue as it stands, and it is probably how the presets should work anyway: the
+   per-item numbers then improve the *live* estimate rather than defining the preset.
+
+Route 2 unblocks the home screen next session. Route 1 is the content job that makes the
+live estimate mean something, and it is now visible as a number that will move.

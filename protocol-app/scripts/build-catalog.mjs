@@ -27,6 +27,7 @@
 import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { tagAll, applyPatterns } from './facet-tags.mjs';
 import { applyMeasureSpecs } from './measure-specs.mjs';
+import { applyDurations, lengthOf } from '../src/lib/durations.js';
 import { existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { dirname, resolve, relative } from 'node:path';
@@ -437,7 +438,7 @@ async function main() {
     const applied = applyFoldin(catalog.items, JSON.parse(await readFile(FOLDIN_FILE, 'utf8')), nodes);
     const tagged = applyAnatomyTags(applied.items, JSON.parse(await readFile(TAGS_FILE, 'utf8')), nodes);
     const patterned = applyPatterns(tagged, JSON.parse(await readFile(PATTERNS_FILE, 'utf8')));
-    const faceted = applyMeasureSpecs(tagAll(patterned, JSON.parse(await readFile(OVERRIDES_FILE, 'utf8'))));
+    const faceted = applyDurations(applyMeasureSpecs(tagAll(patterned, JSON.parse(await readFile(OVERRIDES_FILE, 'utf8')))));
     const related = checkRelations(faceted, nodes);
     catalog.items = related.items;
     unconditional = related.unconditional;
@@ -491,6 +492,8 @@ async function main() {
   const measurements = catalog.items.filter((i) => i.type === 'measurement');
   const scheduled = measurements.filter((i) => i.cadence);
   console.log(`self-tests: ${measurements.length} — all recording a real reading; ${scheduled.length} with a re-test cadence; ${routers.length} that route (TAXONOMY §5).`);
+  const len = lengthOf(catalog.items);
+  console.log(`durations: ${len.timed}/${catalog.items.length} items say how long they take — the other ${len.untimed} say nothing, and nothing is what the screens will say about them.`);
   const withTarget = catalog.items.filter((i) => i.target?.length).length;
   const bare = catalog.items.filter((i) => !i.target?.length);
   console.log(`anatomy: ${withTarget}/${catalog.items.length} items carry node ids (muscles and regions kept alongside).`);

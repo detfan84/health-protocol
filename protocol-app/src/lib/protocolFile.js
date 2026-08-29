@@ -202,10 +202,15 @@ function fixItem(raw, path, ctx) {
   if (legacyAmount) ctx.sawLegacyAmount = true;
   if (rawAmount) {
     const amount = {};
-    for (const k of ['sets', 'reps', 'seconds']) {
+    for (const k of ['sets', 'reps', 'seconds', 'secondsMax']) {
       const n = asNumber(rawAmount[k]);
       if (n !== undefined && Number.isFinite(n) && n > 0) amount[k] = Math.round(n);
     }
+    // A stated range stays a range. "30–60 seconds" is not forty-five: the
+    // midpoint is a number nobody wrote down.
+    if (amount.secondsMax && !amount.seconds) delete amount.secondsMax;
+    if (amount.secondsMax && amount.secondsMax <= amount.seconds) delete amount.secondsMax;
+    if (rawAmount.perSide === true) amount.perSide = true;
     if (Object.keys(amount).length) item.amount = amount;
   }
   // Which rung of the ladder this person is actually on. A catalogue item

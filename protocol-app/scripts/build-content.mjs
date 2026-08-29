@@ -35,6 +35,7 @@ const load = (f) => import(pathToFileURL(resolve(OLD, f)).href);
 import { dayArcProtocol } from './day-arc.mjs';
 import { GENERALISE, SECTION_NOTES } from './generalise.mjs';
 
+
 /* ------------------------------------------------------------------ *
  * Personal detail → general instruction.
  *

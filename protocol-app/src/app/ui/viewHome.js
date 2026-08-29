@@ -18,6 +18,7 @@ import * as store from '../store.js';
 import { icon } from './icons.js';
 import { buildToday } from '../todayModel.js';
 import { localDateKey, displayTime, timeFormatOf } from '../../lib/core.js';
+import { lengthOf, lengthText } from '../../lib/durations.js';
 
 /**
  * How a protocol presents itself on the menu. Seeded protocols get a look;
@@ -52,10 +53,16 @@ function tile({ title, sub, iconName, accent, onclick, wide = false }) {
   );
 }
 
-const minutes = (block) => {
-  const secs = block.items.reduce((n, it) => n + (it.amount?.seconds ?? 60), 0);
-  return Math.max(1, Math.round(secs / 60));
-};
+// How long a block reads as. This used to be
+//   block.items.reduce((n, it) => n + (it.amount?.seconds ?? 60), 0)
+// — a minute invented for every item with no duration, summed, and shown to a
+// person as though the app knew. Most of the day carries no clock at all, so
+// most of that number was fabricated. Canon 3.7: no uncertainty was
+// experienced while writing it, which is exactly how a made-up number gets
+// mistaken for a known one.
+//
+// It says what it knows and counts what it does not.
+const lengthLabel = (block) => lengthText(lengthOf(block.items));
 
 export async function viewHome({ open, startSession }) {
   const date = localDateKey();
@@ -83,7 +90,7 @@ export async function viewHome({ open, startSession }) {
         h('h2.section-title', {}, 'Right now'),
         h('div.card.now-card', {},
           h('h3', {}, b.name),
-          h('p.muted', {}, `${b.items.length} left · about ${minutes(b)} min`),
+          h('p.muted', {}, `${b.items.length} left · ${lengthLabel(b)}`),
           h('button.btn.primary', {
             style: 'width:100%',
             onclick: () => startSession(b.protocolId, b.blockId),
@@ -168,4 +175,4 @@ export async function viewHome({ open, startSession }) {
   return root;
 }
 
-export { lookFor, minutes };
+export { lookFor, lengthLabel };
