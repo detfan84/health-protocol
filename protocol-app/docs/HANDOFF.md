@@ -9,7 +9,7 @@ is the part written for the next session specifically.*
 **Live:** https://shoes-of-peace.kevin-c-bowie.workers.dev
 **Code:** `C:\Users\kevin\Health App\protocol-app`, branch `protocol-app-v0.2`
 **Deploy:** `npm run deploy` (direct upload to Cloudflare — a git push does NOT
-deploy). **Tests:** `npm test` — **307 green** (29 Aug).
+deploy). **Tests:** `npm test` — **313 green** (29 Aug).
 
 ---
 
@@ -281,12 +281,57 @@ be tested by a suite that only ever sees the time it happens to run at.
 
 ---
 
+## The opportunity layer, and the cadence it needed (29 Aug)
+
+Kevin, on the rise block: *"'while you're already up' isn't a good label, because some
+things are while you are seated or lying down… that one will perpetually be front and
+center unless they have done 3 per day already so that's not right either."*
+
+**It is `Woven into what you're already doing` now**, with **no window** and every item
+`{ kind: 'timesPerDay', n: 3 }` — a new cadence kind. A thing you do whenever you are
+already doing something cannot be retired by a clock, and a single daily tick cannot count
+it. Three passes and it stops asking for the day.
+
+- `check.ats: [iso, …]` — the moments behind one check. `timesDone` reads a record with no
+  `ats` as **one** go rather than none, so nothing already written changes meaning.
+- A repeatable tap **counts up and wraps to nothing**. No second control: on a three-a-day
+  item the way back is at most three more taps.
+- The row shows `1 of 3 today`, and unlike the weekly count this is **not opt-in**. R17
+  makes the weekly number a choice because it is a target reflected back at somebody; this
+  is the state of a control, and a row that showed nothing after a tap would look broken.
+- **Home:** a windowless block whose items repeat takes the Now card when the clock has
+  nothing to say — found by *shape*, not by id. Offering it is not the app choosing; the
+  plan already chose. Verified live at 07:00, 14:00 and 21:00.
+
+**Still not true, and worth saying:** all three items in that block are done on your feet.
+The name can hold a seated or lying variant; the content has none. FRAMEWORK part 4.
+
+### The bug this exposed
+
+`Morning flow` carried **a start and no end**, and `todayModel` runs such a block until the
+next timed block begins. It had been colliding with another 07:00 start, so its window
+collapsed to nothing and it read as missed all day; dropping the rise block's window
+changed what came next and it went to owning the Now card until 8pm. Both readings were
+accidents of what else was scheduled. **Flow blocks carry an end now**, and a test fails on
+any block with a start, no end, and something scheduled after it.
+
+---
+
 ## Open: colours and icons
 
-Kevin, 29 Aug: *"we need to figure out better color schemes and icons."* Not started —
-four palettes and four icon sets are drawn up on the real home screen and waiting on a
-pick. The brief behind them: the accent has to carry one loud thing, and sage sits very
-close to the paper it lives on.
+Kevin, 29 Aug: *"we need to figure out better color schemes and icons."* Waiting on a pick.
+
+The first four proposals were rejected, correctly: *"nearly the same thing with a different
+color button. The colors should be throughout the theme."* The brief that came with it —
+**dark by default but with other options, and intentionally avoid blue light. Desert or
+sunset. Darker without being black.**
+
+Second pass carries the hue through every token (ground, surface, rule, muted, ink) and is
+measured rather than described: a neutral grey is 33.3% blue by definition, so each
+candidate states the blue share of its background. Current Paper sits at 32.8% and Slate at
+33.7% — grey with a tint. Desert night 26.7% · Ember 29.5% · Clay 31.4% · Sunset 31.9%.
+
+Icons: unchanged, no opinion given yet.
 
 Also open, and the honest note for whoever reads this: **I could not see the screen.** The
 Browser pane would not display in that session, so every check was DOM measurement —
