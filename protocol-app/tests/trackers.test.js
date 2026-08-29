@@ -17,6 +17,10 @@ import {
   bumpWaterMl,
   makeSupply,
   supplyKey,
+  setReading,
+  readings,
+  addSet,
+  trainingLog,
 } from '../src/app/trackerOps.js';
 import {
   buildToday,
@@ -309,4 +313,74 @@ test('one failed day write does not wedge the writes behind it', async () => {
   await store.mutateDay(date, (day) => toggleCheck(day, 'after-the-failure'));
   const back = await store.loadDay(date);
   assert.ok(back.checks['after-the-failure'], 'the queue kept moving');
+});
+
+/* ----------------------------- readings (§5.1) --------------------------- */
+// Fourteen self-tests shipped as tick boxes — GAPS §3's D36 finding, and a tick
+// on a measurement is the same failure PLAN §2 named for sets and reps. These
+// pin where the answer goes and what it must survive.
+
+test('a number goes in, per side, and comes back', () => {
+  let day = blankDay('2026-08-29');
+  day = setReading(day, 'test-kneewall', 'left', 9.5);
+  day = setReading(day, 'test-kneewall', 'right', 11);
+  assert.equal(readings(day, 'test-kneewall').left.value, 9.5);
+  assert.equal(readings(day, 'test-kneewall').right.value, 11);
+  assert.ok(readings(day, 'test-kneewall').left.at, 'and when it was taken');
+});
+
+test('a left ankle and a right ankle are two measurements, not one averaged', () => {
+  let day = blankDay('2026-08-29');
+  day = setReading(day, 'test-kneewall', 'left', 9);
+  day = setReading(day, 'test-kneewall', 'right', 12);
+  const r = readings(day, 'test-kneewall');
+  assert.notEqual(r.left.value, r.right.value);
+  assert.equal(r.both, undefined, 'and nothing invented a combined figure');
+});
+
+test('a choice keeps the words it had at the time, not just the id', () => {
+  // D20. The reading "the thigh sits above the line of your trunk" can be
+  // reworded next year; a record holding only an id would quietly start
+  // meaning the new sentence.
+  let day = blankDay('2026-08-29');
+  day = setReading(day, 'test-hipflexor-length', 'left', {
+    outcomeId: 'deep-flexor',
+    tell: 'The thigh sits above the line of your trunk.',
+  });
+  const r = readings(day, 'test-hipflexor-length').left;
+  assert.equal(r.outcomeId, 'deep-flexor');
+  assert.match(r.tell, /above the line of your trunk/);
+});
+
+test('clearing a reading makes it absent, not nought', () => {
+  // Ruling A: nothing is a zero until it is typed.
+  let day = blankDay('2026-08-29');
+  day = setReading(day, 'test-kneewall', 'left', 9);
+  day = setReading(day, 'test-kneewall', 'left', undefined);
+  assert.equal(readings(day, 'test-kneewall'), undefined);
+  assert.equal(day.log, undefined, 'and an empty log is no log');
+});
+
+test('zero is a real reading and survives', () => {
+  let day = blankDay('2026-08-29');
+  day = setReading(day, 'test-bigtoe', 'right', 0);
+  assert.equal(readings(day, 'test-bigtoe').right.value, 0, 'a big toe that does not lift is a result');
+});
+
+test('a reading is not destroyed by a tap', () => {
+  // Ruling B: typed content is never stranded. The log lives beside the checks,
+  // so un-checking something by accident cannot erase what you wrote down.
+  let day = blankDay('2026-08-29');
+  day = setReading(day, 'test-kneewall', 'left', 9.5);
+  day = toggleCheck(day, 'test-kneewall');
+  day = toggleCheck(day, 'test-kneewall');
+  assert.equal(readings(day, 'test-kneewall').left.value, 9.5);
+});
+
+test('readings and sets can live on the same item without clobbering each other', () => {
+  let day = blankDay('2026-08-29');
+  day = setReading(day, 'x', 'both', 12);
+  day = addSet(day, 'x', { reps: 8 });
+  assert.equal(readings(day, 'x').both.value, 12);
+  assert.equal(trainingLog(day, 'x').sets.length, 1);
 });

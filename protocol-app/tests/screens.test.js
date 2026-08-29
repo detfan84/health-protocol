@@ -794,3 +794,54 @@ test('the library says who wrote an item, and what it asks for', async () => {
     globalThis.fetch = realFetch;
   }
 });
+
+test('a self-test on your day has somewhere to put the answer', async () => {
+  store._resetForTests();
+  await store.ready({ name: 'screens-measure' });
+  // GAPS §3 / D36: thirteen tests shipped as tick boxes with their unit written
+  // in a sentence — "Recorded in cm." — and nowhere at all to type the number.
+  // A tick box on a measurement is the failure PLAN §2 named for sets and reps.
+  await store.saveProtocol({
+    id: 'p-measure', name: 'Measures', active: true, phases: [],
+    blocks: [{
+      id: 'b', name: 'Tests', order: 0, items: [
+        { id: 'test-kneewall', name: 'Knee to wall', tracking: 'measure', sides: true,
+          measure: { kind: 'number', unit: 'cm', name: 'centimetres', better: 'higher' } },
+        { id: 'test-hipflexor-length', name: 'The hanging-leg test', tracking: 'measure', sides: true,
+          measure: { kind: 'choice' },
+          outcomes: [
+            { id: 'level', tell: 'The thigh rests level.', means: 'Nothing is short.' },
+            { id: 'deep-flexor', tell: 'The thigh sits above the trunk.', means: 'Psoas and iliacus.' },
+          ] },
+      ],
+    }],
+    createdAt: 'x', updatedAt: 'x',
+  });
+
+  draw(await viewToday({}));
+  await settled();
+  // The log inputs live inside the item's own card, which starts closed.
+  for (const card of document.querySelectorAll('details')) card.open = true;
+  await settled();
+  const main = document.body;
+
+  const labels = [...main.querySelectorAll('label')].map((l) => l.textContent);
+  assert.ok(labels.some((t) => /Left \(cm\)/.test(t)), `no left reading input — got ${JSON.stringify(labels)}`);
+  assert.ok(labels.some((t) => /Right \(cm\)/.test(t)), 'and a right one, because two ankles are two measurements');
+  assert.match(main.textContent, /Higher is better/, 'and which direction is progress');
+
+  // The choice test offers the readings themselves, in the words of the card.
+  const options = [...main.querySelectorAll('option')].map((o) => o.textContent);
+  assert.ok(options.some((t) => /thigh sits above the trunk/.test(t)), `readings not offered — got ${JSON.stringify(options)}`);
+  assert.ok(options.includes('Not recorded'), 'and not recording is a real state');
+
+  // Typing one stores it.
+  const input = [...main.querySelectorAll('input[type=number]')]
+    .find((i) => /Left reading/.test(i.getAttribute('aria-label') ?? ''));
+  input.value = '9.5';
+  input.dispatchEvent(new Event('change'));
+  await settled();
+  const { localDateKey } = await import('../src/lib/core.js');
+  const day = await store.loadDay(localDateKey());
+  assert.equal(day.log['test-kneewall'].readings.left.value, 9.5);
+});

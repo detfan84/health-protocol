@@ -160,9 +160,31 @@ function fixItem(raw, path, ctx) {
   // Anything else is a tick, because an unknown tracking type must not make an
   // item unloggable — it just makes it ordinary.
   const tracking = asTrimmed(String(raw.tracking ?? ''));
-  if (tracking === 'sets' || tracking === 'duration') item.tracking = tracking;
+  if (tracking === 'sets' || tracking === 'duration' || tracking === 'measure') item.tracking = tracking;
   else if (tracking && tracking !== 'check') {
-    ctx.warn(path + '.tracking', `"${raw.tracking}" is not a way of tracking — treated as a simple tick. Known: check, sets, duration.`);
+    ctx.warn(path + '.tracking', `"${raw.tracking}" is not a way of tracking — treated as a simple tick. Known: check, sets, duration, measure.`);
+  }
+  // What a self-test records. A tick box on a measurement is the failure PLAN
+  // §2 named for sets and reps, and this is the field that ends it — the unit,
+  // the scale, or "a choice", plus which direction counts as progress.
+  if (isObj(raw.measure)) {
+    const kind = asTrimmed(String(raw.measure.kind ?? ''));
+    if (['number', 'scale', 'choice'].includes(kind)) {
+      const measure = { kind };
+      for (const k of ['unit', 'name']) {
+        const v = asTrimmed(String(raw.measure[k] ?? ''));
+        if (v) measure[k] = v;
+      }
+      for (const k of ['min', 'max']) {
+        const n = asNumber(raw.measure[k]);
+        if (n !== undefined && Number.isFinite(n)) measure[k] = n;
+      }
+      const better = asTrimmed(String(raw.measure.better ?? ''));
+      if (better === 'higher' || better === 'lower') measure.better = better;
+      item.measure = measure;
+    } else {
+      ctx.warn(path + '.measure.kind', `"${raw.measure.kind}" is not a kind of measurement — ignored. Known: number, scale, choice.`);
+    }
   }
   // What the plan asks for. Optional, and never a floor or a judgement — the
   // log records what happened, this only says what was written down.
@@ -288,7 +310,11 @@ function fixItem(raw, path, ctx) {
       const tell = asTrimmed(String(o.tell ?? ''));
       const means = asTrimmed(String(o.means ?? ''));
       if (!tell || !means) continue;
-      const out = { tell, means };
+      const out = {};
+      const id = asTrimmed(String(o.id ?? ''));
+      if (id) out.id = id;
+      out.tell = tell;
+      out.means = means;
       const list = (v) => (Array.isArray(v) ? [...new Set(v.map((x) => asTrimmed(String(x))).filter(Boolean))] : []);
       if (list(o.points).length) out.points = list(o.points);
       if (list(o.then).length) out.then = list(o.then);

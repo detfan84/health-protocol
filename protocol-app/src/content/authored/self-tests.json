@@ -8,7 +8,7 @@
       "name": "The hanging-leg test — which hip flexor is short, if any",
       "kind": "selftest",
       "category": "measure",
-      "tracking": "check",
+      "tracking": "measure",
       "sides": true,
       "tier": "established",
       "why": "\"Tight hip flexors\" is three different muscles wearing one complaint, and they are released in three different places. This is the position that tells them apart — including the answer nobody expects, which is that none of them is short.",
@@ -27,12 +27,14 @@
       },
       "outcomes": [
         {
+          "id": "level",
           "tell": "The thigh rests level with the trunk or a little below, the knee hangs near 90°, and the low back stays flat.",
           "means": "Nothing here is short. If a movement still feels blocked at the front of the hip, the restriction is somewhere else — and stretching this would be work aimed at nothing.",
           "points": [],
           "then": []
         },
         {
+          "id": "deep-flexor",
           "tell": "The thigh sits above the line of your trunk — you could pass a hand under it without touching.",
           "means": "The deep hip flexor is the short one: psoas and iliacus, which cross from the spine and the inside of the pelvis to the top of the thigh.",
           "points": [
@@ -44,6 +46,7 @@
           ]
         },
         {
+          "id": "rectus",
           "tell": "The thigh rests down, but the knee straightens toward the floor rather than hanging bent.",
           "means": "Rectus femoris — the one quad that crosses the hip as well as the knee. A hip-flexor stretch that keeps the knee straight never asks it for anything.",
           "points": [
@@ -54,6 +57,7 @@
           ]
         },
         {
+          "id": "tfl",
           "tell": "The thigh drifts out to the side as it lowers, or will not stay in line without you holding it.",
           "means": "The muscle at the front corner of the hip and the band it tensions.",
           "points": [
@@ -66,7 +70,15 @@
         }
       ],
       "sourceNote": "A long-standing clinical assessment position, written here as something a person can run on themselves and read. The four readings are the standard ones; the wording is this app's.",
-      "authoringNote": "Ships with tracking: 'check' like the other thirteen self-tests, and that is wrong for the same reason (GAPS §3, D36): the result of this one is a four-way reading per side, and a tick box cannot hold it. The outcomes below carry the meaning; nothing yet carries the answer."
+      "authoringNote": "Records which of four readings you got, per side. The other thirteen tests record a number; this one records a choice, which is why `measure.kind` exists at all.",
+      "measure": {
+        "kind": "choice",
+        "name": "which reading you got"
+      },
+      "cadence": {
+        "kind": "everyNDays",
+        "n": 28
+      }
     }
   ]
 }

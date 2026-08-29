@@ -254,7 +254,7 @@ function withLog(day, itemId, change) {
   d.log = d.log ?? {};
   const current = d.log[itemId] ?? {};
   const next = change(clone(current));
-  if (!next || (!next.sets?.length && !Number.isFinite(next.seconds))) {
+  if (!next || (!next.sets?.length && !Number.isFinite(next.seconds) && !Object.keys(next.readings ?? {}).length)) {
     delete d.log[itemId];                       // nothing recorded is nothing
     if (Object.keys(d.log).length === 0) delete d.log;
   } else {
@@ -299,6 +299,61 @@ export function setDuration(day, itemId, seconds) {
     else delete next.seconds;
     return next;
   });
+}
+
+/**
+ * Record a self-test's answer (docs/TAXONOMY.md §5.1).
+ *
+ * Fourteen tests shipped as tick boxes — GAPS §3's D36 finding, and a tick on a
+ * measurement is the same failure PLAN §2 named for sets and reps. This is
+ * where the number goes.
+ *
+ * Two shapes, because the tests are two shapes. A number is a number. A choice
+ * stores the outcome's id AND the words it had at the time (D20): the reading
+ * "the thigh sits above the line of your trunk" can be reworded next year, and
+ * a record that kept only the id would quietly start meaning the new sentence.
+ *
+ * Per side, because most of these are per side, and a left ankle and a right
+ * ankle are two measurements rather than one averaged.
+ *
+ * Passing `undefined` clears that side. Nothing is a zero until it is typed —
+ * a cleared reading is absent, not nought (ruling A).
+ */
+export function setReading(day, itemId, side, reading, at = nowIso()) {
+  const key = side === 'left' || side === 'right' ? side : 'both';
+  return withLog(day, itemId, (log) => {
+    const readings = { ...(log.readings ?? {}) };
+    const cleaned = cleanReading(reading, at);
+    if (cleaned) readings[key] = cleaned;
+    else delete readings[key];
+    const next = { ...log };
+    if (Object.keys(readings).length) next.readings = readings;
+    else delete next.readings;
+    return next;
+  });
+}
+
+/** What was recorded for this test, or undefined. */
+export function readings(day, itemId) {
+  return day.log?.[itemId]?.readings;
+}
+
+function cleanReading(raw, at) {
+  if (raw == null) return null;
+  if (typeof raw === 'number') {
+    return Number.isFinite(raw) ? { value: Math.round(raw * 100) / 100, at } : null;
+  }
+  const out = {};
+  if (Number.isFinite(raw.value)) out.value = Math.round(raw.value * 100) / 100;
+  if (raw.outcomeId) {
+    out.outcomeId = String(raw.outcomeId);
+    // The words at the time. A reading whose meaning is only reachable through
+    // the current catalogue is a reading that changes when the catalogue does.
+    if (raw.tell) out.tell = String(raw.tell);
+  }
+  if (!('value' in out) && !('outcomeId' in out)) return null;
+  out.at = at;
+  return out;
 }
 
 function cleanSet(raw) {

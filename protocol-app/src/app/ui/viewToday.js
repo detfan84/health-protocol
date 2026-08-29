@@ -19,7 +19,7 @@ import { h, clear } from './dom.js';
 import { buildToday, makePhaseSetting } from '../todayModel.js';
 import {
   setJournal, addFood, removeFood, bumpWaterMl, setWaterMl,
-  unavailableReason, addSet, updateSet, removeSet, setDuration, trainingLog, lastLoggedBefore,
+  unavailableReason, addSet, updateSet, removeSet, setDuration, setReading, trainingLog, lastLoggedBefore,
   applyCheckToggle, setCheckUnits,
 } from '../trackerOps.js';
 import { unitsOf, stepMl, volumeUnitLabel, displayVolume, parseVolume, weightUnitLabel, displayWeight, parseWeight } from '../../lib/units.js';
@@ -198,20 +198,20 @@ function fieldsBlock(fields) {
  * ticked with nothing typed is complete, and always was.
  */
 function trainingBlock(item, day, { units, writeKey, onLogged, lastTime }) {
-  if (item.tracking !== 'sets' && item.tracking !== 'duration') return null;
+  if (item.tracking !== 'sets' && item.tracking !== 'duration' && item.tracking !== 'measure') return null;
 
   const host = h('div.training', {});
   const wLabel = weightUnitLabel(units);
 
-  const target = item.amount
-    ? item.tracking === 'duration'
+  const target = item.tracking === 'measure' || !item.amount
+    ? null
+    : item.tracking === 'duration'
       ? `${item.amount.seconds ?? ''} sec`
-      : `${item.amount.sets ?? ''} × ${item.amount.reps ?? ''}`.trim()
-    : null;
+      : `${item.amount.sets ?? ''} × ${item.amount.reps ?? ''}`.trim();
 
   host.append(
     h('div.training-head', {},
-      h('span.field-label', {}, 'Log'),
+      h('span.field-label', {}, item.tracking === 'measure' ? 'Reading' : 'Log'),
       target ? h('span.why', {}, `Asked for: ${target}`) : null,
       lastTime ? h('span.why', {}, `Last time (${lastTime.when}): ${lastTime.text}`) : null,
     ),
@@ -226,6 +226,76 @@ function trainingBlock(item, day, { units, writeKey, onLogged, lastTime }) {
   function renderSets() {
     clear(rows);
     const log = trainingLog(day, item.id);
+
+    // A self-test's answer (docs/TAXONOMY.md §5.1). Fourteen tests shipped as
+    // tick boxes with their unit written in a sentence — "Recorded in cm." —
+    // and nowhere at all to put the number. Two shapes, because the tests are
+    // two shapes: most want a figure, one wants which of four things you saw.
+    if (item.tracking === 'measure' && item.measure) {
+      const stored = log?.readings ?? {};
+      const sides = item.sides ? ['left', 'right'] : ['both'];
+      const label = { left: 'Left', right: 'Right', both: 'Reading' };
+
+      for (const side of sides) {
+        const current = stored[side];
+        if (item.measure.kind === 'choice') {
+          rows.append(
+            h('div', {},
+              h('label', {}, item.sides ? `${label[side]} — what you saw` : 'What you saw'),
+              h('select', {
+                'aria-label': `${label[side]} reading for ${item.name}`,
+                onchange: (e) => {
+                  const chosen = (item.outcomes ?? []).find((o) => o.id === e.target.value);
+                  write(
+                    (fresh) => setReading(fresh, item.id, side, chosen ? { outcomeId: chosen.id, tell: chosen.tell } : undefined),
+                    `The ${label[side].toLowerCase()} reading for ${item.name}`,
+                  );
+                },
+              },
+                [h('option', { value: '' }, 'Not recorded')].concat(
+                  (item.outcomes ?? []).map((o) => h('option', {
+                    value: o.id,
+                    selected: current?.outcomeId === o.id,
+                  }, o.tell)),
+                ),
+              ),
+            ),
+          );
+        } else {
+          const isScale = item.measure.kind === 'scale';
+          rows.append(
+            h('div.field-row', {},
+              h('div', {},
+                h('label', {}, item.sides
+                  ? `${label[side]} (${isScale ? `${item.measure.min}–${item.measure.max}` : item.measure.unit})`
+                  : `Reading (${isScale ? `${item.measure.min}–${item.measure.max}` : item.measure.unit})`),
+                h('input', {
+                  type: 'number',
+                  inputmode: 'decimal',
+                  ...(isScale ? { min: String(item.measure.min), max: String(item.measure.max) } : { min: '0' }),
+                  // A blank is "not recorded" and a zero is a result. A big toe
+                  // that does not lift is a reading, not a missing one.
+                  value: Number.isFinite(current?.value) ? String(current.value) : '',
+                  placeholder: '—',
+                  'aria-label': `${label[side]} reading for ${item.name}`,
+                  onchange: (e) => {
+                    const raw = e.target.value.trim();
+                    const n = Number(raw);
+                    write(
+                      (fresh) => setReading(fresh, item.id, side, raw !== '' && Number.isFinite(n) ? n : undefined),
+                      `The ${label[side].toLowerCase()} reading for ${item.name}`,
+                    );
+                  },
+                })),
+            ),
+          );
+        }
+      }
+      if (item.measure.better) {
+        rows.append(h('p.muted', {}, `${item.measure.better === 'higher' ? 'Higher' : 'Lower'} is better. It is your own number — nothing is compared to anybody else's.`));
+      }
+      return;
+    }
 
     if (item.tracking === 'duration') {
       const secs = log?.seconds;

@@ -278,6 +278,7 @@ export async function viewLibrary({ reload } = {}) {
               .map((k) => [k, item[k]]),
           ),
           ...(item.outcomes?.length ? { outcomes: item.outcomes } : {}),
+          ...(item.measure ? { measure: item.measure } : {}),
           ...Object.fromEntries(
             ['effect', 'tissue', 'target', 'context', 'equipment', 'demands', 'before']
               .filter((k) => Array.isArray(item[k]) && item[k].length)

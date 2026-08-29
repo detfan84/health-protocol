@@ -386,10 +386,35 @@ promises and then fails.
 
 **Still true: 1 of 14 self-tests can route**, and the build prints that ratio every time.
 
-**And the tick box is still a tick box.** This ships `tracking: 'check'` like the other thirteen,
-which is the D36 defect `GAPS.md` §3 named — except here the cost is legible, because the result is
-a four-way reading per side and a tick cannot hold it. The outcomes carry the *meaning*; nothing
-yet carries the *answer*. That is a measurement type, and it is the next thing this needs.
+### 5.2 The tick box, ended
+
+`tracking: 'measure'` — the D36 defect `GAPS.md` §3 named, closed. **All fourteen self-tests now
+record a real reading, on a stated interval.**
+
+The specs were **parsed, not invented**, and that is the part worth keeping. Every imported test
+already said what it records and which way was progress, in prose, in a field nothing could read:
+`notice` said *"Recorded in cm."* and `why` said *"Re-test: Every 2 weeks. Higher is better."* So
+`scripts/measure-specs.mjs` reads those two sentences and a measurement whose card says neither
+**stops the build** — a unit guessed there would look exactly like a unit somebody chose (canon
+3.7).
+
+Three shapes, because the tests are three shapes: `number` (cm, sec, min, /day), `scale` (0–3,
+0–10, with the anchors already written into the instructions), and `choice`, whose options are the
+item's own `outcomes`.
+
+The sentences are then **removed from `why`**, because a fact in two places drifts and *"Re-test:
+Every 2 weeks. Higher is better."* was never a why — it is a cadence and a direction wearing the
+reason field's clothes (§10.1 again). Deriving the cadence also closed GAPS §3's other half:
+fourteen tests had no re-test interval, and now all fourteen do.
+
+**Where the answer goes:** `log[itemId].readings.{left|right|both}`, beside the checks and never
+inside them, so an accidental tap cannot erase it (ruling B). Per side, because a left ankle and a
+right ankle are two measurements rather than one averaged. Zero is a real reading — a big toe that
+does not lift is a result — and a cleared one is absent, not nought (ruling A).
+
+A `choice` reading stores the outcome's id **and the words it had at the time** (D20). Reword the
+card next year and the record still says what was seen, rather than quietly starting to mean the
+new sentence.
 
 ---
 

@@ -16,6 +16,7 @@ import { resolve } from 'node:path';
 
 import { mergeCatalog, readSource, collectSources, applyFoldin, applyAnatomyTags, checkRelations, versionOf } from '../scripts/build-catalog.mjs';
 import { tagAll, typeOf, effectOf } from '../scripts/facet-tags.mjs';
+import { applyMeasureSpecs, unitFrom, directionFrom, cadenceFrom, whyWithout } from '../scripts/measure-specs.mjs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 
@@ -165,7 +166,7 @@ test('the shipped catalogue is exactly its sources, and the authored file is in 
   const built = mergeCatalog(await collectSources());
   const overrides = JSON.parse(await readFile(url('../src/content/vocab/facet-overrides.json'), 'utf8'));
   const tags = JSON.parse(await readFile(url('../src/content/vocab/anatomy-tags.json'), 'utf8'));
-  built.items = checkRelations(tagAll(applyAnatomyTags(applyFoldin(built.items, foldin, nodes).items, tags, nodes), overrides), nodes).items;
+  built.items = checkRelations(applyMeasureSpecs(tagAll(applyAnatomyTags(applyFoldin(built.items, foldin, nodes).items, tags, nodes), overrides)), nodes).items;
   built.version = versionOf(built.items);
   const shipped = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
 
@@ -635,4 +636,57 @@ test('the prerequisite that asked for this test now points at it', async () => {
   const [pre] = lib.items.find((i) => i.id === 'var-legs-up-wall-one-down').before;
   assert.equal(pre.test, 'test-hipflexor-length');
   assert.ok(lib.items.some((i) => i.id === pre.test));
+});
+
+/* ------------------------ what a measurement records --------------------- */
+// Every imported test already stated its unit and its direction, in prose, in
+// a field nothing could read: `notice` said "Recorded in cm." and `why` said
+// "Re-test: Every 2 weeks. Higher is better." So this is parsed, not invented.
+
+test('the unit, the direction and the re-test interval come out of the card', () => {
+  assert.deepEqual(unitFrom('Recorded in cm.'), { kind: 'number', unit: 'cm', name: 'centimetres' });
+  assert.deepEqual(unitFrom('Recorded in 0–3.'), { kind: 'scale', min: 0, max: 3 });
+  assert.equal(unitFrom('Nothing useful here'), null);
+  assert.equal(directionFrom('Re-test: Weekly. Lower is better.'), 'lower');
+  assert.deepEqual(cadenceFrom('Re-test: Every 2 weeks. Higher is better.'), { kind: 'everyNDays', n: 14 });
+  assert.deepEqual(cadenceFrom('Re-test: Monthly.'), { kind: 'everyNDays', n: 30 });
+});
+
+test('a measurement that does not say what it records stops the build', () => {
+  // A unit invented here would look exactly like a unit somebody chose
+  // (canon 3.7). The build refuses rather than guessing "cm".
+  assert.throws(
+    () => applyMeasureSpecs([{ id: 't', name: 'T', type: 'measurement', fields: {} }]),
+    /do not say what they record/,
+  );
+});
+
+test('a card that states its own shape outranks the prose parser', () => {
+  const authored = { id: 't', name: 'T', type: 'measurement', measure: { kind: 'choice' }, fields: { notice: 'Recorded in cm.' } };
+  assert.deepEqual(applyMeasureSpecs([authored])[0].measure, { kind: 'choice' });
+});
+
+test('the parsed sentences leave `why` rather than living in two places', () => {
+  // "Re-test: Every 2 weeks. Higher is better." was never a why. It is a
+  // cadence and a direction wearing the reason field's clothes, and a fact in
+  // two places drifts.
+  assert.equal(whyWithout('Re-test: Every 2 weeks. Higher is better.'), '');
+  assert.equal(whyWithout('Re-test: Weekly. Higher is better. The ribs stop moving first.'), 'The ribs stop moving first.');
+});
+
+test('every shipped self-test records something real, on a stated interval', async () => {
+  const lib = JSON.parse(await readFile(url('../src/content/library.json'), 'utf8'));
+  const tests = lib.items.filter((i) => i.type === 'measurement');
+  assert.equal(tests.length, 14);
+  for (const t of tests) {
+    assert.equal(t.tracking, 'measure', `${t.id} is still a tick box`);
+    assert.ok(t.measure?.kind, `${t.id} does not say what it records`);
+    assert.ok(t.cadence, `${t.id} has no re-test interval`);
+    if (t.measure.kind === 'number') assert.ok(t.measure.unit, `${t.id} has no unit`);
+    if (t.measure.kind === 'scale') assert.ok(Number.isFinite(t.measure.max), `${t.id} has no top of scale`);
+  }
+  const kneewall = tests.find((i) => i.id === 'test-kneewall');
+  assert.deepEqual(kneewall.measure, { kind: 'number', unit: 'cm', name: 'centimetres', better: 'higher' });
+  assert.deepEqual(kneewall.cadence, { kind: 'everyNDays', n: 14 });
+  assert.ok(!kneewall.why, 'and its "why" is no longer a re-test note');
 });

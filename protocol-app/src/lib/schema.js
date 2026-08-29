@@ -134,7 +134,10 @@ export const MIGRATIONS = [
  *     items: [ {
  *       id, name, dose?, why?, notes?, phaseIds?: [],
  *       cadence?: { kind, n? },                    // how often (PLAN 4.1)
- *       tracking?: 'check' | 'sets' | 'duration',   // how it is logged (4.2)
+ *       tracking?: 'check' | 'sets' | 'duration' | 'measure',  // how it is logged (4.2)
+ *       measure?: { kind: 'number'|'scale'|'choice', unit?, name?, min?, max?, better? },
+ *                                                   // what a self-test records (§5.1)
+ *       outcomes?: [ { id, tell, means, points?: [], then?: [] } ],  // and what it means
  *       amount?: { sets?, reps?, seconds? },        // what the plan asks for
  *       fields?: { tool?, release?, load?, notice?, careful? },  // K3
  *       photos?: [ { set, caption?, approx? } ],   // two frames per set
@@ -167,9 +170,14 @@ export const MIGRATIONS = [
  *   date 'YYYY-MM-DD' (local),                         // the key
  *   checks:  { [itemId]: { at: ISO } }                 // check-offs point at item IDs
  *   journal?, food: [ { id, at, text } ],
- *   log?: { [itemId]: { sets?: [ { reps?, kg?, seconds? } ], seconds? } },
- *                              // what was actually done — beside the checks,
- *                              // never inside them, so a tap cannot erase it
+ *   log?: { [itemId]: {
+ *     sets?: [ { reps?, kg?, seconds? } ], seconds?,
+ *     readings?: { left?|right?|both?: { value?, outcomeId?, tell?, at } },
+ *   } },                       // what was actually done — beside the checks,
+ *                              // never inside them, so a tap cannot erase it.
+ *                              // A reading keeps the words its outcome had at
+ *                              // the time (D20): reword the card later and the
+ *                              // record still says what was seen.
  *   waterMl?: number,          // canonical millilitres; absent = never logged
  *                              // (ruling A); 0 only ever user-made
  *   waterFromGlasses?: number, // provenance: converted from a v0.2 "glasses"

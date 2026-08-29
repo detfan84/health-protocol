@@ -26,6 +26,7 @@
 
 import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { tagAll } from './facet-tags.mjs';
+import { applyMeasureSpecs } from './measure-specs.mjs';
 import { existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { dirname, resolve, relative } from 'node:path';
@@ -390,7 +391,8 @@ async function main() {
     const nodes = new Map(JSON.parse(await readFile(ANATOMY_FILE, 'utf8')).nodes.map((n) => [n.id, n]));
     const applied = applyFoldin(catalog.items, JSON.parse(await readFile(FOLDIN_FILE, 'utf8')), nodes);
     const tagged = applyAnatomyTags(applied.items, JSON.parse(await readFile(TAGS_FILE, 'utf8')), nodes);
-    const related = checkRelations(tagAll(tagged, JSON.parse(await readFile(OVERRIDES_FILE, 'utf8'))), nodes);
+    const faceted = applyMeasureSpecs(tagAll(tagged, JSON.parse(await readFile(OVERRIDES_FILE, 'utf8'))));
+    const related = checkRelations(faceted, nodes);
     catalog.items = related.items;
     unconditional = related.unconditional;
     // The graph ships WITH the catalogue, slimmed to what a browser needs to
@@ -431,7 +433,8 @@ async function main() {
   }
   const routers = catalog.items.filter((i) => i.outcomes?.length);
   const measurements = catalog.items.filter((i) => i.type === 'measurement');
-  console.log(`self-tests: ${routers.length}/${measurements.length} can route — the rest record a reading and point nowhere (TAXONOMY §5).`);
+  const scheduled = measurements.filter((i) => i.cadence);
+  console.log(`self-tests: ${measurements.length} — all recording a real reading; ${scheduled.length} with a re-test cadence; ${routers.length} that route (TAXONOMY §5).`);
   const withTarget = catalog.items.filter((i) => i.target?.length).length;
   const bare = catalog.items.filter((i) => !i.target?.length);
   console.log(`anatomy: ${withTarget}/${catalog.items.length} items carry node ids (muscles and regions kept alongside).`);
