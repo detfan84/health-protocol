@@ -9,7 +9,7 @@ is the part written for the next session specifically.*
 **Live:** https://shoes-of-peace.kevin-c-bowie.workers.dev
 **Code:** `C:\Users\kevin\Health App\protocol-app`, branch `protocol-app-v0.2`
 **Deploy:** `npm run deploy` (direct upload to Cloudflare — a git push does NOT
-deploy). **Tests:** `npm test` — **305 green** (29 Aug).
+deploy). **Tests:** `npm test` — **307 green** (29 Aug).
 
 ---
 
@@ -210,6 +210,88 @@ saying two different numbers on two screens would have been worse than neither s
 **And the honest gate on all of it:** `Working_Record_v1.md` §1 still reads **0 loops**.
 Phase 1's done-when is Kevin's real daily use running on this build, and it has not happened
 yet. Everything above is easier to judge after a few days of using the thing.
+
+---
+
+## The one that was hiding under everything (29 Aug)
+
+**A revision to a seeded protocol could never reach an installed app.** Kevin: *"there's
+stuff I thought we had worked on that hasn't changed."*
+
+```
+device says applied version : a366b1dba3d1
+file  says version          : a366b1dba3d1      <- the same
+device holds block named    : "While the kettle boils"    <- the old name
+file  holds block named     : "While you're already up"   <- the new one
+```
+
+`protocolsToOffer` filtered on `!have.has(p.id)`, so anything the device already held was
+never a candidate for anything. New *protocols* arrived; a *revision* to one could not.
+And the version was stamped as applied regardless — the one record that could have shown
+the gap was asserting there wasn't one.
+
+`src/lib/seed.js` holds the rule now: **replace what the app gave you and you have not
+touched; never replace what you have made your own.** A baseline is the fingerprint of the
+shipped protocol *as installed*, so stored-vs-baseline asks "have you changed this?", which
+is a different question from "does this match what ships today". `active` and the stamps
+stay out of the fingerprint, or switching a plan off would freeze you out of corrections.
+
+**The migration, stated:** devices seeded before baselines existed fall back to
+`updatedAt === createdAt` as proof nothing has ever been saved. Blunt in one direction — a
+plan you merely toggled reads as edited and stops updating — and it errs toward never
+overwriting somebody's work. **If a plan ever stops receiving corrections, that is why.**
+
+Verified end to end on a device that held the stale copy: it repaired itself on the next
+launch, kept its on/off state, wrote ten baselines.
+
+---
+
+## The home screen, second cut (29 Aug)
+
+The first collapse was worse, and Kevin said so: 1259px of scroll on an 812px phone, six
+equal rows, and the largest thing on the page was a card reading "Nothing scheduled this
+minute" while three blocks sat open underneath it.
+
+His brief: *"what's up now in the current time slot should be front and center. What's
+completed should vanish (but still be accessible)… what didn't get done, but the time has
+passed is still at the top of the list to circle back to, just not drawing the same
+attention… what's to come can be on there, but again smaller… not adding to the
+overwhelming list that turns into a wall of obligation."*
+
+So the type scale IS the hierarchy, and exactly one thing is loud:
+
+```
+Now          one big card, the only filled button on the screen
+Circle back  missed, directly under it, plain rows - no card, no accent, no button
+Later        one folded line
+Anytime      one folded line
+Done today   one folded line - off the day, still reachable
+Browse + a thin row + the plans fold
+```
+
+**882px. The whole front door is one screen.**
+
+Two calls worth knowing. When the clock has nothing to say, Now says so and offers **no
+button** — handing somebody an arbitrary anytime block is the app choosing for them, and
+"nothing here judges what you pick" does not lapse because there is a gap in the clock.
+And Done counts what is in a drawer, never a proportion (law 2).
+
+`viewHome` takes an injectable `now`. A screen whose whole job is reading the clock cannot
+be tested by a suite that only ever sees the time it happens to run at.
+
+---
+
+## Open: colours and icons
+
+Kevin, 29 Aug: *"we need to figure out better color schemes and icons."* Not started —
+four palettes and four icon sets are drawn up on the real home screen and waiting on a
+pick. The brief behind them: the accent has to carry one loud thing, and sage sits very
+close to the paper it lives on.
+
+Also open, and the honest note for whoever reads this: **I could not see the screen.** The
+Browser pane would not display in that session, so every check was DOM measurement —
+element counts, computed styles, page height. That is how the first cut passed as a win at
+1259px. If the pane works for you, use it.
 
 ---
 
