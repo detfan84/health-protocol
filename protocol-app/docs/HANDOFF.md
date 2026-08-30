@@ -9,7 +9,7 @@ is the part written for the next session specifically.*
 **Live:** https://shoes-of-peace.kevin-c-bowie.workers.dev
 **Code:** `C:\Users\kevin\Health App\protocol-app`, branch `protocol-app-v0.2`
 **Deploy:** `npm run deploy` (direct upload to Cloudflare — a git push does NOT
-deploy). **Tests:** `npm test` — **313 green** (29 Aug).
+deploy). **Tests:** `npm test` — **336 green** (30 Aug).
 
 ---
 
@@ -50,8 +50,10 @@ serialises day writes), `todayModel.js` (`buildToday` → groups), `trackerOps.j
 (checks, journal, food, water, supply, pause, training log), `editorOps.js`,
 `failLog.js`.
 
-**Screens** (`src/app/ui/`) — Today (grouped), Protocols, Editor, Supply, Data,
-Reminders, Disclaimer, announcer (the fail-loudly surface).
+**Screens** (`src/app/ui/`) — Home (the front door), Today (grouped), Library, **Food &
+supplements**, Learn, Protocols, Editor, Area, Session, Supply, Data, Reminders, Disclaimer,
+announcer (the fail-loudly surface). Six tabs, which is a lot for a phone — Learn is the
+thinnest if one has to go.
 
 **Behaviour that exists and is tested:**
 
@@ -99,6 +101,23 @@ Reminders, Disclaimer, announcer (the fail-loudly surface).
 6. **Records out**: doctor summary with denominators (D26), labs, artifacts.
 7. **Ship hygiene**: About/story, help, for-clinicians, landing, legal.
 
+**Added to this list on 30 Aug, from Kevin directly:**
+
+8. **The Learn tab.** It is the weakest screen in the app and he has said so twice. Its
+   protocol remnants are gone; what should replace them does not exist. His brief: *"more
+   information on the body and why we are doing the things we do with this app."* The spine
+   I proposed and he has not yet ruled on: why the day has anchors and a sixty-second floor,
+   why release comes before load, and the anatomy map — the app already knows 136 body parts
+   and what refers pain where, which is genuinely "information on the body".
+9. **Reminders.** Still calendar-export only. R19 ruled push out for v1, but the rulings log
+   notes that memo was written for an iPhone and Kevin is on Android, where push works in an
+   ordinary tab. Plausibly the difference between 0 loops and 1.
+10. **The clock.** 06:30 wake, 07:00 flow, 20:00 evening, 22:00 bed — all invented, and
+    there is no "when does your day start" question anywhere. If somebody's day does not
+    match, most of it reads as "Circle back" every single day.
+11. **Seated and lying content** for the woven block. It is called "Woven into what you're
+    already doing" and all three items need you on your feet.
+
 ## Things that will bite you
 
 - **Kevin is on Android**, not iPhone. Push works in a plain tab there; the
@@ -114,6 +133,11 @@ Reminders, Disclaimer, announcer (the fail-loudly surface).
   not be.
 - Day-record writes must go through `store.mutateDay`. A plain
   load-then-save loses taps when a thumb moves fast.
+- **Content is generated from tables.** `authored/supplements.json` and `authored/foods.json`
+  are build products — edit `scripts/build-{supplements,foods}.mjs` instead. Same for
+  `reference.json` and `starter.json`.
+- **A shipped protocol you edit stops receiving updates** (`lib/seed.js`). That is deliberate
+  — it never overwrites your work — but if a plan ever stops getting corrections, that is why.
 - `h()` drops null children; the raw DOM `append()` renders the word "null".
   **Use `add(el, ...children)` from `dom.js`** wherever a conditional child
   meets an element that already exists. The guard test now walks TEXT NODES
@@ -210,6 +234,62 @@ saying two different numbers on two screens would have been worse than neither s
 **And the honest gate on all of it:** `Working_Record_v1.md` §1 still reads **0 loops**.
 Phase 1's done-when is Kevin's real daily use running on this build, and it has not happened
 yet. Everything above is easier to judge after a few days of using the thing.
+
+---
+
+## Food & supplements — the newest thing here (30 Aug)
+
+A whole tab that did not exist this morning. Read this before touching it, because the
+shape took four corrections to find and three of them were me building the wrong thing.
+
+**It is a TRACKER, not a shop.** Kevin: *"We are not selling or recommending supplements.
+We are making it easy for someone to track what they take within their daily routine."*
+Everything below follows from that sentence.
+
+### What it is
+
+- **Its own tab** (`Food`), its own search, `viewSupplements.js`. It is deliberately NOT in
+  the main library — filing 110 substances into a shelf that slices by release/lengthen/load
+  and by body part made them *harder* to find than before they existed.
+- **Two halves, joined by the nutrient.** 110 supplements · 108 food rows · 27 nutrients.
+  Ask for magnesium and pumpkin seeds and a capsule come back together.
+- **The join is honest about its own limit.** 50 supplements name a nutrient you could eat;
+  60 do not. Ashwagandha is not missing from anybody's dinner, and the card says *"No food
+  route to this one"* rather than implying a column that is empty.
+- **Add your own** — blends and proprietary tubs. Not an edge case: no list of a hundred
+  covers them, and a tracker that cannot track what somebody takes is not a tracker.
+- **Shopping list**, grouped by aisle. **No meal plan** — that half of Kevin's sentence is
+  unbuilt and unspecified; ask before guessing.
+
+### The four rules that are load-bearing
+
+1. **No warning theatre.** The first version put a `careful` on every item including vitamin
+   D, enforced by a test *requiring* one. Kevin: *"you need a warning that you put too many
+   warnings on stuff."* A caution on all of them is a caution on none. The test now inverts:
+   `careful` must be **empty**, and practical facts live in the how-to. A second test fails
+   if more than half the shelf carries even a note.
+2. **No nutrition maths.** Servings are "a small handful", "one tin", "two nuts". Never a
+   percentage of a daily value — those hide a dozen assumptions, and inventing them is the
+   sixty-seconds-per-item failure in a new costume.
+3. **Split a food when the preparation changes which nutrients it provides, or its aisle.**
+   Fresh vs pickled beetroot, live vs jarred sauerkraut, UV-exposed mushrooms. Raw and
+   roasted almonds stay one row. A test fails a form identical to its parent.
+4. **A brand is not a substance.** Brands belong in offers, which do not exist yet.
+
+### Both tables are TABLES
+
+`scripts/build-supplements.mjs` and `scripts/build-foods.mjs`. Editing content is one line
+per entry — do not hand-edit `src/content/authored/{supplements,foods}.json`, they are
+generated. `npm run supplements` · `npm run foods` · then `npm run catalog`.
+
+### Still open here
+
+- **Affiliate links.** Kevin raised them; the field is designed and deliberately empty. My
+  suggestion on record: put them on the reorder state, never on the education, so the money
+  follows a decision already made. His call, not mine.
+- **Which supplements should actually be on the shelf.** The 110 are my picks of "commonly
+  taken", which is the same guessing that got the palette wrong twice.
+- **The meal plan.**
 
 ---
 
@@ -319,7 +399,17 @@ any block with a start, no end, and something scheduled after it.
 
 ## Open: colours and icons
 
-Kevin, 29 Aug: *"we need to figure out better color schemes and icons."* Waiting on a pick.
+**Settled, 30 Aug: Desert night is the default-able dark scheme** and is live on the You
+screen. Kevin liked it best of four, and the two corrections that made it work are in
+`tests/palette.test.js`: the hue runs through *every* token, and nothing may exceed 0.6
+luminance — every other dark theme here puts body text at a near-white (.78–.81) and that
+is what blasts you at 5am. Desert tops out at .52 and still reads 9.9:1.
+
+Kevin's verdict on the set: *"I'm not loving any of them though. And we still have more
+important stuff to fix."* So this is parked, not finished. **Icons are untouched** — A and
+B were "the best options but they still aren't great", and he asked whether to outsource.
+My answer on record: not yet, because there are seven icons left, all behind a fold, and
+nobody has used the app for a day.
 
 The first four proposals were rejected, correctly: *"nearly the same thing with a different
 color button. The colors should be throughout the theme."* The brief that came with it —
