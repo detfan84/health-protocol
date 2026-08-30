@@ -549,7 +549,11 @@ test('the library is comprehensive, merged, and every item can be picked up', as
     if (it.why) whyCounts.set(it.why, (whyCounts.get(it.why) ?? 0) + 1);
   }
   const mute = [];
-  for (const it of lib.items) {
+  // Supplements are exempt and that is not a loophole: "how to do it" is a
+  // question about a movement. A capsule's instruction is its dose and its
+  // moment, both of which every intake item carries and neither of which is a
+  // `release` field. They browse on their own tab for the same reason.
+  for (const it of lib.items.filter((i) => i.type !== 'intake')) {
     assert.ok(it.id && it.name, 'every item is identifiable');
     assert.ok(it.type, `${it.name} has no type`);
     assert.ok(it.kind === undefined, `${it.name} still carries "kind" — it was retired with schema 3`);
@@ -1123,7 +1127,8 @@ test('searching a symptom offers where else it can come from, red flags first', 
   // The count is read from the catalogue rather than written down here: a
   // number in a test is a fact with nobody checking it, and it went stale the
   // first time an item was added.
-  const total = JSON.parse(libText).items.length;
+  // The library shows everything EXCEPT supplements, which have their own tab.
+  const total = JSON.parse(libText).items.filter((i) => i.type !== 'intake').length;
   assert.match(main.textContent, new RegExp(`of ${total}`));
   } finally {
     globalThis.fetch = realFetch;
@@ -1401,54 +1406,3 @@ test('the whenever block is offered when the clock is empty, and goes quiet afte
   assert.ok(done, 'what you did is still reachable');
 });
 
-// Kevin, 29 Aug, after eight supplements shipped: "no I still have phases but
-// no supplements."
-//
-// They were in the catalogue and deployed. They were also unreachable. The
-// shelf you land on is "What it does", intake items correctly carry no movement
-// effect, so they appeared under no chip at all — findable only by typing a
-// name you already knew, which is no use to somebody whose whole request was
-// "just let me select my supplements".
-//
-// Being in the catalogue is not the same as being reachable. Same lesson as the
-// four days the app shipped with a full body-work library nobody could see.
-test('a supplement can be found by browsing, not only by knowing its name', async () => {
-  const { viewLibrary } = await import('../src/app/ui/viewLibrary.js');
-  store._resetForTests();
-  await store.ready({ name: 'screens-intake' });
-  const main = draw(await viewLibrary({ open: () => {} }));
-  await settled();
-
-  const chipsIn = (label) => {
-    const g = [...main.querySelectorAll('[role=group]')].find((x) => x.getAttribute('aria-label') === label);
-    return g ? [...g.querySelectorAll('button')] : [];
-  };
-  const press = (label, text) => {
-    const b = chipsIn(label).find((x) => x.textContent.startsWith(text));
-    assert.ok(b, `no "${text}" under ${label} — got ${JSON.stringify(chipsIn(label).map((x) => x.textContent))}`);
-    b.dispatchEvent(new Event('click'));
-  };
-
-  // There is a door marked Supplements, and it has a count on it.
-  press('Browse by', 'Kind of thing');
-  await settled();
-  const kinds = chipsIn('Kind of thing').map((b) => b.textContent);
-  const supplements = kinds.find((t) => t.startsWith('Supplements'));
-  assert.ok(supplements, `no Supplements shelf — got ${JSON.stringify(kinds)}`);
-  assert.match(supplements, /· \d+$/, 'and it says how many, so it is not a dead end');
-
-  press('Kind of thing', 'Supplements');
-  await settled();
-  assert.match(main.textContent, /Magnesium glycinate/, 'the shelf actually holds them');
-
-  // And they can be browsed by what a person is looking for, which is the
-  // question they can answer about themselves — not by which facet the
-  // movement ledger happens to count in.
-  const fresh = draw(await viewLibrary({ open: () => {} }));
-  await settled();
-  press('Browse by', 'What it’s for');
-  await settled();
-  const purposes = chipsIn('What it’s for').map((b) => b.textContent);
-  assert.ok(purposes.some((t) => /^Sleep/.test(t)), `no purpose shelf — got ${JSON.stringify(purposes)}`);
-  assert.ok(fresh);
-});

@@ -182,7 +182,7 @@ async function loadLibrary() {
   return cache;
 }
 
-export async function viewLibrary({ reload, openOn } = {}) {
+export async function viewLibrary({ reload } = {}) {
   const root = h('div');
   root.append(
     h('h1', {}, 'Library'),
@@ -191,7 +191,15 @@ export async function viewLibrary({ reload, openOn } = {}) {
 
   let library;
   try {
-    library = await loadLibrary();
+    const all = await loadLibrary();
+    // Supplements live on their own tab, with their own search (Kevin, 29 Aug:
+    // "I don't know why you are trying to mix supplements in with everything
+    // else"). They were briefly in here and it made them HARDER to find, not
+    // easier: this shelf slices by release / lengthen / load, by body part and
+    // by equipment, and a hundred substances answering none of those questions
+    // sat behind a facet menu three taps down. They keep `type: 'intake'` and
+    // the same item shape — what changes is which screen browses them.
+    library = { ...all, items: all.items.filter((i) => i.type !== 'intake') };
   } catch (error) {
     root.append(
       h('div.card', {},
@@ -215,11 +223,8 @@ export async function viewLibrary({ reload, openOn } = {}) {
   // the Supplements shelf is the whole point of having a door to it.
   const state = {
     q: '',
-    slice: openOn === 'intake' ? 'type' : 'effect',
-    filters: {
-      effect: null, type: openOn === 'intake' ? 'intake' : null,
-      target: null, equipment: null, context: null, supports: null,
-    },
+    slice: 'effect',
+    filters: { effect: null, type: null, target: null, equipment: null, context: null },
   };
   const results = h('div');
 

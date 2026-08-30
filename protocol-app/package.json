@@ -12,9 +12,10 @@
     "library": "node scripts/build-library.mjs",
     "re-freeze": "node scripts/build-library.mjs --re-freeze",
     "stage": "node scripts/stage-dist.mjs",
-    "deploy": "node scripts/build-content.mjs && node scripts/build-catalog.mjs && node scripts/build-reference.mjs && node scripts/stage-dist.mjs && wrangler deploy",
+    "deploy": "node scripts/build-supplements.mjs && node scripts/build-content.mjs && node scripts/build-catalog.mjs && node scripts/build-reference.mjs && node scripts/stage-dist.mjs && wrangler deploy",
     "reference": "node scripts/build-reference.mjs",
-    "vocab": "node scripts/check-vocab.mjs"
+    "vocab": "node scripts/check-vocab.mjs",
+    "supplements": "node scripts/build-supplements.mjs"
   },
   "devDependencies": {
     "fake-indexeddb": "^6.2.5",

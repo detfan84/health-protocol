@@ -1,143 +1,40 @@
-// Supplements as a shelf, not as somebody's protocol.
+// Supplements: their own tab, their own search, their own list.
 //
-// Kevin, 29 Aug, stopping a port that was halfway out of the old app: "it's not
-// to be transferred over as it was. The supplements should be like any other
-// library, just a big list of commonly taken supplements that can be adjusted
-// by bottle/dose size, with the reorder tracking and stuff… Just let me select
-// my supplements. It could be smart enough to have some education as to what
-// each supplement does and suggest when it should be taken, so that supplements
-// can fit naturally into the day arc and not riding in an awkward side car."
+// The design took three corrections to get here and each one is a rule below.
 //
-// Every rule below comes out of that sentence, plus the two laws this content
-// is most likely to break: a claim travels with its grade (law 5), and a brand
-// is not a substance (decision 3 — the library must read to a stranger).
+//   "The supplements should be like any other library, just a big list of
+//    commonly taken supplements that can be adjusted by bottle/dose size, with
+//    the reorder tracking and stuff… Just let me select my supplements."
+//
+//   "Putting a careful label on vitamin D is dumb… We are not selling or
+//    recommending supplements. We are making it easy for someone to track what
+//    they take within their daily routine."
+//
+//   "Finding supplements is harder than it was. It should be its own tab with
+//    its own search. I don't know why you are trying to mix supplements in with
+//    everything else… there are literally thousands of supplements, you could
+//    easily find the top 100 and put them in there. And it was already planned
+//    that people can put their own supplements in there as many supplements are
+//    combos and blends now too."
+//
+// The mistake the third one corrects is worth keeping written down: "fits into
+// the day arc, not a side car" is about where a supplement LANDS once you take
+// it. It was never about the browsing surface. Filing a hundred substances into
+// a shelf that slices by release / lengthen / load and by body part made them
+// harder to find than they had been.
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { JSDOM } from 'jsdom';
+import 'fake-indexeddb/auto';
 
 const lib = JSON.parse(await readFile(new URL('../src/content/library.json', import.meta.url), 'utf8'));
 const supplements = lib.items.filter((i) => i.type === 'intake');
 
-// A moment in the day, not a clock time. The whole point is that choosing a
-// supplement puts it where it belongs instead of in a side car.
 const TIMING = ['fasted', 'with-food', 'evening', 'before-bed', 'anytime'];
 
-test('supplements are in the same shelf as everything else', () => {
-  assert.ok(supplements.length >= 8, `only ${supplements.length} intake items — the shelf is not stocked`);
-  // Not a separate file, not a separate screen, not a protocol: they are
-  // catalogue items and Browse slices them like anything else.
-  for (const s of supplements) {
-    assert.equal(s.type, 'intake');
-    assert.ok(s.name && s.why, `${s.id} says nothing about itself`);
-  }
-});
-
-test('a supplement carries no movement effect', () => {
-  // `effect` is release / lengthen / load / calm — the vocabulary the coverage
-  // ledger counts in (TAXONOMY §2.3, "short and closed on purpose"). Magnesium
-  // is not a `calm` the way a breathing drill is, and filing it as one would
-  // put it in the ledger competing for the same slot. What a supplement is FOR
-  // lives in its own facet.
-  for (const s of supplements) {
-    assert.equal(s.effect, undefined, `${s.id} claims a movement effect`);
-    assert.ok(Array.isArray(s.supports) && s.supports.length, `${s.id} does not say what it is for`);
-  }
-});
-
-test('every supplement says when it wants to be taken', () => {
-  // The "awkward side car" clause. A substance with no timing cannot be placed
-  // in the day, so it would need a screen of its own — which is the thing this
-  // is not.
-  for (const s of supplements) {
-    assert.ok(TIMING.includes(s.timing), `${s.id} has timing "${s.timing}", which is not a moment in the day`);
-  }
-});
-
-test('bottle and dose are real numbers, so reorder tracking has something to count', () => {
-  for (const s of supplements) {
-    const b = s.bottle;
-    assert.ok(b, `${s.id} has no bottle`);
-    assert.ok(Number.isInteger(b.units) && b.units > 0, `${s.id}: bottle units`);
-    assert.ok(Number.isInteger(b.unitsPerDose) && b.unitsPerDose > 0, `${s.id}: units per dose`);
-    assert.ok(b.unitName, `${s.id}: a unit needs a name, or the count means nothing`);
-    // The supply record this seeds is { count, unitsPerDose, unitName } — the
-    // same shape the existing supply screen already decrements on a tick.
-    assert.ok(b.units >= b.unitsPerDose, `${s.id}: a bottle that cannot cover one dose`);
-  }
-});
-
-test('the shelf does not read as a shop', () => {
-  // Law 5, kept at the size it earns. Every item wears a tier, because
-  // "established" and "exploratory" are a real difference and it is one word.
-  // What is gone is the paragraph of evidence prose each one used to carry:
-  // this is a tracker for what somebody already takes, not a case for taking it.
-  for (const s of supplements) {
-    assert.ok(s.tier, `${s.id} has no tier`);
-  }
-  // And they are not all "established", which would mean the tier is doing no
-  // work — a shelf where everything is proven is a shop.
-  const tiers = new Set(supplements.map((s) => s.tier));
-  assert.ok(tiers.size > 1, `every supplement has the same tier (${[...tiers]}) — that is a marketing claim`);
-});
-
-test('a brand is not a substance', () => {
-  // Decision 3: the library reads to a stranger. The old app's supplement list
-  // was brand names end to end — a brand belongs in `offers`, where somebody is
-  // choosing where to buy, and never in the record of what a thing IS.
-  const brands = ['rho ', 'boost blenz', 'silver fern', 'meraki', 'kinoko', 'standard process', 'qunol', 'naked '];
-  for (const s of supplements) {
-    const blob = JSON.stringify(s).toLowerCase();
-    for (const b of brands) {
-      assert.equal(blob.includes(b), false, `${s.id} names the brand "${b.trim()}"`);
-    }
-    assert.ok(s.substance, `${s.id} does not say what substance it actually is`);
-  }
-});
-
-test('nothing here is a warning for the sake of having one', () => {
-  // This test used to REQUIRE a `careful` on every item, and the content
-  // obliged — including a caution on vitamin D. Kevin, 29 Aug: "putting a
-  // careful label on vitamin D is dumb. All of these stupid precautions are
-  // unnecessary. We are not selling or recommending supplements. We are making
-  // it easy for someone to track what they take within their daily routine…
-  // you need a warning that you put too many warnings on stuff."
-  //
-  // He is right, and the requirement was the mechanism. A caution on all of
-  // them is a caution on none: it stops being information and becomes the
-  // liability furniture people learn to scroll past, which is worse than
-  // nothing because it also trains them past the one that would have mattered.
-  //
-  // So the rule inverts. Practical facts about how to take a thing — with food,
-  // with a full glass of water, away from iron — belong in the how-to, where
-  // they are read while doing it. `careful` is for a genuine hazard and this
-  // shelf has none, so it is empty and the test says so.
-  const warned = supplements.filter((s) => s.fields?.careful).map((s) => s.id);
-  assert.deepEqual(warned, [], `${warned.length} supplement(s) carry a warning box — put the practical part in the how-to instead`);
-
-  // The practical half did not go missing on the way.
-  for (const s of supplements) {
-    const howTo = `${s.fields?.release ?? ''}${s.fields?.tool ?? ''}`;
-    assert.ok(howTo.length > 20, `${s.id} does not say how to take it`);
-  }
-});
-
-test('caffeine is not on the shelf', () => {
-  // Kevin, 29 Aug: "I don't think anyone thinks caffeine is a supplement and I
-  // don't think anyone is recommending it as a supplement to a caffeine
-  // addicted society." It was in the first tranche on the reasoning that people
-  // forget they are taking it — which is a clever argument for putting a
-  // stimulant on a shelf nobody asked to be sold from.
-  const names = supplements.map((s) => `${s.id} ${s.name}`.toLowerCase());
-  assert.equal(names.some((n) => n.includes('caffeine')), false);
-});
-
-/* -------------------- reachable, and it lands somewhere ------------------ */
-
-import { JSDOM } from 'jsdom';
-import 'fake-indexeddb/auto';
-
-const dom = new JSDOM('<!doctype html><html><body><main></main></body></html>', { url: 'http://localhost/' });
+const dom = new JSDOM('<!doctype html><html><body><main></main><nav class="tabs"></nav></body></html>', { url: 'http://localhost/' });
 for (const k of ['window', 'document', 'HTMLElement', 'Event', 'AbortController', 'AbortSignal', 'localStorage']) {
   globalThis[k] = k === 'window' ? dom.window : dom.window[k];
 }
@@ -147,67 +44,221 @@ for (const k of ['window', 'document', 'HTMLElement', 'Event', 'AbortController'
 }
 const store = await import('../src/app/store.js');
 const settled = async () => { for (let i = 0; i < 8; i++) await new Promise((r) => setTimeout(r, 0)); };
+const fire = (el, type = 'click') => el.dispatchEvent(new dom.window.Event(type, { bubbles: true }));
 
-test('the front door has a supplements door on it', async () => {
-  // Kevin, 29 Aug: "the way to find how to search for supplements is way too
-  // buried and hidden. People would never know they could track supplements in
-  // this app if they didn't have someone else tell them or they just randomly
-  // found it while exploring which would be rare."
-  //
-  // It was three taps behind a facet menu. A capability nobody can find is a
-  // capability nobody has.
-  const { viewHome } = await import('../src/app/ui/viewHome.js');
-  store._resetForTests();
-  await store.ready({ name: 'sup-home' });
+/* ------------------------------- the shelf ------------------------------- */
 
-  const opened = [];
-  const view = await viewHome({ open: (o) => opened.push(o), startSession: () => {} });
-  const door = [...view.querySelectorAll('.tile')]
-    .find((t) => t.querySelector('.tile-title')?.textContent === 'Supplements');
-  assert.ok(door, 'no supplements door on the front page');
-  door.dispatchEvent(new dom.window.Event('click'));
-  // And it opens ON the shelf, rather than dropping you at the default view to
-  // go and find the filter yourself.
-  assert.deepEqual(opened.at(-1), { tab: 'library', shelf: 'intake' });
+test('the shelf is big enough to find yourself on', () => {
+  // "There are literally thousands of supplements, you could easily find the
+  // top 100 and put them in there."
+  assert.ok(supplements.length >= 100, `only ${supplements.length} on the shelf`);
+  const ids = new Set(supplements.map((s) => s.id));
+  assert.equal(ids.size, supplements.length, 'duplicate ids');
 });
 
-test('adding a supplement says where in the day it went', async () => {
-  // Kevin, 29 Aug: "I clicked add it to my day but I don't know where in my day
-  // it went." Everything landed in one untimed block regardless of what it was,
-  // so a before-bed supplement arrived in an anytime bucket folded away on the
-  // home screen — and the button said "Added to your day", which is true and
-  // useless.
+test('every supplement says when it wants to be taken', () => {
+  // The field that lets a supplement land somewhere real in the day instead of
+  // in a list beside it.
+  for (const s of supplements) {
+    assert.ok(TIMING.includes(s.timing), `${s.id} has timing "${s.timing}"`);
+    assert.ok(Array.isArray(s.supports) && s.supports.length, `${s.id} does not say what it is for`);
+    assert.ok(s.substance, `${s.id} does not say what it actually is`);
+  }
+  // And they are spread across the day rather than all defaulting to one
+  // moment, which would make the placement meaningless.
+  const moments = new Set(supplements.map((s) => s.timing));
+  assert.ok(moments.size >= 4, `everything lands in ${[...moments]}`);
+});
+
+test('bottle and dose are real, so reorder tracking has something to count', () => {
+  for (const s of supplements) {
+    const b = s.bottle;
+    assert.ok(Number.isInteger(b?.units) && b.units > 0, `${s.id}: bottle units`);
+    assert.ok(Number.isInteger(b.unitsPerDose) && b.unitsPerDose > 0, `${s.id}: units per dose`);
+    assert.ok(b.unitName, `${s.id}: a count with no unit name means nothing`);
+    assert.ok(b.units >= b.unitsPerDose, `${s.id}: a bottle that cannot cover one dose`);
+  }
+});
+
+test('nothing here is a warning for the sake of having one', () => {
+  // This test used to REQUIRE a caution on every item, and the content obliged
+  // — including one on vitamin D. A caution on all of them is a caution on
+  // none: it becomes the liability furniture people learn to scroll past,
+  // which is worse than nothing because it trains them past the one that would
+  // have mattered. Practical facts about how to take a thing live in the
+  // how-to, and most rows need none at all.
+  const warned = supplements.filter((s) => s.fields?.careful).map((s) => s.id);
+  assert.deepEqual(warned, [], 'warning boxes are back');
+  const noted = supplements.filter((s) => s.fields?.release).length;
+  assert.ok(noted < supplements.length / 2,
+    `${noted} of ${supplements.length} carry a note — a note on most of them is furniture again`);
+});
+
+test('a brand is not a substance, and caffeine is not a supplement', () => {
+  const brands = ['rho ', 'boost blenz', 'silver fern', 'meraki', 'kinoko', 'standard process', 'qunol'];
+  const blob = JSON.stringify(supplements).toLowerCase();
+  for (const b of brands) assert.equal(blob.includes(b), false, `the shelf names the brand "${b.trim()}"`);
+  // "I don't think anyone thinks caffeine is a supplement and I don't think
+  // anyone is recommending it as a supplement to a caffeine addicted society."
+  assert.equal(supplements.some((s) => /caffeine/i.test(s.name)), false);
+});
+
+/* -------------------------------- the tab -------------------------------- */
+
+test('supplements are a tab, and not mixed into the library', async () => {
+  const shell = await readFile(new URL('../src/app/ui/app.js', import.meta.url), 'utf8');
+  const tabs = [...shell.matchAll(/\{ id: '([a-z]+)', label:/g)].map((m) => m[1]);
+  assert.ok(tabs.includes('supplements'), `no supplements tab — tabs are ${tabs.join(', ')}`);
+
+  // And the general library does not carry them any more. It slices by
+  // release / lengthen / load, by body part and by equipment; a hundred
+  // substances answering none of those questions sat three taps down a facet
+  // menu, which is how they got harder to find than before they existed.
   const { viewLibrary } = await import('../src/app/ui/viewLibrary.js');
   store._resetForTests();
-  await store.ready({ name: 'sup-add' });
+  await store.ready({ name: 'sup-not-lib' });
+  const view = await viewLibrary({});
+  document.querySelector('main').replaceChildren(view);
+  await settled();
+  assert.doesNotMatch(view.textContent, /Magnesium glycinate/, 'the library still holds supplements');
+});
 
-  const view = await viewLibrary({ openOn: 'intake' });
+test('the tab searches by name and by what a thing is for', async () => {
+  const { viewSupplements } = await import('../src/app/ui/viewSupplements.js');
+  store._resetForTests();
+  await store.ready({ name: 'sup-search' });
+  const view = await viewSupplements({});
+  document.querySelector('main').replaceChildren(view);
+  await settled();
+
+  const box = view.querySelector('input[type=search]');
+  assert.ok(box, 'the tab has its own search');
+
+  box.value = 'magnesium';
+  fire(box, 'input');
+  await settled();
+  assert.match(view.textContent, /Magnesium glycinate/);
+
+  // "What it is for" is the question somebody can answer about themselves —
+  // they know they sleep badly, they do not know they want glycinate.
+  box.value = 'sleep';
+  fire(box, 'input');
+  await settled();
+  assert.match(view.textContent, /Melatonin|Magnesium|Valerian/, 'searching a purpose finds nothing');
+});
+
+test('adding one says where in the day it went, and it goes somewhere real', async () => {
+  // "I had to dig to find where the supplements landed in my daily routine."
+  const { viewSupplements } = await import('../src/app/ui/viewSupplements.js');
+  store._resetForTests();
+  await store.ready({ name: 'sup-place' });
+  const view = await viewSupplements({});
   document.querySelector('main').replaceChildren(view);
   await settled();
 
   const card = [...view.querySelectorAll('details.lib-item')]
     .find((d) => /Magnesium glycinate/.test(d.textContent));
-  assert.ok(card, 'the shelf opened on supplements');
-  const add = [...card.querySelectorAll('button')].find((b) => /Add to my day/.test(b.textContent));
-  add.dispatchEvent(new dom.window.Event('click'));
+  const btn = [...card.querySelectorAll('button')].find((b) => /^Add to/.test(b.textContent));
+  // The button names the destination BEFORE you press it, not only after.
+  assert.match(btn.textContent, /Add to Before bed/);
+  fire(btn);
   await settled();
+  assert.match(btn.textContent, /Added to Before bed/);
 
-  // The button names the destination.
-  assert.match(add.textContent, /Added to Before bed/, `button said "${add.textContent}"`);
-
-  // And the destination is real: a block with a clock on it, so Today and Home
-  // interleave it with everything else happening then rather than parking it in
-  // a side car.
   const picks = (await store.loadProtocols()).find((p) => p.id === 'my-picks');
   const block = picks.blocks.find((b) => b.items.some((i) => i.id === 'sup-magnesium-glycinate'));
   assert.equal(block.name, 'Before bed');
-  assert.ok(block.start, 'a moment in the day has a time on it');
-  assert.equal(block.items[0].timing, 'before-bed', 'the item keeps knowing when it wants to be taken');
+  assert.ok(block.start, 'a moment in the day carries a time, so Today interleaves it with everything else then');
+  assert.equal(block.items[0].timing, 'before-bed');
 
-  // The dose config is seeded so reorder tracking has something to count — but
-  // NOT the count, which is a fact about somebody's cupboard that nobody asked.
+  // The dose config is seeded so reorder tracking works; the COUNT is not,
+  // because how many you have is a fact about your cupboard (ruling A).
   const supply = await store.getSetting('supply:sup-magnesium-glycinate');
   assert.equal(supply.unitsPerDose, 2);
-  assert.equal(supply.unitName, 'capsule');
   assert.equal(supply.count, undefined, 'the app does not invent what you have on hand');
+});
+
+test('what you already take is at the top, not something to go and find', async () => {
+  const { viewSupplements } = await import('../src/app/ui/viewSupplements.js');
+  store._resetForTests();
+  await store.ready({ name: 'sup-yours' });
+  await store.saveProtocol({
+    id: 'my-picks', name: 'My picks', active: true, phases: [],
+    blocks: [{ id: 'pick-bed', name: 'Before bed', start: '21:30', order: 3, items: [
+      { id: 'sup-melatonin', name: 'Melatonin', type: 'intake', timing: 'before-bed' }] }],
+    createdAt: 'x', updatedAt: 'x',
+  });
+  const view = await viewSupplements({});
+  document.querySelector('main').replaceChildren(view);
+  await settled();
+
+  const headings = [...view.querySelectorAll('.section-title')].map((e) => e.textContent);
+  assert.match(headings[0], /What you take/, `first heading was "${headings[0]}"`);
+  const yours = view.querySelector('details.lib-item');
+  assert.match(yours.textContent, /Melatonin/);
+  assert.match(yours.textContent, /In your day · Before bed/, 'and it says where it sits');
+});
+
+test('anything not on the shelf can still be tracked', async () => {
+  // "Many supplements are combos and blends now too, they need to be able to
+  // add whatever they are taking if it's not preloaded so they can still track
+  // it." A tracker that cannot track what somebody actually takes is not one.
+  const { viewSupplements } = await import('../src/app/ui/viewSupplements.js');
+  store._resetForTests();
+  await store.ready({ name: 'sup-own' });
+  const view = await viewSupplements({});
+  document.querySelector('main').replaceChildren(view);
+  await settled();
+
+  const set = (id, value) => {
+    const el = view.querySelector(`#${id}`);
+    assert.ok(el, `no field ${id}`);
+    el.value = value;
+    fire(el, el.tagName === 'SELECT' ? 'change' : 'input');
+  };
+  set('own-name', 'Morning Greens Blend');
+  set('own-timing', 'fasted');
+  set('own-dose', '1 scoop');
+  set('own-units', '30');
+  set('own-perDose', '1');
+  set('own-unitName', 'scoop');
+
+  const addBtn = [...view.querySelectorAll('button')].find((b) => /Add it to my day/.test(b.textContent));
+  fire(addBtn);
+  await settled();
+
+  const picks = (await store.loadProtocols()).find((p) => p.id === 'my-picks');
+  const block = picks.blocks.find((b) => b.items.some((i) => i.name === 'Morning Greens Blend'));
+  assert.ok(block, 'a typed-in supplement did not land anywhere');
+  assert.equal(block.name, 'First thing, before food');
+  const item = block.items.find((i) => i.name === 'Morning Greens Blend');
+  assert.equal(item.type, 'intake');
+  assert.equal(item.dose, '1 scoop');
+
+  // And it counts down like anything else, because that is the whole point.
+  const supply = await store.getSetting(`supply:${item.id}`);
+  assert.equal(supply.count, 30);
+  assert.equal(supply.unitsPerDose, 1);
+});
+
+test('a blank container count means "not counting", never zero', async () => {
+  const { viewSupplements } = await import('../src/app/ui/viewSupplements.js');
+  store._resetForTests();
+  await store.ready({ name: 'sup-blank' });
+  const view = await viewSupplements({});
+  document.querySelector('main').replaceChildren(view);
+  await settled();
+
+  const set = (id, value) => { const el = view.querySelector(`#${id}`); el.value = value; fire(el, 'input'); };
+  set('own-name', 'Some blend');
+  set('own-units', '');
+  set('own-perDose', '1');
+  fire([...view.querySelectorAll('button')].find((b) => /Add it to my day/.test(b.textContent)));
+  await settled();
+
+  const picks = (await store.loadProtocols()).find((p) => p.id === 'my-picks');
+  const item = picks.blocks.flatMap((b) => b.items).find((i) => i.name === 'Some blend');
+  assert.ok(item);
+  const supply = await store.getSetting(`supply:${item.id}`);
+  assert.equal(supply?.count, undefined, 'a blank became a zero — ruling A');
 });

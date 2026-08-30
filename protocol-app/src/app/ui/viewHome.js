@@ -359,7 +359,7 @@ export async function viewHome({ open, startSession, now = new Date() }) {
         iconName: 'bottle',
         accent: 'ochre',
         wide: true,
-        onclick: () => open({ tab: 'library', shelf: 'intake' }),
+        onclick: () => open({ tab: 'supplements' }),
       }),
       h('div.thin-row', {},
         h('button.thin-link', { onclick: () => open({ tab: 'day' }) }, 'Everything today'),

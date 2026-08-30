@@ -17,6 +17,7 @@ import { viewSupply } from './viewSupply.js';
 import { viewData } from './viewData.js';
 import { viewSession } from './viewSession.js';
 import { viewLibrary } from './viewLibrary.js';
+import { viewSupplements } from './viewSupplements.js';
 import { viewHome } from './viewHome.js';
 import { viewArea } from './viewArea.js';
 import { viewReference } from './viewReference.js';
@@ -31,9 +32,16 @@ import { seedPlan, baselinesOf, refreshed } from '../../lib/seed.js';
 // structure the app now has is: menu → area → session. A tab bar with a
 // screenful of items behind every tab is what it had before, and it read as
 // one mile-long page no matter which tab you were on.
+// Supplements is a tab and not a shelf inside the library (Kevin, 29 Aug):
+// "It should be its own tab with its own search. I don't know why you are
+// trying to mix supplements in with everything else." Six is a lot for a phone,
+// and the honest note is that Learn is the thinnest of them — if one has to go
+// to make room, that is the conversation, not this list quietly staying at five
+// while the thing people came for hides three taps down.
 const TABS = [
   { id: 'home', label: 'Home' },
   { id: 'library', label: 'Library' },
+  { id: 'supplements', label: 'Supps' },
   { id: 'reference', label: 'Learn' },
   { id: 'track', label: 'Track' },
   { id: 'data', label: 'You' },
@@ -151,6 +159,8 @@ async function render() {
       });
     } else if (state.tab === 'library') {
       view = await viewLibrary({ reload: () => render(), openOn: state.shelf });
+    } else if (state.tab === 'supplements') {
+      view = await viewSupplements({ reload: () => render() });
     } else if (state.tab === 'reference') {
       view = await viewReference();
     } else if (state.tab === 'plans') {
