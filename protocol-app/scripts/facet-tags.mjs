@@ -85,7 +85,15 @@ export const EQUIPMENT_BY_FIELD = {
  *
  * Everything else is a practice. No `intake` or `record` content exists yet.
  */
+const DECLARED_TYPES = ['practice', 'measurement', 'teaching', 'intake', 'record'];
+
 export function typeOf(item) {
+  // An authored file may SAY what it is, and then it is not this function's
+  // business to re-derive it. The inference below exists for the 2025 import,
+  // which had no `type` at all — it reads `kind` and `role`, neither of which a
+  // supplement has. Without this an intake item falls through to "practice" and
+  // the build then demands a movement effect for magnesium.
+  if (DECLARED_TYPES.includes(item.type)) return item.type;
   if (item.kind === 'selftest') return 'measurement';
   if (item.role === 'technique-guide') return 'teaching';
   if (item.role === 'awareness-cue' && (item.tracking ?? 'check') === 'check') return 'teaching';
@@ -93,7 +101,14 @@ export function typeOf(item) {
 }
 
 export function effectOf(item, type = typeOf(item)) {
-  if (type !== 'practice') return []; // teaching and measurement do nothing to the body
+  // Only a PRACTICE has a movement effect. Teaching and measurement do nothing
+  // to the body, and an `intake` — a supplement, a food rule — does plenty but
+  // not in this vocabulary: `effect` is release / lengthen / load / calm, the
+  // words the coverage ledger counts in (TAXONOMY §2.3, "short and closed on
+  // purpose"). Magnesium is not a `calm` in the sense a breathing drill is, and
+  // filing it as one would put it in the ledger competing with breathing drills
+  // for the same slot. What a supplement is for lives in its own facet.
+  if (type !== 'practice') return [];
   const byRole = EFFECT_BY_ROLE[item.role];
   if (byRole) return byRole;
   return EFFECT_BY_CATEGORY[item.category] ?? null; // null = the caller must fail loudly

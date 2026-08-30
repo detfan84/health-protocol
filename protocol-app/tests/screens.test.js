@@ -1054,6 +1054,23 @@ test('a second reading shows the change, and a first one says there is none yet'
 test('searching a symptom offers where else it can come from, red flags first', async () => {
   // TAXONOMY §4. Somebody arriving with "elbow" does not know the app files
   // things by what they do to you, so the map answers the search box.
+  //
+  // This shims its own fetch, and did not used to. viewLibrary caches its
+  // catalogue in a module-level variable, so this test was reading whatever an
+  // earlier test in this file happened to have left there — it has never once
+  // passed on its own, and the day the test above it changed shape this one
+  // failed for a reason that had nothing to do with symptoms or referral.
+  const { readFile } = await import('node:fs/promises');
+  const libText = await readFile(new URL('../src/content/library.json', import.meta.url), 'utf8');
+  const refText = await readFile(new URL('../src/content/referral.json', import.meta.url), 'utf8');
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url) => ({
+    ok: true,
+    status: 200,
+    json: async () => JSON.parse(String(url).includes('referral') ? refText : libText),
+  });
+
+  try {
   store._resetForTests();
   await store.ready({ name: 'screens-referral' });
   const { viewLibrary } = await import('../src/app/ui/viewLibrary.js');
@@ -1078,7 +1095,14 @@ test('searching a symptom offers where else it can come from, red flags first', 
   assert.ok(new Set(tiers).size > 1, 'and they are not all the same word');
 
   // The ordinary results are still there — this is above them, not instead.
-  assert.match(main.textContent, /of 383/);
+  // The count is read from the catalogue rather than written down here: a
+  // number in a test is a fact with nobody checking it, and it went stale the
+  // first time an item was added.
+  const total = JSON.parse(libText).items.length;
+  assert.match(main.textContent, new RegExp(`of ${total}`));
+  } finally {
+    globalThis.fetch = realFetch;
+  }
 });
 
 test('the shelf is a view over one facet, and the facets compose', async () => {
