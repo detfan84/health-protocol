@@ -422,3 +422,79 @@ test('forms are shown under the food, not as unrelated neighbours', async () => 
   assert.match(forms.textContent, /Pickled/);
   assert.doesNotMatch(forms.querySelector('.name').textContent, /Beetroot/);
 });
+
+/* ------------------------------ the meal plan ----------------------------- */
+// Kevin, 29 Aug: "they can create a shopping list and meal plan on one side and
+// have the supps on the other side." Both halves, and the arrow runs one way:
+// the plan is what you decide, the list is what the plan costs you at the shop.
+// Two independent lists would mean planning a Tuesday dinner and still having to
+// remember to buy it.
+
+test('planning a meal puts its food on the shopping list, and says which meal', async () => {
+  const { viewSupplements } = await import('../src/app/ui/viewSupplements.js');
+  store._resetForTests();
+  await store.ready({ name: 'sup-plan' });
+  const view = await viewSupplements({});
+  document.querySelector('main').replaceChildren(view);
+  await settled();
+
+  const group = (label) => {
+    const g = [...view.querySelectorAll('[role=group]')].find((x) => x.getAttribute('aria-label') === label);
+    return g ? [...g.querySelectorAll('button')] : [];
+  };
+  fire(group('Food or supplements').find((b) => /^Food/.test(b.textContent)));
+  await settled();
+
+  // Every day has its four meals, or it is not a week.
+  for (const day of ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']) {
+    assert.equal(group(`${day} meals`).length, 4, `${day} does not have four meals`);
+  }
+
+  fire(group('Tuesday meals').find((b) => /^Dinner/.test(b.textContent)));
+  await settled();
+  assert.match(view.textContent, /Planning Tuesday dinner/, 'picking a meal did not enter planning');
+
+  const card = [...view.querySelectorAll('details.lib-item')].find((d) => /Pumpkin seeds/.test(d.textContent));
+  const addBtn = [...card.querySelectorAll('button')].find((b) => /Add to Tuesday dinner/.test(b.textContent));
+  assert.ok(addBtn, 'while planning, a food row still offered the shopping list instead of the meal');
+  fire(addBtn);
+  await settled();
+
+  // The plan holds it, and the list knows why it is there.
+  assert.match(view.textContent, /Meal plan — 1 food/);
+  assert.match(view.textContent, /Shopping list — 1/);
+  assert.match(view.textContent, /For Tuesday dinner/, 'the list does not say which meal wants it');
+
+  const saved = await store.getSetting('meal.plan');
+  assert.deepEqual(saved.days.tue.dinner, ['food-pumpkin-seeds']);
+  assert.deepEqual(saved.days.mon.breakfast, [], 'the other slots did not survive the save');
+  // It was never added to the list by hand, so the list must not have kept a
+  // second copy that could outlive the plan.
+  assert.equal((await store.getSetting('shopping.list'))?.items ?? undefined, undefined);
+});
+
+test('a food leaves the shopping list when it leaves the plan', async () => {
+  const { viewSupplements } = await import('../src/app/ui/viewSupplements.js');
+  store._resetForTests();
+  await store.ready({ name: 'sup-plan-off' });
+  await store.putSetting({ key: 'meal.plan', days: { tue: { dinner: ['food-pumpkin-seeds'] } } });
+  const view = await viewSupplements({});
+  document.querySelector('main').replaceChildren(view);
+  await settled();
+  const group = (label) => {
+    const g = [...view.querySelectorAll('[role=group]')].find((x) => x.getAttribute('aria-label') === label);
+    return g ? [...g.querySelectorAll('button')] : [];
+  };
+  fire(group('Food or supplements').find((b) => /^Food/.test(b.textContent)));
+  await settled();
+  assert.match(view.textContent, /Shopping list — 1/, 'a saved plan did not reach the list');
+
+  const off = [...view.querySelectorAll('button')]
+    .find((b) => b.getAttribute('aria-label') === 'Take Pumpkin seeds off Tuesday dinner');
+  assert.ok(off, 'no way to take a food back off a meal');
+  fire(off);
+  await settled();
+
+  assert.doesNotMatch(view.textContent, /Shopping list/, 'the food outlived the plan that put it there');
+  assert.deepEqual((await store.getSetting('meal.plan')).days.tue.dinner, []);
+});

@@ -83,6 +83,41 @@ export const NUTRIENTS = {
 };
 const AISLE_LABELS = { produce: 'Produce', protein: 'Meat & fish', dair: 'Dairy', dairy: 'Dairy', frozen: 'Frozen', pantry: 'Pantry' };
 const SHOPPING_KEY = 'shopping.list';
+const PLAN_KEY = 'meal.plan';
+
+// A week, not a calendar. A meal plan is the thing somebody makes on a Sunday
+// for the seven days after it; dating it to 3 March means it expires and has to
+// be rebuilt rather than adjusted.
+const DAYS = [
+  { id: 'mon', name: 'Monday' }, { id: 'tue', name: 'Tuesday' },
+  { id: 'wed', name: 'Wednesday' }, { id: 'thu', name: 'Thursday' },
+  { id: 'fri', name: 'Friday' }, { id: 'sat', name: 'Saturday' },
+  { id: 'sun', name: 'Sunday' },
+];
+const MEALS = [
+  { id: 'breakfast', name: 'Breakfast' }, { id: 'lunch', name: 'Lunch' },
+  { id: 'dinner', name: 'Dinner' }, { id: 'snack', name: 'Snack' },
+];
+const DAY_BY_ID = Object.fromEntries(DAYS.map((d) => [d.id, d]));
+const MEAL_BY_ID = Object.fromEntries(MEALS.map((m) => [m.id, m]));
+
+function emptyPlanDays() {
+  const days = {};
+  for (const d of DAYS) { days[d.id] = {}; for (const m of MEALS) days[d.id][m.id] = []; }
+  return days;
+}
+
+/** A saved plan, with every slot present and nothing in it that is not an id. */
+export function normalisePlan(saved) {
+  const days = emptyPlanDays();
+  for (const d of DAYS) {
+    for (const m of MEALS) {
+      const got = saved?.days?.[d.id]?.[m.id];
+      if (Array.isArray(got)) days[d.id][m.id] = got.filter((x) => typeof x === 'string');
+    }
+  }
+  return days;
+}
 
 let shelfCache = null;
 async function loadShelf() {
@@ -153,8 +188,14 @@ export async function viewSupplements({ reload } = {}) {
     .filter(({ item }) => item.type === 'intake');
   const mineIds = new Set(mine.map((m) => m.item.id));
 
-  const state = { part: 'supplements', q: '', nutrient: null };
+  // `planning` is a slot — { day, meal } — and while it is set the food rows
+  // put things into that meal instead of onto the list. A mode, but a signposted
+  // one: picking a meal and then browsing is how somebody actually plans a week,
+  // and it saves building a second copy of the food list inside a picker.
+  const state = { part: 'supplements', q: '', nutrient: null, planning: null };
   const shopping = new Set((await store.getSetting(SHOPPING_KEY))?.items ?? []);
+  const plan = normalisePlan(await store.getSetting(PLAN_KEY));
+  const foodById = Object.fromEntries(shelf.foods.map((f) => [f.id, f]));
   const results = h('div');
   const nutrientRow = h('div.chip-row', { role: 'group', 'aria-label': 'Nutrient' });
 
@@ -280,6 +321,8 @@ export async function viewSupplements({ reload } = {}) {
 
   function foodRow(f, { sibling = false } = {}) {
     const onList = shopping.has(f.id);
+    const target = state.planning;
+    const inSlot = !!target && plan[target.day][target.meal].includes(f.id);
     // A form reads as what it is — "pickled", "tinned, with bones" — rather
     // than repeating the food's name, when it is sitting under its own parent.
     const label = sibling && f.form ? f.form.replace(/^./, (c) => c.toUpperCase()) : f.name;
@@ -289,10 +332,15 @@ export async function viewSupplements({ reload } = {}) {
         h('span.why', {}, [f.serving, nutrientsOf(f)].filter(Boolean).join(' · ')),
       ),
       f.fields?.release ? h('p.muted', {}, f.fields.release) : null,
-      h('button.btn' + (onList ? '.quiet' : '.primary'), {
-        style: 'width:100%',
-        onclick: (e) => toggleShopping(f, e.currentTarget),
-      }, onList ? 'On the shopping list' : 'Add to shopping list'),
+      target
+        ? h('button.btn' + (inSlot ? '.quiet' : '.primary'), {
+          style: 'width:100%',
+          onclick: (e) => togglePlanned(f, target, e.currentTarget),
+        }, inSlot ? `On ${slotLabel(target)}` : `Add to ${slotLabel(target)}`)
+        : h('button.btn' + (onList ? '.quiet' : '.primary'), {
+          style: 'width:100%',
+          onclick: (e) => toggleShopping(f, e.currentTarget),
+        }, onList ? 'On the shopping list' : 'Add to shopping list'),
     );
   }
 
@@ -356,14 +404,119 @@ export async function viewSupplements({ reload } = {}) {
     );
   }
 
+  /* ----------------------------- the meal plan ----------------------------- */
+  // Kevin, 29 Aug: "they can create a shopping list and meal plan on one side
+  // and have the supps on the other side." Both halves of that sentence, and
+  // the arrow between them runs one way: you plan the week, and the shopping
+  // list is what the plan needs. Keeping two independent lists would mean
+  // planning a Tuesday dinner and still having to remember to buy it.
+  //
+  // The app does not decide what you eat on Tuesday. It has no business doing
+  // that and inventing meals is the sixty-seconds-per-item failure in an apron.
+  // You pick the slot, you pick the food, and the only thing it works out for
+  // itself is the consequence for the shop.
+
+  const slotLabel = (t) => `${DAY_BY_ID[t.day].name} ${MEAL_BY_ID[t.meal].name.toLowerCase()}`;
+  const savePlan = () => store.putSetting({ key: PLAN_KEY, days: plan, updatedAt: nowIso() });
+
+  /** foodId → the meals that want it, so a row can say why it is on the list. */
+  function plannedFoods() {
+    const want = new Map();
+    for (const d of DAYS) {
+      for (const m of MEALS) {
+        for (const id of plan[d.id][m.id]) {
+          if (!want.has(id)) want.set(id, []);
+          want.get(id).push(`${d.name} ${m.name.toLowerCase()}`);
+        }
+      }
+    }
+    return want;
+  }
+
+  function togglePlanned(f, target, btn) {
+    btn.disabled = true;
+    const slot = plan[target.day][target.meal];
+    const at = slot.indexOf(f.id);
+    if (at >= 0) slot.splice(at, 1); else slot.push(f.id);
+    return guarded(savePlan, {
+      what: at >= 0 ? `Taking ${f.name} off ${slotLabel(target)}` : `Putting ${f.name} on ${slotLabel(target)}`,
+      onOk: () => paint(),
+      onFail: () => {
+        if (at >= 0) slot.splice(at, 0, f.id); else slot.splice(slot.indexOf(f.id), 1);
+        btn.disabled = false;
+      },
+    });
+  }
+
+  function planningBanner() {
+    return h('div.card', {},
+      h('p', {}, `Planning ${slotLabel(state.planning)} — tap a food below to put it in.`),
+      h('button.btn.quiet', {
+        style: 'width:100%',
+        onclick: () => { state.planning = null; paint(); },
+      }, 'Done planning'));
+  }
+
+  function mealPlanCard() {
+    const want = plannedFoods();
+    const card = h('div.card', {},
+      h('div.card-head', {}, h('h2', {},
+        want.size ? `Meal plan — ${want.size} ${want.size === 1 ? 'food' : 'foods'}` : 'Meal plan')),
+    );
+    if (!want.size) {
+      card.append(h('p.muted', {}, 'Nothing planned yet. Pick a meal, then tap the foods that go in it — whatever you plan turns up on the shopping list.'));
+    }
+    for (const d of DAYS) {
+      const slots = h('div.chip-row', { role: 'group', 'aria-label': `${d.name} meals` });
+      for (const m of MEALS) {
+        const ids = plan[d.id][m.id];
+        const on = state.planning?.day === d.id && state.planning?.meal === m.id;
+        slots.append(h('button.chip', {
+          'aria-pressed': on ? 'true' : 'false',
+          onclick: () => { state.planning = on ? null : { day: d.id, meal: m.id }; paint(); },
+        }, ids.length ? `${m.name} · ${ids.length}` : m.name));
+      }
+      card.append(h('h3.section-title', {}, d.name), slots);
+      for (const m of MEALS) {
+        for (const id of plan[d.id][m.id]) {
+          // A food can be planned and then dropped from the shelf between
+          // builds. Showing the id beats silently losing somebody's Tuesday.
+          const f = foodById[id] ?? { id, name: id };
+          card.append(h('div.row.compact', {},
+            h('div.grow', {}, h('span.name', {}, f.name, h('span.dose', {}, ` · ${m.name}`))),
+            h('button.btn.quiet.small', {
+              'aria-label': `Take ${f.name} off ${d.name} ${m.name.toLowerCase()}`,
+              onclick: (e) => togglePlanned(f, { day: d.id, meal: m.id }, e.currentTarget),
+            }, '✕'),
+          ));
+        }
+      }
+    }
+    if (want.size) {
+      card.append(h('button.btn.quiet', {
+        style: 'width:100%',
+        onclick: () => guarded(async () => {
+          for (const d of DAYS) for (const m of MEALS) plan[d.id][m.id] = [];
+          await savePlan();
+          return true;
+        }, { what: 'Clearing the plan', onOk: () => { state.planning = null; paint(); } }),
+      }, 'Clear the plan'));
+    }
+    return card;
+  }
+
   /* --------------------------- the shopping list --------------------------- */
-  // Grouped by aisle, because that is the order somebody walks a shop in. It is
-  // a list of what to buy, not a meal plan — the app has no business telling
-  // anybody what to cook on Tuesday, and pretending to would be the invented
-  // number problem in a new costume.
+  // Grouped by aisle, because that is the order somebody walks a shop in.
+  //
+  // Two ways onto it, and the difference is visible rather than merged: what
+  // the plan needs, which says which meals want it, and what you added straight
+  // to the list, which says nothing because there is nothing to say. A planned
+  // row has no ✕ — it leaves when it leaves the plan, and a list that could
+  // silently disagree with the plan above it is worse than no list.
   function shoppingCard() {
-    if (!shopping.size) return null;
-    const chosen = shelf.foods.filter((f) => shopping.has(f.id));
+    const want = plannedFoods();
+    const chosen = shelf.foods.filter((f) => want.has(f.id) || shopping.has(f.id));
+    if (!chosen.length) return null;
     const byAisle = new Map();
     for (const f of chosen) {
       if (!byAisle.has(f.aisle)) byAisle.set(f.aisle, []);
@@ -375,23 +528,27 @@ export async function viewSupplements({ reload } = {}) {
     for (const [aisle, foods] of [...byAisle.entries()].sort()) {
       card.append(h('h3.section-title', {}, AISLE_LABELS[aisle] ?? aisle));
       for (const f of foods) {
+        const meals = want.get(f.id);
         card.append(h('div.row.compact', {},
-          h('div.grow', {}, h('span.name', {}, f.name, h('span.dose', {}, ` · ${f.serving}`))),
-          h('button.btn.quiet.small', {
+          h('div.grow', {}, h('span.name', {}, f.name, h('span.dose', {}, ` · ${f.serving}`)),
+            meals ? h('span.why', {}, `For ${meals.join(', ')}`) : null),
+          meals ? null : h('button.btn.quiet.small', {
             'aria-label': `Take ${f.name} off the list`,
             onclick: (e) => toggleShopping(f, e.currentTarget),
           }, '✕'),
         ));
       }
     }
-    card.append(h('button.btn.quiet', {
-      style: 'width:100%',
-      onclick: () => guarded(async () => {
-        shopping.clear();
-        await store.putSetting({ key: SHOPPING_KEY, items: [], updatedAt: nowIso() });
-        return true;
-      }, { what: 'Clearing the list', onOk: () => paint() }),
-    }, 'Clear the list'));
+    if (shopping.size) {
+      card.append(h('button.btn.quiet', {
+        style: 'width:100%',
+        onclick: () => guarded(async () => {
+          shopping.clear();
+          await store.putSetting({ key: SHOPPING_KEY, items: [], updatedAt: nowIso() });
+          return true;
+        }, { what: 'Clearing the list', onOk: () => paint() }),
+      }, want.size ? 'Clear the ones you added' : 'Clear the list'));
+    }
     return card;
   }
 
@@ -413,6 +570,8 @@ export async function viewSupplements({ reload } = {}) {
     clear(results);
 
     if (state.part === 'food') {
+      if (state.planning) results.append(planningBanner());
+      results.append(mealPlanCard());
       const list = shoppingCard();
       if (list) results.append(list);
       const found = shelf.foods.filter(matches);

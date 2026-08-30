@@ -258,8 +258,16 @@ Everything below follows from that sentence.
   route to this one"* rather than implying a column that is empty.
 - **Add your own** — blends and proprietary tubs. Not an edge case: no list of a hundred
   covers them, and a tracker that cannot track what somebody takes is not a tracker.
-- **Shopping list**, grouped by aisle. **No meal plan** — that half of Kevin's sentence is
-  unbuilt and unspecified; ask before guessing.
+- **Meal plan, and the shopping list that follows from it.** Both halves of Kevin's
+  sentence, and the arrow runs one way: a week of Mon–Sun × breakfast/lunch/dinner/snack,
+  you pick a slot and tap foods into it, and the list is what the plan needs. Grouped by
+  aisle. A planned row says *which* meals want it and has no ✕ — it leaves when it leaves
+  the plan, because a list that can silently disagree with the plan above it is worse than
+  no list. Adding straight to the list still works and stays separate.
+- **The app never decides what you eat.** It picks nothing, suggests nothing, and invents no
+  meals — you choose the slot and the food. The only thing it works out on its own is the
+  consequence for the shop. Inventing meals would be the sixty-seconds-per-item failure in
+  an apron.
 
 ### The four rules that are load-bearing
 
@@ -284,12 +292,14 @@ generated. `npm run supplements` · `npm run foods` · then `npm run catalog`.
 
 ### Still open here
 
-- **Affiliate links.** Kevin raised them; the field is designed and deliberately empty. My
-  suggestion on record: put them on the reorder state, never on the education, so the money
-  follows a decision already made. His call, not mine.
+- **Affiliate links.** Kevin asked for these: *"what might be nice is to do affiliate links
+  to amazon, rho, or other products to maybe make some money that way."* Not a question —
+  the next thing to build. The field is designed and still empty. Design on record: on the
+  reorder state, never on the education, so the money follows a decision already made. The
+  one thing that cannot be written here is his associate tag / Rho id, which is an account
+  detail rather than a design call.
 - **Which supplements should actually be on the shelf.** The 110 are my picks of "commonly
   taken", which is the same guessing that got the palette wrong twice.
-- **The meal plan.**
 
 ---
 
