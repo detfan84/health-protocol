@@ -41,7 +41,7 @@ import { seedPlan, baselinesOf, refreshed } from '../../lib/seed.js';
 const TABS = [
   { id: 'home', label: 'Home' },
   { id: 'library', label: 'Library' },
-  { id: 'supplements', label: 'Supps' },
+  { id: 'supplements', label: 'Food' },
   { id: 'reference', label: 'Learn' },
   { id: 'track', label: 'Track' },
   { id: 'data', label: 'You' },

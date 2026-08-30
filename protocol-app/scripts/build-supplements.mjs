@@ -136,7 +136,7 @@ Cinnamon | cinnamomum cassia | metabolic | with-food | capsule | 500 mg | 60 | 1
 Nattokinase | nattokinase | heart | fasted | capsule | 2000 FU | 60 | 1 |
 Serrapeptase | serrapeptase | inflammation | fasted | capsule | 40000 SPU | 90 | 1 |
 Bromelain | bromelain | inflammation,gut | fasted | capsule | 500 mg | 60 | 1 |
-Beetroot | beta vulgaris extract | heart,energy | fasted | powder | 5 g | 30 | 1 |
+Beetroot powder | beta vulgaris extract | heart,energy | fasted | powder | 5 g | 30 | 1 |
 Spirulina | arthrospira platensis | energy | anytime | tablet | 3 g | 180 | 6 |
 Chlorella | chlorella vulgaris | energy | anytime | tablet | 3 g | 180 | 6 |
 Green tea extract | EGCG | metabolic,cognition | fasted | capsule | 300–500 mg | 60 | 1 |
@@ -151,6 +151,45 @@ DIM | diindolylmethane | hormonal | with-food | capsule | 100–200 mg | 60 | 1 
 Maca | lepidium meyenii | energy,hormonal | anytime | powder | 3 g | 30 | 1 |
 Vitamin D + omega blend | cholecalciferol + fish oil | immune,heart | with-food | softgel | per label | 60 | 1 |
 `.trim();
+
+// What a supplement actually PROVIDES, in the same vocabulary a food does.
+//
+// Kevin, 29 Aug: "supplements are just supplementing the nutrients you aren't
+// getting in your food right?" Half right, and the half that is wrong is the
+// useful half — so this map is deliberately incomplete and the gaps are the
+// point. Magnesium glycinate provides magnesium and you can eat pumpkin seeds
+// instead. Ashwagandha provides no nutrient at all: there is no food route to
+// it, and a page that implied there was would be lying to somebody trying to
+// eat their way out of a supplement shelf.
+//
+// So: a nutrient id where one honestly applies, nothing where it does not, and
+// the screen says which of those it is looking at.
+const PROVIDES = {
+  'sup-magnesium-glycinate': 'magnesium', 'sup-magnesium-citrate': 'magnesium',
+  'sup-magnesium-threonate': 'magnesium',
+  'sup-vitamin-d3': 'vitamin-d', 'sup-vitamin-d3-with-k2': 'vitamin-d,vitamin-k',
+  'sup-vitamin-k2': 'vitamin-k', 'sup-vitamin-c': 'vitamin-c',
+  'sup-vitamin-b12': 'b12', 'sup-vitamin-b6': 'b6', 'sup-folate': 'folate',
+  'sup-vitamin-b-complex': 'b12,b6,folate', 'sup-vitamin-a': 'vitamin-a',
+  'sup-vitamin-e': 'vitamin-e', 'sup-zinc': 'zinc', 'sup-iron': 'iron',
+  'sup-calcium': 'calcium', 'sup-selenium': 'selenium', 'sup-iodine': 'iodine',
+  'sup-potassium': 'potassium', 'sup-copper': 'copper',
+  'sup-trace-minerals': 'magnesium,potassium', 'sup-electrolytes': 'sodium,potassium,magnesium',
+  'sup-creatine-monohydrate': 'creatine',
+  'sup-whey-protein': 'protein', 'sup-casein-protein': 'protein', 'sup-pea-protein': 'protein',
+  'sup-collagen-peptides': 'collagen', 'sup-essential-amino-acids': 'protein',
+  'sup-branched-chain-amino-acids': 'protein', 'sup-glycine': 'collagen',
+  'sup-taurine': 'taurine', 'sup-l-carnitine': 'carnitine',
+  'sup-omega-3': 'omega-3', 'sup-cod-liver-oil': 'omega-3,vitamin-d,vitamin-a',
+  'sup-krill-oil': 'omega-3', 'sup-algae-omega-3': 'omega-3', 'sup-flaxseed-oil': 'omega-3',
+  'sup-probiotic': 'probiotics', 'sup-saccharomyces-boulardii': 'probiotics',
+  'sup-prebiotic-fibre': 'fibre', 'sup-psyllium-husk': 'fibre', 'sup-fibre-blend': 'fibre',
+  'sup-multivitamin': 'vitamin-a,vitamin-c,vitamin-d,b12,zinc,iodine',
+  'sup-turmeric': 'polyphenols', 'sup-resveratrol': 'polyphenols',
+  'sup-green-tea-extract': 'polyphenols', 'sup-quercetin': 'polyphenols',
+  'sup-beetroot-powder': 'nitrate', 'sup-spirulina': 'protein,iron', 'sup-chlorella': 'protein,iron',
+  'sup-choline': 'choline',
+};
 
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
@@ -172,6 +211,9 @@ const items = TABLE.split('\n').map((line) => {
   // Absent stays absent: most rows have nothing a person would get wrong, and a
   // note invented to fill the column would be the thing this file exists to
   // avoid.
+  const provides = PROVIDES[item.id];
+  if (provides) item.provides = provides.split(',').map((v) => v.trim());
+  item.intakeKind = 'supplement';
   if (note) item.fields = { release: note };
   return item;
 });
@@ -196,3 +238,5 @@ console.log(`supplements: ${items.length} on the shelf`);
 const byTiming = items.reduce((m, i) => ({ ...m, [i.timing]: (m[i.timing] ?? 0) + 1 }), {});
 console.log(`  by moment: ${Object.entries(byTiming).map(([k, v]) => `${k} ${v}`).join(' · ')}`);
 console.log(`  with a note: ${items.filter((i) => i.fields).length} — the rest need no explaining`);
+const routed = items.filter((i) => i.provides).length;
+console.log(`  ${routed} name a nutrient you could also eat; ${items.length - routed} have no food route at all`);

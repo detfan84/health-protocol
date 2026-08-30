@@ -30,7 +30,11 @@ import { JSDOM } from 'jsdom';
 import 'fake-indexeddb/auto';
 
 const lib = JSON.parse(await readFile(new URL('../src/content/library.json', import.meta.url), 'utf8'));
-const supplements = lib.items.filter((i) => i.type === 'intake');
+// Foods are `intake` too — they are the other half of the same page — so this
+// file's subject is the supplement half specifically.
+const intake = lib.items.filter((i) => i.type === 'intake');
+const supplements = intake.filter((i) => i.intakeKind !== 'food');
+const foods = intake.filter((i) => i.intakeKind === 'food');
 
 const TIMING = ['fasted', 'with-food', 'evening', 'before-bed', 'anytime'];
 
@@ -261,4 +265,98 @@ test('a blank container count means "not counting", never zero', async () => {
   assert.ok(item);
   const supply = await store.getSetting(`supply:${item.id}`);
   assert.equal(supply?.count, undefined, 'a blank became a zero — ruling A');
+});
+
+/* ------------------------- food, the other half -------------------------- */
+//
+// Kevin, 29 Aug: "help people identify what foods are good sources to get what
+// they need for the people who prefer avoiding supplements… supplements are
+// just supplementing the nutrients you aren't getting in your food right?"
+
+test('the food half is keyed to the same nutrients as the supplement half', () => {
+  assert.ok(foods.length >= 80, `only ${foods.length} foods`);
+  const fromFood = new Set(foods.flatMap((f) => f.provides ?? []));
+  const fromSupps = new Set(supplements.flatMap((s) => s.provides ?? []));
+  assert.ok(fromFood.size >= 20, 'the food side covers too few nutrients to be a route to anything');
+
+  // The join has to actually join: most nutrients a supplement names must have
+  // somewhere to eat them from, or "eat it instead" is a dead link.
+  const orphans = [...fromSupps].filter((n) => !fromFood.has(n));
+  assert.ok(orphans.length <= 3, `supplement nutrients with no food source at all: ${orphans.join(', ')}`);
+
+  for (const f of foods) {
+    assert.ok(f.serving, `${f.id} has no serving — "eat kale" is not an instruction`);
+    assert.ok(f.aisle, `${f.id} has no aisle, so it cannot go on a shopping list`);
+    assert.ok((f.provides ?? []).length, `${f.id} names no nutrient`);
+  }
+});
+
+test('the page is honest about which supplements have no food route', () => {
+  // The half of Kevin's reframe that is wrong is the useful half. Ashwagandha
+  // is not a nutrient you are missing from your dinner, and a page implying
+  // otherwise would mislead somebody trying to eat their way off a shelf.
+  const withRoute = supplements.filter((s) => (s.provides ?? []).length);
+  assert.ok(withRoute.length >= 30, 'almost nothing routes to food — the join is not doing any work');
+  assert.ok(withRoute.length < supplements.length,
+    'every single supplement claims a food equivalent, which is not true of herbs and enzymes');
+});
+
+test('food and supplements are two parts of one page, sharing the nutrient', async () => {
+  const { viewSupplements } = await import('../src/app/ui/viewSupplements.js');
+  store._resetForTests();
+  await store.ready({ name: 'sup-food' });
+  const view = await viewSupplements({});
+  document.querySelector('main').replaceChildren(view);
+  await settled();
+
+  const group = (label) => {
+    const g = [...view.querySelectorAll('[role=group]')].find((x) => x.getAttribute('aria-label') === label);
+    return g ? [...g.querySelectorAll('button')] : [];
+  };
+  const parts = group('Food or supplements').map((b) => b.textContent);
+  assert.ok(parts.some((t) => /^Supplements · \d+/.test(t)), `parts were ${JSON.stringify(parts)}`);
+  assert.ok(parts.some((t) => /^Food · \d+/.test(t)));
+
+  // Switch to food and filter by a nutrient: the two sides speak one language.
+  fire(group('Food or supplements').find((b) => /^Food/.test(b.textContent)));
+  await settled();
+  // The chips are the side's own, not the previous side's left in place.
+  const foodChips = group('Nutrient').map((b) => b.textContent);
+  const magChip = foodChips.find((t) => /^Magnesium/.test(t));
+  assert.ok(magChip, `no magnesium chip — chips were ${JSON.stringify(foodChips.slice(0, 6))}`);
+  assert.doesNotMatch(magChip, /· 5$/, 'the food side is showing the supplement side\'s counts');
+
+  const mag = group('Nutrient').find((b) => /^Magnesium/.test(b.textContent));
+  assert.ok(mag, 'no magnesium chip on the food side');
+  fire(mag);
+  await settled();
+  assert.match(view.textContent, /Foods with Magnesium/);
+  assert.match(view.textContent, /Pumpkin seeds/);
+});
+
+test('a shopping list, grouped the way a shop is walked', async () => {
+  const { viewSupplements } = await import('../src/app/ui/viewSupplements.js');
+  store._resetForTests();
+  await store.ready({ name: 'sup-shop' });
+  const view = await viewSupplements({});
+  document.querySelector('main').replaceChildren(view);
+  await settled();
+
+  const group = (label) => {
+    const g = [...view.querySelectorAll('[role=group]')].find((x) => x.getAttribute('aria-label') === label);
+    return g ? [...g.querySelectorAll('button')] : [];
+  };
+  fire(group('Food or supplements').find((b) => /^Food/.test(b.textContent)));
+  await settled();
+
+  const card = [...view.querySelectorAll('details.lib-item')].find((d) => /Pumpkin seeds/.test(d.textContent));
+  const addBtn = [...card.querySelectorAll('button')].find((b) => /Add to shopping list/.test(b.textContent));
+  fire(addBtn);
+  await settled();
+
+  assert.match(view.textContent, /Shopping list — 1/);
+  assert.match(view.textContent, /Pantry/, 'the list is grouped by aisle');
+  // It survives leaving the screen, or it is not a list.
+  const saved = await store.getSetting('shopping.list');
+  assert.deepEqual(saved.items, ['food-pumpkin-seeds']);
 });

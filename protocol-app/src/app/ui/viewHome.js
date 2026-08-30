@@ -354,8 +354,8 @@ export async function viewHome({ open, startSession, now = new Date() }) {
       // the body-work library shipped invisible. So it gets its own door on the
       // front page, at the same weight as Browse.
       tile({
-        title: 'Supplements',
-        sub: 'What you take, when you take it, and what is left in the bottle',
+        title: 'Food & supplements',
+        sub: 'Two routes to the same nutrients, a shopping list, and what is left in the bottle',
         iconName: 'bottle',
         accent: 'ochre',
         wide: true,

@@ -1,4 +1,21 @@
-// viewSupplements.js — its own tab, its own search, its own list.
+// viewSupplements.js — food and supplements, joined by the nutrient.
+//
+// Kevin, 29 Aug: "help people identify what foods are good sources to get what
+// they need for the people who prefer avoiding supplements. Maybe food and
+// supplements could be a 2 part page (supplements are just supplementing the
+// nutrients you aren't getting in your food right?) and then they can create a
+// shopping list and meal plan on one side and have the supps on the other side."
+//
+// The reframe is what makes it buildable: the NUTRIENT is the join. Ask for
+// magnesium and pumpkin seeds and a capsule come back together, and choosing
+// between them is a preference rather than something the app decides for you.
+//
+// It is also only half true, and the honest half of the screen is where it
+// stops being true. Of 110 on the shelf, 50 name a nutrient you could eat
+// instead; 60 — ashwagandha, berberine, serrapeptase — have no food route at
+// all. So the page says so out loud rather than presenting two columns as
+// mirrors of each other and letting somebody conclude they can eat their way
+// off a shelf that has no food on the other side of it.
 //
 // Kevin, 29 Aug, after I filed supplements into the general catalogue: "finding
 // supplements is harder than it was. It should be its own tab with its own
@@ -53,13 +70,31 @@ const SUPPORTS_LABELS = {
   metabolic: 'Blood sugar', hormonal: 'Hormones',
 };
 
+// The nutrients both halves are keyed on, in plain words.
+export const NUTRIENTS = {
+  protein: 'Protein', fibre: 'Fibre', 'omega-3': 'Omega-3', collagen: 'Collagen',
+  calcium: 'Calcium', magnesium: 'Magnesium', potassium: 'Potassium', sodium: 'Sodium',
+  iron: 'Iron', zinc: 'Zinc', selenium: 'Selenium', iodine: 'Iodine', copper: 'Copper',
+  'vitamin-a': 'Vitamin A', 'vitamin-c': 'Vitamin C', 'vitamin-d': 'Vitamin D',
+  'vitamin-e': 'Vitamin E', 'vitamin-k': 'Vitamin K', b12: 'Vitamin B12', b6: 'Vitamin B6',
+  folate: 'Folate', choline: 'Choline', probiotics: 'Probiotics', polyphenols: 'Polyphenols',
+  nitrate: 'Nitrate', creatine: 'Creatine', taurine: 'Taurine', carnitine: 'Carnitine',
+  melatonin: 'Melatonin',
+};
+const AISLE_LABELS = { produce: 'Produce', protein: 'Meat & fish', dair: 'Dairy', dairy: 'Dairy', frozen: 'Frozen', pantry: 'Pantry' };
+const SHOPPING_KEY = 'shopping.list';
+
 let shelfCache = null;
 async function loadShelf() {
   if (shelfCache) return shelfCache;
   const res = await fetch(new URL('../../content/library.json', import.meta.url));
   if (!res.ok) throw new Error(`the shelf did not load: HTTP ${res.status}`);
   const lib = await res.json();
-  shelfCache = lib.items.filter((i) => i.type === 'intake');
+  const intake = lib.items.filter((i) => i.type === 'intake');
+  shelfCache = {
+    supplements: intake.filter((i) => i.intakeKind !== 'food'),
+    foods: intake.filter((i) => i.intakeKind === 'food'),
+  };
   return shelfCache;
 }
 
@@ -93,8 +128,8 @@ function emptyPicks() {
 export async function viewSupplements({ reload } = {}) {
   const root = h('div');
   root.append(
-    h('h1', {}, 'Supplements'),
-    h('p.muted', {}, 'What you take, when you take it, and what is left in the bottle. Nothing here is a recommendation — it is a shelf, and the app only counts what you tell it you take.'),
+    h('h1', {}, 'Food & supplements'),
+    h('p.muted', {}, 'Two routes to the same nutrients. Nothing here is a recommendation — the app only counts what you tell it you take.'),
   );
 
   let shelf;
@@ -118,14 +153,36 @@ export async function viewSupplements({ reload } = {}) {
     .filter(({ item }) => item.type === 'intake');
   const mineIds = new Set(mine.map((m) => m.item.id));
 
-  const state = { q: '' };
+  const state = { part: 'supplements', q: '', nutrient: null };
+  const shopping = new Set((await store.getSetting(SHOPPING_KEY))?.items ?? []);
   const results = h('div');
+  const nutrientRow = h('div.chip-row', { role: 'group', 'aria-label': 'Nutrient' });
+
+  /* ------------------------------ the two parts --------------------------- */
+  // One page, two halves, one nutrient filter across both — which is the whole
+  // idea. Switching sides keeps whatever nutrient you were looking at, so
+  // "where else do I get magnesium" is one tap rather than a new search.
+  const partRow = h('div.chip-row', { role: 'group', 'aria-label': 'Food or supplements' });
+  const partBtn = (id, label) => h('button.chip', {
+    'aria-pressed': state.part === id ? 'true' : 'false',
+    // The chips belong to the side you are on: switching parts without
+    // repainting them left the food half wearing the supplement half's counts,
+    // which is a number that means nothing about what you are looking at.
+    onclick: () => { state.part = id; paintParts(); paintNutrients(); paint(); },
+  }, label);
+  function paintParts() {
+    clear(partRow);
+    partRow.append(partBtn('supplements', `Supplements · ${shelf.supplements.length}`),
+      partBtn('food', `Food · ${shelf.foods.length}`));
+  }
+  paintParts();
+  root.append(partRow);
 
   /* ------------------------------- search -------------------------------- */
   const search = h('input', {
     type: 'search',
     id: 'supplement-search',
-    placeholder: 'Search 110+ supplements, or what they are for',
+    placeholder: 'Search by name, or by what you are after',
     autocomplete: 'off',
     oninput: (e) => { state.q = e.target.value.trim().toLowerCase(); paint(); },
   });
@@ -170,74 +227,200 @@ export async function viewSupplements({ reload } = {}) {
     ),
   );
 
+  root.append(nutrientRow);
+  paintNutrients();
   root.append(results);
 
+  /* ---------------------------- nutrient chips ---------------------------- */
+  // The join. Every nutrient that something on THIS side actually provides, so
+  // a chip is never a dead end, with a count of what it would leave.
+  function sideItems() {
+    return state.part === 'food' ? shelf.foods : shelf.supplements;
+  }
+
+  function paintNutrients() {
+    clear(nutrientRow);
+    const counts = new Map();
+    for (const i of sideItems()) for (const n of i.provides ?? []) counts.set(n, (counts.get(n) ?? 0) + 1);
+    const values = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    if (state.nutrient) {
+      nutrientRow.append(h('button.chip', {
+        'aria-pressed': 'true',
+        onclick: () => { state.nutrient = null; paintNutrients(); paint(); },
+      }, `${NUTRIENTS[state.nutrient] ?? state.nutrient} ✕`));
+      return;
+    }
+    for (const [value, count] of values) {
+      nutrientRow.append(h('button.chip', {
+        onclick: () => { state.nutrient = value; paintNutrients(); paint(); },
+      }, `${NUTRIENTS[value] ?? value} · ${count}`));
+    }
+  }
+
   /* ------------------------------ painting ------------------------------- */
-  function matches(s) {
+  function matches(s2) {
+    if (state.nutrient && !(s2.provides ?? []).includes(state.nutrient)) return false;
     if (!state.q) return true;
-    const hay = [s.name, s.substance, ...(s.supports ?? []).map((v) => SUPPORTS_LABELS[v] ?? v)]
-      .join(' ').toLowerCase();
+    const hay = [
+      s2.name, s2.substance, s2.serving,
+      ...(s2.supports ?? []).map((v) => SUPPORTS_LABELS[v] ?? v),
+      ...(s2.provides ?? []).map((v) => NUTRIENTS[v] ?? v),
+    ].join(' ').toLowerCase();
     return hay.includes(state.q);
   }
 
   function supplyLine(id) {
     const sup = supplies[id];
     if (!sup || doseUnits(sup) === null) return null;
-    const left = sup.count;
-    const doses = Math.floor(left / sup.unitsPerDose);
-    return `${left} ${sup.unitName ?? 'left'} — about ${doses} more ${doses === 1 ? 'dose' : 'doses'}`;
+    const doses = Math.floor(sup.count / sup.unitsPerDose);
+    return `${sup.count} ${sup.unitName ?? 'left'} — about ${doses} more ${doses === 1 ? 'dose' : 'doses'}`;
   }
 
-  function row(s, { owned, where }) {
-    const supports = (s.supports ?? []).map((v) => SUPPORTS_LABELS[v] ?? v).join(' · ');
-    const moment = MOMENT_BY_TIMING[s.timing] ?? MOMENT_BY_TIMING.anytime;
-    const stock = supplyLine(s.id);
+  const nutrientsOf = (i) => (i.provides ?? []).map((v) => NUTRIENTS[v] ?? v).join(' · ');
+
+  function foodRow(f) {
+    const onList = shopping.has(f.id);
     return h('details.card.lib-item', {},
       h('summary', {},
-        h('span.name', {}, s.name),
+        h('span.name', {}, f.name),
+        h('span.why', {}, [f.serving, nutrientsOf(f)].filter(Boolean).join(' · ')),
+      ),
+      f.fields?.release ? h('p.muted', {}, f.fields.release) : null,
+      h('button.btn' + (onList ? '.quiet' : '.primary'), {
+        style: 'width:100%',
+        onclick: (e) => toggleShopping(f, e.currentTarget),
+      }, onList ? 'On the shopping list' : 'Add to shopping list'),
+    );
+  }
+
+  function row(s2, { owned, where }) {
+    if (s2.intakeKind === 'food') return foodRow(s2);
+    const supports = (s2.supports ?? []).map((v) => SUPPORTS_LABELS[v] ?? v).join(' · ');
+    const moment = MOMENT_BY_TIMING[s2.timing] ?? MOMENT_BY_TIMING.anytime;
+    const stock = supplyLine(s2.id);
+    // The honest line. A supplement that names a nutrient has a food route and
+    // the page can offer it; one that does not, does not — and saying so is
+    // more use than a column that quietly has nothing in it.
+    const alsoFood = (s2.provides ?? []).length
+      ? h('button.thin-link', {
+        onclick: () => {
+          state.part = 'food';
+          state.nutrient = s2.provides[0];
+          paintParts(); paintNutrients(); paint();
+        },
+      }, `Eat it instead — foods with ${NUTRIENTS[s2.provides[0]] ?? s2.provides[0]}`)
+      : h('p.muted.tiny', {}, 'No food route to this one.');
+    return h('details.card.lib-item', {},
+      h('summary', {},
+        h('span.name', {}, s2.name),
         h('span.why', {},
-          [owned ? `In your day · ${where}` : moment.name, supports, s.typicalDose]
+          [owned ? `In your day · ${where}` : moment.name, supports, s2.typicalDose]
             .filter(Boolean).join(' · ')),
         stock ? h('span.why', {}, stock) : null,
       ),
-      s.fields?.release ? h('p.muted', {}, s.fields.release) : null,
-      s.substance && s.substance !== s.name.toLowerCase()
-        ? h('p.muted', {}, `What it is: ${s.substance}`) : null,
+      s2.fields?.release ? h('p.muted', {}, s2.fields.release) : null,
+      alsoFood,
       owned
-        ? h('button.btn.quiet', { style: 'width:100%', onclick: (e) => removeFromDay(s, e.currentTarget) }, 'Remove from my day')
-        : h('button.btn.primary', { style: 'width:100%', onclick: (e) => addToDay(s, e.currentTarget) }, `Add to ${moment.name}`),
+        ? h('button.btn.quiet', { style: 'width:100%', onclick: (e) => removeFromDay(s2, e.currentTarget) }, 'Remove from my day')
+        : h('button.btn.primary', { style: 'width:100%', onclick: (e) => addToDay(s2, e.currentTarget) }, `Add to ${moment.name}`),
+    );
+  }
+
+  /* --------------------------- the shopping list --------------------------- */
+  // Grouped by aisle, because that is the order somebody walks a shop in. It is
+  // a list of what to buy, not a meal plan — the app has no business telling
+  // anybody what to cook on Tuesday, and pretending to would be the invented
+  // number problem in a new costume.
+  function shoppingCard() {
+    if (!shopping.size) return null;
+    const chosen = shelf.foods.filter((f) => shopping.has(f.id));
+    const byAisle = new Map();
+    for (const f of chosen) {
+      if (!byAisle.has(f.aisle)) byAisle.set(f.aisle, []);
+      byAisle.get(f.aisle).push(f);
+    }
+    const card = h('div.card', {},
+      h('div.card-head', {}, h('h2', {}, `Shopping list — ${chosen.length}`)),
+    );
+    for (const [aisle, foods] of [...byAisle.entries()].sort()) {
+      card.append(h('h3.section-title', {}, AISLE_LABELS[aisle] ?? aisle));
+      for (const f of foods) {
+        card.append(h('div.row.compact', {},
+          h('div.grow', {}, h('span.name', {}, f.name, h('span.dose', {}, ` · ${f.serving}`))),
+          h('button.btn.quiet.small', {
+            'aria-label': `Take ${f.name} off the list`,
+            onclick: (e) => toggleShopping(f, e.currentTarget),
+          }, '✕'),
+        ));
+      }
+    }
+    card.append(h('button.btn.quiet', {
+      style: 'width:100%',
+      onclick: () => guarded(async () => {
+        shopping.clear();
+        await store.putSetting({ key: SHOPPING_KEY, items: [], updatedAt: nowIso() });
+        return true;
+      }, { what: 'Clearing the list', onOk: () => paint() }),
+    }, 'Clear the list'));
+    return card;
+  }
+
+  function toggleShopping(f, btn) {
+    btn.disabled = true;
+    const wasOn = shopping.has(f.id);
+    if (wasOn) shopping.delete(f.id); else shopping.add(f.id);
+    return guarded(
+      () => store.putSetting({ key: SHOPPING_KEY, items: [...shopping], updatedAt: nowIso() }),
+      {
+        what: wasOn ? `Taking ${f.name} off the list` : `Adding ${f.name} to the list`,
+        onOk: () => paint(),
+        onFail: () => { if (wasOn) shopping.add(f.id); else shopping.delete(f.id); btn.disabled = false; },
+      },
     );
   }
 
   function paint() {
     clear(results);
 
-    // Yours first, always. The complaint that started this screen was "I had to
-    // dig to find where the supplements landed in my daily routine" — so what
-    // you take, and where it sits, is the first thing on the page rather than
-    // something to be discovered.
-    const yours = mine.filter(({ item }) => matches(item));
-    if (yours.length) {
-      results.append(h('h2.section-title', {}, `What you take — ${mine.length}`));
-      for (const { item, block } of yours) {
-        results.append(row(item, { owned: true, where: block.name }));
+    if (state.part === 'food') {
+      const list = shoppingCard();
+      if (list) results.append(list);
+      const found = shelf.foods.filter(matches);
+      results.append(h('h2.section-title', {},
+        state.nutrient
+          ? `Foods with ${NUTRIENTS[state.nutrient] ?? state.nutrient} — ${found.length}`
+          : `Food — ${found.length}`));
+      if (!found.length) {
+        results.append(h('div.card', {}, h('p.muted', {},
+          'Nothing here matches. Not every nutrient has a good food source, and where it does not, that is worth knowing rather than working around.')));
       }
-    } else if (!state.q && !mine.length) {
-      results.append(
-        h('div.card', {},
-          h('p.muted', {}, 'Nothing yet. Add what you already take from the shelf below, or type in anything it does not have.')),
-      );
+      for (const f of found) results.append(foodRow(f));
+      return;
     }
 
-    const rest = shelf.filter((s) => !mineIds.has(s.id) && matches(s));
-    results.append(h('h2.section-title', {}, state.q ? `Shelf — ${rest.length}` : `The shelf — ${shelf.length}`));
+    // Yours first, always — the complaint that started this screen was "I had
+    // to dig to find where the supplements landed in my daily routine".
+    const yours = mine.filter(({ item }) => item.intakeKind !== 'food' && matches(item));
+    if (yours.length) {
+      results.append(h('h2.section-title', {}, `What you take — ${yours.length}`));
+      for (const { item, block } of yours) results.append(row(item, { owned: true, where: block.name }));
+    } else if (!state.q && !state.nutrient && !mine.length) {
+      results.append(h('div.card', {}, h('p.muted', {},
+        'Nothing yet. Add what you already take from the shelf below, or type in anything it does not have.')));
+    }
+
+    const rest = shelf.supplements.filter((s2) => !mineIds.has(s2.id) && matches(s2));
+    results.append(h('h2.section-title', {},
+      state.nutrient
+        ? `Supplements with ${NUTRIENTS[state.nutrient] ?? state.nutrient} — ${rest.length}`
+        : `The shelf — ${rest.length}`));
     if (!rest.length) {
       results.append(h('div.card', {}, h('p.muted', {},
-        state.q
-          ? `Nothing on the shelf matches “${state.q}”. If you take it, add it above — the list will never cover every blend.`
+        state.q || state.nutrient
+          ? 'Nothing on the shelf matches. If you take it, add it above — the list will never cover every blend.'
           : 'You have added everything on the shelf.')));
     }
-    for (const s of rest) results.append(row(s, { owned: false }));
+    for (const s2 of rest) results.append(row(s2, { owned: false }));
   }
 
   /* -------------------------------- writes -------------------------------- */

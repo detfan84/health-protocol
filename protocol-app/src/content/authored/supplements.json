@@ -22,6 +22,10 @@
         "unitName": "capsule",
         "unitsPerDose": 2
       },
+      "provides": [
+        "magnesium"
+      ],
+      "intakeKind": "supplement",
       "fields": {
         "release": "Check the label for ELEMENTAL magnesium — a 500 mg capsule is closer to 70 mg of magnesium."
       }
@@ -44,6 +48,10 @@
         "unitName": "scoop",
         "unitsPerDose": 1
       },
+      "provides": [
+        "magnesium"
+      ],
+      "intakeKind": "supplement",
       "fields": {
         "release": "The laxative one. That is a feature or a problem depending on why you are taking it."
       }
@@ -65,7 +73,11 @@
         "units": 90,
         "unitName": "capsule",
         "unitsPerDose": 3
-      }
+      },
+      "provides": [
+        "magnesium"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-vitamin-d3",
@@ -85,6 +97,10 @@
         "unitName": "softgel",
         "unitsPerDose": 1
       },
+      "provides": [
+        "vitamin-d"
+      ],
+      "intakeKind": "supplement",
       "fields": {
         "release": "Worth a blood test — it tells you the dose, which no label can."
       }
@@ -106,7 +122,12 @@
         "units": 60,
         "unitName": "softgel",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "vitamin-d",
+        "vitamin-k"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-vitamin-k2",
@@ -125,7 +146,11 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "vitamin-k"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-vitamin-c",
@@ -145,6 +170,10 @@
         "unitName": "capsule",
         "unitsPerDose": 1
       },
+      "provides": [
+        "vitamin-c"
+      ],
+      "intakeKind": "supplement",
       "fields": {
         "release": "Absorption drops steeply above about 500 mg at once — split a larger dose."
       }
@@ -167,6 +196,10 @@
         "unitName": "lozenge",
         "unitsPerDose": 1
       },
+      "provides": [
+        "b12"
+      ],
+      "intakeKind": "supplement",
       "fields": {
         "release": "Worth it if you eat little animal food, or take metformin or long-term acid blockers."
       }
@@ -188,7 +221,11 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "b6"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-folate",
@@ -207,7 +244,11 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "folate"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-vitamin-b-complex",
@@ -227,6 +268,12 @@
         "unitName": "capsule",
         "unitsPerDose": 1
       },
+      "provides": [
+        "b12",
+        "b6",
+        "folate"
+      ],
+      "intakeKind": "supplement",
       "fields": {
         "release": "Turns urine bright yellow. That is riboflavin, not a problem."
       }
@@ -248,7 +295,11 @@
         "units": 60,
         "unitName": "softgel",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "vitamin-a"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-vitamin-e",
@@ -267,7 +318,11 @@
         "units": 60,
         "unitName": "softgel",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "vitamin-e"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-zinc",
@@ -287,6 +342,10 @@
         "unitName": "capsule",
         "unitsPerDose": 1
       },
+      "provides": [
+        "zinc"
+      ],
+      "intakeKind": "supplement",
       "fields": {
         "release": "Fasted zinc causes nausea in most people. Competes with iron and calcium."
       }
@@ -308,6 +367,10 @@
         "unitName": "capsule",
         "unitsPerDose": 1
       },
+      "provides": [
+        "iron"
+      ],
+      "intakeKind": "supplement",
       "fields": {
         "release": "Vitamin C helps it absorb; tea, coffee and calcium block it."
       }
@@ -328,7 +391,11 @@
         "units": 120,
         "unitName": "capsule",
         "unitsPerDose": 2
-      }
+      },
+      "provides": [
+        "calcium"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-selenium",
@@ -347,7 +414,11 @@
         "units": 90,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "selenium"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-iodine",
@@ -365,7 +436,11 @@
         "units": 90,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "iodine"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-potassium",
@@ -384,7 +459,11 @@
         "units": 100,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "potassium"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-copper",
@@ -403,6 +482,10 @@
         "unitName": "capsule",
         "unitsPerDose": 1
       },
+      "provides": [
+        "copper"
+      ],
+      "intakeKind": "supplement",
       "fields": {
         "release": "Usually only worth it alongside long-term zinc, which depletes it."
       }
@@ -423,7 +506,12 @@
         "units": 1200,
         "unitName": "drop",
         "unitsPerDose": 10
-      }
+      },
+      "provides": [
+        "magnesium",
+        "potassium"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-electrolytes",
@@ -443,6 +531,12 @@
         "unitName": "scoop",
         "unitsPerDose": 1
       },
+      "provides": [
+        "sodium",
+        "potassium",
+        "magnesium"
+      ],
+      "intakeKind": "supplement",
       "fields": {
         "release": "For heat, hard sweat, illness or a long fast — not a daily requirement for most people."
       }
@@ -466,6 +560,10 @@
         "unitName": "scoop",
         "unitsPerDose": 1
       },
+      "provides": [
+        "creatine"
+      ],
+      "intakeKind": "supplement",
       "fields": {
         "release": "Monohydrate is the studied form. The expensive ones are not better."
       }
@@ -487,7 +585,11 @@
         "units": 30,
         "unitName": "scoop",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "protein"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-casein-protein",
@@ -505,7 +607,11 @@
         "units": 30,
         "unitName": "scoop",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "protein"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-pea-protein",
@@ -523,7 +629,11 @@
         "units": 30,
         "unitName": "scoop",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "protein"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-collagen-peptides",
@@ -543,6 +653,10 @@
         "unitName": "scoop",
         "unitsPerDose": 1
       },
+      "provides": [
+        "collagen"
+      ],
+      "intakeKind": "supplement",
       "fields": {
         "release": "Digested into ordinary amino acids like any other protein."
       }
@@ -563,7 +677,11 @@
         "units": 30,
         "unitName": "scoop",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "protein"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-branched-chain-amino-acids",
@@ -582,6 +700,10 @@
         "unitName": "scoop",
         "unitsPerDose": 1
       },
+      "provides": [
+        "protein"
+      ],
+      "intakeKind": "supplement",
       "fields": {
         "release": "Largely redundant if you already get enough protein."
       }
@@ -602,7 +724,8 @@
         "units": 60,
         "unitName": "scoop",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-glycine",
@@ -620,7 +743,11 @@
         "units": 60,
         "unitName": "scoop",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "collagen"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-l-theanine",
@@ -640,6 +767,7 @@
         "unitName": "capsule",
         "unitsPerDose": 1
       },
+      "intakeKind": "supplement",
       "fields": {
         "release": "Often taken with caffeine to take the edge off it."
       }
@@ -661,7 +789,11 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 2
-      }
+      },
+      "provides": [
+        "taurine"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-l-carnitine",
@@ -680,7 +812,11 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "carnitine"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-l-tyrosine",
@@ -699,7 +835,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-l-arginine",
@@ -717,7 +854,8 @@
         "units": 90,
         "unitName": "capsule",
         "unitsPerDose": 3
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-l-citrulline",
@@ -736,7 +874,8 @@
         "units": 30,
         "unitName": "scoop",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-beta-alanine",
@@ -755,6 +894,7 @@
         "unitName": "scoop",
         "unitsPerDose": 1
       },
+      "intakeKind": "supplement",
       "fields": {
         "release": "The skin tingling is harmless and wears off with regular use."
       }
@@ -778,6 +918,10 @@
         "unitName": "softgel",
         "unitsPerDose": 2
       },
+      "provides": [
+        "omega-3"
+      ],
+      "intakeKind": "supplement",
       "fields": {
         "release": "Read the back panel — \"1000 mg fish oil\" is often 300 mg of the part that does anything."
       }
@@ -799,7 +943,13 @@
         "units": 250,
         "unitName": "ml",
         "unitsPerDose": 5
-      }
+      },
+      "provides": [
+        "omega-3",
+        "vitamin-d",
+        "vitamin-a"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-krill-oil",
@@ -818,7 +968,11 @@
         "units": 60,
         "unitName": "softgel",
         "unitsPerDose": 2
-      }
+      },
+      "provides": [
+        "omega-3"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-algae-omega-3",
@@ -838,6 +992,10 @@
         "unitName": "softgel",
         "unitsPerDose": 2
       },
+      "provides": [
+        "omega-3"
+      ],
+      "intakeKind": "supplement",
       "fields": {
         "release": "The vegan route to the same fatty acids."
       }
@@ -858,7 +1016,11 @@
         "units": 100,
         "unitName": "softgel",
         "unitsPerDose": 2
-      }
+      },
+      "provides": [
+        "omega-3"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-mct-oil",
@@ -877,6 +1039,7 @@
         "unitName": "ml",
         "unitsPerDose": 10
       },
+      "intakeKind": "supplement",
       "fields": {
         "release": "Start small. Too much too soon is a bathroom problem."
       }
@@ -899,6 +1062,10 @@
         "unitName": "capsule",
         "unitsPerDose": 1
       },
+      "provides": [
+        "probiotics"
+      ],
+      "intakeKind": "supplement",
       "fields": {
         "release": "Effects are strain-specific — \"a probiotic\" is not one thing."
       }
@@ -919,7 +1086,11 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "probiotics"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-prebiotic-fibre",
@@ -938,6 +1109,10 @@
         "unitName": "scoop",
         "unitsPerDose": 1
       },
+      "provides": [
+        "fibre"
+      ],
+      "intakeKind": "supplement",
       "fields": {
         "release": "Build up slowly or it will find you out."
       }
@@ -960,6 +1135,10 @@
         "unitName": "scoop",
         "unitsPerDose": 1
       },
+      "provides": [
+        "fibre"
+      ],
+      "intakeKind": "supplement",
       "fields": {
         "release": "A full large glass of water every time. Keep it a couple of hours clear of medication."
       }
@@ -980,7 +1159,8 @@
         "units": 90,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-betaine-hcl",
@@ -998,7 +1178,8 @@
         "units": 100,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-ox-bile",
@@ -1016,7 +1197,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-slippery-elm",
@@ -1034,7 +1216,8 @@
         "units": 30,
         "unitName": "scoop",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-aloe-vera",
@@ -1052,7 +1235,8 @@
         "units": 500,
         "unitName": "ml",
         "unitsPerDose": 30
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-deglycyrrhizinated-liquorice",
@@ -1070,7 +1254,8 @@
         "units": 100,
         "unitName": "tablet",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-turmeric",
@@ -1090,6 +1275,10 @@
         "unitName": "capsule",
         "unitsPerDose": 2
       },
+      "provides": [
+        "polyphenols"
+      ],
+      "intakeKind": "supplement",
       "fields": {
         "release": "Curcumin absorbs poorly on its own — most products pair it with piperine or a lipid."
       }
@@ -1111,7 +1300,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-ginger",
@@ -1130,7 +1320,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-quercetin",
@@ -1149,7 +1340,11 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "polyphenols"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-resveratrol",
@@ -1167,7 +1362,11 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "polyphenols"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-glucosamine-and-chondroitin",
@@ -1185,7 +1384,8 @@
         "units": 120,
         "unitName": "capsule",
         "unitsPerDose": 2
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-msm",
@@ -1204,7 +1404,8 @@
         "units": 60,
         "unitName": "scoop",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-hyaluronic-acid",
@@ -1223,7 +1424,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-ashwagandha",
@@ -1242,7 +1444,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-rhodiola",
@@ -1262,6 +1465,7 @@
         "unitName": "capsule",
         "unitsPerDose": 1
       },
+      "intakeKind": "supplement",
       "fields": {
         "release": "Stimulating for most people — late in the day it can cost you sleep."
       }
@@ -1282,7 +1486,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-reishi",
@@ -1301,7 +1506,8 @@
         "units": 90,
         "unitName": "capsule",
         "unitsPerDose": 2
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-lion-s-mane",
@@ -1320,7 +1526,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 2
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-cordyceps",
@@ -1338,7 +1545,8 @@
         "units": 90,
         "unitName": "capsule",
         "unitsPerDose": 2
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-chaga",
@@ -1356,7 +1564,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 2
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-beta-glucan",
@@ -1374,7 +1583,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-elderberry",
@@ -1392,7 +1602,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-echinacea",
@@ -1410,7 +1621,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-colostrum",
@@ -1430,6 +1642,7 @@
         "unitName": "scoop",
         "unitsPerDose": 1
       },
+      "intakeKind": "supplement",
       "fields": {
         "release": "Not into hot liquid — heat destroys the part you are paying for."
       }
@@ -1451,6 +1664,7 @@
         "unitName": "tablet",
         "unitsPerDose": 1
       },
+      "intakeKind": "supplement",
       "fields": {
         "release": "Lower doses work as well as high ones for most people, and it is a timing signal rather than a sedative."
       }
@@ -1471,7 +1685,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-passionflower",
@@ -1490,7 +1705,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-lemon-balm",
@@ -1509,7 +1725,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-chamomile",
@@ -1528,7 +1745,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-gaba",
@@ -1547,7 +1765,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-5-htp",
@@ -1565,7 +1784,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-tart-cherry",
@@ -1584,7 +1804,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-inositol",
@@ -1603,7 +1824,8 @@
         "units": 60,
         "unitName": "scoop",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-alpha-lipoic-acid",
@@ -1621,7 +1843,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-coq10",
@@ -1641,6 +1864,7 @@
         "unitName": "softgel",
         "unitsPerDose": 1
       },
+      "intakeKind": "supplement",
       "fields": {
         "release": "Fat-soluble, so a meal with fat roughly doubles what you absorb."
       }
@@ -1662,7 +1886,8 @@
         "units": 30,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-nad-precursor",
@@ -1680,7 +1905,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-nac",
@@ -1699,7 +1925,8 @@
         "units": 90,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-glutathione",
@@ -1717,7 +1944,8 @@
         "units": 150,
         "unitName": "ml",
         "unitsPerDose": 5
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-milk-thistle",
@@ -1735,7 +1963,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-dandelion-root",
@@ -1753,7 +1982,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-berberine",
@@ -1772,7 +2002,8 @@
         "units": 90,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-chromium",
@@ -1790,7 +2021,8 @@
         "units": 100,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-cinnamon",
@@ -1808,7 +2040,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-nattokinase",
@@ -1826,7 +2059,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-serrapeptase",
@@ -1844,7 +2078,8 @@
         "units": 90,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-bromelain",
@@ -1863,11 +2098,12 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
-      "id": "sup-beetroot",
-      "name": "Beetroot",
+      "id": "sup-beetroot-powder",
+      "name": "Beetroot powder",
       "type": "intake",
       "tracking": "check",
       "substance": "beta vulgaris extract",
@@ -1882,7 +2118,11 @@
         "units": 30,
         "unitName": "scoop",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "nitrate"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-spirulina",
@@ -1900,7 +2140,12 @@
         "units": 180,
         "unitName": "tablet",
         "unitsPerDose": 6
-      }
+      },
+      "provides": [
+        "protein",
+        "iron"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-chlorella",
@@ -1918,7 +2163,12 @@
         "units": 180,
         "unitName": "tablet",
         "unitsPerDose": 6
-      }
+      },
+      "provides": [
+        "protein",
+        "iron"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-green-tea-extract",
@@ -1937,7 +2187,11 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "polyphenols"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-multivitamin",
@@ -1956,7 +2210,16 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "vitamin-a",
+        "vitamin-c",
+        "vitamin-d",
+        "b12",
+        "zinc",
+        "iodine"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-greens-powder",
@@ -1975,6 +2238,7 @@
         "unitName": "scoop",
         "unitsPerDose": 1
       },
+      "intakeKind": "supplement",
       "fields": {
         "release": "A blend, so what is in it is whatever the label says — worth reading before assuming."
       }
@@ -1995,7 +2259,11 @@
         "units": 30,
         "unitName": "scoop",
         "unitsPerDose": 1
-      }
+      },
+      "provides": [
+        "fibre"
+      ],
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-apple-cider-vinegar",
@@ -2014,7 +2282,8 @@
         "units": 90,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-sea-moss",
@@ -2033,7 +2302,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 2
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-shilajit",
@@ -2051,7 +2321,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-saw-palmetto",
@@ -2069,7 +2340,8 @@
         "units": 60,
         "unitName": "softgel",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-dim",
@@ -2087,7 +2359,8 @@
         "units": 60,
         "unitName": "capsule",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-maca",
@@ -2106,7 +2379,8 @@
         "units": 30,
         "unitName": "scoop",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     },
     {
       "id": "sup-vitamin-d-omega-blend",
@@ -2125,7 +2399,8 @@
         "units": 60,
         "unitName": "softgel",
         "unitsPerDose": 1
-      }
+      },
+      "intakeKind": "supplement"
     }
   ]
 }
