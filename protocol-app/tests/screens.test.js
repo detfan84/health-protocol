@@ -21,6 +21,31 @@ globalThis.AbortController = dom.window.AbortController;
 globalThis.AbortSignal = dom.window.AbortSignal;
 globalThis.localStorage = dom.window.localStorage;
 
+// Node's fetch will not open a file: URL, and viewLibrary fetches its
+// catalogue. This serves the real shipped files for the whole file, ONCE.
+//
+// It replaces a habit that has now broken twice in one day: individual tests
+// installed a shim, and later tests read whatever was left in viewLibrary's
+// module-level cache afterwards. Two of them had never passed on their own,
+// and each failed the moment an unrelated test above it changed — once because
+// the catalogue grew by eight items, and once because a test that had been
+// leaking its shim started cleaning up after itself. A test that depends on
+// another test's leftovers is not testing what its name says.
+{
+  const { readFileSync } = await import('node:fs');
+  const file = (name) => readFileSync(new URL(`../src/content/${name}`, import.meta.url), 'utf8');
+  const bodies = new Map([
+    ['library.json', file('library.json')],
+    ['referral.json', file('referral.json')],
+    ['starter.json', file('starter.json')],
+    ['reference.json', file('reference.json')],
+  ]);
+  globalThis.fetch = async (url) => {
+    const key = [...bodies.keys()].find((k) => String(url).includes(k)) ?? 'library.json';
+    return { ok: true, status: 200, json: async () => JSON.parse(bodies.get(key)), text: async () => bodies.get(key) };
+  };
+}
+
 const store = await import('../src/app/store.js');
 const { viewToday } = await import('../src/app/ui/viewToday.js');
 const { viewEditor } = await import('../src/app/ui/viewEditor.js');
@@ -1126,7 +1151,7 @@ test('the shelf is a view over one facet, and the facets compose', async () => {
 
   // Every slice is offered, and effect is the one you land on.
   const slices = chipsIn('Browse by').map((b) => b.textContent);
-  assert.deepEqual(slices, ['What it does', 'Where in the body', 'How it moves', 'What you need', 'Where you are', 'Kind of thing']);
+  assert.deepEqual(slices, ['What it does', 'Where in the body', 'How it moves', 'What you need', 'Where you are', 'What it’s for', 'Kind of thing']);
 
   // Chips carry counts, so nothing offered is a dead end.
   const effects = chipsIn('What it does').map((b) => b.textContent);
@@ -1374,4 +1399,56 @@ test('the whenever block is offered when the clock is empty, and goes quiet afte
   const done = [...main.querySelectorAll('details.day-fold')]
     .find((d) => /^Done today/.test(d.querySelector('summary').textContent));
   assert.ok(done, 'what you did is still reachable');
+});
+
+// Kevin, 29 Aug, after eight supplements shipped: "no I still have phases but
+// no supplements."
+//
+// They were in the catalogue and deployed. They were also unreachable. The
+// shelf you land on is "What it does", intake items correctly carry no movement
+// effect, so they appeared under no chip at all — findable only by typing a
+// name you already knew, which is no use to somebody whose whole request was
+// "just let me select my supplements".
+//
+// Being in the catalogue is not the same as being reachable. Same lesson as the
+// four days the app shipped with a full body-work library nobody could see.
+test('a supplement can be found by browsing, not only by knowing its name', async () => {
+  const { viewLibrary } = await import('../src/app/ui/viewLibrary.js');
+  store._resetForTests();
+  await store.ready({ name: 'screens-intake' });
+  const main = draw(await viewLibrary({ open: () => {} }));
+  await settled();
+
+  const chipsIn = (label) => {
+    const g = [...main.querySelectorAll('[role=group]')].find((x) => x.getAttribute('aria-label') === label);
+    return g ? [...g.querySelectorAll('button')] : [];
+  };
+  const press = (label, text) => {
+    const b = chipsIn(label).find((x) => x.textContent.startsWith(text));
+    assert.ok(b, `no "${text}" under ${label} — got ${JSON.stringify(chipsIn(label).map((x) => x.textContent))}`);
+    b.dispatchEvent(new Event('click'));
+  };
+
+  // There is a door marked Supplements, and it has a count on it.
+  press('Browse by', 'Kind of thing');
+  await settled();
+  const kinds = chipsIn('Kind of thing').map((b) => b.textContent);
+  const supplements = kinds.find((t) => t.startsWith('Supplements'));
+  assert.ok(supplements, `no Supplements shelf — got ${JSON.stringify(kinds)}`);
+  assert.match(supplements, /· \d+$/, 'and it says how many, so it is not a dead end');
+
+  press('Kind of thing', 'Supplements');
+  await settled();
+  assert.match(main.textContent, /Magnesium glycinate/, 'the shelf actually holds them');
+
+  // And they can be browsed by what a person is looking for, which is the
+  // question they can answer about themselves — not by which facet the
+  // movement ledger happens to count in.
+  const fresh = draw(await viewLibrary({ open: () => {} }));
+  await settled();
+  press('Browse by', 'What it’s for');
+  await settled();
+  const purposes = chipsIn('What it’s for').map((b) => b.textContent);
+  assert.ok(purposes.some((t) => /^Sleep/.test(t)), `no purpose shelf — got ${JSON.stringify(purposes)}`);
+  assert.ok(fresh);
 });

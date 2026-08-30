@@ -43,7 +43,23 @@ const EFFECTS = [
 const TYPES = [
   ['measurement', 'Measure yourself'],
   ['teaching', 'Read about it'],
+  ['intake', 'Supplements'],
 ];
+
+// What an INTAKE is for. Deliberately not `effect` — that vocabulary belongs to
+// the movement coverage ledger, and magnesium is not a `calm` the way a
+// breathing drill is. This is the shelf a person browses supplements by, and
+// without it they shipped invisible: eight items in the catalogue, reachable
+// only by typing a name you already knew, which is no use at all to somebody
+// whose whole request was "just let me select my supplements".
+const SUPPORTS = [
+  ['sleep', 'Sleep'], ['energy', 'Energy'], ['gut', 'Digestion'],
+  ['immune', 'Immune'], ['muscle', 'Muscle'], ['strength', 'Strength'],
+  ['bone', 'Bones'], ['heart', 'Heart'], ['brain', 'Brain'],
+  ['cognition', 'Focus'], ['inflammation', 'Inflammation'],
+  ['nervous-system', 'Nervous system'], ['hydration', 'Hydration'],
+];
+const SUPPORTS_LABELS = Object.fromEntries(SUPPORTS);
 const EFFECT_LABELS = Object.fromEntries(EFFECTS);
 
 const CONTEXTS = [
@@ -67,6 +83,7 @@ const SLICES = [
   { id: 'pattern', label: 'How it moves', read: (i) => i.pattern ?? [] },
   { id: 'equipment', label: 'What you need', read: (i) => i.equipment ?? [] },
   { id: 'context', label: 'Where you are', read: (i) => i.context ?? [] },
+  { id: 'supports', label: 'What it’s for', read: (i) => i.supports ?? [] },
   { id: 'type', label: 'Kind of thing', read: (i) => (i.type ? [i.type] : []) },
 ];
 const SLICE_BY_ID = Object.fromEntries(SLICES.map((s) => [s.id, s]));
@@ -317,7 +334,8 @@ export async function viewLibrary({ reload } = {}) {
     if (sliceId === 'effect') return EFFECT_LABELS[value] ?? value;
     if (sliceId === 'equipment') return EQUIPMENT_LABELS[value] ?? value.replace(/-/g, ' ');
     if (sliceId === 'context') return Object.fromEntries(CONTEXTS)[value] ?? value;
-    if (sliceId === 'type') return { practice: 'Something to do', measurement: 'Measure yourself', teaching: 'Read about it' }[value] ?? value;
+    if (sliceId === 'type') return { practice: 'Something to do', measurement: 'Measure yourself', teaching: 'Read about it', intake: 'Supplements', record: 'A record you keep' }[value] ?? value;
+    if (sliceId === 'supports') return SUPPORTS_LABELS[value] ?? value.replace(/-/g, ' ');
     if (sliceId === 'pattern') return PATTERN_LABELS[value] ?? value;
     if (sliceId === 'target') return anatomyIndex.get(value)?.name ?? value;
     return value;

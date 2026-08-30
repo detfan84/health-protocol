@@ -58,14 +58,21 @@ export async function viewReference() {
     );
   }
 
-  root.append(
-    h('section', {},
-      h('h2.section-title', {}, 'Food, in phases'),
-      h('p.muted', {}, 'What to lean on, what to go easy on, what to leave out — and why each one is on the list. Phases are a shape, not a prescription; take what applies.'),
-      food,
-      h('p.muted', {}, 'Prescription-medication timing has been left out of this on purpose. That belongs with whoever prescribed it, not in an app.'),
-    ),
-  );
+  // Only if there is any. The food section used to be a four-phase detox diet
+  // carried over from the 2025 app — somebody's treatment plan, told to a
+  // stranger — and it is not shipped any more (see scripts/build-reference.mjs).
+  // An empty heading over nothing is worse than no heading: it reads as a screen
+  // that failed to load rather than a section that has not been written.
+  if ((ref.diet ?? []).length) {
+    root.append(
+      h('section', {},
+        h('h2.section-title', {}, 'Food'),
+        h('p.muted', {}, 'What to lean on, what to go easy on, what to leave out — and why each one is on the list.'),
+        food,
+        h('p.muted', {}, 'Prescription-medication timing has been left out of this on purpose. That belongs with whoever prescribed it, not in an app.'),
+      ),
+    );
+  }
 
   /* ------------------------------ spacing -------------------------------- */
   root.append(

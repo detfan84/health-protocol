@@ -85,18 +85,24 @@ function scrubGroup(g) {
 }
 
 /* ------------------------------- diet -------------------------------- */
-
-const diet = (DIET_PHASES ?? []).map((phase) => ({
-  id: `diet-${phase.id}`,
-  name: `Phase ${phase.id}`,
-  duration: phase.duration,
-  strategy: dropDrugClauses(depersonalise(phase.strategy)),
-  groups: [
-    { heading: 'Lean on these', groups: (phase.good ?? []).map(scrubGroup).filter(Boolean) },
-    { heading: 'In moderation', groups: (phase.moderate ?? []).map(scrubGroup).filter(Boolean) },
-    { heading: 'Leave out', groups: (phase.avoid ?? []).map(scrubGroup).filter(Boolean) },
-  ].filter((s) => s.groups.length),
-}));
+//
+// NOT SHIPPED, from 29 Aug. `DIET_PHASES` is the 2025 app's four-phase detox
+// diet, and the depersonalising pass above was never going to be enough for it:
+// the problem is not the wording, it is the shape. Four numbered phases with
+// day counts, whose strategies read "Starve pathogens, support liver detox",
+// "Heavy killing is done", "Gut is repaired, pathogens cleared" — that is one
+// person's treatment plan for one person's diagnosis, addressed to a stranger
+// in the second person, on a public URL.
+//
+// Decision 3: a stranger gets an app, not somebody's regimen. A phased plan is
+// a fine thing to BUILD, and phases exist in the editor for exactly that — as
+// yours, on your device. It is not shipped reference.
+//
+// The scrubbing helpers stay because the food content is worth returning to.
+// What it needs is not a scrub but a rewrite into principles that are true of
+// anybody, which is a content job and not a pipeline flag. Until then the Learn
+// tab carries the two things that already generalise: spacing and symptoms.
+const diet = [];
 
 /* ------------------------------ spacing ------------------------------ */
 // The rules that are about a named product become the principle underneath.
