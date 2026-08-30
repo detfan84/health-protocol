@@ -343,6 +343,24 @@ export async function viewHome({ open, startSession, now = new Date() }) {
         wide: true,
         onclick: () => open({ tab: 'library' }),
       }),
+      // Kevin, 29 Aug: "the way to find how to search for supplements is way
+      // too buried and hidden. People would never know they could track
+      // supplements in this app if they didn't have someone else tell them or
+      // they just randomly found it while exploring which would be rare."
+      //
+      // He is right, and it was three taps behind a facet menu: Library →
+      // Browse by → Kind of thing → Supplements. A capability nobody can find
+      // is a capability nobody has, which is the same sentence as the four days
+      // the body-work library shipped invisible. So it gets its own door on the
+      // front page, at the same weight as Browse.
+      tile({
+        title: 'Supplements',
+        sub: 'What you take, when you take it, and what is left in the bottle',
+        iconName: 'bottle',
+        accent: 'ochre',
+        wide: true,
+        onclick: () => open({ tab: 'library', shelf: 'intake' }),
+      }),
       h('div.thin-row', {},
         h('button.thin-link', { onclick: () => open({ tab: 'day' }) }, 'Everything today'),
         h('button.thin-link', { onclick: () => open({ tab: 'supply' }) }, 'Supply'),

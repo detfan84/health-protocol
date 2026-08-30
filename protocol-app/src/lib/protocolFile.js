@@ -265,7 +265,12 @@ function fixItem(raw, path, ctx) {
   // (Kevin, 29 Aug). The current structure names the field; the old shape gets
   // reformatted to fit it, not the other way round. The dose is `amount` now,
   // and a file written before the rename is translated above.
-  for (const k of ['type', 'technique', 'performedBy', 'tradition', 'variationOf']) {
+  // `timing` and `substance` are what an INTAKE is: when in the day it wants to
+  // be taken, and what it actually is under whatever the bottle calls it. They
+  // travel with the item because the validator strips what it does not know,
+  // and an item that lost its timing on a backup round trip would come back not
+  // knowing where in the day it belongs.
+  for (const k of ['type', 'technique', 'performedBy', 'tradition', 'variationOf', 'timing', 'substance']) {
     if (raw[k] == null) continue;
     const v = asTrimmed(String(raw[k]));
     if (v) item[k] = v;
@@ -293,7 +298,7 @@ function fixItem(raw, path, ctx) {
     }
     if (before.length) item.before = before;
   }
-  for (const k of ['effect', 'tissue', 'target', 'context', 'equipment', 'demands']) {
+  for (const k of ['effect', 'tissue', 'target', 'context', 'equipment', 'demands', 'supports', 'spacing']) {
     if (k === 'target' && isObj(raw.target)) continue; // the legacy dose, handled above
     if (raw[k] == null) continue;
     if (!Array.isArray(raw[k])) {

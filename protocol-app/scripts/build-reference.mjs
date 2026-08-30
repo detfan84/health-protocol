@@ -109,8 +109,12 @@ const diet = [];
 // Anything left naming a specific supplement is dropped rather than shipped as
 // advice about somebody else's bottle.
 
+// The binder rule went on 29 Aug with the diet phases. "Activated charcoal,
+// zeolite, clay — two hours clear on either side" is true, and it is also the
+// vocabulary of one particular detox protocol: nobody who is not on one owns a
+// binder, and leading a general reference with it tells the reader what they are
+// supposed to be doing. What is left is true of anybody with a cupboard.
 const SPACING_PRINCIPLES = [
-  { rule: 'Binders, away from everything', detail: 'Activated charcoal, zeolite, clay and similar bind what is in the gut — including food, supplements and medication. Two hours clear on either side, or they bind the thing you meant to absorb.' },
   { rule: 'Fat-soluble things need fat', detail: 'Vitamins A, D, E and K, and anything oil-based, absorb with a meal that contains fat. On an empty stomach much of it passes through.' },
   { rule: 'Some things are hard on an empty stomach', detail: 'Anything that reliably causes nausea taken fasted is telling you something. With food is not a weaker dose, it is a tolerated one.' },
   { rule: 'Minerals compete', detail: 'Calcium, magnesium, zinc and iron all use overlapping transport. Split them across the day rather than stacking them in one handful.' },

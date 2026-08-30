@@ -18,6 +18,7 @@ import { h, clear } from './dom.js';
 import * as store from '../store.js';
 import { guarded } from './announcer.js';
 import { newId, nowIso } from '../../lib/core.js';
+import { makeSupply } from '../trackerOps.js';
 
 // The shelf you browse by is EFFECT — what a thing does to you — because it is
 // the facet a person can answer about themselves: tight, weak, wired
@@ -123,6 +124,55 @@ const TIER_LABELS = {
 /** Where a picked item goes: one protocol, made the first time it is needed. */
 const PICKS_ID = 'my-picks';
 
+/**
+ * Where a thing you add actually lands.
+ *
+ * Kevin, 29 Aug: "I clicked add it to my day but I don't know where in my day
+ * it went." Everything went into one untimed block called "From the library",
+ * whatever it was — so a supplement that says it wants to be taken before bed
+ * arrived in an anytime bucket, folded away on the front door, indistinguishable
+ * from a foam-roll card. The item HAD said when it wanted to be taken and
+ * nothing read it.
+ *
+ * These times deliberately mirror the day arc's, because Today and Home
+ * interleave every active protocol's blocks BY TIME — so a picked item at 06:30
+ * lands beside the arc's 06:30 block rather than beside a heading of its own.
+ * That is the whole "not an awkward side car" requirement, and it needs no
+ * writing into the shipped arc at all: writing into a seeded protocol would
+ * mark it edited and quietly stop its content updates arriving (lib/seed.js).
+ */
+const MOMENTS = [
+  { timing: 'fasted', id: 'pick-fasted', name: 'First thing, before food', start: '06:30', end: '09:00', order: 0 },
+  { timing: 'with-food', id: 'pick-with-food', name: 'With a meal', order: 1 },
+  { timing: 'evening', id: 'pick-evening', name: 'Evening', start: '18:00', end: '21:30', order: 2 },
+  { timing: 'before-bed', id: 'pick-bed', name: 'Before bed', start: '21:30', end: '23:59', order: 3 },
+  { timing: 'anytime', id: 'pick-anytime', name: 'Anytime', order: 4 },
+];
+// "With a meal" carries no clock on purpose: nobody eats on the app's schedule,
+// and inventing 12:30 for somebody's lunch is the same class of made-up number
+// as the sixty seconds the home screen used to add per untimed item.
+const MOMENT_BY_TIMING = Object.fromEntries(MOMENTS.map((m) => [m.timing, m]));
+
+/** The block in My picks this item belongs in, created if it is not there yet. */
+function blockFor(picks, item) {
+  const moment = MOMENT_BY_TIMING[item.timing]
+    ?? (item.type === 'intake' ? MOMENT_BY_TIMING.anytime : null);
+  // Anything that is not an intake keeps the original single block, because
+  // nothing else in the catalogue says when it wants to happen yet.
+  const spec = moment ?? { id: 'pick-general', name: 'From the library', order: 5 };
+  let block = picks.blocks.find((b) => b.id === spec.id)
+    // The block this app shipped with before moments existed, by its name.
+    ?? (spec.id === 'pick-general' ? picks.blocks.find((b) => b.name === 'From the library') : undefined);
+  if (!block) {
+    block = { id: spec.id, name: spec.name, order: spec.order, items: [] };
+    if (spec.start) block.start = spec.start;
+    if (spec.end) block.end = spec.end;
+    picks.blocks.push(block);
+    picks.blocks.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  }
+  return block;
+}
+
 let cache = null;
 async function loadLibrary() {
   if (cache) return cache;
@@ -132,7 +182,7 @@ async function loadLibrary() {
   return cache;
 }
 
-export async function viewLibrary({ reload } = {}) {
+export async function viewLibrary({ reload, openOn } = {}) {
   const root = h('div');
   root.append(
     h('h1', {}, 'Library'),
@@ -160,7 +210,17 @@ export async function viewLibrary({ reload } = {}) {
   // TAXONOMY §8. Somebody looking for "something for my leg that releases" is
   // asking two facets one after the other, not choosing between them, and the
   // chosen ones stay visible as pills they can take off.
-  const state = { q: '', slice: 'effect', filters: { effect: null, type: null, target: null, equipment: null, context: null } };
+  // `openOn` is a shelf somebody was sent to. Landing on the default view and
+  // leaving them to find the filter is what "too buried" meant — arriving on
+  // the Supplements shelf is the whole point of having a door to it.
+  const state = {
+    q: '',
+    slice: openOn === 'intake' ? 'type' : 'effect',
+    filters: {
+      effect: null, type: openOn === 'intake' ? 'intake' : null,
+      target: null, equipment: null, context: null, supports: null,
+    },
+  };
   const results = h('div');
 
   /* ------------------------------ filters ------------------------------ */
@@ -444,8 +504,10 @@ export async function viewLibrary({ reload } = {}) {
             updatedAt: nowIso(),
           };
         }
-        const block = picks.blocks[0];
-        if (block.items.some((i) => i.id === item.id)) return { already: true };
+        const block = blockFor(picks, item);
+        if (picks.blocks.some((b) => b.items.some((i) => i.id === item.id))) {
+          return { already: true, where: block.name };
+        }
 
         // The library item becomes an ordinary plan item — the same shape as
         // everything else, so nothing about it is special once it is yours.
@@ -486,14 +548,14 @@ export async function viewLibrary({ reload } = {}) {
           // not tagged arrives untagged rather than arriving with empty lists,
           // because "nobody has said" and "none" are different facts (D24).
           ...Object.fromEntries(
-            ['type', 'technique', 'performedBy', 'tradition', 'variationOf']
+            ['type', 'technique', 'performedBy', 'tradition', 'variationOf', 'timing', 'substance']
               .filter((k) => item[k])
               .map((k) => [k, item[k]]),
           ),
           ...(item.outcomes?.length ? { outcomes: item.outcomes } : {}),
           ...(item.measure ? { measure: item.measure } : {}),
           ...Object.fromEntries(
-            ['effect', 'tissue', 'target', 'context', 'equipment', 'demands', 'before']
+            ['effect', 'tissue', 'target', 'context', 'equipment', 'demands', 'before', 'supports', 'spacing']
               .filter((k) => Array.isArray(item[k]) && item[k].length)
               .map((k) => [k, [...item[k]]]),
           ),
@@ -511,13 +573,26 @@ export async function viewLibrary({ reload } = {}) {
         };
         block.items.push(planItem);
         await store.saveProtocol(picks);
-        return { already: false };
+        // What a bottle holds is the person's to say; how many units make one
+        // dose is a fact about the substance. So the dose config is seeded and
+        // the COUNT is deliberately left absent — an app that guessed you had
+        // sixty capsules would be inventing your cupboard (ruling A).
+        if (item.type === 'intake' && item.bottle?.unitsPerDose) {
+          await store.putSetting(makeSupply(item.id, {
+            name: item.name,
+            unitsPerDose: item.bottle.unitsPerDose,
+            unitName: item.bottle.unitName,
+          }, await store.getSetting(`supply:${item.id}`)));
+        }
+        return { already: false, where: block.name };
       },
       {
         what: `Adding ${item.name}`,
         onOk: (res) => {
           owned.add(item.id);
-          btn.textContent = res.already ? 'Already in your day' : 'Added to your day';
+          // Say WHERE. "Added to your day" is true and useless — the day has
+          // places in it, and the whole complaint was not knowing which one.
+          btn.textContent = res.already ? `Already in ${res.where}` : `Added to ${res.where}`;
           btn.classList.remove('primary');
         },
         onFail: () => { btn.disabled = false; },

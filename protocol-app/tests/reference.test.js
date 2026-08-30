@@ -39,6 +39,10 @@ test('the reference does not tell a stranger what is wrong with them', () => {
     /\bheavy killing\b/i,
     /\byour (?:parasites|pathogens|infection|candida|biofilm)\b/i,
     /\bwhile you detox\b/i,
+    // Binders are one protocol's kit, not general knowledge: nobody who is not
+    // on a detox owns activated charcoal, and leading a general reference with
+    // it tells the reader what they are supposed to be doing.
+    /\b(?:activated charcoal|zeolite)\b/i,
   ];
   const offenders = [];
   for (const line of allText(ref)) {
@@ -70,6 +74,6 @@ test('the reference is reference, not a staged treatment plan', () => {
 test('what remains is genuinely general', () => {
   // Spacing and symptoms survive because they are true of anybody: what not to
   // take within two hours of what, and where a pain can come from.
-  assert.ok((ref.spacing ?? []).length >= 5, 'spacing principles are general and worth keeping');
+  assert.ok((ref.spacing ?? []).length >= 4, 'spacing principles are general and worth keeping');
   assert.ok((ref.symptoms ?? []).length >= 10, 'the symptom map is general and worth keeping');
 });

@@ -1,7 +1,7 @@
 {
   "format": "shoes-of-peace/authored@1",
   "module": "supplements",
-  "note": "Supplements as a SHELF, not as somebody's protocol (Kevin, 29 Aug): \"The supplements should be like any other library, just a big list of commonly taken supplements that can be adjusted by bottle/dose size, with the reorder tracking and stuff. But we don't need to port the whole protocol over. Just let me select my supplements.\" So: no stack, no phases, no schedule. Substances, by their generic names, each saying what it is for, what the evidence actually is, and when it wants to be taken — so choosing one puts it in the right moment of the day instead of in a side car. Brand names appear nowhere in an item; a brand is a place to buy a substance, which is a different fact and lives in `offers`. This first tranche is a proof of the shape, not the catalogue.",
+  "note": "A shelf of commonly taken supplements, so somebody can tick off what they already take (Kevin, 29 Aug): \"The supplements should be like any other library, just a big list of commonly taken supplements that can be adjusted by bottle/dose size, with the reorder tracking and stuff… Just let me select my supplements. It could be smart enough to have some education as to what each supplement does and suggest when it should be taken.\"\n\nTHIS IS A TRACKER, NOT A SHOP. The first version of this file put a `careful` warning on every item including vitamin D, and a test that REQUIRED one — Kevin, same day: \"putting a careful label on vitamin D is dumb. All of these stupid precautions are unnecessary. We are not selling or recommending supplements. We are making it easy for someone to track what they take within their daily routine… you need a warning that you put too many warnings on stuff.\" He is right, and the warnings were doing the opposite of their job: a caution on all eight is a caution on none, and it read as liability boilerplate on a screen whose only job is to let you tick off what is already in your cupboard.\n\nSo what stays is what changes how you take the thing — with food, on an empty stomach, with a full glass of water — and that lives in the how-to, where you read it while doing it, not in a warning box. What goes is everything a person did not come here for.\n\nBrand names appear nowhere: a brand is where you buy a substance, which is a different fact.",
   "items": [
     {
       "id": "sup-magnesium-glycinate",
@@ -9,35 +9,17 @@
       "type": "intake",
       "tracking": "check",
       "substance": "magnesium bisglycinate",
-      "supports": [
-        "sleep",
-        "muscle",
-        "nervous-system"
-      ],
+      "supports": ["sleep", "muscle", "nervous-system"],
       "timing": "before-bed",
       "form": "capsule",
       "typicalDose": "200–400 mg elemental magnesium",
-      "bottle": {
-        "units": 120,
-        "unitName": "capsule",
-        "unitsPerDose": 2
-      },
+      "bottle": { "units": 120, "unitName": "capsule", "unitsPerDose": 2 },
       "tier": "established",
-      "evidence": {
-        "grade": "mixed",
-        "basis": "Magnesium deficiency is real, common, and worth correcting, and glycinate is among the better-absorbed and least laxative forms. The leap people make is from 'corrects a deficiency' to 'improves sleep in everyone' — trials in people who are not deficient are small and inconsistent. Worth taking if you are low; not a sedative."
-      },
       "why": "The form of magnesium least likely to send you to the bathroom, which is why it is the one people take at night.",
       "fields": {
-        "tool": "Capsules, usually two. Check the label for ELEMENTAL magnesium — a 500 mg capsule of magnesium glycinate is not 500 mg of magnesium, it is closer to 70.",
-        "release": "With or without food, in the evening. Splitting the dose across the day is easier on the gut than taking it all at once.",
-        "notice": "Loose stools mean the dose is too high or the form is wrong — that is the main signal this gives you.",
-        "careful": "Reduced kidney function changes how magnesium clears, and it interacts with some antibiotics and thyroid medication. If either applies to you, this is a conversation with a pharmacist, not a shelf."
-      },
-      "spacing": [
-        "thyroid-medication",
-        "some-antibiotics"
-      ]
+        "tool": "Check the label for ELEMENTAL magnesium — a 500 mg capsule of magnesium glycinate is not 500 mg of magnesium, it is closer to 70.",
+        "release": "Evening, with or without food. Splitting it across the day sits easier than taking it all at once."
+      }
     },
     {
       "id": "sup-vitamin-d3-k2",
@@ -45,31 +27,16 @@
       "type": "intake",
       "tracking": "check",
       "substance": "cholecalciferol + menaquinone-7",
-      "supports": [
-        "immune",
-        "bone"
-      ],
+      "supports": ["immune", "bone"],
       "timing": "with-food",
       "form": "capsule",
-      "typicalDose": "1000–2000 IU D3 daily, unless a blood test says otherwise",
-      "bottle": {
-        "units": 60,
-        "unitName": "capsule",
-        "unitsPerDose": 1
-      },
+      "typicalDose": "1000–2000 IU D3",
+      "bottle": { "units": 60, "unitName": "capsule", "unitsPerDose": 1 },
       "tier": "established",
-      "evidence": {
-        "grade": "established",
-        "basis": "Correcting a genuine vitamin D deficiency is well supported. Supplementing when you are already replete does much less than the marketing suggests. The K2 pairing is mechanistically sensible — it directs calcium to bone rather than arteries — and has reasonable but not conclusive human evidence behind it."
-      },
-      "why": "The one supplement most worth having an actual blood level for, because both too little and too much are real.",
+      "why": "The one worth having an actual blood level for — a 25-hydroxy test tells you the dose, which no label can.",
       "fields": {
-        "tool": "A softgel, with the fattiest meal of the day — it is fat-soluble and absorption roughly doubles with food.",
-        "release": "Once daily with a meal that contains fat.",
-        "notice": "This is measurable. A 25-hydroxyvitamin D test tells you whether you need it at all and what dose is right, which no label can.",
-        "careful": "Fat-soluble, so it accumulates — high doses over months can raise blood calcium. K2 interacts with warfarin and other anticoagulants; if you take one, do not add K2 without asking."
-      },
-      "spacing": []
+        "release": "With the fattiest meal of the day. It is fat-soluble and absorption roughly doubles with food."
+      }
     },
     {
       "id": "sup-creatine-monohydrate",
@@ -77,32 +44,17 @@
       "type": "intake",
       "tracking": "check",
       "substance": "creatine monohydrate",
-      "supports": [
-        "strength",
-        "energy",
-        "cognition"
-      ],
+      "supports": ["strength", "energy", "cognition"],
       "timing": "anytime",
       "form": "powder",
-      "typicalDose": "3–5 g daily",
-      "bottle": {
-        "units": 60,
-        "unitName": "scoop",
-        "unitsPerDose": 1
-      },
+      "typicalDose": "3–5 g",
+      "bottle": { "units": 60, "unitName": "scoop", "unitsPerDose": 1 },
       "tier": "established",
-      "evidence": {
-        "grade": "established",
-        "basis": "The most studied sports supplement there is, and one of the few where the effect on strength and lean mass is not in dispute. The cognitive claims are newer, plausible, and considerably weaker than the muscle ones. Monohydrate is the studied form; the expensive forms are not better."
-      },
-      "why": "Cheap, boring, and one of the very few that does what the label says.",
+      "why": "Cheap, boring, and among the very few that does what the label says. Monohydrate is the studied form; the expensive ones are not better.",
       "fields": {
-        "tool": "A scoop of plain monohydrate powder in whatever you are already drinking. It does not fully dissolve in cold water and that is normal.",
-        "release": "Any time of day. Consistency matters far more than timing — the muscle store fills over weeks, not hours.",
-        "notice": "A couple of pounds of scale weight in the first fortnight is water drawn into muscle, not fat.",
-        "careful": "Drink enough water. Existing kidney disease is the one real contraindication — in healthy kidneys the safety record is long and good."
-      },
-      "spacing": []
+        "release": "Any time of day — the muscle store fills over weeks, so consistency matters far more than timing.",
+        "notice": "A couple of pounds on the scale in the first fortnight is water drawn into muscle."
+      }
     },
     {
       "id": "sup-omega-3",
@@ -110,32 +62,17 @@
       "type": "intake",
       "tracking": "check",
       "substance": "eicosapentaenoic acid + docosahexaenoic acid",
-      "supports": [
-        "heart",
-        "inflammation",
-        "brain"
-      ],
+      "supports": ["heart", "inflammation", "brain"],
       "timing": "with-food",
       "form": "capsule",
       "typicalDose": "1–2 g combined EPA + DHA",
-      "bottle": {
-        "units": 120,
-        "unitName": "softgel",
-        "unitsPerDose": 2
-      },
+      "bottle": { "units": 120, "unitName": "softgel", "unitsPerDose": 2 },
       "tier": "established",
-      "evidence": {
-        "grade": "mixed",
-        "basis": "Strong for lowering triglycerides at gram doses. Much weaker, and repeatedly disappointing in large trials, for preventing heart attacks in people who are not already at high risk. The anti-inflammatory and mood claims are plausible and unsettled."
-      },
-      "why": "Read the back of the bottle, not the front: '1000 mg fish oil' is often 300 mg of the part that does anything.",
+      "why": "Read the back of the bottle, not the front — \"1000 mg fish oil\" is often 300 mg of the part that does anything.",
       "fields": {
-        "tool": "Softgels or liquid. The number that matters is combined EPA + DHA per serving, which is on the back panel.",
-        "release": "With a meal. Freezing the softgels reduces the fishy repeat.",
-        "notice": "Rancid fish oil is common and tastes like it. If it smells strongly fishy through the bottle, it has oxidised.",
-        "careful": "At high doses it has a mild blood-thinning effect. If you take an anticoagulant or have surgery coming up, say so first."
-      },
-      "spacing": []
+        "release": "With a meal. Freezing the softgels stops the fishy repeat.",
+        "notice": "If it smells strongly fishy through the bottle it has oxidised."
+      }
     },
     {
       "id": "sup-l-glutamine",
@@ -143,62 +80,33 @@
       "type": "intake",
       "tracking": "check",
       "substance": "L-glutamine",
-      "supports": [
-        "gut"
-      ],
+      "supports": ["gut"],
       "timing": "fasted",
       "form": "powder",
       "typicalDose": "5 g",
-      "bottle": {
-        "units": 60,
-        "unitName": "scoop",
-        "unitsPerDose": 1
-      },
+      "bottle": { "units": 60, "unitName": "scoop", "unitsPerDose": 1 },
       "tier": "exploratory",
-      "evidence": {
-        "grade": "exploratory",
-        "basis": "Glutamine is genuinely the preferred fuel of intestinal cells, and that mechanism is not in doubt. Whether supplementing it repairs a gut lining in an ordinary healthy person is a much larger claim, and the human evidence is thin outside of clinical settings like burns, surgery and certain bowel conditions. Popular well ahead of its data."
-      },
-      "why": "The mechanism is real and the everyday benefit is mostly assumed. Worth knowing which of those you are buying.",
+      "why": "Genuinely the preferred fuel of intestinal cells. Whether supplementing it does anything for an ordinary gut is a much bigger claim than the mechanism supports.",
       "fields": {
-        "tool": "Plain powder. It dissolves far better in hot liquid than cold.",
-        "release": "On an empty stomach, usually first thing.",
-        "notice": "If nothing changes in a month, nothing is likely to.",
-        "careful": "Not for people with liver disease or a history of seizures without medical advice — glutamine feeds into ammonia and glutamate handling."
-      },
-      "spacing": []
+        "release": "Empty stomach, usually first thing. It dissolves far better in hot liquid than cold."
+      }
     },
     {
       "id": "sup-electrolytes",
-      "name": "Electrolytes (sodium, potassium, magnesium)",
+      "name": "Electrolytes",
       "type": "intake",
       "tracking": "check",
-      "substance": "mixed electrolyte salts",
-      "supports": [
-        "hydration",
-        "energy"
-      ],
+      "substance": "sodium, potassium and magnesium salts",
+      "supports": ["hydration", "energy"],
       "timing": "anytime",
       "form": "powder",
       "typicalDose": "one sachet in 500 ml water",
-      "bottle": {
-        "units": 30,
-        "unitName": "sachet",
-        "unitsPerDose": 1
-      },
+      "bottle": { "units": 30, "unitName": "sachet", "unitsPerDose": 1 },
       "tier": "established",
-      "evidence": {
-        "grade": "mixed",
-        "basis": "Replacing salt and water after real sweat loss, illness or a long fast is straightforwardly sound. Taking a high-sodium sachet daily while sitting indoors is not the same thing, and the popular versions carry a lot more sodium than most people need."
-      },
-      "why": "For heat, hard sweat, illness or fasting. Not a daily requirement for most people, whatever the packaging implies.",
+      "why": "For heat, hard sweat, illness or a long fast. Not a daily requirement for most people, whatever the packaging implies.",
       "fields": {
-        "tool": "A sachet or a measured scoop in a large glass of water.",
-        "release": "During or after the thing that lost you the water — heat, a long session, a fast, a stomach bug.",
-        "notice": "Craving salt and feeling flat after sweating is the signal this is for. Feeling puffy is the signal to stop.",
-        "careful": "High blood pressure, kidney disease, or any potassium-sparing medication makes daily electrolyte loading a medical question rather than a shelf choice."
-      },
-      "spacing": []
+        "release": "During or after whatever lost you the water."
+      }
     },
     {
       "id": "sup-psyllium",
@@ -206,69 +114,102 @@
       "type": "intake",
       "tracking": "check",
       "substance": "plantago ovata husk",
-      "supports": [
-        "gut",
-        "heart"
-      ],
+      "supports": ["gut", "heart"],
       "timing": "with-food",
       "form": "powder",
-      "typicalDose": "5–10 g with a full glass of water",
-      "bottle": {
-        "units": 60,
-        "unitName": "scoop",
-        "unitsPerDose": 1
-      },
+      "typicalDose": "5–10 g",
+      "bottle": { "units": 60, "unitName": "scoop", "unitsPerDose": 1 },
       "tier": "established",
-      "evidence": {
-        "grade": "established",
-        "basis": "One of the better-evidenced things on any shelf: soluble fibre with consistent effects on stool form in both directions, and a modest, repeatedly demonstrated effect on LDL cholesterol."
-      },
-      "why": "Unfashionable, cheap, and it works — which is an unusual combination here.",
+      "why": "Unfashionable, cheap, and it works — an unusual combination on this shelf.",
       "fields": {
-        "tool": "Plain husk powder and a full large glass of water. It thickens within a minute, so drink it rather than sipping it.",
-        "release": "Start at half a dose and build over a fortnight. Going straight to a full dose is how people decide fibre does not agree with them.",
-        "notice": "Stool becomes formed and easier in both directions — this is the rare one where you get an answer in days.",
-        "careful": "Always with plenty of liquid — taken dry it can obstruct. Keep it two hours clear of medications, because it slows their absorption."
-      },
-      "spacing": [
-        "medication",
-        "binders"
-      ]
+        "tool": "A full large glass of water, every time. It thickens within a minute, so drink it rather than sipping at it.",
+        "release": "Start at half a dose and build over a fortnight — going straight to a full one is how people decide fibre does not agree with them. Keep it a couple of hours clear of medication, which it slows down."
+      }
     },
     {
-      "id": "sup-caffeine",
-      "name": "Caffeine",
+      "id": "sup-zinc",
+      "name": "Zinc",
       "type": "intake",
       "tracking": "check",
-      "substance": "caffeine",
-      "supports": [
-        "energy",
-        "cognition"
-      ],
-      "timing": "fasted",
-      "form": "drink",
-      "typicalDose": "80–200 mg",
-      "bottle": {
-        "units": 60,
-        "unitName": "serving",
-        "unitsPerDose": 1
-      },
+      "substance": "zinc picolinate or bisglycinate",
+      "supports": ["immune", "skin"],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "15–30 mg",
+      "bottle": { "units": 90, "unitName": "capsule", "unitsPerDose": 1 },
       "tier": "established",
-      "evidence": {
-        "grade": "established",
-        "basis": "The effect on alertness and endurance performance is beyond argument. What is routinely underestimated is the half-life: roughly five to six hours, so a 3pm coffee still has a quarter of its dose working at bedtime."
-      },
-      "why": "It is on this shelf because it is a supplement people forget they are taking, and because it is the one most likely to interact with everything else here.",
+      "why": "One of the few where taking it on an empty stomach is reliably unpleasant, and where more is clearly not better.",
       "fields": {
-        "tool": "Coffee, tea, or a tablet where the dose needs to be known rather than guessed.",
-        "release": "Earlier than feels necessary. Working back from your bedtime by eight hours is a more useful rule than any cut-off time.",
-        "notice": "If mornings need it before they work, that is tolerance rather than benefit.",
-        "careful": "Interacts with anxiety, reflux, arrhythmia and sleep. It also blunts iron absorption within an hour either side of a meal."
-      },
-      "spacing": [
-        "iron",
-        "minerals"
-      ]
+        "release": "With food — fasted zinc causes nausea in most people. Keep it away from iron and calcium, which compete with it for the same transport."
+      }
+    },
+    {
+      "id": "sup-vitamin-b12",
+      "name": "Vitamin B12",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "methylcobalamin or cyanocobalamin",
+      "supports": ["energy", "brain"],
+      "timing": "fasted",
+      "form": "capsule",
+      "typicalDose": "500–1000 mcg",
+      "bottle": { "units": 60, "unitName": "lozenge", "unitsPerDose": 1 },
+      "tier": "established",
+      "why": "Worth it if you eat little or no animal food, or take metformin or long-term acid blockers. Otherwise usually already covered.",
+      "fields": {
+        "release": "Morning — it is mildly stimulating for some people. A sublingual lozenge is held under the tongue rather than swallowed."
+      }
+    },
+    {
+      "id": "sup-vitamin-c",
+      "name": "Vitamin C",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "ascorbic acid",
+      "supports": ["immune", "skin"],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "500–1000 mg",
+      "bottle": { "units": 100, "unitName": "capsule", "unitsPerDose": 1 },
+      "tier": "mixed",
+      "why": "Absorption drops steeply above about 500 mg at a time, so a large single dose mostly ends up in the toilet. Split it if you take more.",
+      "fields": {
+        "release": "With food, split across the day if the dose is large."
+      }
+    },
+    {
+      "id": "sup-collagen",
+      "name": "Collagen peptides",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "hydrolysed collagen",
+      "supports": ["skin", "joint"],
+      "timing": "anytime",
+      "form": "powder",
+      "typicalDose": "10–15 g",
+      "bottle": { "units": 30, "unitName": "scoop", "unitsPerDose": 1 },
+      "tier": "exploratory",
+      "why": "Digested into ordinary amino acids like any other protein, so the idea that it travels to your joints is not how it works. The tendon and skin trials are small but not nothing.",
+      "fields": {
+        "release": "Any time. Dissolves in hot or cold without changing the taste of much."
+      }
+    },
+    {
+      "id": "sup-probiotic",
+      "name": "Probiotic",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "mixed live bacterial strains",
+      "supports": ["gut", "immune"],
+      "timing": "fasted",
+      "form": "capsule",
+      "typicalDose": "per label — strain matters more than the CFU count",
+      "bottle": { "units": 30, "unitName": "capsule", "unitsPerDose": 1 },
+      "tier": "mixed",
+      "why": "Effects are strain-specific, so \"a probiotic\" is not a thing that works or does not — the one on the label is. Most benefits stop when you stop.",
+      "fields": {
+        "release": "Usually away from a meal, though the label for your particular strain outranks that."
+      }
     }
   ]
 }

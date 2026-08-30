@@ -53,6 +53,8 @@ const state = {
   // A block being run rather than listed: { protocolId, blockId }. The session
   // owns the whole screen while it lasts — no tabs, no scrolling past it.
   session: null,
+  // Which shelf the library opens on, when something sent you there for one.
+  shelf: null,
   // Which area page is open, if any — an area is a protocol, and its page
   // lists that protocol's parts rather than everything in the app.
   areaId: null,
@@ -148,7 +150,7 @@ async function render() {
         openEditor: (id) => { state.editingId = id; render(); },
       });
     } else if (state.tab === 'library') {
-      view = await viewLibrary({ reload: () => render() });
+      view = await viewLibrary({ reload: () => render(), openOn: state.shelf });
     } else if (state.tab === 'reference') {
       view = await viewReference();
     } else if (state.tab === 'plans') {
@@ -175,9 +177,12 @@ async function render() {
     } else {
       view = await viewHome({
         startSession,
-        open: ({ area, tab }) => {
+        open: ({ area, tab, shelf }) => {
           if (area) state.areaId = area;
           if (tab) state.tab = tab;
+          // Which shelf the library should open on. A door that lands you on
+          // the default view and leaves you to find the filter is not a door.
+          state.shelf = shelf ?? null;
           render();
         },
       });
