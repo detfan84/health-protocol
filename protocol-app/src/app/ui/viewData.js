@@ -260,6 +260,7 @@ export async function viewData({ applyTheme, applyScheme, go }) {
             ['slate', 'Slate - cool grey'],
             ['forest', 'Forest - deep green'],
             ['dusk', 'Dusk - warm dark, always'],
+            ['desert', 'Desert night - warm dark, dim at the top'],
             ['contrast', 'Plain - maximum contrast'],
           ].map(([value, label]) =>
             h('option', { value, selected: persistedScheme === value }, label)),

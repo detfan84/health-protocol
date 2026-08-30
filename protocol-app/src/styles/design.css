@@ -195,6 +195,30 @@ p  { margin: var(--sp-2) 0; }
   --accent: #c08f5e; --accent-ink: #1b1a18; --accent-soft: #33291f;
   --danger: #d08b80; --shadow: none;
 }
+/* Desert night — always dark, warm all the way through, and deliberately
+   DIM AT THE TOP.
+   Kevin, 29 Aug: "if someone gets up at 4, 5, 6am they don't want to be
+   blasted with a near white screen."
+   That is a statement about the brightest thing on screen, not the darkest.
+   Every other dark theme here — Dusk, and the built-in dark — puts body text at
+   a near-white (#e7e5de, relative luminance .78). This one tops out at a mid
+   sand (#d7bb98, luminance .52): a third less light off the brightest element,
+   while still 10:1 against the ground, which is well past what anybody needs to
+   read. Nothing in this palette is allowed above it.
+   And the hue runs through ALL of it — the rules are rust-brown, the muted text
+   is sand, the tile accents are desert colours. A warm accent on a grey app is
+   the thing this replaces. Blue is 26% of the ground, where a neutral grey is
+   33.3% by definition. */
+:root[data-scheme='desert'] {
+  --bg: #1c1411; --surface: #261b16; --surface-2: #322319;
+  --ink: #d7bb98; --ink-muted: #a3866a; --line: #45301f;
+  --accent: #cf6a3c; --accent-ink: #1c1411; --accent-soft: #38211a;
+  --danger: #c25552; --danger-ink: #1c1411; --shadow: none;
+  /* The tile hues too, or the one grid of colour in the app stays temperate
+     while everything around it moved to the desert. No blue in the set. */
+  --dawn: #d98c5a; --sage: #9a9a6b; --clay: #c8705a;
+  --sky: #a68d6e; --plum: #b58274; --ochre: #c9a15e; --muted-accent: #8a7157;
+}
 /* Plain — maximum contrast, minimum decoration. */
 :root[data-scheme='contrast'] {
   --bg: #ffffff; --surface: #ffffff; --surface-2: #f0f0f0;
