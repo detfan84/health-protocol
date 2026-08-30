@@ -678,3 +678,10 @@ nav.tabs button[aria-current='page'] { color: var(--accent); font-weight: 650; }
 .chip-row .field-label { align-self: center; margin-right: var(--sp-1); }
 .chip.on { background: var(--sage-2, rgba(0,0,0,.06)); }
 .chip.quiet { opacity: .7; }
+
+/* A food and its other preparations. Fresh and pickled beetroot are different
+   rows with different nutrients, but they are the same vegetable, and listing
+   them as unrelated neighbours makes the reader work that out. */
+.food-forms { margin-left: var(--sp-4); border-left: 2px solid var(--line); padding-left: var(--sp-3); }
+.food-forms > .food-form { background: transparent; box-shadow: none; }
+.food-family { margin-bottom: var(--sp-3); }

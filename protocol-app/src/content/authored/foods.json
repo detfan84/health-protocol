@@ -6,6 +6,7 @@
     {
       "id": "food-pumpkin-seeds",
       "name": "Pumpkin seeds",
+      "baseName": "Pumpkin seeds",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -20,6 +21,7 @@
     {
       "id": "food-almonds",
       "name": "Almonds",
+      "baseName": "Almonds",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -34,6 +36,7 @@
     {
       "id": "food-cashews",
       "name": "Cashews",
+      "baseName": "Cashews",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -48,6 +51,7 @@
     {
       "id": "food-brazil-nuts",
       "name": "Brazil nuts",
+      "baseName": "Brazil nuts",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -63,6 +67,7 @@
     {
       "id": "food-walnuts",
       "name": "Walnuts",
+      "baseName": "Walnuts",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -79,6 +84,7 @@
     {
       "id": "food-sunflower-seeds",
       "name": "Sunflower seeds",
+      "baseName": "Sunflower seeds",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -92,6 +98,7 @@
     {
       "id": "food-chia-seeds",
       "name": "Chia seeds",
+      "baseName": "Chia seeds",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -106,6 +113,7 @@
     {
       "id": "food-flaxseed",
       "name": "Flaxseed",
+      "baseName": "Flaxseed",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -122,6 +130,7 @@
     {
       "id": "food-hemp-seeds",
       "name": "Hemp seeds",
+      "baseName": "Hemp seeds",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -135,6 +144,7 @@
     {
       "id": "food-sardines",
       "name": "Sardines",
+      "baseName": "Sardines",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -153,7 +163,8 @@
     },
     {
       "id": "food-salmon",
-      "name": "Salmon",
+      "name": "Salmon, fresh",
+      "baseName": "Salmon",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -164,11 +175,56 @@
         "protein"
       ],
       "serving": "a palm-sized fillet",
-      "aisle": "protein"
+      "aisle": "protein",
+      "form": "fresh"
+    },
+    {
+      "id": "food-salmon-tinned-with-bones",
+      "name": "Salmon, tinned, with bones",
+      "baseName": "Salmon",
+      "type": "intake",
+      "intakeKind": "food",
+      "tracking": "check",
+      "provides": [
+        "omega-3",
+        "vitamin-d",
+        "calcium",
+        "b12",
+        "protein"
+      ],
+      "serving": "half a tin",
+      "aisle": "pantry",
+      "form": "tinned, with bones",
+      "variationOf": "food-salmon",
+      "fields": {
+        "release": "The soft bones are the calcium, and they are the reason the tin beats the fillet for it."
+      }
+    },
+    {
+      "id": "food-salmon-smoked",
+      "name": "Salmon, smoked",
+      "baseName": "Salmon",
+      "type": "intake",
+      "intakeKind": "food",
+      "tracking": "check",
+      "provides": [
+        "omega-3",
+        "b12",
+        "protein",
+        "sodium"
+      ],
+      "serving": "two or three slices",
+      "aisle": "protein",
+      "form": "smoked",
+      "variationOf": "food-salmon",
+      "fields": {
+        "release": "Cured rather than cooked, so it carries a lot of salt."
+      }
     },
     {
       "id": "food-mackerel",
       "name": "Mackerel",
+      "baseName": "Mackerel",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -183,6 +239,7 @@
     {
       "id": "food-anchovies",
       "name": "Anchovies",
+      "baseName": "Anchovies",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -196,6 +253,7 @@
     {
       "id": "food-oysters",
       "name": "Oysters",
+      "baseName": "Oysters",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -214,6 +272,7 @@
     {
       "id": "food-mussels",
       "name": "Mussels",
+      "baseName": "Mussels",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -228,6 +287,7 @@
     {
       "id": "food-beef-liver",
       "name": "Beef liver",
+      "baseName": "Beef liver",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -247,6 +307,7 @@
     {
       "id": "food-beef",
       "name": "Beef",
+      "baseName": "Beef",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -263,6 +324,7 @@
     {
       "id": "food-lamb",
       "name": "Lamb",
+      "baseName": "Lamb",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -278,6 +340,7 @@
     {
       "id": "food-chicken",
       "name": "Chicken",
+      "baseName": "Chicken",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -292,6 +355,7 @@
     {
       "id": "food-eggs",
       "name": "Eggs",
+      "baseName": "Eggs",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -309,7 +373,8 @@
     },
     {
       "id": "food-greek-yoghurt",
-      "name": "Greek yoghurt",
+      "name": "Greek yoghurt, live",
+      "baseName": "Greek yoghurt",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -320,11 +385,33 @@
         "b12"
       ],
       "serving": "a small pot",
-      "aisle": "dairy"
+      "aisle": "dairy",
+      "form": "live",
+      "fields": {
+        "release": "\"Live\" or \"active cultures\" on the pot. Heat-treated versions have none."
+      }
+    },
+    {
+      "id": "food-greek-yoghurt-heat-treated",
+      "name": "Greek yoghurt, heat-treated",
+      "baseName": "Greek yoghurt",
+      "type": "intake",
+      "intakeKind": "food",
+      "tracking": "check",
+      "provides": [
+        "protein",
+        "calcium",
+        "b12"
+      ],
+      "serving": "a small pot",
+      "aisle": "dairy",
+      "form": "heat-treated",
+      "variationOf": "food-greek-yoghurt"
     },
     {
       "id": "food-kefir",
       "name": "Kefir",
+      "baseName": "Kefir",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -342,6 +429,7 @@
     {
       "id": "food-cheese",
       "name": "Cheese",
+      "baseName": "Cheese",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -356,6 +444,7 @@
     {
       "id": "food-cottage-cheese",
       "name": "Cottage cheese",
+      "baseName": "Cottage cheese",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -369,6 +458,7 @@
     {
       "id": "food-milk",
       "name": "Milk",
+      "baseName": "Milk",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -382,7 +472,8 @@
     },
     {
       "id": "food-sauerkraut",
-      "name": "Sauerkraut",
+      "name": "Sauerkraut, unpasteurised",
+      "baseName": "Sauerkraut",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -392,14 +483,35 @@
         "fibre"
       ],
       "serving": "a forkful",
-      "aisle": "pantry",
+      "aisle": "dairy",
+      "form": "unpasteurised",
       "fields": {
-        "release": "Unpasteurised, from the chilled section — the shelf-stable jars have no live cultures."
+        "release": "From the chilled section. This is the one with live cultures in it."
+      }
+    },
+    {
+      "id": "food-sauerkraut-jarred-pasteurised",
+      "name": "Sauerkraut, jarred, pasteurised",
+      "baseName": "Sauerkraut",
+      "type": "intake",
+      "intakeKind": "food",
+      "tracking": "check",
+      "provides": [
+        "vitamin-c",
+        "fibre"
+      ],
+      "serving": "a forkful",
+      "aisle": "pantry",
+      "form": "jarred, pasteurised",
+      "variationOf": "food-sauerkraut",
+      "fields": {
+        "release": "Shelf-stable means heat-treated, which means no live cultures at all."
       }
     },
     {
       "id": "food-kimchi",
       "name": "Kimchi",
+      "baseName": "Kimchi",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -413,6 +525,7 @@
     {
       "id": "food-miso",
       "name": "Miso",
+      "baseName": "Miso",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -428,6 +541,7 @@
     {
       "id": "food-tempeh",
       "name": "Tempeh",
+      "baseName": "Tempeh",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -442,6 +556,7 @@
     {
       "id": "food-tofu",
       "name": "Tofu",
+      "baseName": "Tofu",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -456,6 +571,7 @@
     {
       "id": "food-edamame",
       "name": "Edamame",
+      "baseName": "Edamame",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -470,6 +586,7 @@
     {
       "id": "food-lentils",
       "name": "Lentils",
+      "baseName": "Lentils",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -485,6 +602,7 @@
     {
       "id": "food-chickpeas",
       "name": "Chickpeas",
+      "baseName": "Chickpeas",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -500,6 +618,7 @@
     {
       "id": "food-black-beans",
       "name": "Black beans",
+      "baseName": "Black beans",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -515,6 +634,7 @@
     {
       "id": "food-kidney-beans",
       "name": "Kidney beans",
+      "baseName": "Kidney beans",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -529,6 +649,7 @@
     {
       "id": "food-oats",
       "name": "Oats",
+      "baseName": "Oats",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -545,6 +666,7 @@
     {
       "id": "food-quinoa",
       "name": "Quinoa",
+      "baseName": "Quinoa",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -559,6 +681,7 @@
     {
       "id": "food-brown-rice",
       "name": "Brown rice",
+      "baseName": "Brown rice",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -572,6 +695,7 @@
     {
       "id": "food-buckwheat",
       "name": "Buckwheat",
+      "baseName": "Buckwheat",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -586,6 +710,7 @@
     {
       "id": "food-wholegrain-bread",
       "name": "Wholegrain bread",
+      "baseName": "Wholegrain bread",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -598,7 +723,24 @@
     },
     {
       "id": "food-spinach",
-      "name": "Spinach",
+      "name": "Spinach, raw",
+      "baseName": "Spinach",
+      "type": "intake",
+      "intakeKind": "food",
+      "tracking": "check",
+      "provides": [
+        "folate",
+        "vitamin-k",
+        "vitamin-c"
+      ],
+      "serving": "a large handful",
+      "aisle": "produce",
+      "form": "raw"
+    },
+    {
+      "id": "food-spinach-cooked",
+      "name": "Spinach, cooked",
+      "baseName": "Spinach",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -608,15 +750,18 @@
         "vitamin-k",
         "iron"
       ],
-      "serving": "a large handful, cooked",
+      "serving": "a large handful, wilted",
       "aisle": "produce",
+      "form": "cooked",
+      "variationOf": "food-spinach",
       "fields": {
-        "release": "The iron absorbs far better alongside something with vitamin C."
+        "release": "Wilting concentrates it — and the iron absorbs far better alongside something with vitamin C."
       }
     },
     {
       "id": "food-kale",
       "name": "Kale",
+      "baseName": "Kale",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -631,6 +776,7 @@
     {
       "id": "food-swiss-chard",
       "name": "Swiss chard",
+      "baseName": "Swiss chard",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -645,6 +791,7 @@
     {
       "id": "food-broccoli",
       "name": "Broccoli",
+      "baseName": "Broccoli",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -660,6 +807,7 @@
     {
       "id": "food-brussels-sprouts",
       "name": "Brussels sprouts",
+      "baseName": "Brussels sprouts",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -674,6 +822,7 @@
     {
       "id": "food-cabbage",
       "name": "Cabbage",
+      "baseName": "Cabbage",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -688,6 +837,7 @@
     {
       "id": "food-cauliflower",
       "name": "Cauliflower",
+      "baseName": "Cauliflower",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -702,6 +852,7 @@
     {
       "id": "food-rocket",
       "name": "Rocket",
+      "baseName": "Rocket",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -715,23 +866,46 @@
     },
     {
       "id": "food-beetroot",
-      "name": "Beetroot",
+      "name": "Beetroot, fresh",
+      "baseName": "Beetroot",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
       "provides": [
         "nitrate",
-        "folate"
+        "folate",
+        "fibre"
       ],
       "serving": "one, roasted",
       "aisle": "produce",
+      "form": "fresh",
       "fields": {
         "release": "The nitrate is what the sports-drink versions are selling."
       }
     },
     {
+      "id": "food-beetroot-pickled",
+      "name": "Beetroot, pickled",
+      "baseName": "Beetroot",
+      "type": "intake",
+      "intakeKind": "food",
+      "tracking": "check",
+      "provides": [
+        "folate",
+        "fibre"
+      ],
+      "serving": "two or three slices",
+      "aisle": "pantry",
+      "form": "pickled",
+      "variationOf": "food-beetroot",
+      "fields": {
+        "release": "Boiled and brined, so much of the nitrate has gone — and most jars carry added sugar."
+      }
+    },
+    {
       "id": "food-sweet-potato",
       "name": "Sweet potato",
+      "baseName": "Sweet potato",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -746,6 +920,7 @@
     {
       "id": "food-carrots",
       "name": "Carrots",
+      "baseName": "Carrots",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -759,6 +934,7 @@
     {
       "id": "food-butternut-squash",
       "name": "Butternut squash",
+      "baseName": "Butternut squash",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -773,6 +949,7 @@
     {
       "id": "food-red-pepper",
       "name": "Red pepper",
+      "baseName": "Red pepper",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -788,24 +965,43 @@
     },
     {
       "id": "food-tomatoes",
-      "name": "Tomatoes",
+      "name": "Tomatoes, fresh",
+      "baseName": "Tomatoes",
+      "type": "intake",
+      "intakeKind": "food",
+      "tracking": "check",
+      "provides": [
+        "vitamin-c",
+        "potassium",
+        "polyphenols"
+      ],
+      "serving": "two",
+      "aisle": "produce",
+      "form": "fresh"
+    },
+    {
+      "id": "food-tomatoes-tinned-or-cooked",
+      "name": "Tomatoes, tinned or cooked",
+      "baseName": "Tomatoes",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
       "provides": [
         "polyphenols",
-        "vitamin-c",
         "potassium"
       ],
-      "serving": "two",
-      "aisle": "produce",
+      "serving": "half a tin",
+      "aisle": "pantry",
+      "form": "tinned or cooked",
+      "variationOf": "food-tomatoes",
       "fields": {
-        "release": "Cooked releases more lycopene than raw — the one vegetable that gains from a pan."
+        "release": "Heat frees the lycopene, so cooked beats raw for it — and costs some of the vitamin C."
       }
     },
     {
       "id": "food-avocado",
       "name": "Avocado",
+      "baseName": "Avocado",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -820,6 +1016,7 @@
     {
       "id": "food-banana",
       "name": "Banana",
+      "baseName": "Banana",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -834,6 +1031,7 @@
     {
       "id": "food-potatoes",
       "name": "Potatoes",
+      "baseName": "Potatoes",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -851,6 +1049,7 @@
     {
       "id": "food-oranges",
       "name": "Oranges",
+      "baseName": "Oranges",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -865,6 +1064,7 @@
     {
       "id": "food-kiwi",
       "name": "Kiwi",
+      "baseName": "Kiwi",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -879,6 +1079,7 @@
     {
       "id": "food-strawberries",
       "name": "Strawberries",
+      "baseName": "Strawberries",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -892,6 +1093,7 @@
     {
       "id": "food-blueberries",
       "name": "Blueberries",
+      "baseName": "Blueberries",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -906,6 +1108,7 @@
     {
       "id": "food-blackberries",
       "name": "Blackberries",
+      "baseName": "Blackberries",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -920,6 +1123,7 @@
     {
       "id": "food-raspberries",
       "name": "Raspberries",
+      "baseName": "Raspberries",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -933,6 +1137,7 @@
     {
       "id": "food-cherries",
       "name": "Cherries",
+      "baseName": "Cherries",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -949,6 +1154,7 @@
     {
       "id": "food-pomegranate",
       "name": "Pomegranate",
+      "baseName": "Pomegranate",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -963,6 +1169,7 @@
     {
       "id": "food-apples",
       "name": "Apples",
+      "baseName": "Apples",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -976,6 +1183,7 @@
     {
       "id": "food-pears",
       "name": "Pears",
+      "baseName": "Pears",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -988,6 +1196,7 @@
     {
       "id": "food-prunes",
       "name": "Prunes",
+      "baseName": "Prunes",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1002,6 +1211,7 @@
     {
       "id": "food-figs",
       "name": "Figs",
+      "baseName": "Figs",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1016,6 +1226,7 @@
     {
       "id": "food-dark-chocolate",
       "name": "Dark chocolate",
+      "baseName": "Dark chocolate",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1033,6 +1244,7 @@
     {
       "id": "food-olive-oil",
       "name": "Olive oil",
+      "baseName": "Olive oil",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1049,6 +1261,7 @@
     {
       "id": "food-green-tea",
       "name": "Green tea",
+      "baseName": "Green tea",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1060,7 +1273,24 @@
     },
     {
       "id": "food-mushrooms",
-      "name": "Mushrooms",
+      "name": "Mushrooms, ordinary",
+      "baseName": "Mushrooms",
+      "type": "intake",
+      "intakeKind": "food",
+      "tracking": "check",
+      "provides": [
+        "selenium",
+        "copper",
+        "fibre"
+      ],
+      "serving": "a handful",
+      "aisle": "produce",
+      "form": "ordinary"
+    },
+    {
+      "id": "food-mushrooms-uv-exposed-or-sun-dried",
+      "name": "Mushrooms, UV-exposed or sun-dried",
+      "baseName": "Mushrooms",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1071,28 +1301,52 @@
       ],
       "serving": "a handful",
       "aisle": "produce",
+      "form": "UV-exposed or sun-dried",
+      "variationOf": "food-mushrooms",
       "fields": {
-        "release": "Only if they saw sunlight or UV — most supermarket mushrooms did not."
+        "release": "Only these carry vitamin D. Most supermarket mushrooms grew in the dark; the label says if they did not."
       }
     },
     {
       "id": "food-seaweed",
-      "name": "Seaweed",
+      "name": "Seaweed, nori",
+      "baseName": "Seaweed",
+      "type": "intake",
+      "intakeKind": "food",
+      "tracking": "check",
+      "provides": [
+        "iodine",
+        "protein"
+      ],
+      "serving": "a sheet",
+      "aisle": "pantry",
+      "form": "nori",
+      "fields": {
+        "release": "The mild one — the sushi wrapper."
+      }
+    },
+    {
+      "id": "food-seaweed-kelp-or-kombu",
+      "name": "Seaweed, kelp or kombu",
+      "baseName": "Seaweed",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
       "provides": [
         "iodine"
       ],
-      "serving": "a sheet",
+      "serving": "a small piece",
       "aisle": "pantry",
+      "form": "kelp or kombu",
+      "variationOf": "food-seaweed",
       "fields": {
-        "release": "Iodine varies enormously by type. Kelp in particular can be far too much."
+        "release": "Vastly more iodine than nori, and easy to overdo without meaning to."
       }
     },
     {
       "id": "food-nutritional-yeast",
       "name": "Nutritional yeast",
+      "baseName": "Nutritional yeast",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1109,6 +1363,7 @@
     {
       "id": "food-bone-broth",
       "name": "Bone broth",
+      "baseName": "Bone broth",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1122,6 +1377,7 @@
     {
       "id": "food-chicken-skin-and-cartilage",
       "name": "Chicken skin and cartilage",
+      "baseName": "Chicken skin and cartilage",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1134,6 +1390,7 @@
     {
       "id": "food-sesame-seeds",
       "name": "Sesame seeds",
+      "baseName": "Sesame seeds",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1148,6 +1405,7 @@
     {
       "id": "food-tahini",
       "name": "Tahini",
+      "baseName": "Tahini",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1161,6 +1419,7 @@
     {
       "id": "food-molasses",
       "name": "Molasses",
+      "baseName": "Molasses",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1175,6 +1434,7 @@
     {
       "id": "food-coconut-water",
       "name": "Coconut water",
+      "baseName": "Coconut water",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1187,6 +1447,7 @@
     {
       "id": "food-sea-salt",
       "name": "Sea salt",
+      "baseName": "Sea salt",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1200,6 +1461,7 @@
     {
       "id": "food-garlic",
       "name": "Garlic",
+      "baseName": "Garlic",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1210,20 +1472,9 @@
       "aisle": "produce"
     },
     {
-      "id": "food-ginger-root",
-      "name": "Ginger root",
-      "type": "intake",
-      "intakeKind": "food",
-      "tracking": "check",
-      "provides": [
-        "polyphenols"
-      ],
-      "serving": "a thumb-sized piece",
-      "aisle": "produce"
-    },
-    {
-      "id": "food-turmeric-root",
-      "name": "Turmeric root",
+      "id": "food-ginger",
+      "name": "Ginger, fresh root",
+      "baseName": "Ginger",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1232,13 +1483,62 @@
       ],
       "serving": "a thumb-sized piece",
       "aisle": "produce",
+      "form": "fresh root"
+    },
+    {
+      "id": "food-ginger-dried-ground",
+      "name": "Ginger, dried, ground",
+      "baseName": "Ginger",
+      "type": "intake",
+      "intakeKind": "food",
+      "tracking": "check",
+      "provides": [
+        "polyphenols"
+      ],
+      "serving": "a teaspoon",
+      "aisle": "pantry",
+      "form": "dried, ground",
+      "variationOf": "food-ginger"
+    },
+    {
+      "id": "food-turmeric",
+      "name": "Turmeric, fresh root",
+      "baseName": "Turmeric",
+      "type": "intake",
+      "intakeKind": "food",
+      "tracking": "check",
+      "provides": [
+        "polyphenols"
+      ],
+      "serving": "a thumb-sized piece",
+      "aisle": "produce",
+      "form": "fresh root",
       "fields": {
         "release": "Pair it with black pepper and a fat, or most of it goes straight through."
       }
     },
     {
+      "id": "food-turmeric-dried-ground",
+      "name": "Turmeric, dried, ground",
+      "baseName": "Turmeric",
+      "type": "intake",
+      "intakeKind": "food",
+      "tracking": "check",
+      "provides": [
+        "polyphenols"
+      ],
+      "serving": "a teaspoon",
+      "aisle": "pantry",
+      "form": "dried, ground",
+      "variationOf": "food-turmeric",
+      "fields": {
+        "release": "Same rule: pepper and fat, or it passes through."
+      }
+    },
+    {
       "id": "food-herring",
       "name": "Herring",
+      "baseName": "Herring",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1253,6 +1553,7 @@
     {
       "id": "food-cod",
       "name": "Cod",
+      "baseName": "Cod",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1267,6 +1568,7 @@
     {
       "id": "food-tuna",
       "name": "Tuna",
+      "baseName": "Tuna",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1284,6 +1586,7 @@
     {
       "id": "food-shrimp",
       "name": "Shrimp",
+      "baseName": "Shrimp",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1298,6 +1601,7 @@
     {
       "id": "food-peas",
       "name": "Peas",
+      "baseName": "Peas",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1312,6 +1616,7 @@
     {
       "id": "food-sweetcorn",
       "name": "Sweetcorn",
+      "baseName": "Sweetcorn",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1324,6 +1629,7 @@
     {
       "id": "food-asparagus",
       "name": "Asparagus",
+      "baseName": "Asparagus",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1338,6 +1644,7 @@
     {
       "id": "food-artichoke",
       "name": "Artichoke",
+      "baseName": "Artichoke",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1351,6 +1658,7 @@
     {
       "id": "food-onions",
       "name": "Onions",
+      "baseName": "Onions",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1364,6 +1672,7 @@
     {
       "id": "food-leeks",
       "name": "Leeks",
+      "baseName": "Leeks",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1377,6 +1686,7 @@
     {
       "id": "food-whole-milk-yoghurt",
       "name": "Whole milk yoghurt",
+      "baseName": "Whole milk yoghurt",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",
@@ -1391,6 +1701,7 @@
     {
       "id": "food-cocoa-powder",
       "name": "Cocoa powder",
+      "baseName": "Cocoa powder",
       "type": "intake",
       "intakeKind": "food",
       "tracking": "check",

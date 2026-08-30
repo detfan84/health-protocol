@@ -278,11 +278,14 @@ export async function viewSupplements({ reload } = {}) {
 
   const nutrientsOf = (i) => (i.provides ?? []).map((v) => NUTRIENTS[v] ?? v).join(' · ');
 
-  function foodRow(f) {
+  function foodRow(f, { sibling = false } = {}) {
     const onList = shopping.has(f.id);
-    return h('details.card.lib-item', {},
+    // A form reads as what it is — "pickled", "tinned, with bones" — rather
+    // than repeating the food's name, when it is sitting under its own parent.
+    const label = sibling && f.form ? f.form.replace(/^./, (c) => c.toUpperCase()) : f.name;
+    return h('details.card.lib-item' + (sibling ? '.food-form' : ''), {},
       h('summary', {},
-        h('span.name', {}, f.name),
+        h('span.name', {}, label),
         h('span.why', {}, [f.serving, nutrientsOf(f)].filter(Boolean).join(' · ')),
       ),
       f.fields?.release ? h('p.muted', {}, f.fields.release) : null,
@@ -291,6 +294,33 @@ export async function viewSupplements({ reload } = {}) {
         onclick: (e) => toggleShopping(f, e.currentTarget),
       }, onList ? 'On the shopping list' : 'Add to shopping list'),
     );
+  }
+
+  /**
+   * Foods, with their other forms tucked under them.
+   *
+   * Kevin, 29 Aug: "I would think you can split beets into different varieties
+   * like fresh or pickled and beetroot extract or powder as different things."
+   * They are different things — different nutrients, sometimes a different
+   * aisle — but listing "Beetroot, fresh" and "Beetroot, pickled" as unrelated
+   * neighbours makes the reader work out that they are the same vegetable. So
+   * the parent carries its forms, and a filtered view still shows a form on its
+   * own when its parent does not match: looking for calcium should surface
+   * tinned salmon whether or not the fresh fillet qualifies.
+   */
+  function foodGroup(found) {
+    const shown = new Set(found.map((f) => f.id));
+    const out = [];
+    for (const f of found) {
+      if (f.variationOf && shown.has(f.variationOf)) continue; // drawn under its parent
+      const forms = found.filter((x) => x.variationOf === f.id);
+      if (!forms.length) { out.push(foodRow(f)); continue; }
+      out.push(h('div.food-family', {},
+        foodRow(f),
+        h('div.food-forms', {}, forms.map((x) => foodRow(x, { sibling: true }))),
+      ));
+    }
+    return out;
   }
 
   function row(s2, { owned, where }) {
@@ -394,7 +424,7 @@ export async function viewSupplements({ reload } = {}) {
         results.append(h('div.card', {}, h('p.muted', {},
           'Nothing here matches. Not every nutrient has a good food source, and where it does not, that is worth knowing rather than working around.')));
       }
-      for (const f of found) results.append(foodRow(f));
+      results.append(...foodGroup(found));
       return;
     }
 

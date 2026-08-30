@@ -360,3 +360,65 @@ test('a shopping list, grouped the way a shop is walked', async () => {
   const saved = await store.getSetting('shopping.list');
   assert.deepEqual(saved.items, ['food-pumpkin-seeds']);
 });
+
+test('a preparation that changes the nutrients is its own thing', async () => {
+  // Kevin, 29 Aug: "I would think you can split beets into different varieties
+  // like fresh or pickled and beetroot extract or powder as different things."
+  //
+  // Several of these had been a NOTE, which is weaker: "sauerkraut,
+  // unpasteurised, from the chilled section" asked the reader to do the
+  // filtering. The jarred one provides no probiotics at all — that is not a
+  // caveat on one row, it is two rows.
+  const byId = Object.fromEntries(foods.map((f) => [f.id, f]));
+  const fresh = byId['food-beetroot'];
+  const pickled = byId['food-beetroot-pickled'];
+  assert.ok(fresh && pickled, 'beetroot did not split');
+  assert.equal(pickled.variationOf, 'food-beetroot', 'a form shares its parent');
+  assert.ok(fresh.provides.includes('nitrate'));
+  assert.equal(pickled.provides.includes('nitrate'), false, 'the split has to change something or it is noise');
+  assert.notEqual(fresh.aisle, pickled.aisle);
+
+  // The one that matters most, because the note version was doing real work.
+  const live = byId['food-sauerkraut'];
+  const jarred = byId['food-sauerkraut-jarred-pasteurised'];
+  assert.ok(live.provides.includes('probiotics'));
+  assert.equal(jarred.provides.includes('probiotics'), false);
+
+  // And the extract is on the other side of the page entirely, which is the
+  // rest of his sentence: beetroot powder is a supplement, not a vegetable.
+  assert.ok(supplements.some((s) => /Beetroot powder/.test(s.name)));
+
+  // Every form actually differs from its parent, or the row is just clutter.
+  for (const f of foods.filter((x) => x.variationOf)) {
+    const parent = byId[f.variationOf];
+    assert.ok(parent, `${f.id} points at a parent that is not here`);
+    const same = JSON.stringify([...f.provides].sort()) === JSON.stringify([...parent.provides].sort());
+    assert.ok(!same || f.aisle !== parent.aisle,
+      `${f.id} provides the same as its parent and sits in the same aisle — it is the same row twice`);
+  }
+});
+
+test('forms are shown under the food, not as unrelated neighbours', async () => {
+  const { viewSupplements } = await import('../src/app/ui/viewSupplements.js');
+  store._resetForTests();
+  await store.ready({ name: 'sup-forms' });
+  const view = await viewSupplements({});
+  document.querySelector('main').replaceChildren(view);
+  await settled();
+
+  const group = (label) => {
+    const g = [...view.querySelectorAll('[role=group]')].find((x) => x.getAttribute('aria-label') === label);
+    return g ? [...g.querySelectorAll('button')] : [];
+  };
+  fire(group('Food or supplements').find((b) => /^Food/.test(b.textContent)));
+  await settled();
+
+  const family = [...view.querySelectorAll('.food-family')]
+    .find((el) => /Beetroot/.test(el.textContent));
+  assert.ok(family, 'beetroot is not grouped with its forms');
+  const forms = family.querySelector('.food-forms');
+  assert.ok(forms, 'no forms under the parent');
+  // The child says "Pickled", not "Beetroot, pickled" — it is already under it.
+  assert.match(forms.textContent, /Pickled/);
+  assert.doesNotMatch(forms.querySelector('.name').textContent, /Beetroot/);
+});
