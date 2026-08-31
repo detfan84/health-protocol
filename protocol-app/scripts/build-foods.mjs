@@ -47,7 +47,7 @@
 // "this gives you 84% of your omega-3" is a number with a dozen assumptions
 // hidden inside it.
 
-import { writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -197,6 +197,31 @@ const items = TABLE.split('\n').map((line) => {
   return item;
 });
 
+// The measured amounts, joined on by id. Generated separately from USDA
+// FoodData Central by scripts/build-food-amounts.mjs, because that needs a
+// 38 MB download this repo does not carry — the OUTPUT is committed, the zip is
+// not. Run order after changing the table above: build-food-amounts, then this.
+const AMOUNTS = resolve(here, '../src/content/data/food-amounts.json');
+let amounts = { foods: {} };
+try {
+  amounts = JSON.parse(await readFile(AMOUNTS, 'utf8'));
+} catch {
+  console.warn('  no food-amounts.json — rows will carry no measured amounts');
+}
+let withAmounts = 0;
+for (const it of items) {
+  const a = amounts.foods?.[it.id];
+  if (!a) continue;
+  // Only the nutrients this row actually claims. A figure for something the
+  // food is not listed for is a number nobody asked for.
+  const kept = Object.fromEntries(Object.entries(a.amounts).filter(([n]) => it.provides.includes(n)));
+  if (!Object.keys(kept).length) continue;
+  it.amounts = kept;
+  // Provenance travels with the number or the number is just an assertion.
+  it.amountSource = { fdcId: a.fdcId, fdcDescription: a.fdcDescription, servingGrams: a.servingGrams };
+  withAmounts++;
+}
+
 const ids = new Set();
 for (const it of items) {
   if (ids.has(it.id)) throw new Error(`duplicate food id: ${it.id}`);
@@ -218,3 +243,6 @@ console.log(`foods: ${items.length} rows across ${bases.size} foods and ${Object
 console.log(`  ${items.filter((i) => i.variationOf).length} are a second form of something already listed`);
 console.log(`  thinnest: ${Object.entries(byNutrient).sort((a, b) => a[1] - b[1]).slice(0, 4).map(([k, v]) => `${k} ${v}`).join(' · ')}`);
 console.log(`  with a note: ${items.filter((i) => i.fields).length}`);
+const pairs = items.reduce((n, i) => n + Object.keys(i.amounts ?? {}).length, 0);
+console.log(`  ${withAmounts} carry measured amounts — ${pairs} food/nutrient figures from USDA SR Legacy`);
+console.log(`  ${items.length - withAmounts} carry none, and the screens will say so rather than estimate`);

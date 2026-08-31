@@ -47,7 +47,8 @@ import * as store from '../store.js';
 import { guarded } from './announcer.js';
 import { newId, nowIso, localDateKey } from '../../lib/core.js';
 import { makeSupply, doseUnits } from '../trackerOps.js';
-import { NUTRIENT_NOTES } from './nutrientNotes.js';
+import { NUTRIENT_NOTES, UNMEASURED } from './nutrientNotes.js';
+import { compare } from './doses.js';
 
 const PICKS_ID = 'my-picks';
 
@@ -339,6 +340,13 @@ export async function viewSupplements({ reload } = {}) {
       h('summary', {},
         h('span.name', {}, label),
         h('span.why', {}, [f.serving, nutrientsOf(f)].filter(Boolean).join(' · ')),
+        // "You see a bunch of foods that also have it, but how much do they
+        // have?" While a nutrient is being filtered on, that is the question
+        // the list is being asked, so the answer belongs on the row rather than
+        // one tap inside it.
+        state.nutrient && f.amounts?.[state.nutrient]
+          ? h('span.why.amount', {}, `${comparisonFor(f, state.nutrient).food} of ${(NUTRIENTS[state.nutrient] ?? state.nutrient).toLowerCase()}`)
+          : null,
       ),
       f.fields?.release ? h('p.muted', {}, f.fields.release) : null,
       nutrientChips(f),
@@ -519,6 +527,27 @@ export async function viewSupplements({ reload } = {}) {
   // words tappable adds a capability without adding an object to the screen —
   // where a row of chips underneath them would have been the third control in
   // one card saying what the first one already said.
+  // The dose side of the comparison. The shelf already prints a typical dose on
+  // every supplement; this picks the first one for a nutrient that can actually
+  // be read as a number, so "compared to what" has an answer that came from the
+  // shelf rather than from me.
+  const doseCache = new Map();
+  function shelfDoseFor(nutrient) {
+    if (!doseCache.has(nutrient)) {
+      const holder = shelf.supplements.find((s2) => (s2.provides ?? []).includes(nutrient)
+        && compare({ amount: { perServing: 1, unit: 'mg' }, doseText: s2.typicalDose, nutrient })?.dose);
+      doseCache.set(nutrient, holder ? { text: holder.typicalDose, name: holder.name } : null);
+    }
+    return doseCache.get(nutrient);
+  }
+
+  function comparisonFor(item, nutrient) {
+    const amount = item.amounts?.[nutrient];
+    if (!amount) return null;
+    const dose = shelfDoseFor(nutrient);
+    return compare({ amount, doseText: dose?.text, nutrient });
+  }
+
   function nutrientChips(item) {
     const list = item.provides ?? [];
     if (!list.length) return null;
@@ -531,7 +560,7 @@ export async function viewSupplements({ reload } = {}) {
         clear(note);
         if (wasOpen) return;
         e.currentTarget.setAttribute('aria-expanded', 'true');
-        note.append(nutrientNote(n));
+        note.append(nutrientNote(n, item));
       },
       'aria-expanded': 'false',
     }, NUTRIENTS[n] ?? n));
@@ -542,18 +571,44 @@ export async function viewSupplements({ reload } = {}) {
     return h('div.nutrient-strip', {}, line, note);
   }
 
-  function nutrientNote(n) {
+  function nutrientNote(n, item) {
     const label = NUTRIENTS[n] ?? n;
-    return h('div.nutrient-note', {},
+    const note = h('div.nutrient-note', {},
       h('p', {}, NUTRIENT_NOTES[n] ?? `No plain-words explanation is written for ${label} yet.`),
-      h('button.thin-link', {
-        onclick: () => {
-          state.part = 'food';
-          state.nutrient = n;
-          paintParts(); paintNutrients(); paint();
-        },
-      }, `Foods with ${label}`),
     );
+
+    // "How much do they have? And compared to what?"
+    const c = comparisonFor(item, n);
+    if (c) {
+      note.append(h('p.amount', {},
+        `${item.serving} of ${item.name.toLowerCase()} — about ${c.food} of ${label.toLowerCase()}.`));
+      if (c.servings) {
+        const { lo, hi } = c.servings;
+        const many = lo === hi ? `${lo}` : `${lo}–${hi}`;
+        note.append(h('p.amount', {},
+          `A typical ${label.toLowerCase()} supplement is ${c.dose}${c.converted ? ` (${c.converted})` : ''} — about ${many} ${hi === 1 && lo === 1 ? 'serving' : 'servings'} to match.`));
+      } else if (c.unreadable === 'IU') {
+        note.append(h('p.muted.tiny', {},
+          `The shelf gives this one in IU, and converting IU to milligrams depends on which form is in the bottle — so the two are not put side by side here rather than being compared on a guess.`));
+      } else if (c.dose) {
+        note.append(h('p.amount', {}, `A typical supplement is ${c.dose}.`));
+      }
+      if (item.amountSource) {
+        note.append(h('p.muted.tiny', {},
+          `Measured amount from USDA FoodData Central — “${item.amountSource.fdcDescription}” — for a ${item.amountSource.servingGrams} g serving.`));
+      }
+    } else if (UNMEASURED[n]) {
+      note.append(h('p.muted.tiny', {}, `No amount is shown: ${UNMEASURED[n]}.`));
+    }
+
+    note.append(h('button.thin-link', {
+      onclick: () => {
+        state.part = 'food';
+        state.nutrient = n;
+        paintParts(); paintNutrients(); paint();
+      },
+    }, `Foods with ${label}`));
+    return note;
   }
 
   /* ----------------------------- the meal plan ----------------------------- */

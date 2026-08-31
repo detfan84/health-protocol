@@ -1,0 +1,2020 @@
+{
+  "source": "USDA FoodData Central, SR Legacy (2018-04). Amounts per 100 g are USDA’s; the gram weight of each serving is this app’s own judgement.",
+  "unmeasured": {
+    "polyphenols": "SR Legacy has a polyphenols column and not one food in it carries a value",
+    "nitrate": "SR Legacy has a nitrates column and not one food in it carries a value",
+    "probiotics": "probiotics are live organisms, not a nutrient — there is nothing to weigh",
+    "collagen": "not measured by SR Legacy",
+    "creatine": "not measured by SR Legacy",
+    "melatonin": "not measured by SR Legacy"
+  },
+  "noMatch": {
+    "food-nutritional-yeast": "not in SR Legacy — the nearest entry is yeast extract spread, which is a different product",
+    "food-bone-broth": "not in SR Legacy — the nearest entry is a dried stock cube, and collagen is unmeasured anyway",
+    "food-chicken-skin-and-cartilage": "not in SR Legacy as a food, and collagen is unmeasured",
+    "food-turmeric": "SR Legacy has ground turmeric but not the fresh root, and its only claim here is polyphenols, which is unmeasured"
+  },
+  "foods": {
+    "food-pumpkin-seeds": {
+      "fdcId": "170556",
+      "fdcDescription": "Seeds, pumpkin and squash seed kernels, dried",
+      "servingGrams": 30,
+      "amounts": {
+        "magnesium": {
+          "perServing": 178,
+          "per100g": 592,
+          "unit": "mg"
+        },
+        "zinc": {
+          "perServing": 2.34,
+          "per100g": 7.81,
+          "unit": "mg"
+        },
+        "iron": {
+          "perServing": 2.65,
+          "per100g": 8.82,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-almonds": {
+      "fdcId": "170567",
+      "fdcDescription": "Nuts, almonds",
+      "servingGrams": 30,
+      "amounts": {
+        "magnesium": {
+          "perServing": 81,
+          "per100g": 270,
+          "unit": "mg"
+        },
+        "vitamin-e": {
+          "perServing": 7.69,
+          "per100g": 25.63,
+          "unit": "mg"
+        },
+        "protein": {
+          "perServing": 6.34,
+          "per100g": 21.15,
+          "unit": "g"
+        }
+      }
+    },
+    "food-cashews": {
+      "fdcId": "170162",
+      "fdcDescription": "Nuts, cashew nuts, raw",
+      "servingGrams": 30,
+      "amounts": {
+        "magnesium": {
+          "perServing": 87.6,
+          "per100g": 292,
+          "unit": "mg"
+        },
+        "zinc": {
+          "perServing": 1.73,
+          "per100g": 5.78,
+          "unit": "mg"
+        },
+        "copper": {
+          "perServing": 0.658,
+          "per100g": 2.195,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-brazil-nuts": {
+      "fdcId": "170569",
+      "fdcDescription": "Nuts, brazilnuts, dried, unblanched",
+      "servingGrams": 10,
+      "amounts": {
+        "selenium": {
+          "perServing": 192,
+          "per100g": 1917,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-walnuts": {
+      "fdcId": "170187",
+      "fdcDescription": "Nuts, walnuts, english",
+      "servingGrams": 30,
+      "amounts": {
+        "omega-3": {
+          "perServing": 2.72,
+          "per100g": 9.08,
+          "unit": "g",
+          "summedFrom": [
+            "ALA (as USDA’s generic 18:3)"
+          ]
+        }
+      }
+    },
+    "food-sunflower-seeds": {
+      "fdcId": "170562",
+      "fdcDescription": "Seeds, sunflower seed kernels, dried",
+      "servingGrams": 30,
+      "amounts": {
+        "vitamin-e": {
+          "perServing": 10.6,
+          "per100g": 35.17,
+          "unit": "mg"
+        },
+        "magnesium": {
+          "perServing": 97.5,
+          "per100g": 325,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-chia-seeds": {
+      "fdcId": "170554",
+      "fdcDescription": "Seeds, chia seeds, dried",
+      "servingGrams": 12,
+      "amounts": {
+        "fibre": {
+          "perServing": 4.13,
+          "per100g": 34.4,
+          "unit": "g"
+        },
+        "omega-3": {
+          "perServing": 2.14,
+          "per100g": 17.83,
+          "unit": "g",
+          "summedFrom": [
+            "ALA"
+          ]
+        },
+        "calcium": {
+          "perServing": 75.7,
+          "per100g": 631,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-flaxseed": {
+      "fdcId": "169414",
+      "fdcDescription": "Seeds, flaxseed",
+      "servingGrams": 10,
+      "amounts": {
+        "fibre": {
+          "perServing": 2.73,
+          "per100g": 27.3,
+          "unit": "g"
+        },
+        "omega-3": {
+          "perServing": 2.28,
+          "per100g": 22.813,
+          "unit": "g",
+          "summedFrom": [
+            "ALA (as USDA’s generic 18:3)"
+          ]
+        }
+      }
+    },
+    "food-hemp-seeds": {
+      "fdcId": "170148",
+      "fdcDescription": "Seeds, hemp seed, hulled",
+      "servingGrams": 20,
+      "amounts": {
+        "protein": {
+          "perServing": 6.31,
+          "per100g": 31.56,
+          "unit": "g"
+        },
+        "magnesium": {
+          "perServing": 140,
+          "per100g": 700,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-sardines": {
+      "fdcId": "175139",
+      "fdcDescription": "Fish, sardine, Atlantic, canned in oil, drained solids with bone",
+      "servingGrams": 90,
+      "amounts": {
+        "omega-3": {
+          "perServing": 1.33,
+          "per100g": 1.48,
+          "unit": "g",
+          "summedFrom": [
+            "ALA (as USDA’s generic 18:3)",
+            "EPA",
+            "DHA"
+          ]
+        },
+        "vitamin-d": {
+          "perServing": 4.32,
+          "per100g": 4.8,
+          "unit": "ug"
+        },
+        "calcium": {
+          "perServing": 344,
+          "per100g": 382,
+          "unit": "mg"
+        },
+        "b12": {
+          "perServing": 8.05,
+          "per100g": 8.94,
+          "unit": "ug"
+        },
+        "selenium": {
+          "perServing": 47.4,
+          "per100g": 52.7,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-salmon": {
+      "fdcId": "173686",
+      "fdcDescription": "Fish, salmon, Atlantic, wild, raw",
+      "servingGrams": 120,
+      "amounts": {
+        "omega-3": {
+          "perServing": 2.08,
+          "per100g": 1.731,
+          "unit": "g",
+          "summedFrom": [
+            "ALA (as USDA’s generic 18:3)",
+            "EPA",
+            "DHA"
+          ]
+        },
+        "b12": {
+          "perServing": 3.82,
+          "per100g": 3.18,
+          "unit": "ug"
+        },
+        "protein": {
+          "perServing": 23.8,
+          "per100g": 19.84,
+          "unit": "g"
+        }
+      }
+    },
+    "food-salmon-tinned-with-bones": {
+      "fdcId": "174225",
+      "fdcDescription": "Fish, salmon, pink, canned, without salt, solids with bone and liquid",
+      "servingGrams": 105,
+      "amounts": {
+        "omega-3": {
+          "perServing": 1.79,
+          "per100g": 1.709,
+          "unit": "g",
+          "summedFrom": [
+            "ALA (as USDA’s generic 18:3)",
+            "EPA",
+            "DHA"
+          ]
+        },
+        "calcium": {
+          "perServing": 224,
+          "per100g": 213,
+          "unit": "mg"
+        },
+        "b12": {
+          "perServing": 4.62,
+          "per100g": 4.4,
+          "unit": "ug"
+        },
+        "protein": {
+          "perServing": 20.8,
+          "per100g": 19.78,
+          "unit": "g"
+        }
+      }
+    },
+    "food-salmon-smoked": {
+      "fdcId": "173687",
+      "fdcDescription": "Fish, salmon, chinook, smoked",
+      "servingGrams": 50,
+      "amounts": {
+        "omega-3": {
+          "perServing": 0.225,
+          "per100g": 0.45,
+          "unit": "g",
+          "summedFrom": [
+            "EPA",
+            "DHA"
+          ]
+        },
+        "b12": {
+          "perServing": 1.63,
+          "per100g": 3.26,
+          "unit": "ug"
+        },
+        "protein": {
+          "perServing": 9.14,
+          "per100g": 18.28,
+          "unit": "g"
+        },
+        "sodium": {
+          "perServing": 336,
+          "per100g": 672,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-mackerel": {
+      "fdcId": "175119",
+      "fdcDescription": "Fish, mackerel, Atlantic, raw",
+      "servingGrams": 100,
+      "amounts": {
+        "omega-3": {
+          "perServing": 2.46,
+          "per100g": 2.458,
+          "unit": "g",
+          "summedFrom": [
+            "ALA (as USDA’s generic 18:3)",
+            "EPA",
+            "DHA"
+          ]
+        },
+        "vitamin-d": {
+          "perServing": 16.1,
+          "per100g": 16.1,
+          "unit": "ug"
+        },
+        "b12": {
+          "perServing": 8.71,
+          "per100g": 8.71,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-anchovies": {
+      "fdcId": "174183",
+      "fdcDescription": "Fish, anchovy, european, canned in oil, drained solids",
+      "servingGrams": 20,
+      "amounts": {
+        "omega-3": {
+          "perServing": 0.414,
+          "per100g": 2.072,
+          "unit": "g",
+          "summedFrom": [
+            "ALA (as USDA’s generic 18:3)",
+            "EPA",
+            "DHA"
+          ]
+        },
+        "calcium": {
+          "perServing": 46.4,
+          "per100g": 232,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-oysters": {
+      "fdcId": "171978",
+      "fdcDescription": "Mollusks, oyster, eastern, wild, raw",
+      "servingGrams": 85,
+      "amounts": {
+        "zinc": {
+          "perServing": 33.4,
+          "per100g": 39.3,
+          "unit": "mg"
+        },
+        "b12": {
+          "perServing": 7.44,
+          "per100g": 8.75,
+          "unit": "ug"
+        },
+        "copper": {
+          "perServing": 2.43,
+          "per100g": 2.858,
+          "unit": "mg"
+        },
+        "iron": {
+          "perServing": 3.92,
+          "per100g": 4.61,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-mussels": {
+      "fdcId": "174217",
+      "fdcDescription": "Mollusks, mussel, blue, cooked, moist heat",
+      "servingGrams": 150,
+      "amounts": {
+        "b12": {
+          "perServing": 36,
+          "per100g": 24,
+          "unit": "ug"
+        },
+        "iron": {
+          "perServing": 10.1,
+          "per100g": 6.72,
+          "unit": "mg"
+        },
+        "selenium": {
+          "perServing": 134,
+          "per100g": 89.6,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-beef-liver": {
+      "fdcId": "169451",
+      "fdcDescription": "Beef, variety meats and by-products, liver, raw",
+      "servingGrams": 60,
+      "amounts": {
+        "vitamin-a": {
+          "perServing": 2980,
+          "per100g": 4968,
+          "unit": "ug"
+        },
+        "b12": {
+          "perServing": 35.6,
+          "per100g": 59.3,
+          "unit": "ug"
+        },
+        "folate": {
+          "perServing": 174,
+          "per100g": 290,
+          "unit": "ug"
+        },
+        "iron": {
+          "perServing": 2.94,
+          "per100g": 4.9,
+          "unit": "mg"
+        },
+        "copper": {
+          "perServing": 5.85,
+          "per100g": 9.755,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-beef": {
+      "fdcId": "171790",
+      "fdcDescription": "Beef, ground, 95% lean meat / 5% fat, raw",
+      "servingGrams": 120,
+      "amounts": {
+        "protein": {
+          "perServing": 25.7,
+          "per100g": 21.41,
+          "unit": "g"
+        },
+        "iron": {
+          "perServing": 2.86,
+          "per100g": 2.38,
+          "unit": "mg"
+        },
+        "zinc": {
+          "perServing": 6.11,
+          "per100g": 5.09,
+          "unit": "mg"
+        },
+        "b12": {
+          "perServing": 2.69,
+          "per100g": 2.24,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-lamb": {
+      "fdcId": "173810",
+      "fdcDescription": "Lamb, New Zealand, imported, loin chop, separable lean only, raw",
+      "servingGrams": 120,
+      "amounts": {
+        "protein": {
+          "perServing": 24,
+          "per100g": 19.98,
+          "unit": "g"
+        },
+        "iron": {
+          "perServing": 1.82,
+          "per100g": 1.52,
+          "unit": "mg"
+        },
+        "zinc": {
+          "perServing": 3.23,
+          "per100g": 2.69,
+          "unit": "mg"
+        },
+        "b12": {
+          "perServing": 2.28,
+          "per100g": 1.9,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-chicken": {
+      "fdcId": "171477",
+      "fdcDescription": "Chicken, broilers or fryers, breast, meat only, cooked, roasted",
+      "servingGrams": 120,
+      "amounts": {
+        "protein": {
+          "perServing": 37.2,
+          "per100g": 31.02,
+          "unit": "g"
+        },
+        "b6": {
+          "perServing": 0.72,
+          "per100g": 0.6,
+          "unit": "mg"
+        },
+        "selenium": {
+          "perServing": 33.1,
+          "per100g": 27.6,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-eggs": {
+      "fdcId": "171287",
+      "fdcDescription": "Egg, whole, raw, fresh",
+      "servingGrams": 100,
+      "amounts": {
+        "protein": {
+          "perServing": 12.6,
+          "per100g": 12.56,
+          "unit": "g"
+        },
+        "choline": {
+          "perServing": 294,
+          "per100g": 293.8,
+          "unit": "mg"
+        },
+        "vitamin-d": {
+          "perServing": 2,
+          "per100g": 2,
+          "unit": "ug"
+        },
+        "b12": {
+          "perServing": 0.89,
+          "per100g": 0.89,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-greek-yoghurt": {
+      "fdcId": "171304",
+      "fdcDescription": "Yogurt, Greek, plain, whole milk",
+      "servingGrams": 150,
+      "amounts": {
+        "protein": {
+          "perServing": 13.5,
+          "per100g": 9,
+          "unit": "g"
+        },
+        "calcium": {
+          "perServing": 150,
+          "per100g": 100,
+          "unit": "mg"
+        },
+        "b12": {
+          "perServing": 1.13,
+          "per100g": 0.75,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-greek-yoghurt-heat-treated": {
+      "fdcId": "171304",
+      "fdcDescription": "Yogurt, Greek, plain, whole milk",
+      "servingGrams": 150,
+      "amounts": {
+        "protein": {
+          "perServing": 13.5,
+          "per100g": 9,
+          "unit": "g"
+        },
+        "calcium": {
+          "perServing": 150,
+          "per100g": 100,
+          "unit": "mg"
+        },
+        "b12": {
+          "perServing": 1.13,
+          "per100g": 0.75,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-kefir": {
+      "fdcId": "170904",
+      "fdcDescription": "Kefir, lowfat, plain, LIFEWAY",
+      "servingGrams": 200,
+      "amounts": {
+        "calcium": {
+          "perServing": 260,
+          "per100g": 130,
+          "unit": "mg"
+        },
+        "b12": {
+          "perServing": 0.58,
+          "per100g": 0.29,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-cheese": {
+      "fdcId": "170899",
+      "fdcDescription": "Cheese, cheddar, sharp, sliced",
+      "servingGrams": 30,
+      "amounts": {
+        "calcium": {
+          "perServing": 213,
+          "per100g": 711,
+          "unit": "mg"
+        },
+        "protein": {
+          "perServing": 7.28,
+          "per100g": 24.25,
+          "unit": "g"
+        },
+        "vitamin-k": {
+          "perServing": 0.72,
+          "per100g": 2.4,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-cottage-cheese": {
+      "fdcId": "172179",
+      "fdcDescription": "Cheese, cottage, creamed, large or small curd",
+      "servingGrams": 150,
+      "amounts": {
+        "protein": {
+          "perServing": 16.7,
+          "per100g": 11.12,
+          "unit": "g"
+        },
+        "calcium": {
+          "perServing": 125,
+          "per100g": 83,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-milk": {
+      "fdcId": "171265",
+      "fdcDescription": "Milk, whole, 3.25% milkfat, with added vitamin D",
+      "servingGrams": 200,
+      "amounts": {
+        "calcium": {
+          "perServing": 226,
+          "per100g": 113,
+          "unit": "mg"
+        },
+        "protein": {
+          "perServing": 6.3,
+          "per100g": 3.15,
+          "unit": "g"
+        },
+        "b12": {
+          "perServing": 0.9,
+          "per100g": 0.45,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-sauerkraut": {
+      "fdcId": "169279",
+      "fdcDescription": "Sauerkraut, canned, solids and liquids",
+      "servingGrams": 30,
+      "amounts": {
+        "vitamin-c": {
+          "perServing": 4.41,
+          "per100g": 14.7,
+          "unit": "mg"
+        },
+        "fibre": {
+          "perServing": 0.87,
+          "per100g": 2.9,
+          "unit": "g"
+        }
+      }
+    },
+    "food-sauerkraut-jarred-pasteurised": {
+      "fdcId": "169279",
+      "fdcDescription": "Sauerkraut, canned, solids and liquids",
+      "servingGrams": 30,
+      "amounts": {
+        "vitamin-c": {
+          "perServing": 4.41,
+          "per100g": 14.7,
+          "unit": "mg"
+        },
+        "fibre": {
+          "perServing": 0.87,
+          "per100g": 2.9,
+          "unit": "g"
+        }
+      }
+    },
+    "food-kimchi": {
+      "fdcId": "170392",
+      "fdcDescription": "Cabbage, kimchi",
+      "servingGrams": 30,
+      "amounts": {}
+    },
+    "food-miso": {
+      "fdcId": "172442",
+      "fdcDescription": "Miso",
+      "servingGrams": 15,
+      "amounts": {}
+    },
+    "food-tempeh": {
+      "fdcId": "174272",
+      "fdcDescription": "Tempeh",
+      "servingGrams": 100,
+      "amounts": {
+        "protein": {
+          "perServing": 20.3,
+          "per100g": 20.29,
+          "unit": "g"
+        },
+        "magnesium": {
+          "perServing": 81,
+          "per100g": 81,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-tofu": {
+      "fdcId": "172475",
+      "fdcDescription": "Tofu, raw, firm, prepared with calcium sulfate",
+      "servingGrams": 100,
+      "amounts": {
+        "protein": {
+          "perServing": 17.3,
+          "per100g": 17.27,
+          "unit": "g"
+        },
+        "calcium": {
+          "perServing": 683,
+          "per100g": 683,
+          "unit": "mg"
+        },
+        "iron": {
+          "perServing": 2.66,
+          "per100g": 2.66,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-edamame": {
+      "fdcId": "168411",
+      "fdcDescription": "Edamame, frozen, prepared",
+      "servingGrams": 150,
+      "amounts": {
+        "protein": {
+          "perServing": 17.9,
+          "per100g": 11.91,
+          "unit": "g"
+        },
+        "folate": {
+          "perServing": 467,
+          "per100g": 311,
+          "unit": "ug"
+        },
+        "fibre": {
+          "perServing": 7.8,
+          "per100g": 5.2,
+          "unit": "g"
+        }
+      }
+    },
+    "food-lentils": {
+      "fdcId": "175254",
+      "fdcDescription": "Lentils, mature seeds, cooked, boiled, with salt",
+      "servingGrams": 198,
+      "amounts": {
+        "fibre": {
+          "perServing": 15.6,
+          "per100g": 7.9,
+          "unit": "g"
+        },
+        "folate": {
+          "perServing": 358,
+          "per100g": 181,
+          "unit": "ug"
+        },
+        "iron": {
+          "perServing": 6.59,
+          "per100g": 3.33,
+          "unit": "mg"
+        },
+        "protein": {
+          "perServing": 17.9,
+          "per100g": 9.02,
+          "unit": "g"
+        }
+      }
+    },
+    "food-chickpeas": {
+      "fdcId": "173799",
+      "fdcDescription": "Chickpeas (garbanzo beans, bengal gram), mature seeds, cooked, boiled, with salt",
+      "servingGrams": 164,
+      "amounts": {
+        "fibre": {
+          "perServing": 12.5,
+          "per100g": 7.6,
+          "unit": "g"
+        },
+        "folate": {
+          "perServing": 282,
+          "per100g": 172,
+          "unit": "ug"
+        },
+        "protein": {
+          "perServing": 14.5,
+          "per100g": 8.86,
+          "unit": "g"
+        },
+        "iron": {
+          "perServing": 4.74,
+          "per100g": 2.89,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-black-beans": {
+      "fdcId": "175237",
+      "fdcDescription": "Beans, black, mature seeds, cooked, boiled, with salt",
+      "servingGrams": 172,
+      "amounts": {
+        "fibre": {
+          "perServing": 15,
+          "per100g": 8.7,
+          "unit": "g"
+        },
+        "folate": {
+          "perServing": 256,
+          "per100g": 149,
+          "unit": "ug"
+        },
+        "magnesium": {
+          "perServing": 120,
+          "per100g": 70,
+          "unit": "mg"
+        },
+        "protein": {
+          "perServing": 15.2,
+          "per100g": 8.86,
+          "unit": "g"
+        }
+      }
+    },
+    "food-kidney-beans": {
+      "fdcId": "175242",
+      "fdcDescription": "Beans, kidney, red, mature seeds, cooked, boiled, with salt",
+      "servingGrams": 177,
+      "amounts": {
+        "fibre": {
+          "perServing": 13.1,
+          "per100g": 7.4,
+          "unit": "g"
+        },
+        "iron": {
+          "perServing": 5.2,
+          "per100g": 2.94,
+          "unit": "mg"
+        },
+        "folate": {
+          "perServing": 230,
+          "per100g": 130,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-oats": {
+      "fdcId": "169705",
+      "fdcDescription": "Oats (Includes foods for USDA's Food Distribution Program)",
+      "servingGrams": 40,
+      "amounts": {
+        "fibre": {
+          "perServing": 4.24,
+          "per100g": 10.6,
+          "unit": "g"
+        },
+        "magnesium": {
+          "perServing": 70.8,
+          "per100g": 177,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-quinoa": {
+      "fdcId": "168917",
+      "fdcDescription": "Quinoa, cooked",
+      "servingGrams": 185,
+      "amounts": {
+        "protein": {
+          "perServing": 8.14,
+          "per100g": 4.4,
+          "unit": "g"
+        },
+        "magnesium": {
+          "perServing": 118,
+          "per100g": 64,
+          "unit": "mg"
+        },
+        "fibre": {
+          "perServing": 5.18,
+          "per100g": 2.8,
+          "unit": "g"
+        }
+      }
+    },
+    "food-brown-rice": {
+      "fdcId": "169704",
+      "fdcDescription": "Rice, brown, long-grain, cooked (Includes foods for USDA's Food Distribution Program)",
+      "servingGrams": 195,
+      "amounts": {
+        "magnesium": {
+          "perServing": 76,
+          "per100g": 39,
+          "unit": "mg"
+        },
+        "fibre": {
+          "perServing": 3.12,
+          "per100g": 1.6,
+          "unit": "g"
+        }
+      }
+    },
+    "food-buckwheat": {
+      "fdcId": "170686",
+      "fdcDescription": "Buckwheat groats, roasted, cooked",
+      "servingGrams": 168,
+      "amounts": {
+        "magnesium": {
+          "perServing": 85.7,
+          "per100g": 51,
+          "unit": "mg"
+        },
+        "fibre": {
+          "perServing": 4.54,
+          "per100g": 2.7,
+          "unit": "g"
+        }
+      }
+    },
+    "food-wholegrain-bread": {
+      "fdcId": "172688",
+      "fdcDescription": "Bread, whole-wheat, commercially prepared",
+      "servingGrams": 60,
+      "amounts": {
+        "fibre": {
+          "perServing": 3.6,
+          "per100g": 6,
+          "unit": "g"
+        },
+        "b6": {
+          "perServing": 0.129,
+          "per100g": 0.215,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-spinach": {
+      "fdcId": "168462",
+      "fdcDescription": "Spinach, raw",
+      "servingGrams": 30,
+      "amounts": {
+        "folate": {
+          "perServing": 58.2,
+          "per100g": 194,
+          "unit": "ug"
+        },
+        "vitamin-k": {
+          "perServing": 145,
+          "per100g": 482.9,
+          "unit": "ug"
+        },
+        "vitamin-c": {
+          "perServing": 8.43,
+          "per100g": 28.1,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-spinach-cooked": {
+      "fdcId": "170531",
+      "fdcDescription": "Spinach, cooked, boiled, drained, with salt",
+      "servingGrams": 90,
+      "amounts": {
+        "folate": {
+          "perServing": 131,
+          "per100g": 146,
+          "unit": "ug"
+        },
+        "magnesium": {
+          "perServing": 78.3,
+          "per100g": 87,
+          "unit": "mg"
+        },
+        "vitamin-k": {
+          "perServing": 444,
+          "per100g": 493.6,
+          "unit": "ug"
+        },
+        "iron": {
+          "perServing": 3.21,
+          "per100g": 3.57,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-kale": {
+      "fdcId": "168421",
+      "fdcDescription": "Kale, raw",
+      "servingGrams": 30,
+      "amounts": {
+        "vitamin-k": {
+          "perServing": 117,
+          "per100g": 389.6,
+          "unit": "ug"
+        },
+        "vitamin-c": {
+          "perServing": 28,
+          "per100g": 93.4,
+          "unit": "mg"
+        },
+        "calcium": {
+          "perServing": 76.2,
+          "per100g": 254,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-swiss-chard": {
+      "fdcId": "169343",
+      "fdcDescription": "Chard, swiss, cooked, boiled, drained, with salt",
+      "servingGrams": 90,
+      "amounts": {
+        "magnesium": {
+          "perServing": 77.4,
+          "per100g": 86,
+          "unit": "mg"
+        },
+        "vitamin-k": {
+          "perServing": 295,
+          "per100g": 327.3,
+          "unit": "ug"
+        },
+        "potassium": {
+          "perServing": 494,
+          "per100g": 549,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-broccoli": {
+      "fdcId": "170379",
+      "fdcDescription": "Broccoli, raw",
+      "servingGrams": 90,
+      "amounts": {
+        "vitamin-c": {
+          "perServing": 80.3,
+          "per100g": 89.2,
+          "unit": "mg"
+        },
+        "vitamin-k": {
+          "perServing": 91.4,
+          "per100g": 101.6,
+          "unit": "ug"
+        },
+        "folate": {
+          "perServing": 56.7,
+          "per100g": 63,
+          "unit": "ug"
+        },
+        "fibre": {
+          "perServing": 2.34,
+          "per100g": 2.6,
+          "unit": "g"
+        }
+      }
+    },
+    "food-brussels-sprouts": {
+      "fdcId": "170383",
+      "fdcDescription": "Brussels sprouts, raw",
+      "servingGrams": 90,
+      "amounts": {
+        "vitamin-c": {
+          "perServing": 76.5,
+          "per100g": 85,
+          "unit": "mg"
+        },
+        "vitamin-k": {
+          "perServing": 159,
+          "per100g": 177,
+          "unit": "ug"
+        },
+        "fibre": {
+          "perServing": 3.42,
+          "per100g": 3.8,
+          "unit": "g"
+        }
+      }
+    },
+    "food-cabbage": {
+      "fdcId": "169975",
+      "fdcDescription": "Cabbage, raw",
+      "servingGrams": 90,
+      "amounts": {
+        "vitamin-c": {
+          "perServing": 32.9,
+          "per100g": 36.6,
+          "unit": "mg"
+        },
+        "vitamin-k": {
+          "perServing": 68.4,
+          "per100g": 76,
+          "unit": "ug"
+        },
+        "fibre": {
+          "perServing": 2.25,
+          "per100g": 2.5,
+          "unit": "g"
+        }
+      }
+    },
+    "food-cauliflower": {
+      "fdcId": "169986",
+      "fdcDescription": "Cauliflower, raw",
+      "servingGrams": 100,
+      "amounts": {
+        "vitamin-c": {
+          "perServing": 48.2,
+          "per100g": 48.2,
+          "unit": "mg"
+        },
+        "choline": {
+          "perServing": 44.3,
+          "per100g": 44.3,
+          "unit": "mg"
+        },
+        "fibre": {
+          "perServing": 2,
+          "per100g": 2,
+          "unit": "g"
+        }
+      }
+    },
+    "food-rocket": {
+      "fdcId": "169387",
+      "fdcDescription": "Arugula, raw",
+      "servingGrams": 20,
+      "amounts": {
+        "vitamin-k": {
+          "perServing": 21.7,
+          "per100g": 108.6,
+          "unit": "ug"
+        },
+        "folate": {
+          "perServing": 19.4,
+          "per100g": 97,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-beetroot": {
+      "fdcId": "169146",
+      "fdcDescription": "Beets, cooked, boiled, drained",
+      "servingGrams": 80,
+      "amounts": {
+        "folate": {
+          "perServing": 64,
+          "per100g": 80,
+          "unit": "ug"
+        },
+        "fibre": {
+          "perServing": 1.6,
+          "per100g": 2,
+          "unit": "g"
+        }
+      }
+    },
+    "food-beetroot-pickled": {
+      "fdcId": "170480",
+      "fdcDescription": "Beets, pickled, canned, solids and liquids",
+      "servingGrams": 40,
+      "amounts": {
+        "folate": {
+          "perServing": 10.8,
+          "per100g": 27,
+          "unit": "ug"
+        },
+        "fibre": {
+          "perServing": 0.32,
+          "per100g": 0.8,
+          "unit": "g"
+        }
+      }
+    },
+    "food-sweet-potato": {
+      "fdcId": "168483",
+      "fdcDescription": "Sweet potato, cooked, baked in skin, flesh, without salt",
+      "servingGrams": 130,
+      "amounts": {
+        "vitamin-a": {
+          "perServing": 1250,
+          "per100g": 961,
+          "unit": "ug"
+        },
+        "fibre": {
+          "perServing": 4.29,
+          "per100g": 3.3,
+          "unit": "g"
+        },
+        "potassium": {
+          "perServing": 618,
+          "per100g": 475,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-carrots": {
+      "fdcId": "170393",
+      "fdcDescription": "Carrots, raw",
+      "servingGrams": 120,
+      "amounts": {
+        "vitamin-a": {
+          "perServing": 1000,
+          "per100g": 835,
+          "unit": "ug"
+        },
+        "fibre": {
+          "perServing": 3.36,
+          "per100g": 2.8,
+          "unit": "g"
+        }
+      }
+    },
+    "food-butternut-squash": {
+      "fdcId": "170130",
+      "fdcDescription": "Squash, winter, butternut, cooked, baked, with salt",
+      "servingGrams": 200,
+      "amounts": {
+        "vitamin-a": {
+          "perServing": 1120,
+          "per100g": 558,
+          "unit": "ug"
+        },
+        "vitamin-c": {
+          "perServing": 30.2,
+          "per100g": 15.1,
+          "unit": "mg"
+        },
+        "potassium": {
+          "perServing": 568,
+          "per100g": 284,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-red-pepper": {
+      "fdcId": "170108",
+      "fdcDescription": "Peppers, sweet, red, raw",
+      "servingGrams": 120,
+      "amounts": {
+        "vitamin-c": {
+          "perServing": 153,
+          "per100g": 127.7,
+          "unit": "mg"
+        },
+        "vitamin-a": {
+          "perServing": 188,
+          "per100g": 157,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-tomatoes": {
+      "fdcId": "170457",
+      "fdcDescription": "Tomatoes, red, ripe, raw, year round average",
+      "servingGrams": 250,
+      "amounts": {
+        "vitamin-c": {
+          "perServing": 34.3,
+          "per100g": 13.7,
+          "unit": "mg"
+        },
+        "potassium": {
+          "perServing": 593,
+          "per100g": 237,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-tomatoes-tinned-or-cooked": {
+      "fdcId": "170051",
+      "fdcDescription": "Tomatoes, red, ripe, canned, packed in tomato juice",
+      "servingGrams": 200,
+      "amounts": {
+        "potassium": {
+          "perServing": 382,
+          "per100g": 191,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-avocado": {
+      "fdcId": "171706",
+      "fdcDescription": "Avocados, raw, California",
+      "servingGrams": 100,
+      "amounts": {
+        "potassium": {
+          "perServing": 507,
+          "per100g": 507,
+          "unit": "mg"
+        },
+        "fibre": {
+          "perServing": 6.8,
+          "per100g": 6.8,
+          "unit": "g"
+        },
+        "vitamin-e": {
+          "perServing": 1.97,
+          "per100g": 1.97,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-banana": {
+      "fdcId": "173944",
+      "fdcDescription": "Bananas, raw",
+      "servingGrams": 120,
+      "amounts": {
+        "potassium": {
+          "perServing": 430,
+          "per100g": 358,
+          "unit": "mg"
+        },
+        "b6": {
+          "perServing": 0.44,
+          "per100g": 0.367,
+          "unit": "mg"
+        },
+        "fibre": {
+          "perServing": 3.12,
+          "per100g": 2.6,
+          "unit": "g"
+        }
+      }
+    },
+    "food-potatoes": {
+      "fdcId": "170435",
+      "fdcDescription": "Potatoes, red, flesh and skin, baked",
+      "servingGrams": 170,
+      "amounts": {
+        "potassium": {
+          "perServing": 927,
+          "per100g": 545,
+          "unit": "mg"
+        },
+        "vitamin-c": {
+          "perServing": 21.4,
+          "per100g": 12.6,
+          "unit": "mg"
+        },
+        "fibre": {
+          "perServing": 3.06,
+          "per100g": 1.8,
+          "unit": "g"
+        }
+      }
+    },
+    "food-oranges": {
+      "fdcId": "169917",
+      "fdcDescription": "Oranges, raw, navels (Includes foods for USDA's Food Distribution Program)",
+      "servingGrams": 140,
+      "amounts": {
+        "vitamin-c": {
+          "perServing": 82.7,
+          "per100g": 59.1,
+          "unit": "mg"
+        },
+        "folate": {
+          "perServing": 47.6,
+          "per100g": 34,
+          "unit": "ug"
+        },
+        "fibre": {
+          "perServing": 3.08,
+          "per100g": 2.2,
+          "unit": "g"
+        }
+      }
+    },
+    "food-kiwi": {
+      "fdcId": "168153",
+      "fdcDescription": "Kiwifruit, green, raw",
+      "servingGrams": 140,
+      "amounts": {
+        "vitamin-c": {
+          "perServing": 130,
+          "per100g": 92.7,
+          "unit": "mg"
+        },
+        "fibre": {
+          "perServing": 4.2,
+          "per100g": 3,
+          "unit": "g"
+        },
+        "potassium": {
+          "perServing": 437,
+          "per100g": 312,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-strawberries": {
+      "fdcId": "167762",
+      "fdcDescription": "Strawberries, raw",
+      "servingGrams": 150,
+      "amounts": {
+        "vitamin-c": {
+          "perServing": 88.2,
+          "per100g": 58.8,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-blueberries": {
+      "fdcId": "171711",
+      "fdcDescription": "Blueberries, raw",
+      "servingGrams": 80,
+      "amounts": {
+        "vitamin-c": {
+          "perServing": 7.76,
+          "per100g": 9.7,
+          "unit": "mg"
+        },
+        "fibre": {
+          "perServing": 1.92,
+          "per100g": 2.4,
+          "unit": "g"
+        }
+      }
+    },
+    "food-blackberries": {
+      "fdcId": "173946",
+      "fdcDescription": "Blackberries, raw",
+      "servingGrams": 80,
+      "amounts": {
+        "fibre": {
+          "perServing": 4.24,
+          "per100g": 5.3,
+          "unit": "g"
+        },
+        "vitamin-c": {
+          "perServing": 16.8,
+          "per100g": 21,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-raspberries": {
+      "fdcId": "167755",
+      "fdcDescription": "Raspberries, raw",
+      "servingGrams": 80,
+      "amounts": {
+        "fibre": {
+          "perServing": 5.2,
+          "per100g": 6.5,
+          "unit": "g"
+        },
+        "vitamin-c": {
+          "perServing": 21,
+          "per100g": 26.2,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-cherries": {
+      "fdcId": "171719",
+      "fdcDescription": "Cherries, sweet, raw",
+      "servingGrams": 140,
+      "amounts": {}
+    },
+    "food-pomegranate": {
+      "fdcId": "169134",
+      "fdcDescription": "Pomegranates, raw",
+      "servingGrams": 90,
+      "amounts": {
+        "vitamin-k": {
+          "perServing": 14.8,
+          "per100g": 16.4,
+          "unit": "ug"
+        },
+        "fibre": {
+          "perServing": 3.6,
+          "per100g": 4,
+          "unit": "g"
+        }
+      }
+    },
+    "food-apples": {
+      "fdcId": "171688",
+      "fdcDescription": "Apples, raw, with skin (Includes foods for USDA's Food Distribution Program)",
+      "servingGrams": 180,
+      "amounts": {
+        "fibre": {
+          "perServing": 4.32,
+          "per100g": 2.4,
+          "unit": "g"
+        }
+      }
+    },
+    "food-pears": {
+      "fdcId": "169118",
+      "fdcDescription": "Pears, raw",
+      "servingGrams": 180,
+      "amounts": {
+        "fibre": {
+          "perServing": 5.58,
+          "per100g": 3.1,
+          "unit": "g"
+        }
+      }
+    },
+    "food-prunes": {
+      "fdcId": "168162",
+      "fdcDescription": "Plums, dried (prunes), uncooked",
+      "servingGrams": 40,
+      "amounts": {
+        "fibre": {
+          "perServing": 2.84,
+          "per100g": 7.1,
+          "unit": "g"
+        },
+        "vitamin-k": {
+          "perServing": 23.8,
+          "per100g": 59.5,
+          "unit": "ug"
+        },
+        "potassium": {
+          "perServing": 293,
+          "per100g": 732,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-figs": {
+      "fdcId": "174665",
+      "fdcDescription": "Figs, dried, uncooked",
+      "servingGrams": 25,
+      "amounts": {
+        "fibre": {
+          "perServing": 2.45,
+          "per100g": 9.8,
+          "unit": "g"
+        },
+        "calcium": {
+          "perServing": 40.5,
+          "per100g": 162,
+          "unit": "mg"
+        },
+        "potassium": {
+          "perServing": 170,
+          "per100g": 680,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-dark-chocolate": {
+      "fdcId": "170273",
+      "fdcDescription": "Chocolate, dark, 70-85% cacao solids",
+      "servingGrams": 20,
+      "amounts": {
+        "magnesium": {
+          "perServing": 45.6,
+          "per100g": 228,
+          "unit": "mg"
+        },
+        "iron": {
+          "perServing": 2.38,
+          "per100g": 11.9,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-olive-oil": {
+      "fdcId": "171413",
+      "fdcDescription": "Oil, olive, salad or cooking",
+      "servingGrams": 14,
+      "amounts": {
+        "vitamin-e": {
+          "perServing": 2.01,
+          "per100g": 14.35,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-green-tea": {
+      "fdcId": "171917",
+      "fdcDescription": "Beverages, tea, green, brewed, regular",
+      "servingGrams": 240,
+      "amounts": {}
+    },
+    "food-mushrooms": {
+      "fdcId": "169251",
+      "fdcDescription": "Mushrooms, white, raw",
+      "servingGrams": 70,
+      "amounts": {
+        "selenium": {
+          "perServing": 6.51,
+          "per100g": 9.3,
+          "unit": "ug"
+        },
+        "copper": {
+          "perServing": 0.223,
+          "per100g": 0.318,
+          "unit": "mg"
+        },
+        "fibre": {
+          "perServing": 0.7,
+          "per100g": 1,
+          "unit": "g"
+        }
+      }
+    },
+    "food-mushrooms-uv-exposed-or-sun-dried": {
+      "fdcId": "170143",
+      "fdcDescription": "Mushrooms, portabella, exposed to ultraviolet light, raw",
+      "servingGrams": 70,
+      "amounts": {
+        "vitamin-d": {
+          "perServing": 19.9,
+          "per100g": 28.4,
+          "unit": "ug"
+        },
+        "selenium": {
+          "perServing": 13,
+          "per100g": 18.6,
+          "unit": "ug"
+        },
+        "copper": {
+          "perServing": 0.2,
+          "per100g": 0.286,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-seaweed": {
+      "fdcId": "168458",
+      "fdcDescription": "Seaweed, laver, raw",
+      "servingGrams": 3,
+      "amounts": {
+        "protein": {
+          "perServing": 0.174,
+          "per100g": 5.81,
+          "unit": "g"
+        }
+      }
+    },
+    "food-seaweed-kelp-or-kombu": {
+      "fdcId": "168457",
+      "fdcDescription": "Seaweed, kelp, raw",
+      "servingGrams": 5,
+      "amounts": {}
+    },
+    "food-sesame-seeds": {
+      "fdcId": "170150",
+      "fdcDescription": "Seeds, sesame seeds, whole, dried",
+      "servingGrams": 9,
+      "amounts": {
+        "calcium": {
+          "perServing": 87.8,
+          "per100g": 975,
+          "unit": "mg"
+        },
+        "magnesium": {
+          "perServing": 31.6,
+          "per100g": 351,
+          "unit": "mg"
+        },
+        "iron": {
+          "perServing": 1.31,
+          "per100g": 14.55,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-tahini": {
+      "fdcId": "168604",
+      "fdcDescription": "Seeds, sesame butter, tahini, type of kernels unspecified",
+      "servingGrams": 15,
+      "amounts": {
+        "calcium": {
+          "perServing": 21.1,
+          "per100g": 141,
+          "unit": "mg"
+        },
+        "magnesium": {
+          "perServing": 14.3,
+          "per100g": 95,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-molasses": {
+      "fdcId": "168820",
+      "fdcDescription": "Molasses",
+      "servingGrams": 20,
+      "amounts": {
+        "iron": {
+          "perServing": 0.944,
+          "per100g": 4.72,
+          "unit": "mg"
+        },
+        "magnesium": {
+          "perServing": 48.4,
+          "per100g": 242,
+          "unit": "mg"
+        },
+        "potassium": {
+          "perServing": 293,
+          "per100g": 1464,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-coconut-water": {
+      "fdcId": "170174",
+      "fdcDescription": "Nuts, coconut water (liquid from coconuts)",
+      "servingGrams": 200,
+      "amounts": {
+        "potassium": {
+          "perServing": 500,
+          "per100g": 250,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-sea-salt": {
+      "fdcId": "173468",
+      "fdcDescription": "Salt, table",
+      "servingGrams": 1,
+      "amounts": {
+        "sodium": {
+          "perServing": 388,
+          "per100g": 38758,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-garlic": {
+      "fdcId": "169230",
+      "fdcDescription": "Garlic, raw",
+      "servingGrams": 6,
+      "amounts": {}
+    },
+    "food-ginger": {
+      "fdcId": "169231",
+      "fdcDescription": "Ginger root, raw",
+      "servingGrams": 15,
+      "amounts": {}
+    },
+    "food-ginger-dried-ground": {
+      "fdcId": "170926",
+      "fdcDescription": "Spices, ginger, ground",
+      "servingGrams": 2,
+      "amounts": {}
+    },
+    "food-turmeric-dried-ground": {
+      "fdcId": "172231",
+      "fdcDescription": "Spices, turmeric, ground",
+      "servingGrams": 2,
+      "amounts": {}
+    },
+    "food-herring": {
+      "fdcId": "175116",
+      "fdcDescription": "Fish, herring, Atlantic, raw",
+      "servingGrams": 100,
+      "amounts": {
+        "omega-3": {
+          "perServing": 1.67,
+          "per100g": 1.674,
+          "unit": "g",
+          "summedFrom": [
+            "ALA (as USDA’s generic 18:3)",
+            "EPA",
+            "DHA"
+          ]
+        },
+        "vitamin-d": {
+          "perServing": 4.2,
+          "per100g": 4.2,
+          "unit": "ug"
+        },
+        "b12": {
+          "perServing": 13.7,
+          "per100g": 13.67,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-cod": {
+      "fdcId": "171955",
+      "fdcDescription": "Fish, cod, Atlantic, raw",
+      "servingGrams": 120,
+      "amounts": {
+        "protein": {
+          "perServing": 21.4,
+          "per100g": 17.81,
+          "unit": "g"
+        },
+        "b12": {
+          "perServing": 1.09,
+          "per100g": 0.91,
+          "unit": "ug"
+        },
+        "selenium": {
+          "perServing": 39.7,
+          "per100g": 33.1,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-tuna": {
+      "fdcId": "171986",
+      "fdcDescription": "Fish, tuna, light, canned in water, without salt, drained solids",
+      "servingGrams": 100,
+      "amounts": {
+        "protein": {
+          "perServing": 25.5,
+          "per100g": 25.51,
+          "unit": "g"
+        },
+        "omega-3": {
+          "perServing": 0.27,
+          "per100g": 0.27,
+          "unit": "g",
+          "summedFrom": [
+            "EPA",
+            "DHA"
+          ]
+        },
+        "selenium": {
+          "perServing": 80.4,
+          "per100g": 80.4,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-shrimp": {
+      "fdcId": "174210",
+      "fdcDescription": "Crustaceans, shrimp, mixed species, raw (may contain additives to retain moisture)",
+      "servingGrams": 85,
+      "amounts": {
+        "protein": {
+          "perServing": 11.6,
+          "per100g": 13.61,
+          "unit": "g"
+        },
+        "selenium": {
+          "perServing": 25.2,
+          "per100g": 29.6,
+          "unit": "ug"
+        },
+        "b12": {
+          "perServing": 0.944,
+          "per100g": 1.11,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-peas": {
+      "fdcId": "170102",
+      "fdcDescription": "Peas, green, cooked, boiled, drained, with salt",
+      "servingGrams": 90,
+      "amounts": {
+        "fibre": {
+          "perServing": 4.95,
+          "per100g": 5.5,
+          "unit": "g"
+        },
+        "protein": {
+          "perServing": 4.82,
+          "per100g": 5.36,
+          "unit": "g"
+        },
+        "vitamin-c": {
+          "perServing": 12.8,
+          "per100g": 14.2,
+          "unit": "mg"
+        }
+      }
+    },
+    "food-sweetcorn": {
+      "fdcId": "168525",
+      "fdcDescription": "Corn, sweet, yellow, cooked, boiled, drained, with salt",
+      "servingGrams": 150,
+      "amounts": {
+        "fibre": {
+          "perServing": 3.6,
+          "per100g": 2.4,
+          "unit": "g"
+        }
+      }
+    },
+    "food-asparagus": {
+      "fdcId": "168390",
+      "fdcDescription": "Asparagus, cooked, boiled, drained",
+      "servingGrams": 90,
+      "amounts": {
+        "folate": {
+          "perServing": 134,
+          "per100g": 149,
+          "unit": "ug"
+        },
+        "vitamin-k": {
+          "perServing": 45.5,
+          "per100g": 50.6,
+          "unit": "ug"
+        },
+        "fibre": {
+          "perServing": 1.8,
+          "per100g": 2,
+          "unit": "g"
+        }
+      }
+    },
+    "food-artichoke": {
+      "fdcId": "169311",
+      "fdcDescription": "Artichokes, (globe or french), cooked, boiled, drained, with salt",
+      "servingGrams": 120,
+      "amounts": {
+        "fibre": {
+          "perServing": 6.84,
+          "per100g": 5.7,
+          "unit": "g"
+        },
+        "folate": {
+          "perServing": 107,
+          "per100g": 89,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-onions": {
+      "fdcId": "170000",
+      "fdcDescription": "Onions, raw",
+      "servingGrams": 110,
+      "amounts": {
+        "fibre": {
+          "perServing": 1.87,
+          "per100g": 1.7,
+          "unit": "g"
+        }
+      }
+    },
+    "food-leeks": {
+      "fdcId": "169246",
+      "fdcDescription": "Leeks, (bulb and lower leaf-portion), raw",
+      "servingGrams": 90,
+      "amounts": {
+        "fibre": {
+          "perServing": 1.62,
+          "per100g": 1.8,
+          "unit": "g"
+        },
+        "vitamin-k": {
+          "perServing": 42.3,
+          "per100g": 47,
+          "unit": "ug"
+        }
+      }
+    },
+    "food-whole-milk-yoghurt": {
+      "fdcId": "171284",
+      "fdcDescription": "Yogurt, plain, whole milk",
+      "servingGrams": 150,
+      "amounts": {
+        "calcium": {
+          "perServing": 182,
+          "per100g": 121,
+          "unit": "mg"
+        },
+        "protein": {
+          "perServing": 5.21,
+          "per100g": 3.47,
+          "unit": "g"
+        }
+      }
+    },
+    "food-cocoa-powder": {
+      "fdcId": "169593",
+      "fdcDescription": "Cocoa, dry powder, unsweetened",
+      "servingGrams": 10,
+      "amounts": {
+        "magnesium": {
+          "perServing": 49.9,
+          "per100g": 499,
+          "unit": "mg"
+        },
+        "iron": {
+          "perServing": 1.39,
+          "per100g": 13.86,
+          "unit": "mg"
+        }
+      }
+    }
+  }
+}

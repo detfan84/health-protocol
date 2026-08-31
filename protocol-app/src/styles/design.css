@@ -721,3 +721,5 @@ nav.tabs button[aria-current='page'] { color: var(--accent); font-weight: 650; }
   background: var(--surface-2); border-radius: var(--radius-sm);
 }
 .nutrient-note p { margin-bottom: var(--sp-2); font-size: var(--fs-sm); }
+.nutrient-note .amount { color: var(--ink); }
+.why.amount { color: var(--ink); }
