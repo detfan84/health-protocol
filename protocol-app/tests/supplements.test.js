@@ -165,11 +165,10 @@ test('adding one says where in the day it went, and it goes somewhere real', asy
   // The destination is named BEFORE you press anything, not only after. It moved
   // from the button's label to the selected moment when the panel arrived (31
   // Aug) — the requirement did not move with it.
-  const moments = [...card.querySelectorAll('[role=group]')]
-    .find((g) => /^When to take/.test(g.getAttribute('aria-label') ?? ''));
-  const chosen = [...moments.querySelectorAll('button')]
-    .find((b) => b.getAttribute('aria-pressed') === 'true');
-  assert.match(chosen.textContent, /Before bed/, 'the card does not say where it is about to go');
+  const when = card.querySelector('select[id$="-timing"]');
+  assert.ok(when, 'no way to choose the moment');
+  assert.match(when.selectedOptions[0].textContent, /Before bed/, 'the card does not say where it is about to go');
+  assert.match(when.selectedOptions[0].textContent, /suggested/, 'the suggestion is not named as one');
   const btn = [...card.querySelectorAll('button')].find((b) => /Add it to my day/.test(b.textContent));
   fire(btn);
   await settled();
@@ -326,15 +325,15 @@ test('food and supplements are two parts of one page, sharing the nutrient', asy
   // Switch to food and filter by a nutrient: the two sides speak one language.
   fire(group('Food or supplements').find((b) => /^Food/.test(b.textContent)));
   await settled();
-  // The chips are the side's own, not the previous side's left in place.
-  const foodChips = group('Nutrient').map((b) => b.textContent);
-  const magChip = foodChips.find((t) => /^Magnesium/.test(t));
-  assert.ok(magChip, `no magnesium chip — chips were ${JSON.stringify(foodChips.slice(0, 6))}`);
-  assert.doesNotMatch(magChip, /· 5$/, 'the food side is showing the supplement side\'s counts');
+  // The options are the side's own, not the previous side's left in place.
+  const filter = view.querySelector('#nutrient-filter');
+  assert.ok(filter, 'no nutrient filter');
+  const magOpt = [...filter.options].find((o) => /^Magnesium/.test(o.textContent));
+  assert.ok(magOpt, 'magnesium is not offered on the food side');
+  assert.doesNotMatch(magOpt.textContent, /· 5$/, 'the food side is showing the supplement side\'s counts');
 
-  const mag = group('Nutrient').find((b) => /^Magnesium/.test(b.textContent));
-  assert.ok(mag, 'no magnesium chip on the food side');
-  fire(mag);
+  filter.value = 'magnesium';
+  fire(filter, 'change');
   await settled();
   assert.match(view.textContent, /Foods with Magnesium/);
   assert.match(view.textContent, /Pumpkin seeds/);
@@ -528,22 +527,19 @@ test('a shelf supplement can be re-dosed, re-bottled and re-timed before it is a
     .find((d) => /Magnesium glycinate/i.test(d.textContent));
   assert.ok(card, 'magnesium glycinate is not on the shelf');
 
-  const moments = [...card.querySelectorAll('[role=group]')]
-    .find((g) => /^When to take/.test(g.getAttribute('aria-label') ?? ''));
-  assert.ok(moments, 'no way to choose the moment');
-  const chips = [...moments.querySelectorAll('button')];
-  assert.equal(chips.length, 5, 'not every moment is offered');
+  const when = card.querySelector('select[id$="-timing"]');
+  assert.ok(when, 'no way to choose the moment');
+  assert.equal(when.options.length, 5, 'not every moment is offered');
 
   // The suggestion is a suggestion: named as one, and pre-selected.
-  const suggested = chips.filter((b) => /suggested/.test(b.textContent));
+  const suggested = [...when.options].filter((o) => /suggested/.test(o.textContent));
   assert.equal(suggested.length, 1, 'exactly one moment should be marked as the suggestion');
-  assert.equal(suggested[0].getAttribute('aria-pressed'), 'true', 'the suggestion is not pre-selected');
+  assert.equal(suggested[0].selected, true, 'the suggestion is not pre-selected');
 
   // And it loses to the person.
-  const withFood = chips.find((b) => /^With a meal/.test(b.textContent));
-  fire(withFood);
-  assert.equal(withFood.getAttribute('aria-pressed'), 'true', 'picking another moment did not take');
-  assert.equal(suggested[0].getAttribute('aria-pressed'), 'false', 'two moments are selected at once');
+  when.value = 'with-food';
+  fire(when, 'change');
+  assert.equal(suggested[0].selected, false, 'the suggestion overrode the choice');
 
   const setField = (frag, value) => {
     const input = [...card.querySelectorAll('input')].find((i) => i.id.endsWith(frag));
@@ -636,13 +632,15 @@ test('a nutrient explains itself on the card, and leads back to the shelf', asyn
 
   const card = [...view.querySelectorAll('details.lib-item')].find((d) => /Green tea|Olives|Blueberries/.test(d.textContent));
   assert.ok(card, 'no polyphenol food to test with');
-  const strip = [...card.querySelectorAll('[role=group]')]
-    .find((g) => /^What is in/.test(g.getAttribute('aria-label') ?? ''));
+  const strip = card.querySelector('.nutrient-strip');
   assert.ok(strip, 'a food card lists its nutrients but does not let you ask what they are');
-  const chip = [...strip.querySelectorAll('button')][0];
+  // Words already on the card, made tappable — not a new row of chips under
+  // the ones that were already there (Kevin, 31 Aug).
+  assert.equal(strip.querySelectorAll('.chip').length, 0, 'the explainer grew chips again');
+  const chip = strip.querySelectorAll('button.thin-link')[0];
   const name = chip.textContent.trim();
   fire(chip);
-  assert.equal(chip.getAttribute('aria-pressed'), 'true');
+  assert.equal(chip.getAttribute('aria-expanded'), 'true');
   const note = card.querySelector('.nutrient-note');
   assert.ok(note, 'tapping a nutrient explained nothing');
   assert.ok(note.textContent.length > 80, 'the explanation is a stub');

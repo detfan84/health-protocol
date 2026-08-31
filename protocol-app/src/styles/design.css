@@ -714,7 +714,8 @@ nav.tabs button[aria-current='page'] { color: var(--accent); font-weight: 650; }
 
 /* "what is polyphenols" — behind a tap, and out of the way until asked */
 .nutrient-strip { margin: var(--sp-3) 0; }
-.nutrient-strip > .tiny { margin-bottom: var(--sp-1); }
+.nutrient-strip .thin-link { font-size: inherit; }
+.nutrient-filter { padding: var(--sp-3); }
 .nutrient-note {
   margin-top: var(--sp-2); padding: var(--sp-3);
   background: var(--surface-2); border-radius: var(--radius-sm);

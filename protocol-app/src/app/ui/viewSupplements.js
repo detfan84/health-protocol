@@ -198,7 +198,7 @@ export async function viewSupplements({ reload } = {}) {
   const plan = normalisePlan(await store.getSetting(PLAN_KEY));
   const foodById = Object.fromEntries(shelf.foods.map((f) => [f.id, f]));
   const results = h('div');
-  const nutrientRow = h('div.chip-row', { role: 'group', 'aria-label': 'Nutrient' });
+  const nutrientRow = h('div.card.nutrient-filter', {});
 
   /* ------------------------------ the two parts --------------------------- */
   // One page, two halves, one nutrient filter across both — which is the whole
@@ -280,23 +280,31 @@ export async function viewSupplements({ reload } = {}) {
     return state.part === 'food' ? shelf.foods : shelf.supplements;
   }
 
+  // Kevin, 31 Aug: "I don't know why we would put a bunch of random confusing
+  // chips on the screen anyway."
+  //
+  // This was twenty-nine of them in a row above the list — Protein · 7,
+  // Magnesium · 5, Creatine · 1 — a wall of pills somebody has to read past to
+  // reach the thing they came for, and mostly redundant with the search box,
+  // which already matches on nutrient names. One control does the same job and
+  // asks nothing of anybody not using it.
   function paintNutrients() {
     clear(nutrientRow);
     const counts = new Map();
     for (const i of sideItems()) for (const n of i.provides ?? []) counts.set(n, (counts.get(n) ?? 0) + 1);
     const values = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-    if (state.nutrient) {
-      nutrientRow.append(h('button.chip', {
-        'aria-pressed': 'true',
-        onclick: () => { state.nutrient = null; paintNutrients(); paint(); },
-      }, `${NUTRIENTS[state.nutrient] ?? state.nutrient} ✕`));
-      return;
-    }
-    for (const [value, count] of values) {
-      nutrientRow.append(h('button.chip', {
-        onclick: () => { state.nutrient = value; paintNutrients(); paint(); },
-      }, `${NUTRIENTS[value] ?? value} · ${count}`));
-    }
+    nutrientRow.append(
+      h('label', { for: 'nutrient-filter' }, 'Narrow by nutrient'),
+      h('select', {
+        id: 'nutrient-filter',
+        onchange: (e) => { state.nutrient = e.target.value || null; paintNutrients(); paint(); },
+      },
+      h('option', { value: '' }, 'Any nutrient'),
+      values.map(([value, count]) => h('option', {
+        value,
+        selected: value === state.nutrient,
+      }, `${NUTRIENTS[value] ?? value} · ${count}`))),
+    );
   }
 
   /* ------------------------------ painting ------------------------------- */
@@ -448,23 +456,21 @@ export async function viewSupplements({ reload } = {}) {
         oninput: (e) => { d[key] = e.target.value; }, ...attrs,
       }),
     );
-    // Marked in place rather than re-rendered. Rebuilding the row on every tap
-    // destroys the button that was just pressed, which throws focus back to the
-    // body — fine with a mouse, and the end of the road for anybody moving
-    // through this with a keyboard or a screen reader.
-    const momentBtns = MOMENTS.map((m) => {
-      const btn = h('button.chip', {
-        'aria-pressed': d.timing === m.timing ? 'true' : 'false',
-        onclick: () => {
-          d.timing = m.timing;
-          for (const b of momentBtns) b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
-        },
-      }, m.timing === s.timing ? `${m.name} · suggested` : m.name);
-      return btn;
-    });
-    const moments = h('div.chip-row', { role: 'group', 'aria-label': `When to take ${s.name}` }, momentBtns);
+    // Five chips here was five more chips. The form directly above this one has
+    // picked a moment from a <select> since the day it was written, and there
+    // was never a reason for the shelf to invent a second way to answer the
+    // same question.
+    const moments = h('div.field', {},
+      h('label', { for: `add-${s.id}-timing` }, 'When you take it'),
+      h('select', {
+        id: `add-${s.id}-timing`,
+        onchange: (e) => { d.timing = e.target.value; },
+      }, MOMENTS.map((m) => h('option', {
+        value: m.timing,
+        selected: m.timing === d.timing,
+      }, m.timing === s.timing ? `${m.name} — suggested` : m.name))),
+    );
     return h('div.add-panel', {},
-      h('h3.section-title', {}, 'When you take it'),
       moments,
       fieldFor('How much', 'dose', { placeholder: s.typicalDose ?? 'e.g. 1 capsule' }),
       h('h3.section-title', {}, 'Your container'),
@@ -509,29 +515,31 @@ export async function viewSupplements({ reload } = {}) {
   // already knows what magnesium is — and the explainer carries the way back out
   // to the rest of the shelf, because "what is this" and "where else do I get
   // it" are the same curiosity half a second apart.
+  // The card already listed what is in it, as plain text. Making those same
+  // words tappable adds a capability without adding an object to the screen —
+  // where a row of chips underneath them would have been the third control in
+  // one card saying what the first one already said.
   function nutrientChips(item) {
     const list = item.provides ?? [];
     if (!list.length) return null;
-    const row2 = h('div.chip-row', { role: 'group', 'aria-label': `What is in ${item.name}` });
     const note = h('div');
-    for (const n of list) {
-      row2.append(h('button.chip', {
-        'aria-pressed': 'false',
-        onclick: (e) => {
-          const wasOpen = e.currentTarget.getAttribute('aria-pressed') === 'true';
-          for (const b of row2.querySelectorAll('button')) b.setAttribute('aria-pressed', 'false');
-          clear(note);
-          if (wasOpen) return;
-          e.currentTarget.setAttribute('aria-pressed', 'true');
-          note.append(nutrientNote(n));
-        },
-      }, NUTRIENTS[n] ?? n));
-    }
-    return h('div.nutrient-strip', {},
-      h('p.muted.tiny', {}, 'Tap one to see what it is.'),
-      row2,
-      note,
-    );
+    const line = h('p.muted.tiny', { 'aria-label': `What is in ${item.name}` }, 'What is in it: ');
+    const links = list.map((n) => h('button.thin-link', {
+      onclick: (e) => {
+        const wasOpen = e.currentTarget.getAttribute('aria-expanded') === 'true';
+        for (const b of links) b.setAttribute('aria-expanded', 'false');
+        clear(note);
+        if (wasOpen) return;
+        e.currentTarget.setAttribute('aria-expanded', 'true');
+        note.append(nutrientNote(n));
+      },
+      'aria-expanded': 'false',
+    }, NUTRIENTS[n] ?? n));
+    links.forEach((link, i) => {
+      if (i) line.append(' · ');
+      line.append(link);
+    });
+    return h('div.nutrient-strip', {}, line, note);
   }
 
   function nutrientNote(n) {
