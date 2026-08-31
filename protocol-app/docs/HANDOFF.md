@@ -290,6 +290,39 @@ Everything below follows from that sentence.
 per entry — do not hand-edit `src/content/authored/{supplements,foods}.json`, they are
 generated. `npm run supplements` · `npm run foods` · then `npm run catalog`.
 
+### Amounts, and the rule that did NOT change (31 Aug)
+
+`src/content/data/food-amounts.json` — 247 figures across 104 foods, each naming
+the USDA `fdc_id` it came from **and that entry's own description**, so a wrong
+match is legible instead of hidden inside a plausible number. Regenerate with
+`node scripts/build-food-amounts.mjs <unpacked SR Legacy csv dir>`; the 38 MB zip
+is deliberately not in the repo, the output is.
+
+Kevin, 31 Aug: *"nothing compares 'eat this much of this food to equal a standard
+dose'… how much do they have? And compared to what?"* The old rule was **no
+INVENTED numbers**, not no numbers — a measured milligram from a named source is
+the opposite of an invention. Two layers, kept apart on purpose: USDA owns the
+per-100 g figure, **this app owns the gram weight of "a small handful"**, and the
+only arithmetic is the product.
+
+What it refuses, which is the load-bearing part:
+
+- **Six nutrients can never have a figure** — polyphenols and nitrate have USDA
+  columns that *no food fills*; probiotics, collagen, creatine and melatonin are
+  unmeasured. The card says which and why.
+- **IU converts for vitamin D only** (40 IU/µg, exact). Vitamin A depends on
+  retinol vs beta-carotene and E on natural vs synthetic, so neither is guessed.
+- **Six food/nutrient pairs are blank** and named exactly in the test, so a new
+  gap cannot hide under a threshold.
+- **A total of zero is rejected**, because a food is on this shelf *because* it is
+  a good source.
+
+Three real errors the review caught, all of which would have shipped silently:
+`oats` matched **"Buckwheat groats"** (substring); canned salmon matched the
+**boneless** entry when that row exists for the calcium in the bones; flaxseed and
+walnuts came out at **0 g omega-3** because they file ALA under USDA's generic
+`18:3` id while chia files it under both — so first-present-wins, never sum.
+
 ### Still open here
 
 - **Affiliate links.** Kevin asked for these: *"what might be nice is to do affiliate links
