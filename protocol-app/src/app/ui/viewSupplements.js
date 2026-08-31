@@ -47,6 +47,7 @@ import * as store from '../store.js';
 import { guarded } from './announcer.js';
 import { newId, nowIso, localDateKey } from '../../lib/core.js';
 import { makeSupply, doseUnits } from '../trackerOps.js';
+import { NUTRIENT_NOTES } from './nutrientNotes.js';
 
 const PICKS_ID = 'my-picks';
 
@@ -332,6 +333,7 @@ export async function viewSupplements({ reload } = {}) {
         h('span.why', {}, [f.serving, nutrientsOf(f)].filter(Boolean).join(' · ')),
       ),
       f.fields?.release ? h('p.muted', {}, f.fields.release) : null,
+      nutrientChips(f),
       target
         ? h('button.btn' + (inSlot ? '.quiet' : '.primary'), {
           style: 'width:100%',
@@ -385,6 +387,9 @@ export async function viewSupplements({ reload } = {}) {
           state.part = 'food';
           state.nutrient = s2.provides[0];
           paintParts(); paintNutrients(); paint();
+          // Landing halfway down the previous scroll position is the same bug
+          // wearing a different hat.
+          results.scrollIntoView?.({ block: 'start' });
         },
       }, `Eat it instead — foods with ${NUTRIENTS[s2.provides[0]] ?? s2.provides[0]}`)
       : h('p.muted.tiny', {}, 'No food route to this one.');
@@ -398,9 +403,148 @@ export async function viewSupplements({ reload } = {}) {
       ),
       s2.fields?.release ? h('p.muted', {}, s2.fields.release) : null,
       alsoFood,
+      nutrientChips(s2),
       owned
         ? h('button.btn.quiet', { style: 'width:100%', onclick: (e) => removeFromDay(s2, e.currentTarget) }, 'Remove from my day')
-        : h('button.btn.primary', { style: 'width:100%', onclick: (e) => addToDay(s2, e.currentTarget) }, `Add to ${moment.name}`),
+        : addPanel(s2),
+    );
+  }
+
+  /* ----------------------- adding one from the shelf ----------------------- */
+  // Kevin, 31 Aug: "the vitamins, they don't give you the opportunity to adjust
+  // the size of the container or the dosage or anything like that, like we had
+  // discussed. You should be able to do that before you add it to your day. You
+  // should also have the ability to add it to your day where you want to, not
+  // necessarily where it's recommended… It's good to have the suggestion, but
+  // we need to make it so people can just track their routine. If their routine
+  // is their routine, then they can keep their routine."
+  //
+  // So everything the shelf knows is a STARTING POINT and says so. The suggested
+  // moment is pre-selected and labelled as the suggestion; the other four are
+  // one tap away and none of them argue. Same for the bottle — 60 capsules at
+  // one per dose is the shelf's guess, and somebody holding a tub of 120 should
+  // not have to go and correct it on another screen afterwards.
+
+  const drafts = new Map();
+  function draftFor(s) {
+    if (!drafts.has(s.id)) {
+      drafts.set(s.id, {
+        dose: s.typicalDose ?? '',
+        timing: s.timing ?? 'anytime',
+        units: Number.isFinite(s.bottle?.count) ? String(s.bottle.count) : '',
+        perDose: Number.isFinite(s.bottle?.unitsPerDose) ? String(s.bottle.unitsPerDose) : '1',
+        unitName: s.bottle?.unitName ?? 'capsule',
+      });
+    }
+    return drafts.get(s.id);
+  }
+
+  function addPanel(s) {
+    const d = draftFor(s);
+    const fieldFor = (label, key, attrs = {}) => h('div.field', {},
+      h('label', { for: `add-${s.id}-${key}` }, label),
+      h('input', {
+        id: `add-${s.id}-${key}`, type: 'text', value: d[key],
+        oninput: (e) => { d[key] = e.target.value; }, ...attrs,
+      }),
+    );
+    // Marked in place rather than re-rendered. Rebuilding the row on every tap
+    // destroys the button that was just pressed, which throws focus back to the
+    // body — fine with a mouse, and the end of the road for anybody moving
+    // through this with a keyboard or a screen reader.
+    const momentBtns = MOMENTS.map((m) => {
+      const btn = h('button.chip', {
+        'aria-pressed': d.timing === m.timing ? 'true' : 'false',
+        onclick: () => {
+          d.timing = m.timing;
+          for (const b of momentBtns) b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+        },
+      }, m.timing === s.timing ? `${m.name} · suggested` : m.name);
+      return btn;
+    });
+    const moments = h('div.chip-row', { role: 'group', 'aria-label': `When to take ${s.name}` }, momentBtns);
+    return h('div.add-panel', {},
+      h('h3.section-title', {}, 'When you take it'),
+      moments,
+      fieldFor('How much', 'dose', { placeholder: s.typicalDose ?? 'e.g. 1 capsule' }),
+      h('h3.section-title', {}, 'Your container'),
+      h('div.field-row', {},
+        fieldFor('Units in it', 'units', { type: 'number', inputmode: 'numeric', placeholder: '60' }),
+        fieldFor('Units per dose', 'perDose', { type: 'number', inputmode: 'numeric' }),
+        fieldFor('Called', 'unitName', { placeholder: 'capsule' }),
+      ),
+      h('p.muted.tiny', {}, 'Whatever the shelf guessed, yours wins. Leave the count blank if you would rather not track what is left — blank means "not counting", never zero.'),
+      h('button.btn.primary', {
+        style: 'width:100%',
+        onclick: (e) => addFromShelf(s, e.currentTarget),
+      }, 'Add it to my day'),
+    );
+  }
+
+  function addFromShelf(s, btn) {
+    const d = draftFor(s);
+    const units = Number(d.units);
+    const perDose = Number(d.perDose);
+    const item = { ...planItemFrom(s), timing: d.timing };
+    if (d.dose.trim()) item.dose = d.dose.trim(); else delete item.dose;
+    // Blank is not zero (ruling A). No units-per-dose means no bottle to count.
+    if (Number.isFinite(perDose) && perDose > 0) {
+      item.bottle = {
+        unitsPerDose: perDose,
+        unitName: d.unitName.trim() || 'unit',
+        ...(Number.isFinite(units) && units > 0 ? { count: units } : {}),
+      };
+    } else {
+      delete item.bottle;
+    }
+    return place(item, d.timing, btn, 'Added to');
+  }
+
+  /* -------------------------- what a nutrient is --------------------------- */
+  // Kevin, 31 Aug: "it's nice to see that it has polyphenols or whatever too,
+  // but what are those? We should be able to click to get some education on it
+  // if we want."
+  //
+  // "If we want" is the design. Behind a tap, never in the way of somebody who
+  // already knows what magnesium is — and the explainer carries the way back out
+  // to the rest of the shelf, because "what is this" and "where else do I get
+  // it" are the same curiosity half a second apart.
+  function nutrientChips(item) {
+    const list = item.provides ?? [];
+    if (!list.length) return null;
+    const row2 = h('div.chip-row', { role: 'group', 'aria-label': `What is in ${item.name}` });
+    const note = h('div');
+    for (const n of list) {
+      row2.append(h('button.chip', {
+        'aria-pressed': 'false',
+        onclick: (e) => {
+          const wasOpen = e.currentTarget.getAttribute('aria-pressed') === 'true';
+          for (const b of row2.querySelectorAll('button')) b.setAttribute('aria-pressed', 'false');
+          clear(note);
+          if (wasOpen) return;
+          e.currentTarget.setAttribute('aria-pressed', 'true');
+          note.append(nutrientNote(n));
+        },
+      }, NUTRIENTS[n] ?? n));
+    }
+    return h('div.nutrient-strip', {},
+      h('p.muted.tiny', {}, 'Tap one to see what it is.'),
+      row2,
+      note,
+    );
+  }
+
+  function nutrientNote(n) {
+    const label = NUTRIENTS[n] ?? n;
+    return h('div.nutrient-note', {},
+      h('p', {}, NUTRIENT_NOTES[n] ?? `No plain-words explanation is written for ${label} yet.`),
+      h('button.thin-link', {
+        onclick: () => {
+          state.part = 'food';
+          state.nutrient = n;
+          paintParts(); paintNutrients(); paint();
+        },
+      }, `Foods with ${label}`),
     );
   }
 
@@ -570,20 +714,35 @@ export async function viewSupplements({ reload } = {}) {
     clear(results);
 
     if (state.part === 'food') {
-      if (state.planning) results.append(planningBanner());
-      results.append(mealPlanCard());
+      // Kevin, 31 Aug, arriving here from a supplement: "when you click on one
+      // and you're like, okay, eat it instead, foods with calcium — that should
+      // show up before."
+      //
+      // It should, and it did not: the plan and the shopping list sat above the
+      // answer and pushed it off the screen. Neither of them knows anything
+      // about calcium. A filter is a question, so when one is on, the answer
+      // goes first and the two cards that ignore it drop below.
+      const filtered = !!state.nutrient || !!state.q;
+
+      const cards = [];
+      if (state.planning) cards.push(planningBanner());
+      cards.push(mealPlanCard());
       const list = shoppingCard();
-      if (list) results.append(list);
+      if (list) cards.push(list);
+
       const found = shelf.foods.filter(matches);
-      results.append(h('h2.section-title', {},
+      const answer = [h('h2.section-title', {},
         state.nutrient
           ? `Foods with ${NUTRIENTS[state.nutrient] ?? state.nutrient} — ${found.length}`
-          : `Food — ${found.length}`));
+          : `Food — ${found.length}`)];
       if (!found.length) {
-        results.append(h('div.card', {}, h('p.muted', {},
+        answer.push(h('div.card', {}, h('p.muted', {},
           'Nothing here matches. Not every nutrient has a good food source, and where it does not, that is worth knowing rather than working around.')));
       }
-      results.append(...foodGroup(found));
+      answer.push(...foodGroup(found));
+
+      if (filtered) results.append(...answer, ...cards);
+      else results.append(...cards, ...answer);
       return;
     }
 
@@ -652,10 +811,6 @@ export async function viewSupplements({ reload } = {}) {
       ...(s.fields ? { fields: s.fields } : {}),
       ...(s.bottle ? { bottle: { ...s.bottle } } : {}),
     };
-  }
-
-  function addToDay(s, btn) {
-    return place(planItemFrom(s), s.timing, btn, 'Added to');
   }
 
   function removeFromDay(s, btn) {

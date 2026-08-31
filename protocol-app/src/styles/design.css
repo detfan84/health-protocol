@@ -140,6 +140,21 @@ p  { margin: var(--sp-2) 0; }
 .chip {
   font-size: var(--fs-sm); color: var(--ink-muted);
   background: var(--surface-2); border-radius: 999px; padding: 1px var(--sp-2);
+  /* A chip is often a <button>, and a button with no border declared takes the
+     browser's own: 2px OUTSET WHITE. Outset draws its top and left edges
+     brightest, so every chip wore a white bevel — on Desert night, a line
+     brighter than the text it sat above. Kevin, 31 Aug: "there's this
+     light-coloured line that goes above it, which is actually brighter than
+     the… it makes it distracting and hard to read."
+     Transparent rather than none, so the pressed state can colour it without
+     the chip changing size. */
+  border: 1px solid transparent;
+}
+button.chip { cursor: pointer; }
+/* Selected. There was no rule for this at all, so filtering by magnesium
+   looked exactly like not filtering by magnesium. */
+.chip[aria-pressed='true'] {
+  background: var(--accent); border-color: var(--accent); color: var(--accent-ink);
 }
 .chip.now-tag { color: var(--accent-ink); background: var(--accent); }
 
@@ -412,7 +427,12 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .check[aria-pressed='true'] + .grow .name { color: var(--ink-muted); }
 
-input[type='text'], input[type='number'], input[type='time'], textarea, select {
+/* Not `input[type='text']`: that is an ATTRIBUTE selector, and an <input> built
+   without a type attribute reports type "text" from the DOM while matching no
+   such rule. Four fields on the food screen were falling through to the
+   browser's grey inset border because of it. Match by exclusion instead, so a
+   field is styled whether or not somebody remembered the attribute. */
+input:not([type='checkbox']):not([type='radio']):not([type='range']), textarea, select {
   width: 100%;
   min-height: var(--tap);
   padding: var(--sp-2) var(--sp-3);
@@ -685,3 +705,18 @@ nav.tabs button[aria-current='page'] { color: var(--accent); font-weight: 650; }
 .food-forms { margin-left: var(--sp-4); border-left: 2px solid var(--line); padding-left: var(--sp-3); }
 .food-forms > .food-form { background: transparent; box-shadow: none; }
 .food-family { margin-bottom: var(--sp-3); }
+
+/* the panel that sets a dose and a moment before anything is added */
+.add-panel { border-top: 1px solid var(--line); margin-top: var(--sp-3); padding-top: var(--sp-3); }
+.add-panel > .section-title { margin-top: var(--sp-4); }
+.add-panel > .section-title:first-child { margin-top: 0; }
+.add-panel .chip-row { margin-bottom: var(--sp-3); }
+
+/* "what is polyphenols" — behind a tap, and out of the way until asked */
+.nutrient-strip { margin: var(--sp-3) 0; }
+.nutrient-strip > .tiny { margin-bottom: var(--sp-1); }
+.nutrient-note {
+  margin-top: var(--sp-2); padding: var(--sp-3);
+  background: var(--surface-2); border-radius: var(--radius-sm);
+}
+.nutrient-note p { margin-bottom: var(--sp-2); font-size: var(--fs-sm); }

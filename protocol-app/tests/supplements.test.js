@@ -162,9 +162,15 @@ test('adding one says where in the day it went, and it goes somewhere real', asy
 
   const card = [...view.querySelectorAll('details.lib-item')]
     .find((d) => /Magnesium glycinate/.test(d.textContent));
-  const btn = [...card.querySelectorAll('button')].find((b) => /^Add to/.test(b.textContent));
-  // The button names the destination BEFORE you press it, not only after.
-  assert.match(btn.textContent, /Add to Before bed/);
+  // The destination is named BEFORE you press anything, not only after. It moved
+  // from the button's label to the selected moment when the panel arrived (31
+  // Aug) — the requirement did not move with it.
+  const moments = [...card.querySelectorAll('[role=group]')]
+    .find((g) => /^When to take/.test(g.getAttribute('aria-label') ?? ''));
+  const chosen = [...moments.querySelectorAll('button')]
+    .find((b) => b.getAttribute('aria-pressed') === 'true');
+  assert.match(chosen.textContent, /Before bed/, 'the card does not say where it is about to go');
+  const btn = [...card.querySelectorAll('button')].find((b) => /Add it to my day/.test(b.textContent));
   fire(btn);
   await settled();
   assert.match(btn.textContent, /Added to Before bed/);
@@ -497,4 +503,178 @@ test('a food leaves the shopping list when it leaves the plan', async () => {
 
   assert.doesNotMatch(view.textContent, /Shopping list/, 'the food outlived the plan that put it there');
   assert.deepEqual((await store.getSetting('meal.plan')).days.tue.dinner, []);
+});
+
+/* --------------------- the shelf suggests, you decide --------------------- */
+// Kevin, 31 Aug: "The vitamins, they don't give you the opportunity to adjust
+// the size of the container or the dosage or anything like that, like we had
+// discussed. You should be able to do that before you add it to your day. You
+// should also have the ability to add it to your day where you want to, not
+// necessarily where it's recommended… It's good to have the suggestion, but we
+// need to make it so people can just track their routine. If their routine is
+// their routine, then they can keep their routine."
+
+test('a shelf supplement can be re-dosed, re-bottled and re-timed before it is added', async () => {
+  const { viewSupplements } = await import('../src/app/ui/viewSupplements.js');
+  store._resetForTests();
+  await store.ready({ name: 'sup-adjust' });
+  const view = await viewSupplements({});
+  document.querySelector('main').replaceChildren(view);
+  await settled();
+
+  // Magnesium glycinate is suggested before bed. Somebody who takes it with
+  // breakfast, two capsules from a tub of 120, must be able to say so here.
+  const card = [...view.querySelectorAll('details.lib-item')]
+    .find((d) => /Magnesium glycinate/i.test(d.textContent));
+  assert.ok(card, 'magnesium glycinate is not on the shelf');
+
+  const moments = [...card.querySelectorAll('[role=group]')]
+    .find((g) => /^When to take/.test(g.getAttribute('aria-label') ?? ''));
+  assert.ok(moments, 'no way to choose the moment');
+  const chips = [...moments.querySelectorAll('button')];
+  assert.equal(chips.length, 5, 'not every moment is offered');
+
+  // The suggestion is a suggestion: named as one, and pre-selected.
+  const suggested = chips.filter((b) => /suggested/.test(b.textContent));
+  assert.equal(suggested.length, 1, 'exactly one moment should be marked as the suggestion');
+  assert.equal(suggested[0].getAttribute('aria-pressed'), 'true', 'the suggestion is not pre-selected');
+
+  // And it loses to the person.
+  const withFood = chips.find((b) => /^With a meal/.test(b.textContent));
+  fire(withFood);
+  assert.equal(withFood.getAttribute('aria-pressed'), 'true', 'picking another moment did not take');
+  assert.equal(suggested[0].getAttribute('aria-pressed'), 'false', 'two moments are selected at once');
+
+  const setField = (frag, value) => {
+    const input = [...card.querySelectorAll('input')].find((i) => i.id.endsWith(frag));
+    assert.ok(input, `no ${frag} field`);
+    input.value = value;
+    fire(input, 'input');
+  };
+  setField('-dose', '2 capsules');
+  setField('-units', '120');
+  setField('-perDose', '2');
+  setField('-unitName', 'capsule');
+
+  fire([...card.querySelectorAll('button')].find((b) => /Add it to my day/.test(b.textContent)));
+  await settled();
+
+  const picks = (await store.loadProtocols()).find((p) => p.id === 'my-picks');
+  const placed = picks.blocks.flatMap((b) => b.items.map((i) => ({ i, b })))
+    .find(({ i }) => /Magnesium glycinate/i.test(i.name));
+  assert.ok(placed, 'it never reached the day');
+  assert.equal(placed.i.timing, 'with-food', 'it landed on the suggested moment, not the chosen one');
+  assert.equal(placed.b.name, 'With a meal');
+  assert.equal(placed.i.dose, '2 capsules', 'the typed dose was thrown away');
+  assert.equal(placed.i.bottle.count, 120, 'the container size was thrown away');
+  assert.equal(placed.i.bottle.unitsPerDose, 2);
+
+  // And the supply record agrees, or the reorder count is wrong from day one.
+  const supply = await store.getSetting(`supply:${placed.i.id}`);
+  assert.equal(supply.count, 120);
+  assert.equal(supply.unitsPerDose, 2);
+});
+
+test('a blank container count on a shelf item leaves the shelf default alone', async () => {
+  const { viewSupplements } = await import('../src/app/ui/viewSupplements.js');
+  store._resetForTests();
+  await store.ready({ name: 'sup-blank' });
+  const view = await viewSupplements({});
+  document.querySelector('main').replaceChildren(view);
+  await settled();
+  const card = [...view.querySelectorAll('details.lib-item')]
+    .find((d) => /Magnesium glycinate/i.test(d.textContent));
+  const units = [...card.querySelectorAll('input')].find((i) => i.id.endsWith('-units'));
+  units.value = '';
+  fire(units, 'input');
+  fire([...card.querySelectorAll('button')].find((b) => /Add it to my day/.test(b.textContent)));
+  await settled();
+  const picks = (await store.loadProtocols()).find((p) => p.id === 'my-picks');
+  const item = picks.blocks.flatMap((b) => b.items).find((i) => /Magnesium glycinate/i.test(i.name));
+  assert.equal(item.bottle.count, undefined, 'a cleared count became a number');
+  // Untouched fields keep what the shelf offered — clearing one is not a reason
+  // to lose the others.
+  const shelfItem = supplements.find((x) => x.id === 'sup-magnesium-glycinate');
+  assert.equal(item.bottle.unitsPerDose, shelfItem.bottle.unitsPerDose,
+    'a blank count also wiped units per dose');
+});
+
+/* ------------------------- what is a polyphenol -------------------------- */
+// Kevin, 31 Aug: "it's nice to see that it has polyphenols or whatever too, but
+// what are those? We should be able to click to get some education on it if we
+// want."
+
+test('every nutrient the app names can explain itself', async () => {
+  const { NUTRIENTS } = await import('../src/app/ui/viewSupplements.js');
+  const { NUTRIENT_NOTES } = await import('../src/app/ui/nutrientNotes.js');
+  for (const key of Object.keys(NUTRIENTS)) {
+    const note = NUTRIENT_NOTES[key];
+    assert.ok(note, `${key} is shown to people with nothing to say about it`);
+    assert.ok(note.length > 80, `${key}'s note is too thin to be worth a tap`);
+  }
+  // The rules the notes are written to, checked rather than trusted: no doses,
+  // no daily values, no telling anybody what a nutrient will do for them.
+  for (const [key, note] of Object.entries(NUTRIENT_NOTES)) {
+    assert.doesNotMatch(note, /\b\d+\s*(mg|mcg|µg|g|IU)\b/i, `${key}'s note states a dose`);
+    assert.doesNotMatch(note, /daily value|% of your|recommended daily/i, `${key}'s note invents a daily value`);
+    assert.doesNotMatch(note, /\b(cures?|treats?|prevents?|boosts?)\b/i, `${key}'s note makes a claim`);
+  }
+});
+
+test('a nutrient explains itself on the card, and leads back to the shelf', async () => {
+  const { viewSupplements } = await import('../src/app/ui/viewSupplements.js');
+  store._resetForTests();
+  await store.ready({ name: 'sup-learn' });
+  const view = await viewSupplements({});
+  document.querySelector('main').replaceChildren(view);
+  await settled();
+  const group = (root2, label) => [...root2.querySelectorAll('[role=group]')]
+    .find((x) => x.getAttribute('aria-label') === label);
+  fire([...group(view, 'Food or supplements').querySelectorAll('button')]
+    .find((b) => /^Food/.test(b.textContent)));
+  await settled();
+
+  const card = [...view.querySelectorAll('details.lib-item')].find((d) => /Green tea|Olives|Blueberries/.test(d.textContent));
+  assert.ok(card, 'no polyphenol food to test with');
+  const strip = [...card.querySelectorAll('[role=group]')]
+    .find((g) => /^What is in/.test(g.getAttribute('aria-label') ?? ''));
+  assert.ok(strip, 'a food card lists its nutrients but does not let you ask what they are');
+  const chip = [...strip.querySelectorAll('button')][0];
+  const name = chip.textContent.trim();
+  fire(chip);
+  assert.equal(chip.getAttribute('aria-pressed'), 'true');
+  const note = card.querySelector('.nutrient-note');
+  assert.ok(note, 'tapping a nutrient explained nothing');
+  assert.ok(note.textContent.length > 80, 'the explanation is a stub');
+  assert.match(note.textContent, new RegExp(`Foods with ${name}`), 'no way back out to the other sources');
+
+  // Tapping it again puts it away.
+  fire(chip);
+  assert.equal(card.querySelector('.nutrient-note'), null, 'the note will not close');
+});
+
+test('a filter puts the answer above the cards that ignore it', async () => {
+  // "When you click on one and you're like, okay, eat it instead, foods with
+  // calcium — that should show up before."
+  const { viewSupplements } = await import('../src/app/ui/viewSupplements.js');
+  store._resetForTests();
+  await store.ready({ name: 'sup-order' });
+  await store.putSetting({ key: 'meal.plan', days: { tue: { dinner: ['food-pumpkin-seeds'] } } });
+  const view = await viewSupplements({});
+  document.querySelector('main').replaceChildren(view);
+  await settled();
+
+  const supCard = [...view.querySelectorAll('details.lib-item')]
+    .find((d) => /Eat it instead — foods with/.test(d.textContent));
+  assert.ok(supCard, 'no supplement offers the food route');
+  fire([...supCard.querySelectorAll('button')].find((b) => /Eat it instead/.test(b.textContent)));
+  await settled();
+
+  const text = view.textContent;
+  const answerAt = text.search(/Foods with /);
+  const planAt = text.search(/Meal plan/);
+  const listAt = text.search(/Shopping list/);
+  assert.ok(answerAt >= 0, 'the filtered answer never rendered');
+  assert.ok(answerAt < planAt, 'the meal plan still outranks the question that was asked');
+  assert.ok(answerAt < listAt, 'the shopping list still outranks the question that was asked');
 });
