@@ -50,6 +50,36 @@ export async function applyMorning(morning) {
   return changed;
 }
 
+/**
+ * Once sleep position is known, the wake block stops being fixed content.
+ *
+ * Kevin, 1 Sep: "the wake block should not be fixed content… it doesn't
+ * necessarily need to be the same thing every day." The composed day now deals
+ * "Unwind the night" per position — so the two fixed extras that shipped before
+ * anybody was asked come out of the static block. What stays is the floor
+ * (law 6): sixty seconds of rocking is still the whole block on a bad morning,
+ * every morning, unmoved.
+ *
+ * Only the two seeded ids are removed. Anything a person added to this block
+ * themselves is theirs and is not touched.
+ */
+export async function applySleep(position) {
+  if (!position) return false;
+  const SEEDED_EXTRAS = new Set(['arc-wake-lat', 'arc-wake-chest']);
+  const protocols = await store.loadProtocols();
+  let changed = false;
+  for (const p of protocols) {
+    const block = p.blocks?.find((b) => b.id === 'arc-wake');
+    if (!block) continue;
+    const kept = block.items.filter((i) => !SEEDED_EXTRAS.has(i.id));
+    if (kept.length === block.items.length) continue;
+    block.items = kept;
+    await store.saveProtocol(p);
+    changed = true;
+  }
+  return changed;
+}
+
 export async function viewAssessment({ done, reload } = {}) {
   const root = h('div');
   const previous = (await store.getSetting('composer.assessment'))?.value ?? {};
@@ -59,11 +89,12 @@ export async function viewAssessment({ done, reload } = {}) {
     dial: previous.dial ?? 'standard',
     equipment: [...(previous.equipment ?? [])],
     morning: previous.morning ?? null,
+    sleep: previous.sleep ?? null,
   };
 
   root.append(
     h('h1', {}, previous.areas ? 'Your assessment' : 'A few questions'),
-    h('p.muted', {}, 'Five of them, and every one changes what the app deals you. Skip any of it — nothing here is required, nothing is a diagnosis, and none of it closes anything off.'),
+    h('p.muted', {}, 'Six of them, and every one changes what the app deals you. Skip any of it — nothing here is required, nothing is a diagnosis, and none of it closes anything off.'),
   );
 
   const results = h('div');
@@ -130,6 +161,7 @@ export async function viewAssessment({ done, reload } = {}) {
       for (const event of events) await store.addFinding(event);
       for (const rec of settings) await store.putSetting({ ...rec, updatedAt: nowIso() });
       const renamed = await applyMorning(answers.morning);
+      const rewoken = await applySleep(answers.sleep);
       // Today has already been dealt from the old state. Clear it so the next
       // look composes from what was just said rather than making somebody wait
       // until tomorrow to see any of this matter.
@@ -137,7 +169,7 @@ export async function viewAssessment({ done, reload } = {}) {
       // the next look at Today deals fresh instead of showing a day composed
       // from answers that have just been replaced.
       await store.putSetting({ key: dealtKey(localDateKey()), cleared: true, updatedAt: nowIso() });
-      return { events, notes, renamed };
+      return { events, notes, renamed, rewoken };
     }, {
       what: 'Saving your answers',
       onOk: (out) => { btn.disabled = false; showReceipt(out); },
@@ -151,7 +183,7 @@ export async function viewAssessment({ done, reload } = {}) {
    * What was heard and what it does, in the person's own words. Never a result,
    * never a category, and never anything they did not say themselves.
    */
-  function showReceipt({ events, notes, renamed }) {
+  function showReceipt({ events, notes, renamed, rewoken }) {
     clear(results);
     const card = h('div.card', {}, h('div.card-head', {}, h('h2', {}, 'What that changes')));
 
@@ -171,6 +203,16 @@ export async function viewAssessment({ done, reload } = {}) {
 
     if (answers.equipment.length) {
       card.append(h('p', {}, `The app will stop offering work that needs anything beyond what you have. Most of the library needs nothing at all, so this narrows less than it sounds.`));
+    }
+
+    if (rewoken || answers.sleep) {
+      const how = {
+        side: "a side sleeper's night",
+        back: "a back sleeper's night",
+        stomach: "a stomach sleeper's night",
+        mixed: 'the night — drawn from every position until you refine yours',
+      }[answers.sleep];
+      if (how) card.append(h('p', {}, `Your wake block stops being the same three things: each morning it deals movement that unwinds ${how}, and rotates day to day. The sixty-second floor stays put.`));
     }
 
     if (renamed) {

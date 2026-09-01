@@ -23,6 +23,7 @@ import { nowIso, localDateKey } from '../../lib/core.js';
 import { buildLedger, reachableNodes } from './ledger.js';
 import { weighFindings, itemPreferences } from './findings.js';
 import { dealDay } from './dealer.js';
+import { dealWake } from './wake.js';
 
 export const dealtKey = (date) => `dealt:${date}`;
 
@@ -65,11 +66,12 @@ export async function dealtFor(date, { now = new Date(), dial } = {}) {
   if (date !== localDateKey()) return null;
 
   const catalog = await loadCatalog();
-  const [days, findings, settings, kit] = await Promise.all([
+  const [days, findings, settings, kit, sleep] = await Promise.all([
     store.loadRecentDays(date),
     store.loadFindings(),
     store.getSetting('composer.dial'),
     store.getSetting('composer.equipment'),
+    store.getSetting('composer.sleep'),
   ]);
 
   const ledger = buildLedger({ days: Object.values(days ?? {}), itemsById: catalog.itemsById, now });
@@ -89,10 +91,18 @@ export async function dealtFor(date, { now = new Date(), dial } = {}) {
   // Ids and reasons, not whole items. The catalogue is the source of the item;
   // storing a copy would mean a card edited tomorrow still showing yesterday's
   // wording forever.
+  // The wake block rotates by sleep position — unwind-the-night, finally
+  // implemented (Kevin, 1 Sep: "the wake block should not be fixed content").
+  // Same equipment rule as the main deal: unanswered filters nothing (D24).
+  const owns = Array.isArray(kit?.value) ? new Set([...kit.value, 'none']) : null;
+  const usable = (i) => owns === null || (i.equipment ?? []).every((e) => owns.has(e));
+  const wake = dealWake({ position: sleep?.value ?? null, date, itemsById: catalog.itemsById, usable });
+
   const record = {
     key: dealtKey(date),
     date,
     dial: dealt.dial,
+    wake,
     dealtAt: nowIso(),
     session: dealt.session.map((c) => ({ id: c.item.id, why: c.why })),
     snacks: dealt.snacks.map((c) => ({ id: c.item.id, why: c.why })),
@@ -127,8 +137,20 @@ export function blocksFrom(dealt, catalog) {
     ...(dealt.medicine ? [resolve(dealt.medicine)] : []),
   ].filter(Boolean);
   const snacks = dealt.snacks.map(resolve).filter(Boolean);
+  const wake = (dealt.wake ?? []).map(resolve).filter(Boolean);
 
   const blocks = [];
+  // First among the dealt cards, because it is the first thing in the day. No
+  // clock on it, for the same reason nothing composed carries one — but it
+  // leads by order, and its name says what it is for.
+  if (wake.length) {
+    blocks.push({
+      id: 'composed-wake',
+      name: 'Unwind the night',
+      order: 0,
+      items: wake,
+    });
+  }
   if (session.length) {
     blocks.push({
       id: 'composed-session',

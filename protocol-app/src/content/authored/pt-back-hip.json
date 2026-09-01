@@ -1,0 +1,202 @@
+{
+  "format": "shoes-of-peace/authored@1",
+  "module": "pt-back-hip",
+  "note": "A physical-therapy home program for the low back and hips, September 2026 — brought in with corrections from actually doing them under supervision, which twice contradicted the printed sheet. Two of the sheet's exercises are deliberately NOT here: Superman and Shoulder Tap already sit on the shelf as ex-superman and ex-shoulder-tap, each with difficulty levels, and a second copy of the same movement is a duplicate, not a module. Child's Pose likewise lives at st-childs_pose. Where the sheet's description was wrong — the wall slide is done FACING the wall, leaning into it, not with your back against it — the corrected version is what shipped, and the correction is recorded on the card.",
+  "items": [
+    {
+      "id": "pt-lower-trunk-rotation",
+      "name": "Lower trunk rotations (wig-wags)",
+      "kind": "bodywork",
+      "category": "mobility",
+      "tracking": "check",
+      "tier": "established",
+      "sourceNote": "PT home program, Sep 2026",
+      "dose": "10 each way · hold 5 sec at the end",
+      "muscles": ["lower back", "obliques", "hips"],
+      "context": ["bed", "floor"],
+      "why": "The spine gets rotation before it gets load. Lying with the knees bent and letting them fall side to side moves every lumbar segment gently through its range while the floor holds your torso still — range first, effort later.",
+      "fields": {
+        "tool": "Nothing. A bed works; a floor is firmer and gives a touch more feedback.",
+        "release": "On your back, knees bent, heels down. Let both knees fall to one side as far as they go comfortably, hold five seconds, bring them back up, and fall to the other side. The torso stays put — the movement is the knees swinging, not the shoulders following.",
+        "notice": "One side usually goes further than the other. That difference is information, not a fault to force out."
+      }
+    },
+    {
+      "id": "pt-single-knee-to-chest",
+      "name": "Single knee to chest",
+      "kind": "bodywork",
+      "category": "release",
+      "role": "stretch",
+      "tracking": "check",
+      "tier": "established",
+      "sourceNote": "PT home program, Sep 2026",
+      "dose": "10 per side · hold 5 sec",
+      "sides": true,
+      "muscles": ["lower back", "glutes", "hips"],
+      "context": ["bed", "floor"],
+      "why": "One leg at a time, so the low back gets a gentle flexion stretch without both hips leaving their slack at once. The straight leg anchors the pelvis; the pulled one does the work.",
+      "fields": {
+        "tool": "Nothing.",
+        "release": "On your back. Raise one leg, hold behind the thigh just under the knee, and draw it gently toward your chest. The other leg stays down. Lower, repeat, then switch sides.",
+        "notice": "The stretch should land in the back of the hip and the low back — not a pinch in the front of the hip. If it pinches in front, draw the knee slightly outward."
+      }
+    },
+    {
+      "id": "pt-figure4-press",
+      "name": "Figure-4 with the knee pressed away",
+      "kind": "bodywork",
+      "category": "release",
+      "role": "stretch",
+      "variationOf": "st-figure_four",
+      "tracking": "check",
+      "tier": "established",
+      "sourceNote": "PT home program, Sep 2026 — the modified FABER",
+      "dose": "10 per side · hold 10 sec",
+      "sides": true,
+      "muscles": ["deep hip rotators (piriformis group)", "glutes", "hips", "groin"],
+      "context": ["bed", "floor"],
+      "why": "The plain figure-4 pulls the crossed leg toward you. This version PUSHES the crossed knee away instead, which opens the hip into external rotation from the other direction and often reaches a spot the pull misses — including one that refers relief into the low back.",
+      "fields": {
+        "tool": "Nothing.",
+        "release": "On your back, one foot on the floor with that knee bent. Rest the other ankle on the bent knee. Now press the crossed knee away from you with your hand and hold ten seconds. Switch sides.",
+        "notice": "A deep ache that reads as relief — in the hip or even the low back — is the spot working. Compare sides; they will not feel the same."
+      }
+    },
+    {
+      "id": "pt-piriformis-cross",
+      "name": "Piriformis stretch — knee to the opposite shoulder",
+      "kind": "bodywork",
+      "category": "release",
+      "role": "stretch",
+      "tracking": "check",
+      "tier": "established",
+      "sourceNote": "PT home program, Sep 2026",
+      "dose": "10 per side · hold 10 sec",
+      "sides": true,
+      "muscles": ["piriformis", "deep hip rotators (piriformis group)", "glutes"],
+      "context": ["bed", "floor"],
+      "why": "The piriformis runs diagonally across the back of the hip, so the stretch that finds it is diagonal too: the knee travels across the midline toward the opposite shoulder, not straight up.",
+      "fields": {
+        "tool": "Nothing.",
+        "release": "On your back, one foot on the floor, the other ankle crossed over that knee. Take the free knee with your opposite hand and draw it up and across your body toward the opposite shoulder until you feel it in the buttock. Hold ten seconds. Switch.",
+        "notice": "Felt in the buttock, not the groin. If it lands in the groin, bring the knee higher before crossing."
+      }
+    },
+    {
+      "id": "pt-eccentric-cobra",
+      "name": "Eccentric cobra",
+      "kind": "bodywork",
+      "category": "range",
+      "variationOf": "st-cobra",
+      "tracking": "sets",
+      "amount": { "sets": 3, "reps": 10 },
+      "tier": "established",
+      "sourceNote": "PT home program, Sep 2026",
+      "dose": "3 × 10 · lower for a slow count",
+      "muscles": ["spinal erectors", "glutes", "transverse abdominis", "pelvic floor"],
+      "context": ["floor"],
+      "why": "An ordinary cobra with the work moved to the way down. Squeezing the glutes and bracing the deep core while you LOWER slowly is the loaded half — the press up just gets you there. Skipping the squeeze turns it back into a plain press-up of the spine, which is a different and lesser exercise.",
+      "levels": [
+        { "level": 1, "name": "Half range", "note": "Forearms stay down, sphinx height" },
+        { "level": 2, "name": "Full, with the squeeze", "note": "Glutes, pelvic floor and deep core on for the whole lowering" },
+        { "level": 3, "name": "Slower still", "note": "Five-count lowering, no rest at the bottom" }
+      ],
+      "fields": {
+        "tool": "A mat.",
+        "release": "Face down. Press through the hands into cobra. At the top, squeeze the glutes, draw the pelvic floor and lower belly on, and keep all of it engaged while you lower back down slowly. The hips stay on the floor the whole time — if they lift, you have pressed past cobra into something else.",
+        "notice": "The squeeze is the exercise. If you cannot feel the glutes working on the way down, do less range and find them first."
+      }
+    },
+    {
+      "id": "pt-open-book",
+      "name": "Upper trunk rotation (open book)",
+      "kind": "bodywork",
+      "category": "mobility",
+      "tracking": "check",
+      "tier": "established",
+      "sourceNote": "PT home program, Sep 2026",
+      "dose": "10 per side · hold 5 sec",
+      "sides": true,
+      "muscles": ["thoracic spine", "obliques", "chest"],
+      "context": ["bed", "floor"],
+      "why": "The lower body stays stacked and still, so all the rotation has to come from the upper spine — which is where most people have lost it, and where the low back goes looking for it when it is missing.",
+      "fields": {
+        "tool": "Nothing. A pillow under the head keeps the neck honest.",
+        "release": "Lie on your side, hips and knees bent to ninety, knees stacked. Arms straight out in front, palms together. Open the top arm up and over toward the floor behind you, letting the head and both shoulders follow — the knees stay stacked and do not move. Hold five seconds, return, repeat, switch sides.",
+        "notice": "The stretch runs diagonally from the open shoulder into the opposite low back. The knees drifting apart is the low back stealing the movement back."
+      }
+    },
+    {
+      "id": "pt-wall-slide-lean",
+      "name": "Wall slide, leaning in, with a shrug",
+      "kind": "bodywork",
+      "category": "airway",
+      "role": "activate",
+      "variationOf": "st-wall_slide",
+      "tracking": "sets",
+      "amount": { "sets": 3, "reps": 8 },
+      "tier": "established",
+      "sourceNote": "PT home program, Sep 2026 — the printed sheet says back to the wall; the version actually coached is FACING the wall, leaning into it",
+      "dose": "3 × 8 · slow, with a shrug at the top",
+      "muscles": ["serratus anterior", "mid/lower trapezius", "upper trapezius", "shoulders"],
+      "equipment": ["wall"],
+      "context": ["standing"],
+      "why": "Leaning into the wall is what makes this one work: the forearms carry some bodyweight, so the shoulder blades have to organise against load while they glide. The shrug at the top adds the upper trap's honest contribution — up, not forward.",
+      "levels": [
+        { "level": 1, "name": "Upright, no lean", "note": "Just the slide pattern" },
+        { "level": 2, "name": "Leaning in", "note": "Feet back, real weight through the forearms" },
+        { "level": 3, "name": "On a roller", "note": "Forearms on a foam roller against the wall — smoother glide, more control demanded" }
+      ],
+      "fields": {
+        "tool": "A wall you do not mind touching. A foam roller under the forearms is the smoothest version, and what the clinic used.",
+        "release": "Face the wall, forearms and blade-edge hands against it, and lean in so your forearms are genuinely loaded. Slide the arms up the wall slowly, shrug the shoulders at the top, un-shrug, and slide back down with control. Keep the ribs down and the core on.",
+        "notice": "The shoulder blades should glide flat against the ribs. A wing popping out at the bottom of the blade is the serratus letting go — lean less until it holds."
+      }
+    },
+    {
+      "id": "pt-prone-angel",
+      "name": "Prone angel — W, 90/90, diamond",
+      "kind": "bodywork",
+      "category": "airway",
+      "role": "activate",
+      "tracking": "sets",
+      "amount": { "sets": 3, "reps": 10 },
+      "tier": "established",
+      "sourceNote": "PT home program, Sep 2026",
+      "dose": "3 × 10 · forearms parallel to the floor throughout",
+      "muscles": ["mid/lower trapezius", "rhomboids", "rear delts"],
+      "context": ["floor"],
+      "why": "Three arm positions, one rule: the shoulder blades squeeze and the forearms hover parallel to the floor, never letting the elbows ride higher than the wrists. It is the whole back of the shoulder girdle working through its range against gravity.",
+      "levels": [
+        { "level": 1, "name": "W only", "note": "Elbows low, the easiest hover" },
+        { "level": 2, "name": "All three positions", "note": "W, then 90/90, then diamond, one breath each" },
+        { "level": 3, "name": "Light weights", "note": "A small plate or bottle in each hand" }
+      ],
+      "fields": {
+        "tool": "A mat or bench.",
+        "release": "Face down. Squeeze the shoulder blades together and float the forearms off the floor. Hit three positions before resting: a low W with the elbows drawn toward the waist; a 90/90 with the upper arms straight out from the shoulders; a diamond with the elbows above the shoulders and the hands angled in toward each other overhead. Forearms stay parallel to the floor the whole way — wrists never below the elbows.",
+        "notice": "The diamond is where the squeeze usually collapses. Shrink the position before you surrender the squeeze."
+      }
+    },
+    {
+      "id": "pt-snow-angel-roller",
+      "name": "Snow angels on a foam roller",
+      "kind": "bodywork",
+      "category": "mobility",
+      "variationOf": "pt-prone-angel",
+      "tracking": "check",
+      "tier": "established",
+      "sourceNote": "The clinic's own alternative to the prone angel — face up along a roller, gravity doing the opening",
+      "dose": "10 slow sweeps",
+      "muscles": ["pecs", "chest", "anterior deltoids", "thoracic spine"],
+      "equipment": ["roller"],
+      "context": ["floor"],
+      "why": "The same territory as the prone angel, worked from the other side. Lying face UP along a roller puts the support under the spine and lets the shoulders hang below it, so gravity opens the chest while the arms sweep — a stretch where the prone version is an effort.",
+      "fields": {
+        "tool": "A long foam roller, run lengthways under the spine, head supported.",
+        "release": "Lie back along the roller, knees bent, feet flat. Palms up, arms at your sides, knuckles resting toward the floor. Sweep the arms slowly from your waist to overhead and back, fingers grazing the floor the whole way. Where the chest catches, slow down and breathe there.",
+        "notice": "The catch usually lives at shoulder height. That is the spot this exists for — spend your slowest centimetres there."
+      }
+    }
+  ]
+}

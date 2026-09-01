@@ -40,14 +40,16 @@ test('every question says what it changes, and nothing is asked idly', () => {
   }
 });
 
-test('sleep position is not asked, because nothing yet consumes it', () => {
-  // FRAMEWORK's onboarding order lists it, and D30 specifies the mixed/unknown
-  // branch — but the wake block is fixed content and the unwind-the-night bias
-  // is unbuilt, so the answer would change nothing. The question-earning rule
-  // is a rule, not an aspiration.
-  const asked = QUESTIONS.map((q) => `${q.id} ${q.ask}`).join(' ').toLowerCase();
-  assert.doesNotMatch(asked, /sleep|side|back|stomach/,
-    'a question was asked whose answer changes nothing yet');
+test('sleep position is asked now, because the wake block consumes it', () => {
+  // This test used to assert the OPPOSITE — the question was refused while the
+  // wake block was fixed content, because an answer nothing reads is a question
+  // that wastes patience. Kevin, 1 Sep: "the wake block should not be fixed
+  // content and it should be adjusted based on someone's sleeping position."
+  // The consumer exists, so the question earns its slot — same rule, new facts.
+  const sleep = QUESTIONS.find((q) => q.id === 'sleep');
+  assert.ok(sleep, 'the wake block reads sleep position and nobody is asked for it');
+  assert.equal(sleep.options.length, 4, 'side, back, stomach, and mixed/unknown (D30)');
+  assert.ok(sleep.options.some((o) => o.id === 'mixed'), 'mixed/unknown is a real option, not a forced guess');
 });
 
 /* ------------------------------- no labels -------------------------------- */
@@ -221,4 +223,75 @@ test('the first block is renamed to the morning somebody actually has', async ()
   assert.equal(await applyMorning('on-feet'), false);
   // And unanswered changes nothing.
   assert.equal(await applyMorning(null), false);
+});
+
+/* ---------------------------- unwind the night ---------------------------- */
+// Kevin, 1 Sep: "someone who sleeps on their side or stomach or back will all
+// have different things that need to be addressed when they wake up. And it
+// doesn't necessarily need to be the same thing every day."
+
+test('each sleeping position deals different unwinding work, and it rotates', async () => {
+  const { dealWake, WAKE_POOL, poolFor } = await import('../src/app/composer/wake.js');
+
+  // Every id in every pool is a real card — a pool naming a ghost is a morning
+  // that silently shrinks.
+  for (const [position, ids] of Object.entries(WAKE_POOL)) {
+    for (const id of ids) assert.ok(itemsById[id], `${position} pool names ${id}, which is not in the catalogue`);
+  }
+
+  const wake = (position, date, usable) => dealWake({ position, date, itemsById, usable });
+  const side = wake('side', '2026-09-02');
+  const back = wake('back', '2026-09-02');
+  assert.ok(side.length === 2 && back.length === 2);
+  assert.notDeepEqual(side.map((w) => w.id), back.map((w) => w.id),
+    'a side sleeper and a back sleeper woke up to the same morning');
+  assert.match(side[0].why, /side sleeper/, 'the card cannot say why it was dealt');
+
+  // Different days, different picks — from the same pool.
+  const days = ['2026-09-02', '2026-09-03', '2026-09-04', '2026-09-05'];
+  const mornings = days.map((d) => wake('back', d).map((w) => w.id).join(','));
+  assert.ok(new Set(mornings).size > 1, 'the wake block is still the same thing every day');
+  for (const m of mornings) {
+    for (const id of m.split(',')) assert.ok(WAKE_POOL.back.includes(id), `${id} is not back-sleeper work`);
+  }
+
+  // Mixed draws from everything; unanswered deals nothing and the static block stands.
+  assert.ok(poolFor('mixed').length > WAKE_POOL.side.length);
+  assert.deepEqual(wake(null, '2026-09-02'), []);
+
+  // Equipment still counts: no roller, no roller item.
+  const noKit = wake('side', '2026-09-02', (i) => !(i.equipment ?? []).length);
+  for (const w of noKit) {
+    assert.deepEqual(itemsById[w.id].equipment ?? [], [], `${w.id} needs kit that was not offered`);
+  }
+});
+
+test('answering the sleep question trims the static wake block to its floor', async () => {
+  const store = await import('../src/app/store.js');
+  const { applySleep } = await import('../src/app/ui/viewAssessment.js');
+  store._resetForTests();
+  await store.ready({ name: 'assess-sleep-trim' });
+  await store.saveProtocol({
+    id: 'seed-day-arc', name: 'The day arc', active: true, phases: [],
+    blocks: [{
+      id: 'arc-wake', name: 'Before your feet touch the floor', order: 0,
+      items: [
+        { id: 'arc-wake-rock', name: 'Rocking child’s pose' },
+        { id: 'arc-wake-lat', name: 'Lean-forward lat stretch' },
+        { id: 'arc-wake-chest', name: 'Kneel-sit chest opener' },
+        { id: 'my-own-thing', name: 'Something Kevin added himself' },
+      ],
+    }],
+    createdAt: 'x', updatedAt: 'x',
+  });
+
+  assert.equal(await applySleep('side'), true);
+  const after = await store.loadProtocol('seed-day-arc');
+  const ids = after.blocks[0].items.map((i) => i.id);
+  // The floor stays (law 6), the seeded extras go, and anything the person
+  // added themselves is theirs and untouched.
+  assert.deepEqual(ids, ['arc-wake-rock', 'my-own-thing']);
+  // Idempotent, and unanswered changes nothing.
+  assert.equal(await applySleep('side'), false);
+  assert.equal(await applySleep(null), false);
 });

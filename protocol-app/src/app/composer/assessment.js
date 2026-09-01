@@ -120,6 +120,27 @@ export const EQUIPMENT = [
  * ritual itself belongs to the user; the app schedules around it, never inside
  * it." So it gets asked rather than assumed.
  */
+/**
+ * Sleep position — asked as of 1 Sep, because as of 1 Sep something consumes it.
+ *
+ * Kevin: "the wake block should not be fixed content and it should be adjusted
+ * based on someone's sleeping position. Because someone who sleeps on their
+ * side or stomach or back will all have different things that need to be
+ * addressed when they wake up." That is FRAMEWORK's unwind-the-night principle
+ * finally implemented, and it is what earns this question its slot under the
+ * question-earning rule — the earlier build refused to ask it precisely
+ * because nothing read the answer yet.
+ *
+ * Mixed/unknown is a real option (D30): it deals from every position's pool
+ * rather than forcing a guess.
+ */
+export const SLEEP = [
+  { id: 'side', name: 'On my side', also: 'Curled — the night closes the chest and folds the hips.' },
+  { id: 'back', name: 'On my back', also: 'Long and flat — the night holds the spine in one line.' },
+  { id: 'stomach', name: 'On my stomach', also: 'Head turned, low back arched, for hours.' },
+  { id: 'mixed', name: 'It varies, or I don\'t know', also: 'The wake block draws from everything and you can refine this later.' },
+];
+
 export const MORNING = [
   { id: 'in-bed', name: 'In bed, before I get up', also: 'The first block happens where you wake up.' },
   { id: 'on-feet', name: 'Once I am up and moving', also: 'The first block waits until you are on your feet.' },
@@ -161,6 +182,14 @@ export const QUESTIONS = [
     kind: 'multi',
     options: EQUIPMENT,
     changes: 'stops the composer dealing work that needs kit you do not have',
+  },
+  {
+    id: 'sleep',
+    ask: 'How do you sleep, mostly?',
+    note: 'The first movement of the day reverses whatever position the body held all night, so the answer changes what the wake block deals you.',
+    kind: 'one',
+    options: SLEEP,
+    changes: 'picks which unwinding work the wake block deals, per the unwind-the-night principle',
   },
   {
     id: 'morning',
@@ -219,6 +248,7 @@ export function seedFrom(answers = {}, { anatomy = {}, reachable = [] } = {}) {
     { key: 'composer.pacing', value: pacing },
     { key: 'composer.equipment', value: answers.equipment ?? [] },
     { key: 'composer.morning', value: answers.morning ?? null },
+    { key: 'composer.sleep', value: answers.sleep ?? null },
     // Provenance: what was answered, so the focus list can say "quiz seed" and
     // mean something, and so re-taking it can start from what was said before.
     { key: 'composer.assessment', value: { ...answers }, takenAt: new Date().toISOString() },
