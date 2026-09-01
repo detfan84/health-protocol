@@ -12,7 +12,7 @@
 import { legacyGlassesToMl } from './units.js';
 
 export const DB_NAME = 'protocol-app';
-export const SCHEMA_VERSION = 3;
+export const SCHEMA_VERSION = 4;
 
 // Published file format identifier — shared by backups, gallery/module
 // fragments, and AI-produced imports (the deep-dive and lab doors).
@@ -23,6 +23,7 @@ export const STORES = {
   DAYS: 'days',           // keyPath: date    — one record per local date
   LABS: 'labs',           // keyPath: id      — lab results (v1 scope, Kevin Aug 17)
   SETTINGS: 'settings',   // keyPath: key     — small user prefs (dark mode, faith flag…)
+  FINDINGS: 'findings',   // keyPath: id      — what the body reported (D42), append-only
 };
 
 // Migration ladder. Each rung upgrades from (to - 1) → to and is append-only:
@@ -119,6 +120,25 @@ export const MIGRATIONS = [
         if (touched) cursor.update(rec);
         cursor.continue();
       };
+    },
+  },
+  {
+    // Findings — what the body reported about itself (D42, as amended by R25).
+    //
+    // The store holds EVENTS, not weights. A weight is a computed view over the
+    // events, the same argument the coverage ledger makes: a stored number
+    // drifts from the record it claims to summarise, and then two places
+    // disagree with no way to tell which is lying. Storing the taps also means
+    // the decay curve can be changed later without rewriting anybody's history,
+    // and it is what lets the focus list (D41) say WHERE a weight came from —
+    // "you reported it" / "quiz seed" / "your re-test moved" — which it cannot
+    // do from a bare number.
+    //
+    // Nothing is migrated. There are no findings before this rung, because
+    // there was nowhere to put one.
+    to: 4,
+    run(db) {
+      db.createObjectStore(STORES.FINDINGS, { keyPath: 'id' });
     },
   },
 ];

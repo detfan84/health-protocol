@@ -228,6 +228,26 @@ export async function advancePhases(protocols, settings, today = localDateKey())
 }
 
 /** { [itemId]: supplyRecord } for the supply screen. */
+/* ------------------------------- findings -------------------------------- */
+// What the body reported about itself (D42). Append-only by nature: an event is
+// a thing that happened, and history is not edited. The weight table is
+// computed from these by src/app/composer/findings.js — there is no stored
+// number here to drift.
+
+/** Every finding event, oldest first. */
+export async function loadFindings() {
+  const db = await ready();
+  const all = await getAll(db, STORES.FINDINGS);
+  return all.sort((a, b) => String(a.at).localeCompare(String(b.at)));
+}
+
+/** Record one tap. */
+export async function addFinding(event) {
+  const db = await ready();
+  await put(db, STORES.FINDINGS, event);
+  return event;
+}
+
 export async function loadSupplies() {
   const all = await allSettings();
   const out = {};
