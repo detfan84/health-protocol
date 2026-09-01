@@ -65,10 +65,11 @@ export async function dealtFor(date, { now = new Date(), dial } = {}) {
   if (date !== localDateKey()) return null;
 
   const catalog = await loadCatalog();
-  const [days, findings, settings] = await Promise.all([
+  const [days, findings, settings, kit] = await Promise.all([
     store.loadRecentDays(date),
     store.loadFindings(),
     store.getSetting('composer.dial'),
+    store.getSetting('composer.equipment'),
   ]);
 
   const ledger = buildLedger({ days: Object.values(days ?? {}), itemsById: catalog.itemsById, now });
@@ -79,6 +80,9 @@ export async function dealtFor(date, { now = new Date(), dial } = {}) {
     weights: weighFindings({ events: findings, now }),
     preferences: itemPreferences({ events: findings }),
     dial: dial ?? settings?.value ?? 'standard',
+    // Absent means unanswered, not empty-handed — the dealer filters nothing
+    // until somebody has actually said (D24).
+    equipment: Array.isArray(kit?.value) ? kit.value : null,
     date,
   });
 

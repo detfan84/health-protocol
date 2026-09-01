@@ -25,6 +25,26 @@ export async function viewData({ applyTheme, applyScheme, go }) {
     h('p.muted', {}, 'Everything lives on this device. Nothing is sent anywhere — there\'s no server to send it to.'),
   );
 
+  /* --------------------------- the assessment -------------------------- */
+  // The one place the composer is told anything directly. It is here rather
+  // than behind a first-run gate because it gates nothing and can be retaken
+  // any day — a person whose hips stopped bothering them should be able to say
+  // so without reinstalling anything.
+  {
+    const taken = await store.getSetting('composer.assessment').catch(() => null);
+    const areas = taken?.value?.areas ?? [];
+    root.append(h('div.card', {},
+      h('div.card-head', {}, h('h2', {}, 'What the app knows about you')),
+      h('p.muted', {}, areas.length
+        ? `You have said ${areas.length} ${areas.length === 1 ? 'area bothers' : 'areas bother'} you. That is what the composer puts first when it deals a day.`
+        : 'Five questions about where it bothers you and how much you want in a session. Every answer changes what gets dealt; none of them is a diagnosis, and none of them closes anything off.'),
+      h('button.btn' + (areas.length ? '.quiet' : '.primary'), {
+        style: 'width:100%',
+        onclick: () => go?.('assessment'),
+      }, areas.length ? 'Change your answers' : 'Take the assessment'),
+    ));
+  }
+
   /* ------------------------------ export ------------------------------ */
   const lastExport = await store.getSetting('backup.lastExportedAt').catch(() => null);
   const exportNote = h('p.muted', {},

@@ -365,6 +365,10 @@ export async function viewHome({ open, startSession, now = new Date() }) {
         h('button.thin-link', { onclick: () => open({ tab: 'day' }) }, 'Everything today'),
         h('button.thin-link', { onclick: () => open({ tab: 'supply' }) }, 'Supply'),
         h('button.thin-link', { onclick: () => open({ tab: 'plans' }) }, 'Plans'),
+        // The composer only knows what it has been told. This is where it gets
+        // told, and it has to be findable from the front rather than only from
+        // a card three screens in.
+        h('button.thin-link', { onclick: () => open({ tab: 'assessment' }) }, 'What it knows about you'),
       ),
     ),
   );

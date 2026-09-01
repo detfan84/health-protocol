@@ -11,6 +11,7 @@
 import { h, clear } from './dom.js';
 import * as store from '../store.js';
 import { viewToday } from './viewToday.js';
+import { viewAssessment } from './viewAssessment.js';
 import { viewProtocols } from './viewProtocols.js';
 import { viewEditor } from './viewEditor.js';
 import { viewSupply } from './viewSupply.js';
@@ -181,6 +182,11 @@ async function render() {
         },
         stamp: (s) => { state.todayStamp = s; },
         startSession,
+      });
+    } else if (state.tab === 'assessment') {
+      view = await viewAssessment({
+        done: () => { state.tab = 'day'; render(); },
+        reload: () => render(),
       });
     } else if (state.tab === 'data') {
       view = await viewData({ applyTheme, applyScheme, go: (tab) => { state.tab = tab; render(); } });

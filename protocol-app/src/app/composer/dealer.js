@@ -163,6 +163,7 @@ export function dealDay({
   dial = 'standard',
   date,
   windowDays = 7,
+  equipment = null,
 } = {}) {
   const budget = DIALS[dial] ?? DIALS.standard;
   const rng = rngFrom(seedFrom(String(date ?? '')));
@@ -173,7 +174,16 @@ export function dealDay({
   const jitter = (id) => seedFrom(`${date}|${id}`) / 4294967296;
 
   // Anchors are not the dealer's business (law 4).
-  const pool = items.filter((i) => i.type === 'practice' && !String(i.id).startsWith('arc-'));
+  //
+  // Equipment: `null` means nobody has said what they have, which is NOT the
+  // same as having nothing (D24) — so nothing is filtered until somebody
+  // answers. Once they have, work needing kit they do not own is not dealt,
+  // because an undoable item in a five-item session is a fifth of the day gone.
+  const owns = equipment === null ? null : new Set([...equipment, 'none']);
+  const usable = (i) => owns === null || (i.equipment ?? []).every((e) => owns.has(e));
+  const pool = items.filter((i) => i.type === 'practice'
+    && !String(i.id).startsWith('arc-')
+    && usable(i));
   const ranked = scoreCandidates({ items: pool, ledger, weights, preferences, windowDays })
     .sort((a, b) => {
       const d = Math.round(b.score * 1000) - Math.round(a.score * 1000);
@@ -272,6 +282,7 @@ export function dealDay({
       budgetIsCount: 'the dial is specified in minutes; 14 of 601 items say how long they take, so slots are budgeted by count',
       snacksAreProxy: 'snacks are picked as equipment-free items; the real mechanism is `demands` vs a moment\'s `occupies`, authored on 2 of 343 practices',
       candidates: ranked.length,
+      ...(owns === null ? { equipmentUnknown: 'nobody has said what equipment they have, so nothing was filtered out' } : {}),
     },
   };
 }
