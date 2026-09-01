@@ -101,9 +101,17 @@ export const SOURCES = ['reported', 'quiz-seed', 'template', 'retest'];
  * @param nodes  anatomy node ids this concerns (empty for item/system scope)
  * @param source provenance; defaults to the person having reported it
  */
-export function makeEvent({ kind, nodes = [], itemId, rating, source = 'reported', at, note } = {}) {
+export function makeEvent({ kind, nodes = [], itemId, rating, source = 'reported', at, note, side } = {}) {
   if (!KINDS[kind]) throw new Error(`unknown finding kind: ${kind}`);
   if (source && !SOURCES.includes(source)) throw new Error(`unknown finding source: ${source}`);
+  // Sided, when the person said so (Kevin, 1 Sep: "findings need to be sided" —
+  // his own pattern is a right hip and a right shoulder, and a finding that
+  // cannot say which side flattens exactly the information he is reporting).
+  // Absent means the whole of it, or that nobody said — not "both", which would
+  // be an invented answer (D24).
+  if (side !== undefined && side !== 'left' && side !== 'right') {
+    throw new Error(`a side is left or right, not "${side}" — omit it for unsided`);
+  }
   const rec = {
     id: newId(),
     kind,
@@ -116,6 +124,7 @@ export function makeEvent({ kind, nodes = [], itemId, rating, source = 'reported
   if (itemId) rec.itemId = String(itemId);
   if (Number.isFinite(rating)) rec.rating = rating;
   if (note) rec.note = String(note);
+  if (side) rec.side = side;
   return rec;
 }
 
@@ -165,8 +174,10 @@ export function weighFindings({ events = [], now = new Date() } = {}) {
     for (const node of event.nodes) {
       const entry = nodes[node] ?? (nodes[node] = {
         node, weight: BASELINE, sources: new Set(), events: [], pairedLoad: false,
+        sidedForce: { left: 0, right: 0, unsided: 0 },
       });
       const spec = KINDS[event.kind];
+      entry.sidedForce[event.side ?? 'unsided'] += force;
       if (spec.direction === 'up') {
         entry.weight = clamp(entry.weight + STEP * force);
         if (spec.pairsLoad) entry.pairedLoad = true;
@@ -190,12 +201,36 @@ export function weighFindings({ events = [], now = new Date() } = {}) {
     pairedLoad: e.pairedLoad,
     sources: [...e.sources],
     events: e.events,
+    // Which side the reports point at — see sideOf for the strict reading.
+    sidedForce: {
+      left: Number(e.sidedForce.left.toFixed(3)),
+      right: Number(e.sidedForce.right.toFixed(3)),
+      unsided: Number(e.sidedForce.unsided.toFixed(3)),
+    },
   }]));
 }
 
 /** A node's weight, or baseline when nobody has said anything about it. */
 export function weightOf(table, node) {
   return table?.[node]?.weight ?? BASELINE;
+}
+
+/**
+ * Which side a node's reports point at — 'left', 'right', or null.
+ *
+ * Strict on purpose: a side is claimed only when EVERY report on the node names
+ * that one side. One unsided report, or one from the other side, and the answer
+ * is null — the whole node, no adjective. Items are not left/right specific
+ * yet, so the side cannot steer the deal; what it can do honestly is travel
+ * with the WHY, so a card says "you reported it — right side" and the person
+ * knows which hip to pay attention to while they work.
+ */
+export function sideOf(table, node) {
+  const f = table?.[node]?.sidedForce;
+  if (!f) return null;
+  if (f.left > 0 && f.right === 0 && f.unsided === 0) return 'left';
+  if (f.right > 0 && f.left === 0 && f.unsided === 0) return 'right';
+  return null;
 }
 
 /**

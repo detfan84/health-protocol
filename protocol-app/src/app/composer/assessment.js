@@ -53,21 +53,25 @@ export function descendantsOf(anatomy, id) {
  * Each is an anatomy node the catalogue can actually work, because an area you
  * can pick and nothing can address is a promise the app cannot keep.
  */
+// `paired: true` marks the areas the body has two of, so the screen can ask
+// which one — Kevin's own pattern is a right hip and a right shoulder, and an
+// assessment that cannot record the difference flattens exactly what he is
+// reporting. Midline areas never ask.
 export const AREAS = [
   { id: 'neck', name: 'Neck', also: 'stiffness, turning your head' },
   { id: 'jaw', name: 'Jaw', also: 'clenching, grinding' },
   { id: 'head', name: 'Head', also: 'tension headaches' },
-  { id: 'shoulder-girdle', name: 'Shoulders', also: 'rounding, reaching overhead' },
+  { id: 'shoulder-girdle', name: 'Shoulders', also: 'rounding, reaching overhead', paired: true },
   { id: 'upper-back', name: 'Upper back', also: 'between the shoulder blades' },
   { id: 'chest', name: 'Chest', also: 'tight in front, hard to open' },
   { id: 'ribs', name: 'Ribs and breathing', also: 'shallow breath, tight sides' },
   { id: 'low-back', name: 'Low back', also: 'aching, seizing up' },
   { id: 'deep-core', name: 'Deep core', also: 'the deep support, pelvic floor' },
-  { id: 'hip', name: 'Hips', also: 'tight, pinching, sitting all day' },
-  { id: 'thigh', name: 'Thighs', also: 'hamstrings, quads, groin' },
-  { id: 'lower-leg', name: 'Calves and shins', also: 'cramping, tight ankles' },
-  { id: 'foot', name: 'Feet', also: 'arches, plantar pain' },
-  { id: 'forearm', name: 'Forearms and wrists', also: 'grip, typing, gripping' },
+  { id: 'hip', name: 'Hips', also: 'tight, pinching, sitting all day', paired: true },
+  { id: 'thigh', name: 'Thighs', also: 'hamstrings, quads, groin', paired: true },
+  { id: 'lower-leg', name: 'Calves and shins', also: 'cramping, tight ankles', paired: true },
+  { id: 'foot', name: 'Feet', also: 'arches, plantar pain', paired: true },
+  { id: 'forearm', name: 'Forearms and wrists', also: 'grip, typing, gripping', paired: true },
 ];
 
 export const DIALS = [
@@ -221,6 +225,10 @@ export function seedFrom(answers = {}, { anatomy = {}, reachable = [] } = {}) {
   for (const areaId of answers.areas ?? []) {
     const area = AREAS.find((a) => a.id === areaId);
     if (!area) continue;
+    // 'left' / 'right' when the person said which one; anything else — 'both',
+    // absent, or a side on a midline area — seeds unsided.
+    const said = answers.areaSides?.[areaId];
+    const side = area.paired && (said === 'left' || said === 'right') ? said : undefined;
     // The area AND everything under it, filtered to what some item can actually
     // work. Seeding "hip" alone would not lift a single glute exercise, because
     // items target the muscles rather than the region they sit in.
@@ -233,7 +241,8 @@ export function seedFrom(answers = {}, { anatomy = {}, reachable = [] } = {}) {
       kind: 'hot-spot',
       nodes,
       source: 'quiz-seed',
-      note: `you named ${area.name.toLowerCase()} as somewhere that bothers you`,
+      side,
+      note: `you named ${side ? `your ${side} ${area.name.toLowerCase().replace(/s$/, '')}` : area.name.toLowerCase()} as somewhere that bothers you`,
     }));
   }
 

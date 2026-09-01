@@ -27,7 +27,7 @@
 //      a stated proxy — needs no equipment — and `gaps` says so.
 
 import { EFFECT_COUNTS, nodesOf } from './ledger.js';
-import { weightOf, BASELINE } from './findings.js';
+import { weightOf, sideOf, BASELINE } from './findings.js';
 
 /** Slots and their budgets, per dial. Counts, for the reason above. */
 export const DIALS = {
@@ -132,9 +132,14 @@ export function scoreCandidates({ items = [], ledger, weights = {}, preferences 
     const score = best / (1 + disliked);
 
     const reported = weightOf(weights, bestNode) > BASELINE;
+    // The side travels with the why, when every report agreed on one. Items are
+    // not left/right specific, so this cannot steer WHICH card is dealt — what
+    // it does is tell the person which hip to pay attention to while they work.
+    const side = reported ? sideOf(weights, bestNode) : null;
+    const label = side ? `${bestNode} (${side} side)` : bestNode;
     const why = bestDays === null
-      ? `${bestNode} has not been worked this week`
-      : `${bestNode} was last worked ${bestDays === 0 ? 'today' : `${bestDays} day${bestDays === 1 ? '' : 's'} ago`}`;
+      ? `${label} has not been worked this week`
+      : `${label} was last worked ${bestDays === 0 ? 'today' : `${bestDays} day${bestDays === 1 ? '' : 's'} ago`}`;
 
     out.push({
       item,

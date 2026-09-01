@@ -29,6 +29,7 @@ import { seriesFor, summarise, sparkPath, summaryText } from '../../lib/readings
 import { paceOf, paceText } from '../../lib/durations.js';
 import { guarded } from './announcer.js';
 import { recordFailure } from '../failLog.js';
+import { findingSheet } from './findingSheet.js';
 import * as store from '../store.js';
 import { localDateKey, nowIso, displayTime, timeFormatOf } from '../../lib/core.js';
 
@@ -630,6 +631,10 @@ function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, 
         weekly ? h('span.chip.cadence', {}, weekly) : null,
       ),
       why ? h('span.why', {}, why) : null,
+      // The D42 sheet: only once the thing is DONE, and always optional. It
+      // appears on the re-render the check-off already causes, so nothing here
+      // toggles it by hand.
+      pressed ? findingSheet(item) : null,
       // A card with real content opens to the card; a plain item opens to its
       // notes. Same disclosure, so the row stays one line until asked.
       notesBlock(item.notes, item.id, openNotes, options, {

@@ -90,6 +90,7 @@ export async function viewAssessment({ done, reload } = {}) {
     equipment: [...(previous.equipment ?? [])],
     morning: previous.morning ?? null,
     sleep: previous.sleep ?? null,
+    areaSides: { ...(previous.areaSides ?? {}) },
   };
 
   root.append(
@@ -114,11 +115,31 @@ export async function viewAssessment({ done, reload } = {}) {
           if (!on && at >= 0) answers[q.id].splice(at, 1);
         },
       });
+      // A paired area asks which one, once it is picked. Three radios, default
+      // both — nobody is made to choose a side they did not come in knowing.
+      const sideRow = opt.paired && q.id === 'areas' ? h('div.side-row', {
+        style: answers.areas.includes(opt.id) ? '' : 'display:none',
+      }, ['left', 'right', 'both'].map((side) => {
+        const sid = `${q.id}-${opt.id}-${side}`;
+        return h('span', {},
+          h('input', {
+            type: 'radio', name: `side-${opt.id}`, id: sid,
+            checked: (answers.areaSides[opt.id] ?? 'both') === side,
+            onchange: () => { answers.areaSides[opt.id] = side; },
+          }),
+          h('label', { for: sid }, side === 'both' ? 'Both' : side[0].toUpperCase() + side.slice(1)),
+        );
+      })) : null;
+      if (sideRow) {
+        const oldChange = box.onchange;
+        box.onchange = (e) => { oldChange(e); sideRow.style.display = e.target.checked ? '' : 'none'; };
+      }
       list.append(h('div.row.compact', {},
         box,
         h('label.grow', { for: id },
           h('span.name', {}, opt.name),
-          opt.also ? h('span.why', {}, opt.also) : null),
+          opt.also ? h('span.why', {}, opt.also) : null,
+          sideRow),
       ));
     }
     return list;

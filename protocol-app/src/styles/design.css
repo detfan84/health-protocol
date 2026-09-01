@@ -716,6 +716,16 @@ nav.tabs button[aria-current='page'] { color: var(--accent); font-weight: 650; }
 .nutrient-strip { margin: var(--sp-3) 0; }
 .nutrient-strip .thin-link { font-size: inherit; }
 .nutrient-filter { padding: var(--sp-3); }
+/* which side, asked only after an area is picked */
+.side-row { display: flex; gap: var(--sp-3); margin-top: var(--sp-1); font-size: var(--fs-sm); color: var(--ink-muted); }
+.side-row span { display: flex; align-items: center; gap: 4px; }
+.side-row input { width: auto; min-height: auto; }
+/* the optional post-item sheet — quiet until asked for */
+details.finding-sheet { margin-top: var(--sp-1); }
+details.finding-sheet > summary { color: var(--ink-muted); font-size: var(--fs-sm); cursor: pointer; }
+details.finding-sheet .chip-row { margin: var(--sp-2) 0; align-items: center; }
+details.finding-sheet .thin-link { font-size: var(--fs-sm); }
+.sheet-receipts p { margin-top: var(--sp-2); }
 .nutrient-note {
   margin-top: var(--sp-2); padding: var(--sp-3);
   background: var(--surface-2); border-radius: var(--radius-sm);

@@ -9,6 +9,10 @@ create a draft."*
 *The brief (Kevin, 30 Aug): "more information on the body and why we are doing
 the things we do with this app."*
 
+*Revised 1 Sep: the primary source is now `VOICE_Core_Principle_2026-09-01.md` —
+the whole philosophy said in one breath, first full version on record. §0 and
+§2 draw from it directly.*
+
 ---
 
 ## 0 · The on-ramp piece — R25, drafted
@@ -38,9 +42,30 @@ come first. This is the copy.*
 > deeper work arrives when the parts around it can hold. That's the safety
 > mechanism. Order, not interruptions.
 >
-> Three signals are different, and are never push-through moments: sharp pain
-> that shoots or stabs, a joint that gives way or slides, and going lightheaded.
-> Those mean stop and look, every time.
+> Here's the thing nobody taught you: for most of your life you've been told
+> pain equals bad. Pain means rest it, pain means don't do that. But some pain
+> is your body saying *this needs your attention* — a muscle locked up and
+> keeping things out of whack, fascia bound down and restricting how you move
+> or even how you breathe. That kind of pain is feedback, and leaning into it
+> is how you get to the results on the other side. Parts of you have gone
+> quiet, too — not broken, just dormant. Nerves that learned you never use a
+> range of motion stop showing up for it. That's not real decay; it's
+> reversible, and waking those regions back up is a lot of what this work is.
+>
+> And two kinds of pain are not that, and you need to know them:
+>
+> An **injury** is not an invitation. A torn-up knee hurting is not your body
+> asking you to work the knee harder. This app cannot diagnose you and won't
+> pretend to — but it will teach you that the difference exists, and learning
+> to tell signal from damage is the skill everything else is built on.
+>
+> And three signals mean stop and look, every time, no exceptions: sharp pain
+> that shoots or stabs, a joint that gives way or slides, and going
+> lightheaded. Those are never push-through moments.
+>
+> Learn what the body is telling you. Do what it needs as a result. Then
+> restore its capacity to do what it was designed to do. That's the whole
+> protocol.
 
 ## 1 · Why the day is shaped like this
 
@@ -63,7 +88,16 @@ the things we do" half of the brief, told as reasons rather than rules.*
   twice a week the day includes one avoided-but-needed thing. One honest tap
   skips it; it returns, because avoidance is information about where the work is.
 
-## 2 · Soreness literacy — good-sore vs. warning-sore
+## 2 · Pain literacy — signal, damage, and the stop signals
+
+*Source: the core-principle statement (1 Sep) plus its boundary — "if I've torn
+my ACL, that doesn't mean I need to work my knee more." The three-kind
+typology: signal pain (lean in) · structural injury (not the app's to
+diagnose, and never "work it more") · the R25 stop signals. The "it gave way"
+tap is this section's instrument — already built, already refusing to turn a
+joint event into arithmetic.*
+
+## 2b · Soreness literacy — good-sore vs. warning-sore
 
 *Source: FRAMEWORK teaching list; R25 ("what it does is wake up what has been
 asleep"); METHODOLOGY's eccentric-soreness note ("delayed is the operative
