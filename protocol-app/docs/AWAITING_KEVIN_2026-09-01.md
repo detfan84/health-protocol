@@ -7,7 +7,19 @@ directly — and because the answer is not what the docs imply.*
 
 ---
 
-## 1 · The Connection map: there is nothing here to review
+## 1 · The Connection map — RESOLVED same day: quiz deferred out of v1
+
+*Kevin, same evening: the map was superseded by a planning session working
+through 2017 hEDS-criteria questions; new criteria land in December; and the
+beachhead audience already carries its diagnoses, so an awareness quiz is "not
+load-bearing in terms of release of an initial app." Ruling: the quiz is
+deferred — a post-release growth feature, built once, against the December
+criteria. The §3–9 review is off the critical path entirely. If the planning
+session's material still exists, commit it to docs/ so December starts from a
+document instead of memory. The original analysis is kept below for the
+record.*
+
+### The original finding (superseded)
 
 The map you're supposed to review is **not in this repository and never was**.
 All 100 commits on both branches were searched: no Connection map, no Map Edit
