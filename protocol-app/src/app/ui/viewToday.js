@@ -17,6 +17,7 @@
 
 import { h, clear } from './dom.js';
 import { buildToday, makePhaseSetting } from '../todayModel.js';
+import { dealtFor, loadCatalog, protocolFrom } from '../composer/day.js';
 import {
   setJournal, addFood, removeFood, bumpWaterMl, setWaterMl,
   unavailableReason, addSet, updateSet, removeSet, setDuration, setReading, setTook, trainingLog, lastLoggedBefore,
@@ -27,6 +28,7 @@ import { cadenceOf, cadenceLabel, addDays, dueToday, timesOn } from '../../lib/c
 import { seriesFor, summarise, sparkPath, summaryText } from '../../lib/readings.js';
 import { paceOf, paceText } from '../../lib/durations.js';
 import { guarded } from './announcer.js';
+import { recordFailure } from '../failLog.js';
 import * as store from '../store.js';
 import { localDateKey, nowIso, displayTime, timeFormatOf } from '../../lib/core.js';
 
@@ -674,7 +676,29 @@ export async function viewToday({ reload, stamp, date: viewing, startSession, mo
   // A past day is looked at from its own end: every block's window has closed,
   // so nothing is "now" and what is left is simply what was not recorded.
   const asOf = isToday ? new Date() : endOfDay(date);
-  const today = buildToday({ protocols, phaseSettings, now: asOf, day, history, pauses, supplies });
+
+  // The composed middle of the day, alongside the standing appointments rather
+  // than instead of them (FRAMEWORK: "the composer deals the rotating day-arc
+  // content around them onto the same Today timeline"). Dealt once and written
+  // down — see composer/day.js for why it is not simply recomputed.
+  //
+  // Failing to compose must never cost somebody their day. If the catalogue is
+  // not cached yet, or the deal throws, Today renders exactly as it did before
+  // any of this existed.
+  let composed = null;
+  try {
+    // The REAL clock, not `asOf`. For a past day `asOf` is the end of that day,
+    // which made `dealtFor` believe it was being asked about today and deal a
+    // session into a day that has already happened (decision 21).
+    const dealt = await dealtFor(date, { now: new Date() });
+    if (dealt) composed = protocolFrom(dealt, await loadCatalog());
+  } catch (error) {
+    composed = null;
+    recordFailure({ what: 'Composing today', error });
+  }
+  const withComposed = composed ? [...protocols, composed] : protocols;
+
+  const today = buildToday({ protocols: withComposed, phaseSettings, now: asOf, day, history, pauses, supplies });
 
   // Instructions the person has opened, by item id — kept across the
   // re-sorts a tap causes, so reading stays read.
@@ -803,8 +827,12 @@ export async function viewToday({ reload, stamp, date: viewing, startSession, mo
         ]);
         const settings = await store.loadPhaseSettings(ps);
         Object.assign(state, { day: fresh, history: hist, pauses: paused, supplies: supply });
+        // The composed day comes along on every refresh. Left out, the dealt
+        // session disappeared the moment anything in it was ticked — the block
+        // was gone from the model, so it was in no group, done or otherwise.
         return buildToday({
-          protocols: ps, phaseSettings: settings, now: isToday ? new Date() : endOfDay(key),
+          protocols: composed ? [...ps, composed] : ps,
+          phaseSettings: settings, now: isToday ? new Date() : endOfDay(key),
           day: fresh, history: hist, pauses: paused, supplies: supply,
         });
       },
@@ -1008,6 +1036,36 @@ export async function viewToday({ reload, stamp, date: viewing, startSession, mo
       );
       return;
     }
+    // The composed session comes out of the groups and goes to the front.
+    //
+    // It arrives with no start and no end — deliberately, because every clock
+    // time in this app so far was invented and none of them match Kevin's
+    // actual day. But "no window" means buildToday files it under Anytime,
+    // which on a fresh device is a folded drawer of sixty-two things. The one
+    // part of the day the app actually chose would be the hardest part to find.
+    //
+    // So it is lifted out and led with. Not by giving it a fake time — by
+    // saying what it is. Done items stay in Done, where they belong.
+    const composed = [];
+    const groups = {};
+    for (const [key, parts] of Object.entries(t.groups)) {
+      if (key === 'done') { groups[key] = parts; continue; }
+      groups[key] = parts.filter((p) => {
+        if (!String(p.blockId ?? '').startsWith('composed-')) return true;
+        composed.push(p);
+        return false;
+      });
+    }
+    t = { ...t, groups };
+
+    if (composed.length) {
+      blocksHost.append(h('div', {},
+        h('h2.group-title', {}, 'Dealt for today'),
+        h('p.muted', {}, 'Chosen from what you have and have not worked. It is different tomorrow, and you can ignore all of it.'),
+        composed.map((b) => blockCard(b, t, { flavour: '.now' })),
+      ));
+    }
+
     // The order is the day as it is lived: what is open right now, what is
     // still waiting from earlier, what has no time attached, then what is
     // coming and what is behind you — the last two folded away.

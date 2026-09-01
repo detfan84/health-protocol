@@ -1284,10 +1284,17 @@ test('a set can be timed rather than counted, and the number survives', async ()
   await settled();
   for (const card of document.querySelectorAll('details')) card.open = true;
   await settled();
-  [...document.querySelectorAll('button')].find((b) => /Log a set/.test(b.textContent)).dispatchEvent(new Event('click'));
+  // Scoped to the Plank card, both the click and the read. Today is no longer
+  // only what this test put there — the composer deals a session onto the same
+  // screen and some of what it deals is tracked in sets too, so an unscoped
+  // "Log a set" opens somebody else's set and an unscoped `.set-row input`
+  // reads it back.
+  const card = [...document.querySelectorAll('.card')].find((c) => /Plank/.test(c.textContent));
+  assert.ok(card, 'the Plank card is not on the screen');
+  [...card.querySelectorAll('button')].find((b) => /Log a set/.test(b.textContent)).dispatchEvent(new Event('click'));
   await settled();
 
-  const inputs = [...document.querySelectorAll('.set-row input')];
+  const inputs = [...card.querySelectorAll('.set-row input')];
   const sec = inputs.find((i) => /^Seconds in set 1/.test(i.getAttribute('aria-label') ?? ''));
   assert.ok(sec, `no per-set seconds field — got ${JSON.stringify(inputs.map((i) => i.getAttribute('aria-label')))}`);
   sec.value = '45';
