@@ -49,7 +49,7 @@ Vitamin K2 | menaquinone-7 | bone,heart | with-food | capsule | 100–200 mcg | 
 Vitamin C | ascorbic acid | immune,skin | with-food | capsule | 500–1000 mg | 100 | 1 | Absorption drops steeply above about 500 mg at once — split a larger dose.
 Vitamin B12 | methylcobalamin | energy,brain | fasted | lozenge | 500–1000 mcg | 60 | 1 | Worth it if you eat little animal food, or take metformin or long-term acid blockers.
 Vitamin B6 | pyridoxal-5-phosphate | nervous-system,energy | with-food | capsule | 10–50 mg | 60 | 1 |
-Folate | L-methylfolate | energy,heart | with-food | capsule | 400–800 mcg | 60 | 1 |
+Folate (folic acid) | L-methylfolate | energy,heart | with-food | capsule | 400–800 mcg | 60 | 1 |
 Vitamin B complex | mixed B vitamins | energy,nervous-system | fasted | capsule | per label | 60 | 1 | Turns urine bright yellow. That is riboflavin, not a problem.
 Vitamin A | retinyl palmitate | immune,skin | with-food | softgel | 2500–5000 IU | 60 | 1 |
 Vitamin E | mixed tocopherols | skin,heart | with-food | softgel | 100–400 IU | 60 | 1 |
@@ -68,7 +68,7 @@ Casein protein | micellar casein | muscle | before-bed | powder | 20–30 g | 30
 Pea protein | pea protein isolate | muscle | anytime | powder | 20–30 g | 30 | 1 |
 Collagen peptides | hydrolysed collagen | skin,joint | anytime | powder | 10–15 g | 30 | 1 | Digested into ordinary amino acids like any other protein.
 Essential amino acids | EAA blend | muscle | fasted | powder | 5–10 g | 30 | 1 |
-Branched-chain amino acids | leucine, isoleucine, valine | muscle | anytime | powder | 5 g | 30 | 1 | Largely redundant if you already get enough protein.
+BCAAs (branched-chain amino acids) | leucine, isoleucine, valine | muscle | anytime | powder | 5 g | 30 | 1 | Largely redundant if you already get enough protein.
 L-glutamine | L-glutamine | gut | fasted | powder | 5 g | 60 | 1 |
 Glycine | glycine | sleep | before-bed | powder | 3 g | 60 | 1 |
 L-theanine | L-theanine | calm,cognition | anytime | capsule | 100–200 mg | 60 | 1 | Often taken with caffeine to take the edge off it.
@@ -78,7 +78,7 @@ L-tyrosine | L-tyrosine | cognition,energy | fasted | capsule | 500–1000 mg | 
 L-arginine | L-arginine | heart | fasted | capsule | 3–6 g | 90 | 3 |
 L-citrulline | citrulline malate | strength,heart | fasted | powder | 6–8 g | 30 | 1 |
 Beta-alanine | beta-alanine | strength | anytime | powder | 3–5 g | 60 | 1 | The skin tingling is harmless and wears off with regular use.
-Omega-3 | EPA and DHA | heart,inflammation,brain | with-food | softgel | 1–2 g combined EPA+DHA | 120 | 2 | Read the back panel — "1000 mg fish oil" is often 300 mg of the part that does anything.
+Omega-3 (fish oil) | EPA and DHA | heart,inflammation,brain | with-food | softgel | 1–2 g combined EPA+DHA | 120 | 2 | Read the back panel — "1000 mg fish oil" is often 300 mg of the part that does anything.
 Cod liver oil | cod liver oil | immune,joint | with-food | liquid | 5 ml | 250 | 5 |
 Krill oil | krill oil | heart,joint | with-food | softgel | 1 g | 60 | 2 |
 Algae omega-3 | algal DHA/EPA | heart,brain | with-food | softgel | 500 mg | 60 | 2 | The vegan route to the same fatty acids.
@@ -93,7 +93,7 @@ Betaine HCl | betaine hydrochloride | gut | with-food | capsule | 500–650 mg |
 Ox bile | ox bile extract | gut | with-food | capsule | 100–500 mg | 60 | 1 |
 Slippery elm | ulmus rubra bark | gut | fasted | powder | 2–4 g | 30 | 1 |
 Aloe vera | aloe barbadensis leaf | gut | fasted | liquid | 30 ml | 500 | 30 |
-Deglycyrrhizinated liquorice | DGL liquorice | gut | fasted | tablet | 400 mg | 100 | 1 |
+DGL (deglycyrrhizinated licorice) | DGL liquorice | gut | fasted | tablet | 400 mg | 100 | 1 |
 Turmeric | curcumin | inflammation,joint | with-food | capsule | 500–1000 mg | 60 | 2 | Curcumin absorbs poorly on its own — most products pair it with piperine or a lipid.
 Boswellia | boswellia serrata | inflammation,joint | with-food | capsule | 300–500 mg | 60 | 1 |
 Ginger | zingiber officinale | gut,inflammation | with-food | capsule | 500–1000 mg | 60 | 1 |
@@ -125,7 +125,7 @@ Inositol | myo-inositol | calm,hormonal | before-bed | powder | 2–4 g | 60 | 1
 Alpha-lipoic acid | alpha-lipoic acid | energy | fasted | capsule | 300–600 mg | 60 | 1 |
 CoQ10 | ubiquinol | heart,energy | with-food | softgel | 100–200 mg | 60 | 1 | Fat-soluble, so a meal with fat roughly doubles what you absorb.
 PQQ | pyrroloquinoline quinone | energy,brain | with-food | capsule | 10–20 mg | 30 | 1 |
-NAD+ precursor | nicotinamide riboside | energy | fasted | capsule | 250–500 mg | 60 | 1 |
+NMN / NR (NAD+ precursor) | nicotinamide riboside | energy | fasted | capsule | 250–500 mg | 60 | 1 |
 NAC | N-acetylcysteine | immune,inflammation | fasted | capsule | 600–1200 mg | 90 | 1 |
 Glutathione | liposomal glutathione | inflammation | fasted | liquid | 500 mg | 150 | 5 |
 Milk thistle | silybum marianum | liver | with-food | capsule | 200–400 mg | 60 | 1 |
@@ -150,6 +150,48 @@ Saw palmetto | serenoa repens | hormonal | with-food | softgel | 320 mg | 60 | 1
 DIM | diindolylmethane | hormonal | with-food | capsule | 100–200 mg | 60 | 1 |
 Maca | lepidium meyenii | energy,hormonal | anytime | powder | 3 g | 30 | 1 |
 Vitamin D + omega blend | cholecalciferol + fish oil | immune,heart | with-food | softgel | per label | 60 | 1 |
+Salt tablets | sodium chloride | hydration,heart | with-food | tablet | per label | 100 | 2 | First-line in most POTS protocols. Water comes with it or it does not work.
+Thiamine (Vitamin B1) | thiamine | energy,nervous-system | with-food | capsule | per label | 100 | 1 |
+Biotin | biotin | skin | with-food | capsule | per label | 90 | 1 |
+Choline | choline bitartrate or CDP-choline | brain | with-food | capsule | per label | 60 | 1 |
+Lutein | lutein + zeaxanthin | brain | with-food | softgel | per label | 60 | 1 | The eye-health one; usually paired with zeaxanthin in the same softgel.
+Prenatal multivitamin | prenatal multivitamin | hormonal | with-food | capsule | per label | 60 | 1 |
+Cranberry extract | cranberry extract | gut | with-food | capsule | per label | 60 | 1 |
+Evening primrose oil | evening primrose oil | hormonal,skin | with-food | softgel | per label | 90 | 1 |
+Black cohosh | black cohosh | hormonal | with-food | capsule | per label | 60 | 1 |
+Vitex (chasteberry) | vitex agnus-castus | hormonal | fasted | capsule | per label | 60 | 1 |
+Red raspberry leaf | red raspberry leaf | hormonal | anytime | tea or capsule | per label | 60 | 1 |
+Spearmint | spearmint | hormonal | anytime | tea or capsule | per label | 60 | 1 |
+Soy isoflavones | soy isoflavones | hormonal | with-food | capsule | per label | 60 | 1 |
+Red clover | red clover | hormonal | with-food | capsule | per label | 60 | 1 |
+Dong quai | dong quai | hormonal | with-food | capsule | per label | 60 | 1 |
+St. John's wort | hypericum perforatum | calm | with-food | capsule | per label | 60 | 1 | Talks to a long list of medications — the interaction check is the whole game with this one.
+DHEA | dehydroepiandrosterone | hormonal,energy | fasted | capsule | per label | 60 | 1 |
+Ginkgo biloba | ginkgo biloba | brain,cognition | with-food | capsule | per label | 60 | 1 |
+Ginseng | panax ginseng | energy | with-food | capsule | per label | 60 | 1 |
+Fenugreek | fenugreek | hormonal,metabolic | with-food | capsule | per label | 60 | 1 |
+Garlic extract | aged or standard garlic extract | heart,immune | with-food | capsule | per label | 60 | 1 |
+CBD | cannabidiol | calm,sleep | evening | oil or capsule | per label | 30 | 1 |
+Red yeast rice | red yeast rice | heart | with-food | capsule | per label | 60 | 1 |
+Black seed oil | nigella sativa | immune | with-food | oil or capsule | per label | 60 | 1 |
+D-ribose | D-ribose | energy | with-food | powder | 5 g | 45 | 1 |
+NADH | NADH | energy | fasted | tablet | per label | 30 | 1 |
+DAO enzyme | diamine oxidase | gut | fasted | capsule | per label | 60 | 1 | Taken shortly before meals, which is what fasted means here.
+Luteolin | luteolin | immune,calm | with-food | capsule | per label | 60 | 1 |
+Stinging nettle | stinging nettle | immune | with-food | capsule | per label | 60 | 1 |
+Licorice root (whole) | glycyrrhiza glabra | energy,gut | with-food | capsule | per label | 60 | 1 | The whole-root one, glycyrrhizin included — the opposite product from DGL, which has it removed.
+L-lysine | L-lysine | immune,skin | fasted | capsule | 1–2 g | 100 | 2 |
+Pine bark extract (pycnogenol) | maritime pine bark extract | heart,joint | with-food | capsule | per label | 60 | 1 |
+Oxaloacetate | oxaloacetate | energy | fasted | capsule | per label | 30 | 1 |
+Apigenin | apigenin | sleep,calm | before-bed | capsule | 50 mg | 60 | 1 |
+Tongkat ali | eurycoma longifolia | hormonal,energy | with-food | capsule | per label | 60 | 1 |
+Fadogia agrestis | fadogia agrestis | hormonal | with-food | capsule | per label | 60 | 1 |
+Boron | boron | bone,hormonal | with-food | capsule | 2–4 mg | 90 | 1 |
+HMB | beta-hydroxy beta-methylbutyrate | muscle,strength | with-food | capsule | 3 g | 90 | 3 |
+TMG | trimethylglycine | heart,energy | with-food | capsule | per label | 90 | 1 | The methylation one — a different job from Betaine HCl, which is stomach acid.
+Spermidine | spermidine | heart,brain | with-food | capsule | per label | 60 | 1 |
+Fisetin | fisetin | brain | with-food | capsule | per label | 30 | 1 |
+Ca-AKG | calcium alpha-ketoglutarate | bone,energy | with-food | capsule | per label | 60 | 1 |
 `.trim();
 
 // What a supplement actually PROVIDES, in the same vocabulary a food does.
@@ -165,6 +207,9 @@ Vitamin D + omega blend | cholecalciferol + fish oil | immune,heart | with-food 
 // So: a nutrient id where one honestly applies, nothing where it does not, and
 // the screen says which of those it is looking at.
 const PROVIDES = {
+  'sup-salt-tablets': 'sodium',
+  'sup-choline': 'choline',
+
   'sup-magnesium-glycinate': 'magnesium', 'sup-magnesium-citrate': 'magnesium',
   'sup-magnesium-threonate': 'magnesium',
   'sup-vitamin-d3': 'vitamin-d', 'sup-vitamin-d3-with-k2': 'vitamin-d,vitamin-k',
@@ -193,11 +238,24 @@ const PROVIDES = {
 
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
+// Renamed rows keep the id they were born with. Ids are derived from names for
+// convenience, but the schema's first principle is that IDs are permanent and
+// names are labels — a rename that silently minted a fresh id would orphan the
+// row in anybody's saved picks and break the PROVIDES join (it did both, for
+// about a minute, on 2 Sep). Every rename gets a line here, forever.
+const RENAMED = {
+  'sup-folate-folic-acid': 'sup-folate',
+  'sup-nmn-nr-nad-precursor': 'sup-nad-precursor',
+  'sup-dgl-deglycyrrhizinated-licorice': 'sup-deglycyrrhizinated-liquorice',
+  'sup-omega-3-fish-oil': 'sup-omega-3',
+  'sup-bcaas-branched-chain-amino-acids': 'sup-branched-chain-amino-acids',
+};
+
 const items = TABLE.split('\n').map((line) => {
   const [name, substance, supports, timing, form, dose, units, perDose, note] =
     line.split('|').map((c) => c.trim());
   const item = {
-    id: `sup-${slug(name)}`,
+    id: RENAMED[`sup-${slug(name)}`] ?? `sup-${slug(name)}`,
     name,
     type: 'intake',
     tracking: 'check',

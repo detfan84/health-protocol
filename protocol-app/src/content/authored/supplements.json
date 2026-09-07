@@ -229,7 +229,7 @@
     },
     {
       "id": "sup-folate",
-      "name": "Folate",
+      "name": "Folate (folic acid)",
       "type": "intake",
       "tracking": "check",
       "substance": "L-methylfolate",
@@ -685,7 +685,7 @@
     },
     {
       "id": "sup-branched-chain-amino-acids",
-      "name": "Branched-chain amino acids",
+      "name": "BCAAs (branched-chain amino acids)",
       "type": "intake",
       "tracking": "check",
       "substance": "leucine, isoleucine, valine",
@@ -901,7 +901,7 @@
     },
     {
       "id": "sup-omega-3",
-      "name": "Omega-3",
+      "name": "Omega-3 (fish oil)",
       "type": "intake",
       "tracking": "check",
       "substance": "EPA and DHA",
@@ -1240,7 +1240,7 @@
     },
     {
       "id": "sup-deglycyrrhizinated-liquorice",
-      "name": "Deglycyrrhizinated liquorice",
+      "name": "DGL (deglycyrrhizinated licorice)",
       "type": "intake",
       "tracking": "check",
       "substance": "DGL liquorice",
@@ -1891,7 +1891,7 @@
     },
     {
       "id": "sup-nad-precursor",
-      "name": "NAD+ precursor",
+      "name": "NMN / NR (NAD+ precursor)",
       "type": "intake",
       "tracking": "check",
       "substance": "nicotinamide riboside",
@@ -2398,6 +2398,847 @@
       "bottle": {
         "units": 60,
         "unitName": "softgel",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-salt-tablets",
+      "name": "Salt tablets",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "sodium chloride",
+      "supports": [
+        "hydration",
+        "heart"
+      ],
+      "timing": "with-food",
+      "form": "tablet",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 100,
+        "unitName": "tablet",
+        "unitsPerDose": 2
+      },
+      "provides": [
+        "sodium"
+      ],
+      "intakeKind": "supplement",
+      "fields": {
+        "release": "First-line in most POTS protocols. Water comes with it or it does not work."
+      }
+    },
+    {
+      "id": "sup-thiamine-vitamin-b1",
+      "name": "Thiamine (Vitamin B1)",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "thiamine",
+      "supports": [
+        "energy",
+        "nervous-system"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 100,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-biotin",
+      "name": "Biotin",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "biotin",
+      "supports": [
+        "skin"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 90,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-choline",
+      "name": "Choline",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "choline bitartrate or CDP-choline",
+      "supports": [
+        "brain"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "provides": [
+        "choline"
+      ],
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-lutein",
+      "name": "Lutein",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "lutein + zeaxanthin",
+      "supports": [
+        "brain"
+      ],
+      "timing": "with-food",
+      "form": "softgel",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "softgel",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement",
+      "fields": {
+        "release": "The eye-health one; usually paired with zeaxanthin in the same softgel."
+      }
+    },
+    {
+      "id": "sup-prenatal-multivitamin",
+      "name": "Prenatal multivitamin",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "prenatal multivitamin",
+      "supports": [
+        "hormonal"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-cranberry-extract",
+      "name": "Cranberry extract",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "cranberry extract",
+      "supports": [
+        "gut"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-evening-primrose-oil",
+      "name": "Evening primrose oil",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "evening primrose oil",
+      "supports": [
+        "hormonal",
+        "skin"
+      ],
+      "timing": "with-food",
+      "form": "softgel",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 90,
+        "unitName": "softgel",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-black-cohosh",
+      "name": "Black cohosh",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "black cohosh",
+      "supports": [
+        "hormonal"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-vitex-chasteberry",
+      "name": "Vitex (chasteberry)",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "vitex agnus-castus",
+      "supports": [
+        "hormonal"
+      ],
+      "timing": "fasted",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-red-raspberry-leaf",
+      "name": "Red raspberry leaf",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "red raspberry leaf",
+      "supports": [
+        "hormonal"
+      ],
+      "timing": "anytime",
+      "form": "tea or capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "tea or capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-spearmint",
+      "name": "Spearmint",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "spearmint",
+      "supports": [
+        "hormonal"
+      ],
+      "timing": "anytime",
+      "form": "tea or capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "tea or capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-soy-isoflavones",
+      "name": "Soy isoflavones",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "soy isoflavones",
+      "supports": [
+        "hormonal"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-red-clover",
+      "name": "Red clover",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "red clover",
+      "supports": [
+        "hormonal"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-dong-quai",
+      "name": "Dong quai",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "dong quai",
+      "supports": [
+        "hormonal"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-st-john-s-wort",
+      "name": "St. John's wort",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "hypericum perforatum",
+      "supports": [
+        "calm"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement",
+      "fields": {
+        "release": "Talks to a long list of medications — the interaction check is the whole game with this one."
+      }
+    },
+    {
+      "id": "sup-dhea",
+      "name": "DHEA",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "dehydroepiandrosterone",
+      "supports": [
+        "hormonal",
+        "energy"
+      ],
+      "timing": "fasted",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-ginkgo-biloba",
+      "name": "Ginkgo biloba",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "ginkgo biloba",
+      "supports": [
+        "brain",
+        "cognition"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-ginseng",
+      "name": "Ginseng",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "panax ginseng",
+      "supports": [
+        "energy"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-fenugreek",
+      "name": "Fenugreek",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "fenugreek",
+      "supports": [
+        "hormonal",
+        "metabolic"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-garlic-extract",
+      "name": "Garlic extract",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "aged or standard garlic extract",
+      "supports": [
+        "heart",
+        "immune"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-cbd",
+      "name": "CBD",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "cannabidiol",
+      "supports": [
+        "calm",
+        "sleep"
+      ],
+      "timing": "evening",
+      "form": "oil or capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 30,
+        "unitName": "oil or capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-red-yeast-rice",
+      "name": "Red yeast rice",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "red yeast rice",
+      "supports": [
+        "heart"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-black-seed-oil",
+      "name": "Black seed oil",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "nigella sativa",
+      "supports": [
+        "immune"
+      ],
+      "timing": "with-food",
+      "form": "oil or capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "oil or capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-d-ribose",
+      "name": "D-ribose",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "D-ribose",
+      "supports": [
+        "energy"
+      ],
+      "timing": "with-food",
+      "form": "powder",
+      "typicalDose": "5 g",
+      "bottle": {
+        "units": 45,
+        "unitName": "scoop",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-nadh",
+      "name": "NADH",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "NADH",
+      "supports": [
+        "energy"
+      ],
+      "timing": "fasted",
+      "form": "tablet",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 30,
+        "unitName": "tablet",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-dao-enzyme",
+      "name": "DAO enzyme",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "diamine oxidase",
+      "supports": [
+        "gut"
+      ],
+      "timing": "fasted",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement",
+      "fields": {
+        "release": "Taken shortly before meals, which is what fasted means here."
+      }
+    },
+    {
+      "id": "sup-luteolin",
+      "name": "Luteolin",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "luteolin",
+      "supports": [
+        "immune",
+        "calm"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-stinging-nettle",
+      "name": "Stinging nettle",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "stinging nettle",
+      "supports": [
+        "immune"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-licorice-root-whole",
+      "name": "Licorice root (whole)",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "glycyrrhiza glabra",
+      "supports": [
+        "energy",
+        "gut"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement",
+      "fields": {
+        "release": "The whole-root one, glycyrrhizin included — the opposite product from DGL, which has it removed."
+      }
+    },
+    {
+      "id": "sup-l-lysine",
+      "name": "L-lysine",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "L-lysine",
+      "supports": [
+        "immune",
+        "skin"
+      ],
+      "timing": "fasted",
+      "form": "capsule",
+      "typicalDose": "1–2 g",
+      "bottle": {
+        "units": 100,
+        "unitName": "capsule",
+        "unitsPerDose": 2
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-pine-bark-extract-pycnogenol",
+      "name": "Pine bark extract (pycnogenol)",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "maritime pine bark extract",
+      "supports": [
+        "heart",
+        "joint"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-oxaloacetate",
+      "name": "Oxaloacetate",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "oxaloacetate",
+      "supports": [
+        "energy"
+      ],
+      "timing": "fasted",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 30,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-apigenin",
+      "name": "Apigenin",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "apigenin",
+      "supports": [
+        "sleep",
+        "calm"
+      ],
+      "timing": "before-bed",
+      "form": "capsule",
+      "typicalDose": "50 mg",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-tongkat-ali",
+      "name": "Tongkat ali",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "eurycoma longifolia",
+      "supports": [
+        "hormonal",
+        "energy"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-fadogia-agrestis",
+      "name": "Fadogia agrestis",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "fadogia agrestis",
+      "supports": [
+        "hormonal"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-boron",
+      "name": "Boron",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "boron",
+      "supports": [
+        "bone",
+        "hormonal"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "2–4 mg",
+      "bottle": {
+        "units": 90,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-hmb",
+      "name": "HMB",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "beta-hydroxy beta-methylbutyrate",
+      "supports": [
+        "muscle",
+        "strength"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "3 g",
+      "bottle": {
+        "units": 90,
+        "unitName": "capsule",
+        "unitsPerDose": 3
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-tmg",
+      "name": "TMG",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "trimethylglycine",
+      "supports": [
+        "heart",
+        "energy"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 90,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement",
+      "fields": {
+        "release": "The methylation one — a different job from Betaine HCl, which is stomach acid."
+      }
+    },
+    {
+      "id": "sup-spermidine",
+      "name": "Spermidine",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "spermidine",
+      "supports": [
+        "heart",
+        "brain"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-fisetin",
+      "name": "Fisetin",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "fisetin",
+      "supports": [
+        "brain"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 30,
+        "unitName": "capsule",
+        "unitsPerDose": 1
+      },
+      "intakeKind": "supplement"
+    },
+    {
+      "id": "sup-ca-akg",
+      "name": "Ca-AKG",
+      "type": "intake",
+      "tracking": "check",
+      "substance": "calcium alpha-ketoglutarate",
+      "supports": [
+        "bone",
+        "energy"
+      ],
+      "timing": "with-food",
+      "form": "capsule",
+      "typicalDose": "per label",
+      "bottle": {
+        "units": 60,
+        "unitName": "capsule",
         "unitsPerDose": 1
       },
       "intakeKind": "supplement"
