@@ -20,6 +20,7 @@ import { h, add } from './dom.js';
 import * as store from '../store.js';
 import { makeSupply, isTracked, doseUnits, supplyKey } from '../trackerOps.js';
 import { guarded } from './announcer.js';
+import { offerFor } from '../../lib/offers.js';
 
 /** One item's row of fields. Shared by the tracked list and the add list. */
 function supplyRow(item, initial) {
@@ -65,6 +66,13 @@ function supplyRow(item, initial) {
       : Number.isFinite(rec?.count)
         ? 'Counting by hand. Set units per dose and check-offs will do it for you.'
         : 'Not tracking a number for this yet.';
+    // The reorder state, and only that (offers.js). Dormant without a tag.
+    const offer = offerFor(item, rec);
+    if (offer) {
+      summary.append(h('span', {}, ' '),
+        h('a.thin-link', { href: offer.url, target: '_blank', rel: offer.rel }, offer.label),
+        h('span.why', {}, ` — ${offer.disclosure}`));
+    }
   }
   refresh();
 

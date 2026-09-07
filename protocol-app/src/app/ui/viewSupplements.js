@@ -47,6 +47,7 @@ import * as store from '../store.js';
 import { guarded } from './announcer.js';
 import { newId, nowIso, localDateKey } from '../../lib/core.js';
 import { makeSupply, doseUnits } from '../trackerOps.js';
+import { offerFor } from '../../lib/offers.js';
 import { NUTRIENT_NOTES, UNMEASURED } from './nutrientNotes.js';
 import { compare } from './doses.js';
 
@@ -394,6 +395,11 @@ export async function viewSupplements({ reload } = {}) {
     const supports = (s2.supports ?? []).map((v) => SUPPORTS_LABELS[v] ?? v).join(' · ');
     const moment = MOMENT_BY_TIMING[s2.timing] ?? MOMENT_BY_TIMING.anytime;
     const stock = supplyLine(s2.id);
+    // The reorder state is the ONE place an offer may appear (offers.js has
+    // the rule and the tests hold the line): this person's own count, on a
+    // thing they already take, saying it is nearly gone. Dormant until the
+    // affiliate config carries a real tag.
+    const offer = offerFor(s2, supplies[s2.id]);
     // The honest line. A supplement that names a nutrient has a food route and
     // the page can offer it; one that does not, does not — and saying so is
     // more use than a column that quietly has nothing in it.
@@ -418,6 +424,9 @@ export async function viewSupplements({ reload } = {}) {
         stock ? h('span.why', {}, stock) : null,
       ),
       s2.fields?.release ? h('p.muted', {}, s2.fields.release) : null,
+      offer ? h('p.tiny', {},
+        h('a.thin-link', { href: offer.url, target: '_blank', rel: offer.rel }, offer.label),
+        h('span.why', {}, ` — ${offer.disclosure}`)) : null,
       alsoFood,
       nutrientChips(s2),
       owned

@@ -325,12 +325,13 @@ walnuts came out at **0 g omega-3** because they file ALA under USDA's generic
 
 ### Still open here
 
-- **Affiliate links.** Kevin asked for these: *"what might be nice is to do affiliate links
-  to amazon, rho, or other products to maybe make some money that way."* Not a question —
-  the next thing to build. The field is designed and still empty. Design on record: on the
-  reorder state, never on the education, so the money follows a decision already made. The
-  one thing that cannot be written here is his associate tag / Rho id, which is an account
-  detail rather than a design call.
+- **Affiliate links — BUILT, dormant (7 Sep).** The mechanism ships in `src/lib/offers.js`:
+  reorder links appear only when somebody's own tracked count says a supplement is a week or
+  less from empty — never on the shelf browse, never on food, never on education, and a test
+  holds that boundary. Links carry `rel="sponsored"` and a one-line commission disclosure.
+  SHIP STATE IS OFF: both ids in the `AFFILIATE` block are empty and nothing renders anywhere
+  until Kevin pastes his Amazon Associates tag (and a Rho code + real URL shape) into that one
+  block. That is the only remaining step and it is his account detail, not a design call.
 - **Which supplements should actually be on the shelf.** The 110 are my picks of "commonly
   taken", which is the same guessing that got the palette wrong twice.
 
