@@ -77,15 +77,14 @@ export const NUTRIENT_NOTES = {
   melatonin: 'A hormone the pineal gland releases as evening light falls; it is the body’s signal that it is night, rather than a sedative. Light in the evening suppresses it and darkness permits it, so timing matters more here than in most of this list.',
 };
 
-// Why a nutrient shows no measured amount. Six of the twenty-nine can never
+// Why a nutrient shows no measured amount. Five of the twenty-nine can never
 // carry one, and the reason differs — which is worth a sentence, because "no
 // number" reads as an oversight unless it says otherwise.
 //
-// Checked against SR Legacy rather than assumed: polyphenols and nitrate exist
-// as columns in that database and NOT ONE food in it carries a value for
-// either.
+// Polyphenols left this list on 7 Sep: USDA's column is empty for every food,
+// but Phenol-Explorer measures them, and figures from it now ride on the rows
+// whose form matches — each marked with its source and assay basis.
 export const UNMEASURED = {
-  polyphenols: 'USDA has a polyphenols column and no food in it carries a value, so there is nothing honest to print',
   nitrate: 'USDA has a nitrates column and no food in it carries a value, so there is nothing honest to print',
   probiotics: 'probiotics are live organisms rather than a nutrient, so there is no amount to weigh — and strains differ from each other more than doses do',
   collagen: 'USDA does not measure collagen',

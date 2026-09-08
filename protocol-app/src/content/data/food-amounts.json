@@ -1,7 +1,6 @@
 {
-  "source": "USDA FoodData Central, SR Legacy (2018-04). Amounts per 100 g are USDA’s; the gram weight of each serving is this app’s own judgement.",
+  "source": "USDA FoodData Central, SR Legacy (2018-04) for nutrients; Phenol-Explorer 3.6 (Folin totals) for polyphenols, each such figure marked with its source and basis. Amounts per 100 g are the databases’; the gram weight of each serving is this app’s own judgement.",
   "unmeasured": {
-    "polyphenols": "SR Legacy has a polyphenols column and not one food in it carries a value",
     "nitrate": "SR Legacy has a nitrates column and not one food in it carries a value",
     "probiotics": "probiotics are live organisms, not a nutrient — there is nothing to weigh",
     "collagen": "not measured by SR Legacy",
@@ -105,6 +104,13 @@
           "summedFrom": [
             "ALA (as USDA’s generic 18:3)"
           ]
+        },
+        "polyphenols": {
+          "perServing": 473,
+          "per100g": 1575,
+          "unit": "mg",
+          "source": "Phenol-Explorer 3.6",
+          "basis": "whole walnut, Folin assay, n=2"
         }
       }
     },
@@ -1298,6 +1304,13 @@
           "perServing": 593,
           "per100g": 237,
           "unit": "mg"
+        },
+        "polyphenols": {
+          "perServing": 113,
+          "per100g": 45,
+          "unit": "mg",
+          "source": "Phenol-Explorer 3.6",
+          "basis": "raw tomato, Folin assay, n=29"
         }
       }
     },
@@ -1432,6 +1445,13 @@
           "perServing": 88.2,
           "per100g": 58.8,
           "unit": "mg"
+        },
+        "polyphenols": {
+          "perServing": 434,
+          "per100g": 289,
+          "unit": "mg",
+          "source": "Phenol-Explorer 3.6",
+          "basis": "raw, Folin assay, n=28"
         }
       }
     },
@@ -1449,6 +1469,13 @@
           "perServing": 1.92,
           "per100g": 2.4,
           "unit": "g"
+        },
+        "polyphenols": {
+          "perServing": 178,
+          "per100g": 223,
+          "unit": "mg",
+          "source": "Phenol-Explorer 3.6",
+          "basis": "highbush blueberry, raw, Folin assay, n=126"
         }
       }
     },
@@ -1466,6 +1493,13 @@
           "perServing": 16.8,
           "per100g": 21,
           "unit": "mg"
+        },
+        "polyphenols": {
+          "perServing": 455,
+          "per100g": 569,
+          "unit": "mg",
+          "source": "Phenol-Explorer 3.6",
+          "basis": "raw, Folin assay, n=60"
         }
       }
     },
@@ -1490,7 +1524,15 @@
       "fdcId": "171719",
       "fdcDescription": "Cherries, sweet, raw",
       "servingGrams": 140,
-      "amounts": {}
+      "amounts": {
+        "polyphenols": {
+          "perServing": 245,
+          "per100g": 175,
+          "unit": "mg",
+          "source": "Phenol-Explorer 3.6",
+          "basis": "sweet cherry, raw, Folin assay, n=10"
+        }
+      }
     },
     "food-pomegranate": {
       "fdcId": "169134",
@@ -1518,6 +1560,13 @@
           "perServing": 4.32,
           "per100g": 2.4,
           "unit": "g"
+        },
+        "polyphenols": {
+          "perServing": 362,
+          "per100g": 201,
+          "unit": "mg",
+          "source": "Phenol-Explorer 3.6",
+          "basis": "dessert apple with skin, Folin assay, n=31"
         }
       }
     },
@@ -1591,6 +1640,13 @@
           "perServing": 2.38,
           "per100g": 11.9,
           "unit": "mg"
+        },
+        "polyphenols": {
+          "perServing": 372,
+          "per100g": 1860,
+          "unit": "mg",
+          "source": "Phenol-Explorer 3.6",
+          "basis": "dark chocolate, Folin assay, n=13 — spans 1173–4437 by cocoa content"
         }
       }
     },
@@ -1603,6 +1659,13 @@
           "perServing": 2.01,
           "per100g": 14.35,
           "unit": "mg"
+        },
+        "polyphenols": {
+          "perServing": 7.7,
+          "per100g": 55,
+          "unit": "mg",
+          "source": "Phenol-Explorer 3.6",
+          "basis": "EXTRA VIRGIN, Folin assay, n=67 — refined oil is nearer 20"
         }
       }
     },
@@ -1610,7 +1673,15 @@
       "fdcId": "171917",
       "fdcDescription": "Beverages, tea, green, brewed, regular",
       "servingGrams": 240,
-      "amounts": {}
+      "amounts": {
+        "polyphenols": {
+          "perServing": 149,
+          "per100g": 62,
+          "unit": "mg",
+          "source": "Phenol-Explorer 3.6",
+          "basis": "brewed infusion, per 100 ml, Folin assay, n=16"
+        }
+      }
     },
     "food-mushrooms": {
       "fdcId": "169251",
@@ -1697,8 +1768,8 @@
       }
     },
     "food-tahini": {
-      "fdcId": "168604",
-      "fdcDescription": "Seeds, sesame butter, tahini, type of kernels unspecified",
+      "fdcId": "169406",
+      "fdcDescription": "Seeds, sesame butter, tahini, from unroasted kernels (non-chemically removed seed coat)",
       "servingGrams": 15,
       "amounts": {
         "calcium": {
@@ -1707,8 +1778,8 @@
           "unit": "mg"
         },
         "magnesium": {
-          "perServing": 14.3,
-          "per100g": 95,
+          "perServing": 53,
+          "per100g": 353,
           "unit": "mg"
         }
       }
@@ -1763,25 +1834,57 @@
       "fdcId": "169230",
       "fdcDescription": "Garlic, raw",
       "servingGrams": 6,
-      "amounts": {}
+      "amounts": {
+        "polyphenols": {
+          "perServing": 5.22,
+          "per100g": 87,
+          "unit": "mg",
+          "source": "Phenol-Explorer 3.6",
+          "basis": "fresh raw, Folin assay, n=3"
+        }
+      }
     },
     "food-ginger": {
       "fdcId": "169231",
       "fdcDescription": "Ginger root, raw",
       "servingGrams": 15,
-      "amounts": {}
+      "amounts": {
+        "polyphenols": {
+          "perServing": 30.8,
+          "per100g": 205,
+          "unit": "mg",
+          "source": "Phenol-Explorer 3.6",
+          "basis": "fresh root, Folin assay, n=2"
+        }
+      }
     },
     "food-ginger-dried-ground": {
       "fdcId": "170926",
       "fdcDescription": "Spices, ginger, ground",
       "servingGrams": 2,
-      "amounts": {}
+      "amounts": {
+        "polyphenols": {
+          "perServing": 9.48,
+          "per100g": 474,
+          "unit": "mg",
+          "source": "Phenol-Explorer 3.6",
+          "basis": "dried, Folin assay, n=2"
+        }
+      }
     },
     "food-turmeric-dried-ground": {
       "fdcId": "172231",
       "fdcDescription": "Spices, turmeric, ground",
       "servingGrams": 2,
-      "amounts": {}
+      "amounts": {
+        "polyphenols": {
+          "perServing": 42.3,
+          "per100g": 2117,
+          "unit": "mg",
+          "source": "Phenol-Explorer 3.6",
+          "basis": "dried, Folin assay — a single study"
+        }
+      }
     },
     "food-herring": {
       "fdcId": "175116",
@@ -1962,6 +2065,13 @@
           "perServing": 1.87,
           "per100g": 1.7,
           "unit": "g"
+        },
+        "polyphenols": {
+          "perServing": 66,
+          "per100g": 60,
+          "unit": "mg",
+          "source": "Phenol-Explorer 3.6",
+          "basis": "yellow onion, raw, Folin assay, n=15"
         }
       }
     },
@@ -2013,6 +2123,13 @@
           "perServing": 1.39,
           "per100g": 13.86,
           "unit": "mg"
+        },
+        "polyphenols": {
+          "perServing": 562,
+          "per100g": 5624,
+          "unit": "mg",
+          "source": "Phenol-Explorer 3.6",
+          "basis": "dry powder, Folin assay, n=7"
         }
       }
     }

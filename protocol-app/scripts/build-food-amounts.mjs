@@ -129,7 +129,7 @@ food-mushrooms-uv-exposed-or-sun-dried | 170143 | 70
 food-seaweed | 168458 | 3
 food-seaweed-kelp-or-kombu | 168457 | 5
 food-sesame-seeds | 170150 | 9
-food-tahini | 168604 | 15
+food-tahini | 169406 | 15
 food-molasses | 168820 | 20
 food-coconut-water | 170174 | 200
 food-sea-salt | 173468 | 1
@@ -191,7 +191,6 @@ const NUTRIENT_COMPONENTS = {
 
 // Named so the app can say WHY it is silent rather than just being silent.
 const UNMEASURED = {
-  polyphenols: 'SR Legacy has a polyphenols column and not one food in it carries a value',
   nitrate: 'SR Legacy has a nitrates column and not one food in it carries a value',
   probiotics: 'probiotics are live organisms, not a nutrient — there is nothing to weigh',
   collagen: 'not measured by SR Legacy',
@@ -201,6 +200,38 @@ const UNMEASURED = {
 
 const UNITS = { 1003: 'g', 1079: 'g', 1404: 'g', 1278: 'g', 1272: 'g' }; // the rest are mg or µg
 const NUTRIENT_NAMES = { 1404: 'ALA', 1270: 'ALA (as USDA’s generic 18:3)', 1278: 'EPA', 1272: 'DHA' };
+
+// Polyphenols, from the one database that actually measures them.
+//
+// USDA's polyphenol column is empty for every food, which is why this nutrient
+// sat in UNMEASURED until 7 Sep. Phenol-Explorer v3.6 (the dataset behind
+// Pérez-Jiménez 2010) carries Folin-assay totals, mg per 100 g fresh weight
+// (beverages per 100 ml). Each figure keeps its stated basis, because the
+// basis is where the honesty lives: the extra-virgin figure is not the refined
+// one, and the dried-turmeric figure rests on a single study.
+//
+// THE FORM RULE APPLIES ACROSS SOURCES: a figure whose form does not match the
+// row is not used. Buckwheat (they measured dry flour, we serve cooked groats)
+// and pomegranate (they measured juice, we serve arils) stay blank on purpose,
+// alongside tinned tomatoes and fresh turmeric which have no entry at all.
+const POLYPHENOLS = {
+  'food-walnuts': { per100g: 1575, basis: 'whole walnut, Folin assay, n=2' },
+  'food-tomatoes': { per100g: 45, basis: 'raw tomato, Folin assay, n=29' },
+  'food-strawberries': { per100g: 289, basis: 'raw, Folin assay, n=28' },
+  'food-blueberries': { per100g: 223, basis: 'highbush blueberry, raw, Folin assay, n=126' },
+  'food-blackberries': { per100g: 569, basis: 'raw, Folin assay, n=60' },
+  'food-cherries': { per100g: 175, basis: 'sweet cherry, raw, Folin assay, n=10' },
+  'food-apples': { per100g: 201, basis: 'dessert apple with skin, Folin assay, n=31' },
+  'food-dark-chocolate': { per100g: 1860, basis: 'dark chocolate, Folin assay, n=13 — spans 1173–4437 by cocoa content' },
+  'food-olive-oil': { per100g: 55, basis: 'EXTRA VIRGIN, Folin assay, n=67 — refined oil is nearer 20' },
+  'food-green-tea': { per100g: 62, basis: 'brewed infusion, per 100 ml, Folin assay, n=16' },
+  'food-garlic': { per100g: 87, basis: 'fresh raw, Folin assay, n=3' },
+  'food-ginger': { per100g: 205, basis: 'fresh root, Folin assay, n=2' },
+  'food-ginger-dried-ground': { per100g: 474, basis: 'dried, Folin assay, n=2' },
+  'food-turmeric-dried-ground': { per100g: 2117, basis: 'dried, Folin assay — a single study' },
+  'food-onions': { per100g: 60, basis: 'yellow onion, raw, Folin assay, n=15' },
+  'food-cocoa-powder': { per100g: 5624, basis: 'dry powder, Folin assay, n=7' },
+};
 
 function parseCsv(text) {
   const rows = []; let row = [], cur = '', q = false;
@@ -268,6 +299,14 @@ for (const r of rows) {
   const amounts = {};
   for (const nutrient of food.provides ?? []) {
     if (UNMEASURED[nutrient]) continue;
+    // Polyphenols are Phenol-Explorer's, joined below — USDA has nothing here.
+    if (nutrient === 'polyphenols') {
+      if (!POLYPHENOLS[r.id]) {
+        blank++;
+        missing.push(`${r.id}/polyphenols: no form-matched Phenol-Explorer figure — see the POLYPHENOLS table note`);
+      }
+      continue;
+    }
     const ids = NUTRIENT_IDS[nutrient];
     if (!ids) { missing.push(`${r.id}/${nutrient}: no SR Legacy nutrient mapped`); continue; }
     // Where the app names a family and the database names its members, sum the
@@ -307,11 +346,24 @@ for (const r of rows) {
     };
     filled++;
   }
+  // The Phenol-Explorer join, where the row claims polyphenols and the form
+  // matches. A second source, carried openly on the figure itself.
+  const poly = POLYPHENOLS[r.id];
+  if (poly && (food.provides ?? []).includes('polyphenols')) {
+    amounts.polyphenols = {
+      perServing: Number((poly.per100g * r.grams / 100).toPrecision(3)),
+      per100g: poly.per100g,
+      unit: 'mg',
+      source: 'Phenol-Explorer 3.6',
+      basis: poly.basis,
+    };
+    filled += 1;
+  }
   out[r.id] = { fdcId: r.fdcId, fdcDescription: desc, servingGrams: r.grams, amounts };
 }
 
 writeFileSync(OUT, `${JSON.stringify({
-  source: 'USDA FoodData Central, SR Legacy (2018-04). Amounts per 100 g are USDA’s; the gram weight of each serving is this app’s own judgement.',
+  source: 'USDA FoodData Central, SR Legacy (2018-04) for nutrients; Phenol-Explorer 3.6 (Folin totals) for polyphenols, each such figure marked with its source and basis. Amounts per 100 g are the databases’; the gram weight of each serving is this app’s own judgement.',
   unmeasured: UNMEASURED,
   noMatch: NO_MATCH,
   foods: out,

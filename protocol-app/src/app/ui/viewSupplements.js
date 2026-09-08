@@ -602,7 +602,12 @@ export async function viewSupplements({ reload } = {}) {
       } else if (c.dose) {
         note.append(h('p.amount', {}, `A typical supplement is ${c.dose}.`));
       }
-      if (item.amountSource) {
+      if (item.amounts?.[n]?.source) {
+        // A figure that came from somewhere other than USDA says so itself —
+        // polyphenols ride on Phenol-Explorer, with the assay basis attached.
+        note.append(h('p.muted.tiny', {},
+          `Measured amount from ${item.amounts[n].source} (${item.amounts[n].basis}) — for a ${item.amountSource?.servingGrams ?? '?'} g serving.`));
+      } else if (item.amountSource) {
         note.append(h('p.muted.tiny', {},
           `Measured amount from USDA FoodData Central — “${item.amountSource.fdcDescription}” — for a ${item.amountSource.servingGrams} g serving.`));
       }

@@ -68,7 +68,7 @@ Hemp seeds | | protein,magnesium | two tablespoons | pantry |
 Sardines | | omega-3,vitamin-d,calcium,b12,selenium | one tin | pantry | The bones are the calcium. Eat them.
 Salmon | fresh | omega-3,vitamin-d,b12,protein | a palm-sized fillet | protein |
 Salmon | tinned, with bones | omega-3,vitamin-d,calcium,b12,protein | half a tin | pantry | The soft bones are the calcium, and they are the reason the tin beats the fillet for it.
-Salmon | smoked | omega-3,b12,protein,sodium | two or three slices | protein | Cured rather than cooked, so it carries a lot of salt.
+Salmon | smoked | omega-3,b12,protein,sodium | two or three slices | protein | Cured rather than cooked, so it carries a lot of salt. The measured figures follow USDA's only smoked entry, which is lean chinook — Atlantic smoked salmon, the common product, carries several times more omega-3.
 Mackerel | | omega-3,vitamin-d,b12 | one fillet | protein |
 Anchovies | | omega-3,calcium | a few | pantry |
 Oysters | | zinc,b12,copper,iron | six | protein | Far and away the densest source of zinc there is.

@@ -71,12 +71,19 @@ test('a food that claims a measurable nutrient carries the figure, or is a named
   // records vitamin C as zero — which contradicts the row, so it is dropped
   // rather than printed. Blank beats guessed, every time.
   assert.deepEqual(gaps.sort(), [
+    // The three polyphenol blanks are the FORM RULE holding across sources:
+    // Phenol-Explorer measured buckwheat as dry flour (we serve cooked),
+    // pomegranate as juice (we serve arils), and tinned tomato not at all.
+    // Reusing the nearest figure would be the invented number in a lab coat.
+    'food-buckwheat/polyphenols',
     'food-kimchi/vitamin-c',
+    'food-pomegranate/polyphenols',
     'food-salmon-tinned-with-bones/vitamin-d',
     'food-salmon/vitamin-d',
     'food-sea-salt/iodine',
     'food-seaweed-kelp-or-kombu/iodine',
     'food-seaweed/iodine',
+    'food-tomatoes-tinned-or-cooked/polyphenols',
   ], 'the set of missing figures changed');
   for (const id of excused) {
     assert.ok(data.noMatch[id].length > 20, `${id} is unmatched without a stated reason`);
@@ -100,6 +107,22 @@ test('the figures are the ones a reference book gives', () => {
   near(byId['food-spinach'].amounts['vitamin-k'].perServing, 145, 0.1, 'raw spinach, vitamin K µg');
   // And the one that caught the bad match: oats, not buckwheat.
   assert.match(byId['food-oats'].amountSource.fdcDescription, /^Oats/, 'oats is pointed at the wrong food');
+  // The 7 Sep cross-check against UK CoFID: USDA's default tahini entry claims
+  // 95 mg magnesium per 100 g, which is chemically implausible — hulling
+  // removes calcium (in the hull), not magnesium (in the kernel). The mapping
+  // moved to USDA's unroasted-kernel entry, which agrees with whole sesame and
+  // with CoFID. If this drifts back near 14, the remap was lost.
+  near(byId['food-tahini'].amounts.magnesium.per100g, 353, 0.1, 'tahini magnesium, per 100 g');
+  // Polyphenols ride on Phenol-Explorer and every figure says so, with its
+  // assay basis — the second source never masquerades as the first.
+  const cocoa = byId['food-cocoa-powder'].amounts.polyphenols;
+  near(cocoa.perServing, 562, 0.1, 'two tablespoons of cocoa, polyphenols mg');
+  for (const f of foods) {
+    const poly = f.amounts?.polyphenols;
+    if (!poly) continue;
+    assert.equal(poly.source, 'Phenol-Explorer 3.6', `${f.id}'s polyphenol figure does not name its source`);
+    assert.ok(poly.basis?.length > 10, `${f.id}'s polyphenol figure has no assay basis`);
+  }
 });
 
 test('an omega-3 figure says which fatty acids went into it', () => {
