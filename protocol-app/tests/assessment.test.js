@@ -364,3 +364,42 @@ test('the evening deals downshift only, and never repeats the morning', async ()
   const none = dealDay({ items: lib.items, anatomy, ledger, weights: {}, date: '2026-09-09', minutes: { session: 12, evening: null } });
   assert.deepEqual(none.evening, []);
 });
+
+test('the dealer budgets by your recorded pace, not its own guess', async () => {
+  // Kevin, 9 Sep: "if we find that I'm taking twice as much time… route
+  // according to the updated time, because otherwise things that I should be
+  // doing are being left undone."
+  const { dealDay, minutesOf } = await import('../src/app/composer/dealer.js');
+  const { buildLedger } = await import('../src/app/composer/ledger.js');
+  const itemsById2 = Object.fromEntries(lib.items.map((i) => [i.id, i]));
+  const ledger = buildLedger({ days: [], itemsById: itemsById2, now: NOW });
+
+  // Whatever a blank slate deals first into a 15-minute session…
+  const cold = dealDay({ items: lib.items, anatomy, ledger, weights: {}, date: '2026-09-10', minutes: { session: 15, evening: null } });
+  assert.ok(cold.session.length >= 3, 'need a few items to test with');
+
+  // …now say the first two each actually take this person six minutes —
+  // recorded twice, so the median is real, exactly the session clock's shape.
+  const history = {};
+  for (const [d, key] of [['2026-09-07', 'a'], ['2026-09-08', 'b']]) {
+    history[d] = { date: d, log: {} };
+  }
+  for (const c of cold.session.slice(0, 2)) {
+    history['2026-09-07'].log[c.item.id] = { took: { seconds: 360, source: 'session' } };
+    history['2026-09-08'].log[c.item.id] = { took: { seconds: 360, source: 'session' } };
+  }
+
+  for (const c of cold.session.slice(0, 2)) {
+    assert.equal(minutesOf(c.item, history), 6, `${c.item.id}'s recorded pace was ignored`);
+  }
+
+  const warm = dealDay({ items: lib.items, anatomy, ledger, weights: {}, date: '2026-09-10', minutes: { session: 15, evening: null }, history });
+  assert.ok(warm.session.length < cold.session.length,
+    `the pace doubled and the deal did not shrink (${cold.session.length} -> ${warm.session.length})`);
+  assert.ok(warm.gaps.pacedItems >= 2, 'the deal does not say it used your pace');
+
+  // And an untimed item still budgets by the estimate — pace only ever
+  // replaces a guess where a fact exists.
+  const untimed = cold.session[cold.session.length - 1];
+  assert.equal(minutesOf(untimed.item, history), minutesOf(untimed.item, null));
+});

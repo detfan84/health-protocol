@@ -96,6 +96,9 @@ export async function dealtFor(date, { now = new Date(), dial } = {}) {
     // Absent means unanswered, not empty-handed — the dealer filters nothing
     // until somebody has actually said (D24).
     equipment: Array.isArray(kit?.value) ? kit.value : null,
+    // The same records the ledger reads, in their keyed form — the dealer
+    // budgets by your recorded pace wherever one exists (minutesOf).
+    history: days ?? null,
     date,
   });
 

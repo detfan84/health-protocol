@@ -161,6 +161,13 @@ function photoLoop(photos) {
         if (f.img.isConnected) f.img.src = `./src/content/photos/${f.set}_${frame}.jpg`;
       }
     }, 1200);
+    // In a browser this is a number; under Node's test runner it is a Timeout
+    // that holds the process open. Once the composer started dealing
+    // photo-carrying items onto Today, the screens suite opened their
+    // disclosures, started loops nothing in a test ever stops, and the whole
+    // run hung AFTER its last test passed. Unref lets Node exit; the browser
+    // never sees the call.
+    timer.unref?.();
   };
   host._stopLoop = () => {
     if (timer) clearInterval(timer);

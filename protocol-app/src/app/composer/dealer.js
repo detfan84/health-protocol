@@ -29,6 +29,7 @@
 import { EFFECT_COUNTS, nodesOf } from './ledger.js';
 import { weightOf, sideOf, BASELINE } from './findings.js';
 import { estimateFor } from '../../lib/estimates.js';
+import { paceOf } from '../../lib/durations.js';
 
 /**
  * The dial's count budgets — now the FALLBACK, for anybody who has never set
@@ -42,9 +43,25 @@ export const DIALS = {
   deep: { session: 6, snacks: 3 },
 };
 
-/** Estimated minutes an item costs, both sides counted. Scaffolding-honest:
- *  authored time first, the estimates layer for the other 587. */
-export function minutesOf(item) {
+/**
+ * What an item costs in minutes, in order of trust:
+ *
+ *   1. YOUR OWN RECORDED PACE — the median of what it has actually taken you,
+ *      from the session clock and typed times. Kevin, 9 Sep: "if we find that
+ *      I'm taking twice as much time… route according to the updated time,
+ *      because otherwise things that I should be doing are being left undone."
+ *      A measured you beats an authored anybody. Wall-clock, so no side
+ *      doubling — both sides are already inside the number.
+ *   2. The authored time on the card.
+ *   3. The estimates layer.
+ *   4. Sixty seconds, the last resort.
+ *
+ * The scaffolding comes down on its own: every session you run replaces a
+ * guess about you with a fact about you, and the very next deal budgets by it.
+ */
+export function minutesOf(item, history = null) {
+  const pace = history ? paceOf(history, item.id) : { times: 0 };
+  if (pace.times) return pace.typical / 60;
   const authored = Number.isFinite(item.amount?.seconds) ? item.amount.seconds : null;
   const est = authored === null ? estimateFor(item)?.seconds : null;
   const seconds = authored ?? est ?? 60;
@@ -204,6 +221,9 @@ export function dealDay({
   // these, the dealer fills to minutes with estimated durations; without them
   // it falls back to the dial's counts. `evening` deals a wind-down block.
   minutes = null,
+  // Recent day records, keyed by date — the source of the person's own
+  // recorded pace, which outranks every estimate (minutesOf).
+  history = null,
 } = {}) {
   const budget = DIALS[dial] ?? DIALS.standard;
   const sessionMinutes = Number.isFinite(minutes?.session) ? minutes.session : null;
@@ -258,7 +278,7 @@ export function dealDay({
       if (sessionCost >= sessionMinutes) break;
     } else if (chosen.length >= budget.session) break;
     if (coveredNodes.has(cand.node) && chosen.length) continue;
-    if (take(cand)) sessionCost += minutesOf(cand.item) + PER_ITEM_OVERHEAD_MINUTES;
+    if (take(cand)) sessionCost += minutesOf(cand.item, history) + PER_ITEM_OVERHEAD_MINUTES;
   }
 
   // ---- law 1, the hard one ----------------------------------------------
@@ -332,7 +352,7 @@ export function dealDay({
       if (!(cand.item.effect ?? []).every((e) => EVENING_EFFECTS.has(e))) continue;
       takenIds.add(cand.item.id);
       evening.push({ ...cand, why: `${cand.why} — released before sleep, where today landed` });
-      cost += minutesOf(cand.item) + PER_ITEM_OVERHEAD_MINUTES;
+      cost += minutesOf(cand.item, history) + PER_ITEM_OVERHEAD_MINUTES;
     }
   }
 
@@ -349,6 +369,9 @@ export function dealDay({
       budgetIsCount: 'the dial is specified in minutes; 14 of 601 items say how long they take, so slots are budgeted by count',
       snacksAreProxy: 'snacks are picked as equipment-free items; the real mechanism is `demands` vs a moment\'s `occupies`, authored on 2 of 343 practices',
       candidates: ranked.length,
+      ...(history && (sessionMinutes !== null || eveningMinutes !== null) ? {
+        pacedItems: [...chosen, ...evening].filter((c) => paceOf(history, c.item.id).times > 0).length,
+      } : {}),
       ...(owns === null ? { equipmentUnknown: 'nobody has said what equipment they have, so nothing was filtered out' } : {}),
     },
   };
