@@ -24,6 +24,7 @@ import { viewArea } from './viewArea.js';
 import { viewReference } from './viewReference.js';
 import { viewDisclaimer, accepted } from './viewDisclaimer.js';
 import { surfacePastFailures, installGlobalNet, plainReason } from './announcer.js';
+import { startNudges } from './nudges.js';
 import { recordFailure } from '../failLog.js';
 import { hhmm } from '../todayModel.js';
 import { localDateKey, nowIso } from '../../lib/core.js';
@@ -278,6 +279,10 @@ export async function init() {
   surfacePastFailures();
   askToKeepTheData();
   registerWorker();
+  // After the gate on purpose: nothing in this app speaks — not even a
+  // reminder the person scheduled — before the disclaimer is accepted.
+  // Idempotent, so the init() re-run after acceptance doesn't start a twin.
+  startNudges();
 }
 
 /**

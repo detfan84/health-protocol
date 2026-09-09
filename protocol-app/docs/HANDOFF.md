@@ -11,7 +11,7 @@ supersedes the older step lists below wherever they disagree.*
 branch `protocol-app-v0.2` (the Windows path older notes cite is history).
 **Deploy:** `npm run deploy` (direct upload to Cloudflare — a git push does NOT
 deploy; verify by the build stamp on the live URL). **Tests:** `npm test` —
-**448 green** (9 Sep).
+**462 green** (9 Sep, evening).
 
 ---
 
@@ -59,12 +59,31 @@ dealing Kevin's day**. The pieces, all under `src/app/composer/`:
 **The gate that matters** (unchanged, still zero): Kevin's real daily use on
 his own phone. Everything else is easier to judge behind it.
 
-**Next build, agreed direction:** reminders that actually fire on Android —
-in-app delivery from the schedule that already exists (R24's "one surface
-reading the schedule"; the old push memo was written for an iPhone and Kevin
-is on Android). Then Learn built out from Kevin's strikes. His content jobs
-run alongside: reels notes (docs/Reels_Intake.md — he watches and dumps rough
-notes, CC authors) and the PT eye-training sheet when it arrives.
+**Built 9 Sep, evening: reminders now fire on Android.** R24's one surface
+exists — `src/app/nudge.js` is the engine (walks to the next firing via
+`nextFire` in `lib/reminders.js`, which sits on the same `expandTimes` as the
+calendar file, so the two delivery paths cannot disagree about when) and
+`src/app/ui/nudges.js` is the device wiring: a quiet banner when the app is
+on screen, a service-worker notification when it is backgrounded (on Android
+`new Notification()` throws — `reg.showNotification` is the only path, which
+the old iPhone memo never had reason to know). Composed at fire time: the
+schedule is re-read at the moment of delivery, so a reminder deleted or
+switched off an hour ago stays silent; more than ten minutes late is skipped,
+never delivered stale. Opt-in twice, deliberately — the schedule's own toggle
+travels with a backup; the notification toggle is per-device on the You
+screen, three-state honest (on / off / blocked-by-browser), with a **Send a
+test** button because "on" is a claim and a notification in the tray is a
+fact. Verified live: a reminder set through the UI fired as a banner at its
+minute in a real browser. **The bug the bench flushed out:** viewReminders
+saved whole records via `putSetting`, so two quick edits both computed from
+the same stale copy and the second landed carrying the first field's old
+value — a time edit eaten by a label edit, green UI throughout. Every save on
+that card is now a function of the stored record through `mutateSetting`.
+
+**Next build, agreed direction:** Learn built out from Kevin's strikes on the
+in-app draft. His content jobs run alongside: reels notes
+(docs/Reels_Intake.md — he watches and dumps rough notes, CC authors) and the
+PT eye-training sheet when it arrives.
 
 ---
 
@@ -136,7 +155,10 @@ thinnest if one has to go.
   worker, `storage.persist()` with the browser's real answer shown on Data.
 - **Disclaimer gate** on first run, versioned, re-readable on Data.
 - **Reminders**: schedule model + calendar (.ics) export with per-kind cadence
-  and quiet hours. Push is ruled calendar-only for v1 (R19).
+  and quiet hours, and since 9 Sep the in-app surface (R24): while the app is
+  open — front or background — it fires the same schedule as a banner or an
+  Android notification. R19 still holds for the fully-closed app: that is the
+  calendar's job, and the card says so.
 
 ## What is NOT built, in the order I would do it
 
@@ -164,9 +186,9 @@ thinnest if one has to go.
    I proposed and he has not yet ruled on: why the day has anchors and a sixty-second floor,
    why release comes before load, and the anatomy map — the app already knows 136 body parts
    and what refers pain where, which is genuinely "information on the body".
-9. **Reminders.** Still calendar-export only. R19 ruled push out for v1, but the rulings log
-   notes that memo was written for an iPhone and Kevin is on Android, where push works in an
-   ordinary tab. Plausibly the difference between 0 loops and 1.
+9. ~~**Reminders.**~~ Done 9 Sep — see §The composer era. In-app delivery fires on
+   Android; calendar export covers the fully-closed hours. The "0 loops to 1" bet is
+   now placed and waiting on real use.
 10. **The clock.** 06:30 wake, 07:00 flow, 20:00 evening, 22:00 bed — all invented, and
     there is no "when does your day start" question anywhere. If somebody's day does not
     match, most of it reads as "Circle back" every single day.

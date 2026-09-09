@@ -161,6 +161,29 @@ export async function guarded(action, opts = {}) {
   }
 }
 
+/* ------------------------------- nudges ------------------------------- */
+
+/**
+ * A reminder arriving while the app is on screen (R24). It shares the
+ * announcer's corner because that is the one place cards already live, but it
+ * is not an alert and must not look like one — role=status, accent edge, no
+ * "didn't save" anywhere near it. It stays until dismissed: a nudge that
+ * evaporates before the phone is out of the pocket never happened.
+ */
+export function announceNudge({ at, label, kind }, kinds = {}) {
+  const card = h(
+    'div.announce-card.nudge',
+    { role: 'status' },
+    h('strong', {}, label ?? kinds[kind]?.label ?? 'Reminder'),
+    h('p', {}, `${at} — a time you set on the You screen.`),
+    h('div.announce-actions', {},
+      h('button.btn.quiet', { onclick: () => card.remove() }, 'Dismiss'),
+    ),
+  );
+  ensureHost().append(card);
+  return card;
+}
+
 /* --------------------------- next-launch notes ------------------------ */
 
 /**

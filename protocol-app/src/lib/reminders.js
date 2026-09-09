@@ -18,6 +18,7 @@
 // every delivery path there is.
 
 import { newId } from './core.js';
+import { addDays } from './cadence.js';
 
 export const REMINDERS_KEY = 'reminders';
 
@@ -181,6 +182,54 @@ export function expandTimes(t, quiet) {
     if (!inQuietHours(at, quiet)) out.push(at);
   }
   return out;
+}
+
+/** 0 = Sunday … 6 = Saturday, from a 'YYYY-MM-DD' key, in local terms. */
+function dayOfWeek(dateKey) {
+  const [y, m, d] = String(dateKey).split('-').map(Number);
+  return new Date(y, m - 1, d).getDay();
+}
+
+/**
+ * The next moment this schedule fires, strictly after `hm` on `date`:
+ * `{ date, at, fires: [{ id, kind, label? }] }`, or null when nothing is
+ * coming — off, no times, or no day in the next week matches.
+ *
+ * `fires` is everything due at that minute, because two reminders at 09:00
+ * are two reminders: a delivery path that walked to the first and stepped
+ * past the second would quietly disagree with the calendar file, and the
+ * whole point of one expansion (expandTimes) is that the paths cannot
+ * disagree about when something happens.
+ *
+ * Seven days of lookahead is not a cap that can bite: a `days` list either
+ * matches nothing at all or matches inside a week.
+ */
+export function nextFire(rec, { date, hm }) {
+  const r = normalizeReminders(rec);
+  if (!r.enabled || r.times.length === 0) return null;
+  for (let offset = 0; offset <= 7; offset += 1) {
+    const day = offset === 0 ? String(date) : addDays(date, offset);
+    const weekday = dayOfWeek(day);
+    let at = null;
+    const fires = [];
+    for (const t of r.times) {
+      if (t.days && !t.days.includes(weekday)) continue;
+      for (const each of expandTimes(t, r.quiet)) {
+        if (offset === 0 && each <= hm) continue;
+        if (at === null || each < at) {
+          at = each;
+          fires.length = 0;
+        }
+        if (each === at) {
+          const f = { id: t.id, kind: t.kind };
+          if (t.label) f.label = t.label;
+          fires.push(f);
+        }
+      }
+    }
+    if (at !== null) return { date: day, at, fires };
+  }
+  return null;
 }
 
 /** The times a protocol's timed blocks suggest — a starting point, not a rule. */

@@ -10,7 +10,8 @@ import assert from 'node:assert/strict';
 
 import {
   blankReminders, normalizeReminders, addReminder, updateReminder, removeReminder,
-  remindersFromBlocks, remindersToIcs, expandTimes, inQuietHours, KINDS, REMINDERS_KEY,
+  remindersFromBlocks, remindersToIcs, expandTimes, inQuietHours, nextFire,
+  KINDS, REMINDERS_KEY,
 } from '../src/lib/reminders.js';
 
 const NOW = new Date(Date.UTC(2026, 7, 22, 12, 0, 0));
@@ -155,6 +156,66 @@ test('the file says what it is, because a calendar entry has to explain itself l
     /DESCRIPTION:A reminder you set in Shoes of Peace\. It knows the time only/,
     'and it admits what it cannot know',
   );
+});
+
+/* ----------------------------- next firing ---------------------------- */
+// The in-app path (R24) walks to whatever nextFire says; the calendar file
+// writes whatever expandTimes says. nextFire is built ON expandTimes so the
+// two cannot disagree — these tests pin the walking itself.
+
+// 2026-09-09 is a Wednesday.
+const WED = { date: '2026-09-09', hm: '12:00' };
+
+const on = (r) => ({ ...r, enabled: true });
+
+test('nextFire: off, or nothing scheduled, means nothing coming', () => {
+  const r = addReminder(blankReminders(), { at: '07:00' });
+  assert.equal(nextFire(r, WED), null, 'the schedule is opt-in and this one is off');
+  assert.equal(nextFire(on(blankReminders()), WED), null, 'on with no times is still nothing');
+});
+
+test('nextFire: the next time today, strictly after now', () => {
+  let r = addReminder(blankReminders(), { at: '07:15', label: 'Morning block' });
+  r = on(addReminder(r, { at: '21:30', label: 'Wind down' }));
+
+  const next = nextFire(r, WED);
+  assert.equal(next.date, '2026-09-09');
+  assert.equal(next.at, '21:30');
+  assert.deepEqual(next.fires.map((f) => f.label), ['Wind down']);
+
+  // At the minute itself, that minute is already spoken for — a fire at
+  // 21:30 must not fire again when the engine re-arms at 21:30:00.4.
+  const after = nextFire(r, { date: '2026-09-09', hm: '21:30' });
+  assert.equal(after.date, '2026-09-10');
+  assert.equal(after.at, '07:15', 'past the last time today, tomorrow starts over');
+});
+
+test('nextFire: a days list waits for its day', () => {
+  let r = on(addReminder(blankReminders(), { at: '08:00', days: [1], label: 'Monday only' }));
+  const next = nextFire(r, WED);
+  assert.equal(next.date, '2026-09-14', 'the Wednesday ask lands on Monday');
+  assert.equal(next.at, '08:00');
+
+  // …and a day list never starves a nearer reminder on another row.
+  r = on(addReminder(r, { at: '09:00', days: [0], label: 'Sunday only' }));
+  assert.equal(nextFire(r, WED).date, '2026-09-13', 'Sunday 09:00 beats Monday 08:00');
+});
+
+test('nextFire: repeating nudges step through their window, quiet hours kept', () => {
+  const r = on(addReminder(blankReminders(), { at: '09:00', until: '17:00', everyMinutes: 120 }));
+  r.quiet = { from: '12:00', to: '14:00' };
+
+  const next = nextFire(normalizeReminders(r), { date: '2026-09-09', hm: '12:30' });
+  assert.equal(next.at, '15:00', '13:00 is inside quiet hours and never offered');
+});
+
+test('nextFire: two reminders at one minute are two firings, not one', () => {
+  let r = addReminder(blankReminders(), { at: '09:00', label: 'Magnesium' });
+  r = on(addReminder(r, { at: '09:00', label: 'Neck release' }));
+
+  const next = nextFire(r, { date: '2026-09-09', hm: '08:00' });
+  assert.equal(next.at, '09:00');
+  assert.deepEqual(next.fires.map((f) => f.label).sort(), ['Magnesium', 'Neck release']);
 });
 
 /* --------------------------- kinds and cadence ------------------------ */

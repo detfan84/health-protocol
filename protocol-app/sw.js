@@ -35,6 +35,22 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// A tapped reminder opens the app — the notification's whole promise is
+// "open to see what is actually due", so the tap must land there and not on
+// nothing. An open tab is fronted rather than duplicated; failing that, a new
+// window at the app root.
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((tabs) => {
+      for (const tab of tabs) {
+        if ('focus' in tab) return tab.focus();
+      }
+      return self.clients.openWindow('./');
+    }),
+  );
+});
+
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;

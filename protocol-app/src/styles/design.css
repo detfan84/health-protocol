@@ -621,6 +621,13 @@ nav.tabs button[aria-current='page'] { color: var(--accent); font-weight: 650; }
   border-left-color: var(--ink-muted);
 }
 
+/* A reminder is not a failure and must not dress like one: accent edge,
+ * not danger. After [role='status'] so the calmer of the two rules wins. */
+.announce-card.nudge {
+  border-color: var(--line);
+  border-left-color: var(--accent);
+}
+
 .announce-card p { margin: var(--sp-1) 0 0; font-size: var(--fs-base); }
 .announce-card strong { font-size: var(--fs-base); }
 
