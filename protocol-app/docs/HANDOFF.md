@@ -3,13 +3,68 @@
 *Written 23 Aug 2026, for whoever picks this up next. Read this before the
 roadmap: the roadmap says what is intended, this says what is true.*
 
-*Updated 29 Aug 2026 after the taxonomy session — §Where the home screen stands
-is the part written for the next session specifically.*
+*Updated 9 Sep 2026 at session close — read §The composer era first; it
+supersedes the older step lists below wherever they disagree.*
 
 **Live:** https://shoes-of-peace.kevin-c-bowie.workers.dev
-**Code:** `C:\Users\kevin\Health App\protocol-app`, branch `protocol-app-v0.2`
+**Code:** now on Kevin's Linux machine, `~/Projects/health-protocol/protocol-app`,
+branch `protocol-app-v0.2` (the Windows path older notes cite is history).
 **Deploy:** `npm run deploy` (direct upload to Cloudflare — a git push does NOT
-deploy). **Tests:** `npm test` — **336 green** (30 Aug).
+deploy; verify by the build stamp on the live URL). **Tests:** `npm test` —
+**448 green** (9 Sep).
+
+---
+
+## The composer era (1–9 Sep) — what is true now
+
+The day engine the roadmap called "layer 2, at zero" is **built, live, and
+dealing Kevin's day**. The pieces, all under `src/app/composer/`:
+
+- **Ledger** — computed coverage per anatomy node from checked-off work;
+  systemic effects recorded but never counted as coverage. **Findings** —
+  sided (left/right) events with decaying weights; the D42 post-item sheet
+  ("How was it?") records rating, limiting factor, hot-spot/eased-up,
+  deal-this-less. **Dealer** — rotation by recency × weight, pairing law hard
+  (strict: the region opened gets loaded, siblings don't count), medicine
+  drop, equipment filtering. **Wake** — dealt by sleep position
+  (unwind-the-night, Kevin's 1 Sep ruling amending law 4 for this block).
+- **The assessment** (Home → "What it knows about you"): problem areas with
+  sides · pacing (self-designation, D28) · **the time plan** · equipment ·
+  sleep position · when the day starts. Receipt reads back every consequence.
+- **The time plan replaced the preset tiers** (Kevin, 9 Sep: "those are just
+  arbitrary numbers"). One number, typed or slid; an election of blocks; a
+  recommended split, all overridable; guidance encourages and never clamps —
+  `timeplan.js`. The dealer fills each elected block to its minutes, evening
+  block deals downshift-only ("where today landed"), 45 s/item switching
+  overhead in the accounting.
+- **Pace learning closes the loop** (9 Sep): the dealer budgets by the
+  person's recorded times (median) before any estimate — `minutesOf` in
+  `dealer.js`. Estimates (`src/lib/estimates.js`) are the scaffolding and
+  come down item by item as sessions get timed.
+- **The Recognition Quiz is deferred out of the release path** (Kevin, 1 Sep):
+  the Connection map was superseded, new hEDS criteria land in December, and
+  the beachhead audience already knows its diagnoses. Three of the quiz's four
+  outputs ship via the assessment; module toggles wait.
+- **Food side**: shelf researched 110→152 (salt tablets the headline);
+  247→263 measured figures, cross-checked against UK CoFID (one real error
+  found and fixed — tahini magnesium); polyphenols measured via
+  Phenol-Explorer, source carried per figure. **Affiliate mechanism** built
+  and dormant (`src/lib/offers.js`) — backburner by Kevin's ruling, wakes only
+  when his tag is pasted in.
+- **Learn**: the draft spine is IN THE APP (Learn tab, banner-marked DRAFT)
+  for Kevin to strike — `learnDraft.js`. Sources: `docs/LEARN_DRAFT_v0.md`,
+  `docs/VOICE_Core_Principle_2026-09-01.md` (his statement, verbatim — the
+  app's core principle, first full version on record).
+
+**The gate that matters** (unchanged, still zero): Kevin's real daily use on
+his own phone. Everything else is easier to judge behind it.
+
+**Next build, agreed direction:** reminders that actually fire on Android —
+in-app delivery from the schedule that already exists (R24's "one surface
+reading the schedule"; the old push memo was written for an iPhone and Kevin
+is on Android). Then Learn built out from Kevin's strikes. His content jobs
+run alongside: reels notes (docs/Reels_Intake.md — he watches and dumps rough
+notes, CC authors) and the PT eye-training sheet when it arrives.
 
 ---
 
@@ -214,7 +269,8 @@ items, 136 anatomy nodes, 6 referral sites, with zero items still carrying `kind
 `wrangler` auth is an OAuth token in `~/.config/.wrangler` — it will expire, and
 `npm run deploy` is a direct upload, so a git push still does not deploy.
 
-### Start here next session
+### Start here next session — SUPERSEDED 9 Sep, see §The composer era
+*(kept for the reasoning; the presets below were struck for the time plan)*
 
 Step 2 below is **done** — see §The tile collapse. What is left:
 
