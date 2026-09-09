@@ -35,7 +35,11 @@ test('every question says what it changes, and nothing is asked idly', () => {
   assert.ok(QUESTIONS.length >= 4);
   for (const q of QUESTIONS) {
     assert.ok(q.changes?.length > 20, `"${q.ask}" cannot say what it changes`);
-    assert.ok(q.options?.length >= 2, `"${q.ask}" offers no real choice`);
+    // The time and blocks questions are custom controls, not option lists —
+    // their "choice" is a number and an election (9 Sep, no tiers).
+    if (!['time', 'multi-blocks'].includes(q.kind)) {
+      assert.ok(q.options?.length >= 2, `"${q.ask}" offers no real choice`);
+    }
     assert.ok(q.note?.length > 20, `"${q.ask}" has no plain-words note`);
   }
 });
@@ -137,18 +141,23 @@ test('a seeded weight is above baseline and says where it came from', () => {
 
 /* -------------------------------- the dial -------------------------------- */
 
-test('careful pacing caps the dial, and says so', () => {
-  // D28: the capacity gate "sets the movement dial's start and caps its ramp".
-  assert.equal(capDial('deep', 'careful'), 'standard');
-  assert.equal(capDial('standard', 'careful'), 'standard');
-  assert.equal(capDial(undefined, 'careful'), 'light');
-  // And it caps nothing for anybody else.
-  assert.equal(capDial('deep', 'steady'), 'deep');
-  assert.equal(capDial('deep', null), 'deep');
+test('careful pacing encourages a lighter start, and never clamps the number', () => {
+  // The posture moved on 9 Sep: D28's cap becomes a recommendation with its
+  // reason attached, because "all of this should be adjustable for them" —
+  // the derailer is the disrupted routine, and the guidance says exactly that.
+  const { settings, notes } = seedFrom({
+    time: { total: 45, elected: { wake: true, session: true, snacks: true, evening: true, bed: true } },
+    pacing: 'careful',
+  }, ctx);
+  const time = settings.find((s) => s.key === 'composer.time').value;
+  assert.equal(time.total, 45, 'the person\'s number was clamped');
+  assert.ok(notes.some((n) => /recommended start is 25/.test(n)), 'no guidance rode along with the choice');
+  assert.ok(notes.some((n) => /routine/.test(n)), 'the guidance does not say why');
 
-  const { settings, notes } = seedFrom({ dial: 'deep', pacing: 'careful' }, ctx);
-  assert.equal(settings.find((s) => s.key === 'composer.dial').value, 'standard');
-  assert.ok(notes.some((n) => /Standard/.test(n)), 'the cap was applied silently');
+  // The dial fallback still starts a careful pacer light when no time is set.
+  assert.equal(capDial(undefined, 'careful'), 'light');
+  const bare = seedFrom({ pacing: 'careful' }, ctx);
+  assert.equal(bare.settings.find((s) => s.key === 'composer.dial').value, 'light');
 });
 
 /* ------------------------------- equipment -------------------------------- */
@@ -294,4 +303,64 @@ test('answering the sleep question trims the static wake block to its floor', as
   // Idempotent, and unanswered changes nothing.
   assert.equal(await applySleep('side'), false);
   assert.equal(await applySleep(null), false);
+});
+
+/* ------------------------------ the time plan ----------------------------- */
+// Kevin, 9 Sep: "those are just arbitrary numbers… how much time do you want to
+// dedicate? How do you want to split it up? Here's our recommendation… let
+// them choose what they get."
+
+test('the split spends what the person gave, over what they elected', async () => {
+  const { recommendSplit, minimumFor, BLOCKS } = await import('../src/app/composer/timeplan.js');
+  const elected = { wake: true, session: true, snacks: true, evening: true, bed: true };
+  const split = recommendSplit({ total: 30, elected });
+  const spent = BLOCKS.filter((b) => elected[b.id]).reduce((n, b) => n + split[b.id], 0);
+  assert.ok(Math.abs(spent - 30) <= 2, `30 minutes became ${spent}`);
+  assert.ok(split.session > split.evening, 'the session should take the larger share');
+
+  // Dropping the evening sends its share to the session, not into thin air.
+  const noEvening = recommendSplit({ total: 30, elected: { ...elected, evening: false } });
+  assert.ok(noEvening.session > split.session);
+  assert.equal(noEvening.evening, undefined);
+
+  // The person's own override always wins.
+  const overridden = recommendSplit({ total: 30, elected, overrides: { session: 8 } });
+  assert.equal(overridden.session, 8);
+  assert.ok(minimumFor(elected) >= 10, 'the all-blocks floor should be a real number');
+});
+
+test('minute budgets fill the session to the minutes, not to a count', async () => {
+  const { dealDay, minutesOf } = await import('../src/app/composer/dealer.js');
+  const { buildLedger } = await import('../src/app/composer/ledger.js');
+  const itemsById2 = Object.fromEntries(lib.items.map((i) => [i.id, i]));
+  const ledger = buildLedger({ days: [], itemsById: itemsById2, now: NOW });
+  const short = dealDay({ items: lib.items, anatomy, ledger, weights: {}, date: '2026-09-09', minutes: { session: 6, evening: null } });
+  const long = dealDay({ items: lib.items, anatomy, ledger, weights: {}, date: '2026-09-09', minutes: { session: 25, evening: null } });
+  const { PER_ITEM_OVERHEAD_MINUTES } = await import('../src/app/composer/dealer.js');
+  // Cost as the dealer counts it: the work plus the switching. Without the
+  // overhead a 26-minute budget dealt seventeen items.
+  const cost = (day) => day.session.reduce((n, c) => n + minutesOf(c.item) + PER_ITEM_OVERHEAD_MINUTES, 0);
+  assert.ok(cost(short) < cost(long), 'more minutes did not deal more work');
+  assert.ok(cost(short) >= 5, `a 6-minute budget dealt ${cost(short).toFixed(1)} min`);
+  assert.ok(cost(long) >= 20 && cost(long) <= 40, `a 25-minute budget dealt ${cost(long).toFixed(1)} min`);
+  assert.ok(long.session.length <= 14, `a 25-minute budget dealt ${long.session.length} items — a scramble, not a session`);
+});
+
+test('the evening deals downshift only, and never repeats the morning', async () => {
+  const { dealDay } = await import('../src/app/composer/dealer.js');
+  const { buildLedger } = await import('../src/app/composer/ledger.js');
+  const itemsById2 = Object.fromEntries(lib.items.map((i) => [i.id, i]));
+  const ledger = buildLedger({ days: [], itemsById: itemsById2, now: NOW });
+  const day = dealDay({ items: lib.items, anatomy, ledger, weights: {}, date: '2026-09-09', minutes: { session: 12, evening: 8 } });
+  assert.ok(day.evening.length > 0, 'an elected evening dealt nothing');
+  const CALM = new Set(['release', 'lengthen', 'calm', 'circulate', 'mobilise']);
+  for (const c of day.evening) {
+    assert.ok((c.item.effect ?? []).every((e) => CALM.has(e)),
+      `${c.item.id} [${(c.item.effect ?? []).join('/')}] was dealt into the wind-down`);
+  }
+  const morning = new Set(day.session.map((c) => c.item.id));
+  for (const c of day.evening) assert.ok(!morning.has(c.item.id), `${c.item.id} was dealt twice in one day`);
+  // And with no election, no evening — a block you did not choose stays empty.
+  const none = dealDay({ items: lib.items, anatomy, ledger, weights: {}, date: '2026-09-09', minutes: { session: 12, evening: null } });
+  assert.deepEqual(none.evening, []);
 });

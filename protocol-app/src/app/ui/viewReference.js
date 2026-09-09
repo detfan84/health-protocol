@@ -18,7 +18,29 @@ async function loadReference() {
 
 export async function viewReference() {
   const root = h('div');
-  root.append(h('h1', {}, 'Reference'));
+  root.append(h('h1', {}, 'Learn'));
+
+  // The Learn spine, as a reviewable draft (Kevin, 9 Sep: "just go ahead and
+  // drop it in the app and then I can review it there"). The on-ramp reads in
+  // full; the sections beneath are the plan of what gets written next. The
+  // draft banner comes off when Kevin has struck what's wrong.
+  {
+    const { ON_RAMP, SECTIONS } = await import('./learnDraft.js');
+    root.append(h('p.muted', {}, 'DRAFT — assembled from things Kevin has said, for his review. Strike freely; nothing here is final.'));
+    root.append(h('div.card', {},
+      h('div.card-head', {}, h('h2', {}, ON_RAMP.title)),
+      ON_RAMP.paragraphs.map((text) => h('p', {}, text)),
+    ));
+    const coming = h('div.card', {},
+      h('div.card-head', {}, h('h2', {}, 'What Learn will hold')),
+      h('p.muted', {}, 'Each of these becomes its own piece, in the same voice, dripped rather than dumped.'));
+    for (const s2 of SECTIONS) {
+      coming.append(h('details.notes', {},
+        h('summary', {}, s2.title),
+        h('p.muted', {}, s2.sketch)));
+    }
+    root.append(coming);
+  }
 
   let ref;
   try {

@@ -24,6 +24,7 @@ import { buildLedger, reachableNodes } from './ledger.js';
 import { weighFindings, itemPreferences } from './findings.js';
 import { dealDay } from './dealer.js';
 import { dealWake } from './wake.js';
+import { recommendSplit } from './timeplan.js';
 
 export const dealtKey = (date) => `dealt:${date}`;
 
@@ -66,21 +67,31 @@ export async function dealtFor(date, { now = new Date(), dial } = {}) {
   if (date !== localDateKey()) return null;
 
   const catalog = await loadCatalog();
-  const [days, findings, settings, kit, sleep] = await Promise.all([
+  const [days, findings, settings, kit, sleep, time] = await Promise.all([
     store.loadRecentDays(date),
     store.loadFindings(),
     store.getSetting('composer.dial'),
     store.getSetting('composer.equipment'),
     store.getSetting('composer.sleep'),
+    store.getSetting('composer.time'),
   ]);
 
   const ledger = buildLedger({ days: Object.values(days ?? {}), itemsById: catalog.itemsById, now });
+  // The person's time plan, when they have made one (timeplan.js): minutes per
+  // elected block, dealt to the minute with estimated durations. Without one,
+  // the dial's counts still work — nobody's day breaks for skipping a screen.
+  const plan = time?.value ?? null;
+  const split = plan ? recommendSplit({ total: plan.total, elected: plan.elected, overrides: plan.overrides ?? {} }) : null;
   const dealt = dealDay({
     items: catalog.items,
     anatomy: catalog.anatomy,
     ledger,
     weights: weighFindings({ events: findings, now }),
     preferences: itemPreferences({ events: findings }),
+    minutes: split ? {
+      session: plan.elected?.session ? split.session : null,
+      evening: plan.elected?.evening ? split.evening : null,
+    } : null,
     dial: dial ?? settings?.value ?? 'standard',
     // Absent means unanswered, not empty-handed — the dealer filters nothing
     // until somebody has actually said (D24).
@@ -106,6 +117,7 @@ export async function dealtFor(date, { now = new Date(), dial } = {}) {
     dealtAt: nowIso(),
     session: dealt.session.map((c) => ({ id: c.item.id, why: c.why })),
     snacks: dealt.snacks.map((c) => ({ id: c.item.id, why: c.why })),
+    evening: (dealt.evening ?? []).map((c) => ({ id: c.item.id, why: c.why })),
     medicine: dealt.medicine ? { id: dealt.medicine.item.id, why: dealt.medicine.why } : null,
     notes: dealt.notes,
     updatedAt: nowIso(),
@@ -138,6 +150,7 @@ export function blocksFrom(dealt, catalog) {
   ].filter(Boolean);
   const snacks = dealt.snacks.map(resolve).filter(Boolean);
   const wake = (dealt.wake ?? []).map(resolve).filter(Boolean);
+  const evening = (dealt.evening ?? []).map(resolve).filter(Boolean);
 
   const blocks = [];
   // First among the dealt cards, because it is the first thing in the day. No
@@ -157,6 +170,18 @@ export function blocksFrom(dealt, catalog) {
       name: 'Session',
       order: 2,
       items: session,
+    });
+  }
+  // The evening's concrete answer to the anchor's standing instruction. The
+  // static arc-evening block says "deep release, wherever today landed" — this
+  // block IS where today landed, chosen by the same ledger that dealt the
+  // morning. It sorts after the session and stays clock-free like the rest.
+  if (evening.length) {
+    blocks.push({
+      id: 'composed-evening',
+      name: 'Evening — where today landed',
+      order: 6,
+      items: evening,
     });
   }
   if (snacks.length) {

@@ -32,6 +32,7 @@
 // the whole library stays browsable and addable regardless.
 
 import { makeEvent } from './findings.js';
+import { recommendSplit, planNotes } from './timeplan.js';
 
 /** Everything under a node, so "my hips" reaches the muscles in them. */
 export function descendantsOf(anatomy, id) {
@@ -172,12 +173,26 @@ export const QUESTIONS = [
     changes: 'caps the dial and how quickly it may rise',
   },
   {
-    id: 'dial',
-    ask: 'How much do you want in a session?',
-    note: 'Change it any day. Nothing is lost by picking the small one.',
-    kind: 'one',
-    options: DIALS,
-    changes: 'sets how many things are dealt into a session',
+    // Kevin, 9 Sep, striking the four preset tiers: "those are just arbitrary
+    // numbers… how much time do you want to dedicate? And then how do you want
+    // to split it up? Here's our recommendation… let them choose what they
+    // get." One number, theirs; an election of blocks; a recommended split
+    // over what they elected; everything adjustable. viewAssessment renders
+    // this one specially — it is minutes and checkboxes, not options.
+    id: 'time',
+    ask: 'How much time do you want to give this each day?',
+    note: 'Your number, not a tier — slide it or type it, change it any day. More is not automatically better: a day that leaves tomorrow intact is what keeps the routine alive, and the routine is what does the work.',
+    kind: 'time',
+    options: [],
+    changes: 'sets the minutes each elected block is dealt to, split by recommendation and adjustable per block',
+  },
+  {
+    id: 'blocks',
+    ask: 'Which parts of the day do you actually want?',
+    note: 'Morning and evening together are the ideal — but a block you will not do is worse than one you never took on. The composer only deals into what you elect.',
+    kind: 'multi-blocks',
+    options: [],
+    changes: 'elects which blocks of the day the composer deals into at all',
   },
   {
     id: 'equipment',
@@ -247,13 +262,22 @@ export function seedFrom(answers = {}, { anatomy = {}, reachable = [] } = {}) {
   }
 
   const pacing = answers.pacing ?? null;
-  const dial = capDial(answers.dial, pacing);
-  if (pacing === 'careful' && answers.dial === 'deep') {
-    notes.push('Deep was asked for and the dial starts at Standard — it can climb from there');
+  // The time plan replaces the dial (9 Sep). The dial survives as a derived
+  // fallback so nothing that still reads it breaks; careful pacing without a
+  // stated time still starts light.
+  const time = answers.time ?? null;
+  let dial;
+  if (time && Number.isFinite(time.total)) {
+    const split = recommendSplit({ total: time.total, elected: time.elected, overrides: time.overrides ?? {} });
+    dial = (split.session ?? 0) < 8 ? 'light' : (split.session ?? 0) <= 13 ? 'standard' : 'deep';
+    notes.push(...planNotes({ total: time.total, elected: time.elected, pacing }));
+  } else {
+    dial = capDial(answers.dial, pacing);
   }
 
   const settings = [
     { key: 'composer.dial', value: dial },
+    { key: 'composer.time', value: time && Number.isFinite(time.total) ? time : null },
     { key: 'composer.pacing', value: pacing },
     { key: 'composer.equipment', value: answers.equipment ?? [] },
     { key: 'composer.morning', value: answers.morning ?? null },

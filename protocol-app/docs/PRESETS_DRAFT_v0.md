@@ -1,4 +1,15 @@
-# The four presets — a draft to strike, with measured minutes
+# SUPERSEDED, 9 Sep — Kevin struck the tiers themselves
+
+*"Those are just arbitrary numbers." The four fixed presets are replaced by one
+number the person chooses (typed or slid), an election of which blocks of the
+day they will actually do, a recommended split over what they elected, and
+every part of it adjustable — with the composer filling each elected block to
+its minutes. Built same day: `src/app/composer/timeplan.js`, the time card in
+the assessment, and minute-budget dealing in the dealer. The measured numbers
+below survive as evidence for the recommended split's proportions; the tiers do
+not.*
+
+# ~~The four presets~~ — a draft to strike, with measured minutes
 
 *2 Sep 2026. Your ask (29 Aug): recommended daily arcs at different time
 commitments, fully modifiable. The blocker was "what ARE the presets?" — a

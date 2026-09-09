@@ -19,6 +19,7 @@ import * as store from '../store.js';
 import { guarded } from './announcer.js';
 import { nowIso, localDateKey } from '../../lib/core.js';
 import { QUESTIONS, seedFrom, AREAS, capDial } from '../composer/assessment.js';
+import { BLOCKS, DEFAULT_ELECTED, recommendSplit, minimumFor, planNotes } from '../composer/timeplan.js';
 import { loadCatalog, dealtKey } from '../composer/day.js';
 import { reachableNodes } from '../composer/ledger.js';
 
@@ -91,6 +92,9 @@ export async function viewAssessment({ done, reload } = {}) {
     morning: previous.morning ?? null,
     sleep: previous.sleep ?? null,
     areaSides: { ...(previous.areaSides ?? {}) },
+    time: previous.time
+      ? { total: previous.time.total, elected: { ...previous.time.elected }, overrides: { ...(previous.time.overrides ?? {}) } }
+      : { total: 20, elected: { ...DEFAULT_ELECTED }, overrides: {} },
   };
 
   root.append(
@@ -162,7 +166,92 @@ export async function viewAssessment({ done, reload } = {}) {
     return card;
   }
 
+  /**
+   * The time question — one number, an election of blocks, a live recommended
+   * split, and per-block overrides on the flexible two. Kevin's 9 Sep shape:
+   * no tiers, everything adjustable, recommendations with their reasons.
+   */
+  function timeField(q, blocksQ) {
+    const t = answers.time;
+    const splitLine = h('p.muted', {});
+    const notesHost = h('div');
+    const overrideInputs = {};
+
+    function repaint() {
+      const split = recommendSplit({ total: t.total, elected: t.elected, overrides: t.overrides });
+      const parts = BLOCKS.filter((b) => t.elected[b.id])
+        .map((b) => `${b.name.toLowerCase()} ${split[b.id]} min`);
+      splitLine.textContent = parts.length
+        ? `The split, adjustable: ${parts.join(' · ')} — floor for this selection is ${minimumFor(t.elected)} min.`
+        : 'Nothing elected — the day would be empty.';
+      clear(notesHost);
+      for (const n of planNotes({ total: t.total, elected: t.elected, pacing: answers.pacing })) {
+        notesHost.append(h('p.muted.tiny', {}, n));
+      }
+      for (const [id, input] of Object.entries(overrideInputs)) {
+        if (!Number.isFinite(t.overrides[id])) input.placeholder = String(split[id] ?? '');
+      }
+    }
+
+    const total = h('input', {
+      type: 'number', min: '0', inputmode: 'numeric', id: 'time-total',
+      value: String(t.total), style: 'width:90px',
+      oninput: (e) => { const n = Number(e.target.value); if (Number.isFinite(n)) t.total = n; repaint(); },
+    });
+    const slider = h('input', {
+      type: 'range', min: '5', max: '90', step: '5', value: String(t.total),
+      'aria-label': 'Minutes per day',
+      oninput: (e) => { t.total = Number(e.target.value); total.value = e.target.value; repaint(); },
+    });
+    total.addEventListener('input', () => { slider.value = String(t.total); });
+
+    const card = h('div.card', {},
+      h('div.card-head', {}, h('h2', {}, q.ask)),
+      h('p.muted', {}, q.note),
+      h('div.field-row', {},
+        h('div', {}, h('label', { for: 'time-total' }, 'Minutes a day'), total),
+        h('div.grow', {}, h('label', {}, 'Or slide it'), slider),
+      ),
+      h('h3.section-title', {}, blocksQ.ask),
+      h('p.muted', {}, blocksQ.note),
+    );
+
+    for (const b of BLOCKS) {
+      const id = `block-${b.id}`;
+      const box = h('input', {
+        type: 'checkbox', id, checked: !!t.elected[b.id],
+        onchange: (e) => { t.elected[b.id] = e.target.checked; repaint(); },
+      });
+      const row = h('div.row.compact', {}, box,
+        h('label.grow', { for: id },
+          h('span.name', {}, b.name),
+          h('span.why', {}, b.note)));
+      if (b.flexible) {
+        const ov = h('input', {
+          type: 'number', min: '0', inputmode: 'numeric', style: 'width:70px',
+          'aria-label': `Minutes for ${b.name}`,
+          value: Number.isFinite(t.overrides[b.id]) ? String(t.overrides[b.id]) : '',
+          oninput: (e) => {
+            const raw = String(e.target.value).trim();
+            if (raw === '') delete t.overrides[b.id];
+            else { const n = Number(raw); if (Number.isFinite(n)) t.overrides[b.id] = n; }
+            repaint();
+          },
+        });
+        overrideInputs[b.id] = ov;
+        row.append(ov);
+      }
+      card.append(row);
+    }
+    card.append(splitLine, notesHost);
+    repaint();
+    return card;
+  }
+
+  const blocksQ = QUESTIONS.find((q) => q.kind === 'multi-blocks');
   for (const q of QUESTIONS) {
+    if (q.kind === 'multi-blocks') continue; // folded into the time card
+    if (q.kind === 'time') { root.append(timeField(q, blocksQ)); continue; }
     root.append(q.kind === 'multi' ? multiField(q) : oneField(q));
   }
 
@@ -215,11 +304,12 @@ export async function viewAssessment({ done, reload } = {}) {
       card.append(h('p', {}, 'You named no problem areas, so the rotation starts even and spreads across everything the library can reach.'));
     }
 
-    const dial = capDial(answers.dial, answers.pacing);
-    if (answers.pacing === 'careful') {
-      card.append(h('p', {}, `Because doing too much costs you later, the dial starts at ${dial} and climbs slowly. That is a pacing setting, not a label, and nothing in the app decides anything else about you from it.`));
-    } else if (answers.pacing) {
-      card.append(h('p', {}, `Sessions are set to ${dial}. Change it any day.`));
+    if (answers.time && Number.isFinite(answers.time.total)) {
+      const split = recommendSplit({ total: answers.time.total, elected: answers.time.elected, overrides: answers.time.overrides });
+      const parts = BLOCKS.filter((b) => answers.time.elected[b.id]).map((b) => `${b.name.toLowerCase()} ${split[b.id]} min`);
+      card.append(h('p', {}, `${answers.time.total} minutes a day, split ${parts.join(' · ')}. The composer fills each block to its minutes with what your coverage and reports say you need — and every part of the split is yours to change.`));
+    } else if (answers.pacing === 'careful') {
+      card.append(h('p', {}, `Because doing too much costs you later, sessions start light and climb slowly. That is a pacing setting, not a label.`));
     }
 
     if (answers.equipment.length) {

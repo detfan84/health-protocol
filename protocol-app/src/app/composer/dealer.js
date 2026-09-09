@@ -28,13 +28,44 @@
 
 import { EFFECT_COUNTS, nodesOf } from './ledger.js';
 import { weightOf, sideOf, BASELINE } from './findings.js';
+import { estimateFor } from '../../lib/estimates.js';
 
-/** Slots and their budgets, per dial. Counts, for the reason above. */
+/**
+ * The dial's count budgets — now the FALLBACK, for anybody who has never set
+ * their time. Kevin's 9 Sep redirect replaced tiers with one number the person
+ * chooses; the dealer fills minutes when it is given minutes (see dealDay's
+ * `minutes`) and falls back to these counts when it is not.
+ */
 export const DIALS = {
   light: { session: 2, snacks: 2 },
   standard: { session: 4, snacks: 3 },
   deep: { session: 6, snacks: 3 },
 };
+
+/** Estimated minutes an item costs, both sides counted. Scaffolding-honest:
+ *  authored time first, the estimates layer for the other 587. */
+export function minutesOf(item) {
+  const authored = Number.isFinite(item.amount?.seconds) ? item.amount.seconds : null;
+  const est = authored === null ? estimateFor(item)?.seconds : null;
+  const seconds = authored ?? est ?? 60;
+  const mult = (item.amount?.perSide || (authored === null && estimateFor(item)?.perSide)) && item.sides !== false ? 2 : 1;
+  return (seconds * mult) / 60;
+}
+
+/**
+ * What switching costs. An estimated 90-second release is not 90 seconds of a
+ * person's session — they read the card, get on the floor, find the spot, get
+ * back up. Without this a 26-minute budget dealt SEVENTEEN items, which is a
+ * scramble, not a session. Three-quarters of a minute per item is a stated
+ * assumption like every number in estimates.js — argue with it there.
+ */
+export const PER_ITEM_OVERHEAD_MINUTES = 0.75;
+
+// The evening deals downshift and opening, never loading — FRAMEWORK's part 5:
+// deep release, "the melt-into-the-floor response is the body's signal that
+// it's safe to downshift", then breath. A kettlebell snatch at 21:30 is a
+// different app.
+const EVENING_EFFECTS = new Set(['release', 'lengthen', 'calm', 'circulate', 'mobilise']);
 
 const OPENS = new Set(['release', 'lengthen']);
 const LOADS = new Set(['load', 'activate']);
@@ -169,8 +200,14 @@ export function dealDay({
   date,
   windowDays = 7,
   equipment = null,
+  // Minute budgets, when the person has set their time (timeplan.js). Given
+  // these, the dealer fills to minutes with estimated durations; without them
+  // it falls back to the dial's counts. `evening` deals a wind-down block.
+  minutes = null,
 } = {}) {
   const budget = DIALS[dial] ?? DIALS.standard;
+  const sessionMinutes = Number.isFinite(minutes?.session) ? minutes.session : null;
+  const eveningMinutes = Number.isFinite(minutes?.evening) ? minutes.evening : null;
   const rng = rngFrom(seedFrom(String(date ?? '')));
   // Rotation needs a tie-break, and it has to be stable within a day and
   // different between days. Without one, a flat ledger — nothing done yet, every
@@ -211,10 +248,17 @@ export function dealDay({
   // ---- the session -------------------------------------------------------
   // Highest need first, and one region at a time: two releases on the same
   // muscle is not a session, it is a repetition.
+  //
+  // With a minute budget, fill until the estimated minutes reach it — the last
+  // item may run slightly over, which beats stopping a session at 80% of what
+  // was asked for. Without one, the dial's count.
+  let sessionCost = 0;
   for (const cand of ranked) {
-    if (chosen.length >= budget.session) break;
+    if (sessionMinutes !== null) {
+      if (sessionCost >= sessionMinutes) break;
+    } else if (chosen.length >= budget.session) break;
     if (coveredNodes.has(cand.node) && chosen.length) continue;
-    take(cand);
+    if (take(cand)) sessionCost += minutesOf(cand.item) + PER_ITEM_OVERHEAD_MINUTES;
   }
 
   // ---- law 1, the hard one ----------------------------------------------
@@ -275,11 +319,29 @@ export function dealDay({
     snacks.push(cand);
   }
 
+  // ---- the evening -------------------------------------------------------
+  // Dealt only when elected with minutes. Downshift and opening exclusively,
+  // and never something already dealt this morning — the evening is where the
+  // day's tension gets released, not a second copy of the session.
+  const evening = [];
+  if (eveningMinutes !== null && eveningMinutes > 0) {
+    let cost = 0;
+    for (const cand of ranked) {
+      if (cost >= eveningMinutes) break;
+      if (takenIds.has(cand.item.id)) continue;
+      if (!(cand.item.effect ?? []).every((e) => EVENING_EFFECTS.has(e))) continue;
+      takenIds.add(cand.item.id);
+      evening.push({ ...cand, why: `${cand.why} — released before sleep, where today landed` });
+      cost += minutesOf(cand.item) + PER_ITEM_OVERHEAD_MINUTES;
+    }
+  }
+
   return {
     date,
     dial,
     session: chosen,
     snacks,
+    evening,
     medicine,
     notes,
     gaps: {
