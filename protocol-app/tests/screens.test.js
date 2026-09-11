@@ -171,7 +171,13 @@ test('Today draws the day in groups, and a tap moves an item to Done', async () 
   await store.ready({ name: 'screens-1' });
   await store.saveProtocol(dayLongProtocol());
 
-  draw(await viewToday({}));
+  // A pinned clock, not the suite's. This test ran on the wall clock for two
+  // weeks and first failed at 00:19, when a fixture whose blocks start at
+  // 05:00 honestly has nothing open — the screen was right and the test was
+  // wrong. Same doctrine as viewHome's injectable now.
+  const halfPastNine = new Date();
+  halfPastNine.setHours(9, 30, 0, 0);
+  draw(await viewToday({ now: halfPastNine }));
   await settled();
 
   const titles = [...document.querySelectorAll('.group-title, details.group > summary')]
@@ -179,7 +185,7 @@ test('Today draws the day in groups, and a tap moves an item to Done', async () 
   assert.ok(titles.length > 0, 'the day is grouped, not one flat list');
   assert.ok(
     titles.some((t) => t.startsWith('Now')) || titles.some((t) => t.startsWith('Still open')),
-    'whatever the clock says, there is a group for what is open',
+    'at half past nine, something is open',
   );
   assert.ok(
     titles.every((t) => !/%|\bof\b/.test(t)),

@@ -1,0 +1,161 @@
+{
+  "format": "protocol-app/authored-v1",
+  "category": "vestibular",
+  "_meta": {
+    "file": "dual-task-balance.json — the storey above the standing balance ladder: attention goes elsewhere.",
+    "status": "DRAFT — Kevin's strike pass pending. Not ratified content.",
+    "source": "Kevin's dictated note, 11 Sep 2026: a coaching video he flagged (wedge stance + stick tracking) plus his own synthesis of dual-task balance progressions he has been seeing (wall-ball on one leg, peripheral catch, counting backwards). Authored in the app's own words per docs/Reels_Intake.md — his notes, CC authors. This is the intake's first live conversion: the shape test has begun.",
+    "placement_note": "Same category as vestibular.json so it shelves with the eye drills and the standing balance ladder. Deliberately NOT rungs on balance-standing-ladder: that ladder removes information (eyes closed, unstable surface); this module adds competing demands. Different mechanism, different card. The why on the principle card says to earn the ladder's middle rungs first.",
+    "claims_note": "The video's strongest claim — that this training lets the body use its strength more efficiently — is carried as provenance on the wedge card, not endorsed as evidence. What the evidence blocks stand on is the narrower, well-documented finding: external focus of attention improves balance performance and retention over body-focused attention, and dual-task training is standard practice in rehabilitation. Law 5: the claim travels with its status.",
+    "open_from_note": "Wedge angle and stance width · duration or passes for the stick sweep · ball size and wall distance · sets and home frequency · where these sit relative to Kevin's PT plan. All marked _undetermined rather than guessed."
+  },
+  "items": [
+    {
+      "id": "attention-elsewhere-why",
+      "name": "Balance you don't have to think about",
+      "kind": "practice",
+      "category": "vestibular",
+      "categoryName": "Eyes, balance & orientation",
+      "tracking": "check",
+      "tier": "established",
+      "role": "awareness-cue",
+      "why": "Read this before the drills that follow it. The standing balance ladder makes balance harder by taking information away. These drills work the other way: they park your attention on a task — a stick, a ball, a count — so balance has to run underneath, without you steering it.",
+      "fields": {
+        "release": "Most balance practice has you thinking about balancing. That builds the skill, but daily life almost never asks for it in that form — you catch yourself while carrying groceries, turning to answer someone, stepping off a kerb mid-thought. The system that saves you there is the one running when you are NOT paying attention to it.\n\nSo these drills give your attention a job somewhere else. Follow the stick. Catch the ball. Count backwards. The balance still has to happen for you to stay upright — and because you are not steering it, it learns to run on its own.",
+        "notice": "The difference between the first time and the tenth: early on, the task falls apart the moment balance gets loud. Later, both keep going at once. That shift — not longer holds, not harder surfaces — is what this storey trains.",
+        "careful": "Fair warning, once: stacking a task on top of balance means more to drop when it goes wrong. Earn the middle of the standing balance ladder first — one-leg stance, steady — before parking your attention elsewhere, and keep something to catch yourself on within reach at every rung of every drill here."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Read it",
+          "note": "Once. It applies to every drill in this group."
+        }
+      ],
+      "evidence": {
+        "grade": "established in motor-learning research; the framing here is the app's own",
+        "basis": "A large motor-learning literature finds that aiming attention at an external target or task improves balance performance and retention compared with thinking about the body itself, and dual-task balance training — a motor or cognitive task layered on a balance task — is standard practice in fall-prevention and return-from-injury rehabilitation. The specific drills that follow are coaching constructions of that principle, and their cards say so."
+      },
+      "sourceNote": "App content, authored from a dictated intake note (11 Sep 2026). Not clinician-prescribed.",
+      "carefulAudience": "hypermobile, orthostatic"
+    },
+    {
+      "id": "wedge-stick-track",
+      "name": "Wedge stance with a moving stick",
+      "kind": "exercise",
+      "category": "vestibular",
+      "categoryName": "Eyes, balance & orientation",
+      "tracking": "check",
+      "tier": "exploratory",
+      "role": "balance",
+      "equipment": "A pair of wedges or a slant board; a stick (a broom handle works); a counter within reach",
+      "muscles": [
+        "foot intrinsics (arch)",
+        "tibialis anterior",
+        "peroneals",
+        "glute med/min",
+        "oculomotor"
+      ],
+      "fields": {
+        "tool": "Wedges under the forefoot so the heels hang free, and a stick held in both hands.",
+        "release": "Stand with your toes up on the wedges, heels off the ground, knees bent. Hold the stick out in front of you. Sweep it slowly out to one side and back to the front, then the other side, following it the whole way with your eyes and head. The balance work is in what your feet and hips do while your attention rides the stick.",
+        "notice": "Where the wobble shows up when your head turns — feet, ankles, or hips — and whether following the stick with eyes-and-head is harder in one direction. Early on the sweep gets small and cautious; it widening again over sessions is the progress.",
+        "careful": "Heels-free on a wedge is a real ankle demand. If your ankles are unstable, earn the flat-floor version first and keep the counter within reach throughout. Knees stay bent — soft, not locked back.",
+        "load": "Calf raises and single-leg hip work on the same days, same reasoning as the balance ladder: the skill needs something underneath it that can hold."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Flat floor",
+          "note": "Feet flat, knees bent, same stick sweep with eyes-and-head tracking. Earn the pattern before the wedges."
+        },
+        {
+          "level": 2,
+          "name": "On the wedges",
+          "note": "Toes on the wedges, heels free, knees bent. Counter within reach. Small sweeps first."
+        },
+        {
+          "level": 3,
+          "name": "Wider and slower",
+          "note": "Bigger sweep, slower travel, further behind you before returning. Slower is harder here, not easier."
+        }
+      ],
+      "_undetermined": [
+        "wedge angle and stance width",
+        "duration or passes",
+        "home frequency"
+      ],
+      "evidence": {
+        "grade": "exploratory — a coaching construction; the underlying external-focus principle is established",
+        "basis": "The drill combines forefoot balance with visual tracking so attention sits on the stick rather than the balancing. The video it came from claims this trains the body to use its strength more efficiently; that claim is the video's own and travels here as provenance, not as a finding."
+      },
+      "sourceNote": "From a coaching video flagged during intake, 11 Sep 2026 — a claim with a face attached, authored here in the app's own words.",
+      "carefulAudience": "hypermobile, orthostatic"
+    },
+    {
+      "id": "wall-ball-balance",
+      "name": "Ball off the wall, standing on one leg",
+      "kind": "exercise",
+      "category": "vestibular",
+      "categoryName": "Eyes, balance & orientation",
+      "tracking": "check",
+      "tier": "established",
+      "role": "balance",
+      "sides": true,
+      "equipment": "A ball that bounces predictably (a tennis or reaction ball later), a wall, clear floor",
+      "muscles": [
+        "foot intrinsics (arch)",
+        "tibialis anterior",
+        "peroneals",
+        "glute med/min",
+        "deep hip rotators",
+        "oculomotor"
+      ],
+      "fields": {
+        "tool": "A ball and a wall. Start with a slow, predictable ball — the bounce being boring is the point at first.",
+        "release": "Stand on one leg a short distance from the wall. Throw the ball against it and catch the return. Your attention is on the throw and the catch; the balance has to happen underneath for any of it to work. Swap legs halfway.",
+        "notice": "Which leg loses the plot first, and WHAT fails — the catch, or the stance. Early on, a hard return costs you the balance; later the leg just absorbs it. The rung where both fall apart at once is the one you train at.",
+        "careful": "Clear floor, nothing behind you, and a ball you are willing to drop — chasing a bad bounce on one leg is how this goes wrong. On the counting rungs, losing the count is fine and expected; stepping down is just the rung telling you where its edge is.",
+        "load": "Same base as the ladder: calf and single-leg hip strength on the same days."
+      },
+      "levels": [
+        {
+          "level": 1,
+          "name": "Two feet, slow ball",
+          "note": "Learn the throw-catch rhythm with balance cheap. A few clean minutes."
+        },
+        {
+          "level": 2,
+          "name": "One leg",
+          "note": "Same rhythm. Swap legs halfway — expect the sides to differ, and note which is which."
+        },
+        {
+          "level": 3,
+          "name": "Closer and faster",
+          "note": "Step in so the return arrives quicker, or use a livelier ball. The catch starts stealing all the attention — that is the drill working."
+        },
+        {
+          "level": 4,
+          "name": "Eyes elsewhere",
+          "note": "Look past the wall and catch with your peripheral vision. The eyes stop feeding the balance directly and the feet have to make it up."
+        },
+        {
+          "level": 5,
+          "name": "Add a count",
+          "note": "Backwards by threes from 100, out loud, while throwing and catching. A cognitive load on top of the motor one — this is the top of this ladder, and it is genuinely hard."
+        }
+      ],
+      "_undetermined": [
+        "wall distance and ball choice per rung",
+        "duration or catches per side",
+        "home frequency"
+      ],
+      "evidence": {
+        "grade": "established as a training approach; these specific rungs are a common coaching progression, not a tested protocol",
+        "basis": "Dual-task balance training — motor tasks like catching, then cognitive tasks like serial subtraction, layered onto single-leg stance — is standard in fall-prevention and return-to-sport rehabilitation, and progressions of exactly this shape are widely used up to elite sport. No single trial tested this ladder as written."
+      },
+      "sourceNote": "App content, authored from an intake note describing progressions seen across coaching videos (11 Sep 2026). Not clinician-prescribed.",
+      "carefulAudience": "hypermobile, orthostatic"
+    }
+  ]
+}

@@ -653,7 +653,10 @@ function checkRow(item, day, why, { openNotes, onChanged, onPause, unavailable, 
   );
 }
 
-export async function viewToday({ reload, stamp, date: viewing, startSession, mode = 'day' } = {}) {
+// `now` is injectable for the same reason viewHome's is: a screen whose whole
+// job is reading the clock cannot be tested by a suite that only ever sees
+// the time it happens to run at. Live callers pass nothing and get the clock.
+export async function viewToday({ reload, stamp, date: viewing, startSession, mode = 'day', now = new Date() } = {}) {
   const date = viewing ?? localDateKey();
   const isToday = date === localDateKey();
 
@@ -687,7 +690,7 @@ export async function viewToday({ reload, stamp, date: viewing, startSession, mo
   const state = { day, history, pauses, supplies };
   // A past day is looked at from its own end: every block's window has closed,
   // so nothing is "now" and what is left is simply what was not recorded.
-  const asOf = isToday ? new Date() : endOfDay(date);
+  const asOf = isToday ? now : endOfDay(date);
 
   // The composed middle of the day, alongside the standing appointments rather
   // than instead of them (FRAMEWORK: "the composer deals the rotating day-arc
@@ -699,10 +702,10 @@ export async function viewToday({ reload, stamp, date: viewing, startSession, mo
   // any of this existed.
   let composed = null;
   try {
-    // The REAL clock, not `asOf`. For a past day `asOf` is the end of that day,
+    // The clock, not `asOf`. For a past day `asOf` is the end of that day,
     // which made `dealtFor` believe it was being asked about today and deal a
     // session into a day that has already happened (decision 21).
-    const dealt = await dealtFor(date, { now: new Date() });
+    const dealt = await dealtFor(date, { now });
     if (dealt) composed = protocolFrom(dealt, await loadCatalog());
   } catch (error) {
     composed = null;

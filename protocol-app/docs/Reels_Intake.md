@@ -52,3 +52,11 @@ Two things make it land better *after* the taxonomy work than before:
 Either when Kevin has the export file, or on ten hand-picked keepers as a shape test before
 committing to a sweep. The ten-first version is cheaper and answers the real question, which is
 whether the note-to-item conversion is worth the watching time.
+
+**Started 11 Sep 2026.** First conversion: one dictated note (a wedge-stance stick-tracking
+video he flagged, plus his synthesis of dual-task balance progressions) became three authored
+items in `src/content/authored/dual-task-balance.json` — a principle card and two drills with
+levels ladders. The shape held: tier and sourceNote carried, claims separated from evidence,
+unstated doses marked `_undetermined` rather than guessed. One rule learned at the guard rail:
+item-level sourceNotes render to strangers and must not name him — rich provenance lives in the
+file's `_meta`, the rendered note stays anonymous. That is the template for the next nine.
