@@ -16,11 +16,17 @@ nothing on its own.*
 - **Becoming a Supple Leopard** (Kelly Starrett). A library of
   self-mobilisation technique — the release/lengthen vocabulary the catalogue
   already speaks, dense with the how-to detail the cards want.
-- **Tigers Don't Do Sit-Ups** — title as Kevin says it, 11 Sep; author and
-  edition to be confirmed when he has it in hand. (A correction is on record
-  here: CC first wrote this title off as a transcription garble of Supple
-  Leopard. It is its own book — the transcription had *dropped* Supple
-  Leopard, not garbled it.)
+- **Tigers Don't Do Sit-Ups: Exploring biomechanics, fascia, proprioception,
+  and the center of gravity in human movement** (William Payne — spelled out
+  by Kevin from the book in hand, 11 Sep). His read of where it sits: the
+  other two are the more mechanical and nutritional ones; this one brings
+  **proprioception** — which is the axis the app calls the awareness layer
+  (day arc parts 3–4, unbuilt) and the skill R25 says the app teaches rather
+  than adjudicates. Likeliest landing: Learn material and awareness-layer
+  content, more than catalogue cards. (A correction stays on record here: CC
+  first wrote this title off as a transcription garble of Supple Leopard. It
+  is its own book — the transcription had *dropped* Supple Leopard, not
+  garbled it.)
 
 Which of these he has barely opened yet is not settled and does not matter
 for intake: nothing enters unflagged regardless.
