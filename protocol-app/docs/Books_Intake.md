@@ -15,11 +15,15 @@ nothing on its own.*
   own practice, never assets for the app.
 - **Becoming a Supple Leopard** (Kelly Starrett). A library of
   self-mobilisation technique — the release/lengthen vocabulary the catalogue
-  already speaks, dense with the how-to detail the cards want. (Kevin's phone
-  transcribed the title as "a tiger doesn't do sit-ups"; recorded so nobody
-  goes looking for that book.)
-- **A third, unnamed.** Kevin has not looked at it much yet; to be named when
-  he opens it.
+  already speaks, dense with the how-to detail the cards want.
+- **Tigers Don't Do Sit-Ups** — title as Kevin says it, 11 Sep; author and
+  edition to be confirmed when he has it in hand. (A correction is on record
+  here: CC first wrote this title off as a transcription garble of Supple
+  Leopard. It is its own book — the transcription had *dropped* Supple
+  Leopard, not garbled it.)
+
+Which of these he has barely opened yet is not settled and does not matter
+for intake: nothing enters unflagged regardless.
 
 ## The line that matters more here than with reels
 
