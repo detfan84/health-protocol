@@ -7,7 +7,8 @@
     "source": "Kevin's dictated note, 11 Sep 2026: a coaching video he flagged (wedge stance + stick tracking) plus his own synthesis of dual-task balance progressions he has been seeing (wall-ball on one leg, peripheral catch, counting backwards). Authored in the app's own words per docs/Reels_Intake.md — his notes, CC authors. This is the intake's first live conversion: the shape test has begun.",
     "placement_note": "Same category as vestibular.json so it shelves with the eye drills and the standing balance ladder. Deliberately NOT rungs on balance-standing-ladder: that ladder removes information (eyes closed, unstable surface); this module adds competing demands. Different mechanism, different card. The why on the principle card says to earn the ladder's middle rungs first.",
     "claims_note": "The video's strongest claim — that this training lets the body use its strength more efficiently — is carried as provenance on the wedge card, not endorsed as evidence. What the evidence blocks stand on is the narrower, well-documented finding: external focus of attention improves balance performance and retention over body-focused attention, and dual-task training is standard practice in rehabilitation. Law 5: the claim travels with its status.",
-    "open_from_note": "Wedge angle and stance width · duration or passes for the stick sweep · ball size and wall distance · sets and home frequency · where these sit relative to Kevin's PT plan. All marked _undetermined rather than guessed."
+    "open_from_note": "Wedge angle and stance width · duration or passes for the stick sweep · sets and home frequency · where these sit relative to Kevin's PT plan. All marked _undetermined rather than guessed.",
+    "revised_same_day": "Kevin's follow-up note (11 Sep): wall-ball difficulty is not one ladder but independent dials — trajectory, distance, ball count, hands, footing. The card was restructured: levels now carry the footing dial only (two feet → one leg → unstable → moving), the ball dials live in the how-to, and the attention layer (peripheral catch, counting backwards) is the top dial rather than rungs 4–5. Ball size and wall distance left _undetermined before; distance is now a dial, so it came off that list."
   },
   "items": [
     {
@@ -94,7 +95,7 @@
     },
     {
       "id": "wall-ball-balance",
-      "name": "Ball off the wall, standing on one leg",
+      "name": "Ball off the wall",
       "kind": "exercise",
       "category": "vestibular",
       "categoryName": "Eyes, balance & orientation",
@@ -113,48 +114,42 @@
       ],
       "fields": {
         "tool": "A ball and a wall. Start with a slow, predictable ball — the bounce being boring is the point at first.",
-        "release": "Stand on one leg a short distance from the wall. Throw the ball against it and catch the return. Your attention is on the throw and the catch; the balance has to happen underneath for any of it to work. Swap legs halfway.",
-        "notice": "Which leg loses the plot first, and WHAT fails — the catch, or the stance. Early on, a hard return costs you the balance; later the leg just absorbs it. The rung where both fall apart at once is the one you train at.",
-        "careful": "Clear floor, nothing behind you, and a ball you are willing to drop — chasing a bad bounce on one leg is how this goes wrong. On the counting rungs, losing the count is fine and expected; stepping down is just the rung telling you where its edge is.",
+        "release": "Face the wall, throw the ball against it, catch the return, repeat. Your attention rides the throw and the catch; the balance has to happen underneath for any of it to work.\n\nDifficulty here is a set of dials, not one ladder. The rungs below are the footing dial — the balance half of the drill. The ball gives you the rest, each with an easy end and a hard end:\n\n**Trajectory** — lob it high and soft, or throw it down straighter so the return comes back quick.\n**Distance** — stand back for a long, lazy flight, or step in close so there is no time to think.\n**Balls** — one, then two, then three or more; people work up to juggling them off the wall.\n**Hands** — throw and catch with the same hand, or alternate hands every throw.\n**Attention**, the top dial — look past the wall and catch in your peripheral vision, or count backwards by threes out loud while you go.\n\nPick a footing rung, set the ball dials where the catch just barely stays clean, and turn one dial at a time. When you raise one, it often pays to ease another back.",
+        "notice": "Which fails first — the catch, or the stance — and on the one-leg rung, which leg. Early on a quick return costs you the balance; later the leg just absorbs it. The dial that costs you the most is the one with the most to give.",
+        "careful": "Clear floor, nothing behind you, and a ball you are willing to drop — chasing a bad bounce on one leg is how this goes wrong. One dial at a time is the safety mechanism, not just the method. Losing the count is fine and expected; it is the drill telling you where its edge is.",
         "load": "Same base as the ladder: calf and single-leg hip strength on the same days."
       },
       "levels": [
         {
           "level": 1,
-          "name": "Two feet, slow ball",
-          "note": "Learn the throw-catch rhythm with balance cheap. A few clean minutes."
+          "name": "Two feet",
+          "note": "Learn the throw-catch rhythm with balance cheap, and meet the ball dials here first."
         },
         {
           "level": 2,
           "name": "One leg",
-          "note": "Same rhythm. Swap legs halfway — expect the sides to differ, and note which is which."
+          "note": "Swap legs halfway — expect the sides to differ, and note which is which."
         },
         {
           "level": 3,
-          "name": "Closer and faster",
-          "note": "Step in so the return arrives quicker, or use a livelier ball. The catch starts stealing all the attention — that is the drill working."
+          "name": "Unstable footing",
+          "note": "Wobble or dome board — two feet first, one foot later. Counter within reach, and ease the ball dials back when you step up."
         },
         {
           "level": 4,
-          "name": "Eyes elsewhere",
-          "note": "Look past the wall and catch with your peripheral vision. The eyes stop feeding the balance directly and the feet have to make it up."
-        },
-        {
-          "level": 5,
-          "name": "Add a count",
-          "note": "Backwards by threes from 100, out loud, while throwing and catching. A cognitive load on top of the motor one — this is the top of this ladder, and it is genuinely hard."
+          "name": "Moving footing",
+          "note": "Stepping side to side, or a slow drift toward and away from the wall, between throws. The floor stops being a constant."
         }
       ],
       "_undetermined": [
-        "wall distance and ball choice per rung",
-        "duration or catches per side",
+        "duration or catches per rung",
         "home frequency"
       ],
       "evidence": {
-        "grade": "established as a training approach; these specific rungs are a common coaching progression, not a tested protocol",
-        "basis": "Dual-task balance training — motor tasks like catching, then cognitive tasks like serial subtraction, layered onto single-leg stance — is standard in fall-prevention and return-to-sport rehabilitation, and progressions of exactly this shape are widely used up to elite sport. No single trial tested this ladder as written."
+        "grade": "established as a training approach; the dials are a common coaching vocabulary, not a tested protocol",
+        "basis": "Dual-task balance training — motor tasks like catching, then cognitive tasks like serial subtraction, layered onto balance work — is standard in fall-prevention and return-to-sport rehabilitation, and progressions along exactly these axes (trajectory, distance, ball count, hands, footing) are used up to elite sport. No single trial tested this card as written."
       },
-      "sourceNote": "App content, authored from an intake note describing progressions seen across coaching videos (11 Sep 2026). Not clinician-prescribed.",
+      "sourceNote": "App content, authored from intake notes describing progressions seen across coaching videos (11 Sep 2026). Not clinician-prescribed.",
       "carefulAudience": "hypermobile, orthostatic"
     }
   ]
