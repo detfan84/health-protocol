@@ -82,8 +82,10 @@ that card is now a function of the stored record through `mutateSetting`.
 
 **Next build, agreed direction:** Learn built out from Kevin's strikes on the
 in-app draft. His content jobs run alongside: reels notes
-(docs/Reels_Intake.md — he watches and dumps rough notes, CC authors) and the
-PT eye-training sheet when it arrives.
+(docs/Reels_Intake.md — he watches and dumps rough notes, CC authors), book
+mining on the same law (docs/Books_Intake.md — Built from Broken and Becoming
+a Supple Leopard, bought 11 Sep; learn from, never transcribe), and the PT
+eye-training sheet when it arrives.
 
 ---
 
